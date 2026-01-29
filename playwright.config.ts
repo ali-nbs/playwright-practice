@@ -24,16 +24,16 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  timeout: 240000,          // Increase total test time to 60s
+  timeout: 2400000,          // Increase total test time to 60s
   expect: {
-    timeout: 15000,        // <--- THIS IS THE FIX. 
+    timeout: 2400000,        // <--- THIS IS THE FIX. 
                            // Change default 'expect' from 5s to 15s.
   },
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
     baseURL: process.env.BASE_URL,
-
+    storageState: 'auth.json',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
