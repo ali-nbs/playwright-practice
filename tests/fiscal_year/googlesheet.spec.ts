@@ -3,11 +3,11 @@ import { google } from 'googleapis';
 import path from 'path';
 
 const SPREADSHEET_ID = '1ArHNlvrv-4vMedIlz5cohymFZtMhHhEK6FRAg7KqlIU';
-const SHEET_NAME = '1/21';
+const SHEET_NAME = '2/6';
 const KEY_FILE = path.resolve(process.cwd(), 'credentials.json');
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
-const PROCESS_ALL_ROWS = true;
+const PROCESS_ALL_ROWS = false;
 
 test("Fiscal-Year Google Sheets Processor", async ({ page }) => {
     const auth = new google.auth.GoogleAuth({ keyFile: KEY_FILE, scopes: SCOPES });
@@ -70,17 +70,17 @@ test("Fiscal-Year Google Sheets Processor", async ({ page }) => {
                 continue;
             }
 
-           // const targetRow = page.locator('div[data-test="resultRow"]').filter({ hasText: accNum });
-           const targetRow = page.locator(`div[data-test="resultRow"][id="${i}"]`);
+            // const targetRow = page.locator('div[data-test="resultRow"]').filter({ hasText: accNum });
+            const targetRow = page.locator(`div[data-test="resultRow"][id="0"]`);
             console.log(`Found target row for ${accNum}.`);
-             const viewBtn = targetRow.getByRole('button', { name: /View/i });
+            const viewBtn = targetRow.getByRole('button', { name: /View/i });
             // await viewBtn.click();
-            if (await viewBtn.isVisible()) {
+            try {
+                await viewBtn.waitFor({ state: 'visible', timeout: 15000 });
                 console.log(`View button found for ${accNum}. Clicking...`);
                 await viewBtn.click();
-            } else {
-                console.log(`Target row found for ${accNum}, but it has no View button.`);
-                // Handle the missing button (e.g., skip or log error)
+            } catch (e) {
+                console.log(`Target row found for ${accNum}, but View button never appeared.`);
             }
 
             const docFrame = page.frameLocator('iframe[src*="/SECFilings/Documents/"]').first();
