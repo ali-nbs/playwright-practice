@@ -3,7 +3,7 @@ import { google } from 'googleapis';
 import path from 'path';
 
 const SPREADSHEET_ID = '1ArHNlvrv-4vMedIlz5cohymFZtMhHhEK6FRAg7KqlIU';
-const SHEET_NAME = '2/6';
+const SHEET_NAME = '2/9';
 const KEY_FILE = path.resolve(process.cwd(), 'credentials.json');
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 

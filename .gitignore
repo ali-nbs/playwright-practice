@@ -12,4 +12,5 @@ node_modules/
 auth.json
 credentials.json
 test.js
+findDuplicateCompnaies.js
 *results
