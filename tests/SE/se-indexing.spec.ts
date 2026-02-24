@@ -1,114 +1,261 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Page, Locator } from "@playwright/test";
 import * as fs from 'fs';
-import path from "path/win32";
+import * as path from 'path';
+import { google } from 'googleapis';
 
-// Only use storageState if the file actually exists
-// if (fs.existsSync('auth.json')) {
-//     console.log("file found");
-//     test.use({ storageState: 'auth.json' });
-// }
+const AUTH_PATH = path.resolve(__dirname, 'auth.json');
+const SPREADSHEET_ID = '1WG7yXVN4RVwpKCGc41YHievOySO--3WPuHGr7nusnwc';
+const SHEET_NAME = 'Automated Test Cases';
+const KEY_FILE = path.resolve(process.cwd(), 'credentials.json');
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
-test("SE-Indexing", async ({ page }) => {
+const IDENTIFIER = 'se_indexing';
+
+const setupLogger = () => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 16);
     const logDirectory = path.resolve(__dirname, './Results/se-indexing');
+
     if (!fs.existsSync(logDirectory)) {
         fs.mkdirSync(logDirectory, { recursive: true });
     }
 
     const fileName = path.join(logDirectory, `se-indexing-${timestamp}.txt`);
-    const logToFile = (message: any) => {
+
+    return (message: string) => {
         fs.appendFileSync(fileName, message + "\n");
         console.log(message);
     };
+};
 
-    logToFile("title SE-Indexing");
+const performLogin = async (page: Page, logToFile: Function) => {
     await page.goto("/");
 
-    if (await page.locator('#userid').isVisible({ timeout: 5000 }).catch(() => false)) {
-        console.log("Not logged in. Performing login...");
-        await page.locator('#userid').fill(process.env.APP_USERNAME!);
+    const userIdInput = page.locator('#userid');
+
+    if (await userIdInput.isVisible({ timeout: 8000 }).catch(() => false)) {
+        logToFile("Session expired or not found. Performing manual login...");
+
+        await userIdInput.fill(process.env.APP_USERNAME!);
         await page.getByRole('button', { name: 'Next' }).click();
         await page.locator('#password').fill(process.env.APP_PASSWORD!);
         await page.getByRole('button', { name: 'Sign in' }).click();
 
-        await page.waitForURL(/.*apps.intelligize.com/);
-      //  await page.context().storageState({ path: 'auth.json' });
+        await page.waitForURL(/.*apps.intelligize.com/, { waitUntil: 'networkidle' });
+        await page.context().storageState({ path: AUTH_PATH });
+        logToFile("Login successful. auth.json updated.");
+    } else {
+        logToFile("Active session detected via auth.json. Skipping login.");
+    }
+};
+
+
+const typeValue = async (locator: Locator, value: string) => {
+    // await locator.click({ force: true });
+    await locator.focus();
+    await locator.fill('');
+    await locator.pressSequentially(value, { delay: 50 });
+};
+
+const fillAndEnter = async (page: Page, locator: Locator, value: string) => {
+    await typeValue(locator, value);
+    // await page.keyboard.press('Enter'); 
+};
+
+
+const getTabText = async (page: Page, expectedIndex: number, logToFile: Function, isNeedLoadMoreResults: Boolean) => {
+    const tabLocator = page.locator('//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]');
+    await expect(tabLocator.nth(expectedIndex)).toBeVisible({ timeout: 240000 });
+    //return await tabLocator.nth(expectedIndex).innerText();
+    let text = await tabLocator.nth(expectedIndex).innerText();
+    if (text.includes("Docs") && isNeedLoadMoreResults) {
+        await page.locator('a:has-text("Load more results")').last().click({ force: true });
+        text = await tabLocator.nth(expectedIndex).innerText();
+    }
+    return text;
+};
+
+const parseCount = (text: string): number => {
+    const digits = text.replace(/[^0-9]/g, '');
+    return digits ? parseInt(digits, 10) : 0;
+};
+
+const getColumnLetter = (column: number): string => {
+    let letter = '';
+    while (column >= 0) {
+        letter = String.fromCharCode((column % 26) + 65) + letter;
+        column = Math.floor(column / 26) - 1;
+    }
+    return letter;
+};
+async function updateGoogleSheet(resultValue: string) {
+    const auth = new google.auth.GoogleAuth({ keyFile: KEY_FILE, scopes: SCOPES });
+    const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() as any });
+
+    // Format today's date as "2/24"
+    const today = new Date();
+    const dateStr = `${today.getMonth() + 1}/${today.getDate()}`;
+
+    // 1. Fetch current data (A1 to Z100 covers 26 columns, increase Z if needed)
+    const response = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${SHEET_NAME}!A1:Z100`,
+    });
+
+    const rows = response.data.values || [];
+    const headers = rows[0] || [];
+
+    // 2. Find or Create Date Column (Starts from Column F / index 5)
+    let dateColIndex = headers.indexOf(dateStr);
+
+    if (dateColIndex === -1) {
+        // Find first empty column after Column E (index 4)
+        dateColIndex = Math.max(headers.length, 5);
+        const newColLetter = getColumnLetter(dateColIndex);
+
+        await sheets.spreadsheets.values.update({
+            spreadsheetId: SPREADSHEET_ID,
+            range: `${SHEET_NAME}!${newColLetter}1`,
+            valueInputOption: 'USER_ENTERED',
+            requestBody: { values: [[dateStr]] },
+        });
     }
 
-    const secLink = page.locator('text=/SEC Enforcement/i').first();
-    await secLink.click();
+    // 3. Find Identifier in Column E (Index 4)
+    let rowIndex = rows.findIndex(row => row[4] === IDENTIFIER);
 
-    const getTabText = async (expectedIndex: number) => {
-        const tabLocator = page.locator('//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]');
-        await expect(tabLocator).toHaveCount(expectedIndex + 1, { timeout: 240000 });
-        return await tabLocator.nth(expectedIndex).innerText();
-    };
+    if (rowIndex === -1) {
+        // If "sf_indexing" isn't found in Column E, append it to the bottom
+        rowIndex = rows.length;
+        await sheets.spreadsheets.values.update({
+            spreadsheetId: SPREADSHEET_ID,
+            range: `${SHEET_NAME}!E${rowIndex + 1}`,
+            valueInputOption: 'USER_ENTERED',
+            requestBody: { values: [[IDENTIFIER]] },
+        });
+    }
 
-    let dateInput = page.locator('//label[text()="Date"]/ancestor::div[5]//input');
-    await dateInput.click({ force: true });
-    await dateInput.pressSequentially('Today', { delay: 100 });
-    await page.getByRole('button', { name: /^Search$/i }).click();
-    const offeringText1 = await getTabText(0);
-    //console.log(`1st tab: ${offeringText1}`);
-    logToFile(`1st tab (Date Today): ${offeringText1}`);
+    // 4. Update the Result Cell
+    // rowIndex + 1 because Sheets is 1-indexed
+    const targetCell = `${getColumnLetter(dateColIndex)}${rowIndex + 1}`;
 
-    let keywordsInput = page.locator('//label[text()="Keywords"]/following::textarea[1]');
-    await keywordsInput.click({ force: true });
-    await keywordsInput.pressSequentially('is OR the', { delay: 100 });
-    await page.getByRole('button', { name: /^Search$/i }).click();
-    const offeringText2 = await getTabText(1);
-    // console.log(`2nd tab: ${offeringText2}`);
-    logToFile(`2nd tab (Date + Keyword): ${offeringText2}`);
-    logToFile(offeringText1 === offeringText2 ? "Result: Valid" : "Result: Invalid");
-    logToFile("-----------------------------------");
+    await sheets.spreadsheets.values.update({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${SHEET_NAME}!${targetCell}`,
+        valueInputOption: 'USER_ENTERED',
+        requestBody: { values: [[resultValue]] },
+    });
 
-    //  console.log(offeringText1 === offeringText2 ? "Result: Valid" : "Result: Invalid");
-    let clearBtn = page.getByRole('button', { name: /^Clear Filters$/i });
-    await clearBtn.click();
+    const hasInvalid = resultValue.includes("Invalid");
+    const bgColor = hasInvalid 
+        ? { red: 0.95, green: 0.80, blue: 0.80 } // Light Red 2
+        : { red: 0.71, green: 0.88, blue: 0.80 }; // Light Green 2
 
-    dateInput = page.locator('//label[text()="Date"]/ancestor::div[5]//input');
-    await dateInput.waitFor({ state: 'visible' });
-    await dateInput.click({ force: true });
-    await dateInput.pressSequentially('Yesterday', { delay: 100 });
-    await page.getByRole('button', { name: /^Search$/i }).click();
-    let offeringText3 = await getTabText(2);
-    // console.log(`3rd tab: ${offeringText3}`);
-    logToFile(`3rd tab (Date Yesterday): ${offeringText3}`);
+    await sheets.spreadsheets.batchUpdate({
+        spreadsheetId: SPREADSHEET_ID,
+        requestBody: {
+            requests: [
+                {
+                    updateCells: {
+                        range: {
+                            sheetId: 1395635342,
+                            startRowIndex: rowIndex,
+                            endRowIndex: rowIndex + 1,
+                            startColumnIndex: dateColIndex,
+                            endColumnIndex: dateColIndex + 1
+                        },
+                        rows: [{
+                            values: [{
+                                userEnteredValue: { stringValue: resultValue },
+                                userEnteredFormat: {
+                                    backgroundColor: bgColor,
+                                    verticalAlignment: "TOP",
+                                    wrapStrategy: "WRAP",
+                                    textFormat: { fontSize: 9 }
+                                }
+                            }]
+                        }],
+                        fields: 'userEnteredValue,userEnteredFormat(backgroundColor,verticalAlignment,wrapStrategy,textFormat)'
+                    }
+                }
+            ]
+        }
+    });
+}
 
-    keywordsInput = page.locator('//label[text()="Keywords"]/following::textarea[1]');
-    await keywordsInput.click({ force: true });
-    await keywordsInput.pressSequentially('is OR the', { delay: 100 });
-    await page.getByRole('button', { name: /^Search$/i }).click();
-    let offeringText4 = await getTabText(3);
-    // console.log(`4th tab: ${offeringText4}`);
-    // console.log(offeringText3 === offeringText4 ? "7 Days Result: Valid" : "7 Days Result: Invalid");
-    logToFile(`4th tab (Date + Keyword): ${offeringText4}`);
-    logToFile(offeringText3 === offeringText4 ? "Result: Valid" : "Result: Invalid");
-    logToFile("-----------------------------------");
 
-    clearBtn = page.getByRole('button', { name: /^Clear Filters$/i });
-    await clearBtn.click();
+test.describe("SE-Indexing Automation", () => {
 
-    dateInput = page.locator('//label[text()="Date"]/ancestor::div[5]//input');
-    await dateInput.waitFor({ state: 'visible' });
-    await dateInput.click({ force: true });
-    await dateInput.pressSequentially('Last 7 Days', { delay: 100 });
-    await page.getByRole('button', { name: /^Search$/i }).click();
-    offeringText3 = await getTabText(4);
-    // console.log(`3rd tab: ${offeringText3}`);
-    logToFile(`5th tab (Date Last 7 Days): ${offeringText3}`);
+    if (fs.existsSync(AUTH_PATH)) {
+        test.use({ storageState: AUTH_PATH });
+    }
 
-    keywordsInput = page.locator('//label[text()="Keywords"]/following::textarea[1]');
-    await keywordsInput.click({ force: true });
-    await keywordsInput.pressSequentially('is OR the', { delay: 100 });
-    await page.getByRole('button', { name: /^Search$/i }).click();
-    offeringText4 = await getTabText(5);
-    // console.log(`4th tab: ${offeringText4}`);
-    // console.log(offeringText3 === offeringText4 ? "7 Days Result: Valid" : "7 Days Result: Invalid");
-    logToFile(`6th tab (Date + Keyword): ${offeringText4}`);
-    logToFile(offeringText3 === offeringText4 ? "Result: Valid" : "Result: Invalid");
-    logToFile("-----------------------------------");
-    console.log("\n--- End of Report ---");
+    test("SE-Indexing", async ({ page }) => {
+        const logToFile = setupLogger();
+        logToFile("--- Starting SE-Indexing Report ---");
 
-  //  await page.pause();
+        await performLogin(page, logToFile);
+
+        await page.locator('text=/SEC Enforcement/i').first().click();
+
+        const dateInput = page.locator('//label[text()="Date"]/ancestor::div[5]//input');
+        let keywordsInput = page.locator('[data-testid="keywords-input"]');
+        const searchBtn = page.getByRole('button', { name: /^Search$/i }).first();
+        const clearBtn = page.getByRole('button', { name: /^Clear Filters$/i });
+
+        logToFile("Exhibits to Filings: Checked");
+
+        const testCases = [
+            { date: 'Today', keyword: 'is OR the OR a', },
+            { date: 'Yesterday', keyword: 'is OR the OR a', },
+            { date: 'Last 7 Days', keyword: 'is OR the OR a',}
+        ];
+
+        let tabIndex = 0;
+        let resultsSummary: string[] = [];
+
+        for (const scenario of testCases) {
+          
+
+            logToFile(`\nTesting Scenario: ${scenario.date}`);
+
+            await fillAndEnter(page, dateInput, scenario.date);
+            await searchBtn.click();
+
+            const textDateOnly = await getTabText(page, tabIndex++, logToFile, false);
+            logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
+
+            await fillAndEnter(page, keywordsInput, scenario.keyword);
+            await searchBtn.click();
+            let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
+            logToFile(`With Keyword: ${textWithKeyword}`);
+
+            const textDateOnlyCount = parseCount(textDateOnly);
+            console.log("textDateOnlyCount", textDateOnlyCount);
+            let textWithKeywordCount = parseCount(textWithKeyword);
+            console.log("textWithKeywordCount", textWithKeywordCount);
+            let isValid = textDateOnlyCount === textWithKeywordCount;
+            
+            logToFile(isValid ? "✅ Result: Valid" : "❌ Result: Invalid - Counts mismatch");
+            const scenarioFinding = [
+                `Date: ${scenario.date}`,
+                `Doc Found: ${textDateOnlyCount}`,
+                ``,
+                `Data: ${scenario.date} + Keyword: ${scenario.keyword}`,
+                `Doc Found: ${textWithKeywordCount}`,
+                ``,
+                `Result: ${isValid ? "Valid ✅" : "Invalid ❌"}`
+            ].filter(line => line !== "").join("\n");
+            resultsSummary.push(scenarioFinding);
+            await clearBtn.click();
+        }
+        const finalDumpString = resultsSummary.join("\n--------------------------------------------------------------------------------\n");
+
+        try {
+            await updateGoogleSheet(finalDumpString);
+            logToFile("\nSuccessfully dumped detailed findings to Google Sheets.");
+        } catch (err: any) {
+            logToFile(`\nFailed to dump to Google Sheets: ${err.message}`);
+        }
+        logToFile("\n--- End of Report ---");
+    });
 });

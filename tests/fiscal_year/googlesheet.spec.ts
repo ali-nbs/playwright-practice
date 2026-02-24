@@ -3,7 +3,7 @@ import { google } from 'googleapis';
 import path from 'path';
 
 const SPREADSHEET_ID = '1ArHNlvrv-4vMedIlz5cohymFZtMhHhEK6FRAg7KqlIU';
-const SHEET_NAME = '2/18';
+const SHEET_NAME = '2/23';
 const KEY_FILE = path.resolve(process.cwd(), 'credentials.json');
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
@@ -33,9 +33,6 @@ test("Fiscal-Year Google Sheets Processor", async ({ page }) => {
     await secLink.click();
 
     for (let i = 0; i < rows.length; i++) {
-        if (i == 26) {
-            continue;
-        }
         const accNum = rows[i][0];
         const existingValueI = rows[i][7] ? String(rows[i][7]).trim() : "";
 
@@ -43,7 +40,8 @@ test("Fiscal-Year Google Sheets Processor", async ({ page }) => {
         const valK = rows[i][9] ? String(rows[i][9]).trim() : "";
         const valM = rows[i][11] ? String(rows[i][11]).trim() : "";
 
-        const isRowFilled = valJ !== "" && valK !== "" && valM !== "";
+        //const isRowFilled = valJ !== "" && valK !== "" && valM !== "";
+         const isRowFilled = valJ !== "" &&  (valK !== "FALSE" && valK !== "") && valM !== "";
 
         if (!accNum) continue;
 
@@ -99,12 +97,12 @@ test("Fiscal-Year Google Sheets Processor", async ({ page }) => {
 
             let fiscalYearEndValue: string | null = null;
 
-            // if (await currentFYELocator.isVisible({ timeout: 10000 }).catch(() => false)) {
-            //     fiscalYearEndValue = await currentFYELocator.textContent();
-            // } else {
-            //     await docPeriodLocator.waitFor({ state: 'attached', timeout: 15000 });
-            //     fiscalYearEndValue = await docPeriodLocator.textContent();
-            // }
+            if (await currentFYELocator.isVisible({ timeout: 10000 }).catch(() => false)) {
+                fiscalYearEndValue = await currentFYELocator.textContent();
+            } else {
+                await docPeriodLocator.waitFor({ state: 'attached', timeout: 15000 });
+                fiscalYearEndValue = await docPeriodLocator.textContent();
+            }
             const innerText = (await currentFYELocator.textContent().catch(() => "")) || "";
 
             // 2. The Logic: If inner has the value AND a year, use it. 
@@ -117,6 +115,8 @@ test("Fiscal-Year Google Sheets Processor", async ({ page }) => {
                 fiscalYearEndValue = outerText.replace(/\s+/g, ' ').trim();
             }
             const periodEndValue = fiscalYearEndValue?.trim() || "";
+
+
             console.log(`Period End Value: ${periodEndValue}`);
             const ixbrlBtn = page.locator('text=/^iXBRL$/i').first();
             await ixbrlBtn.waitFor({ state: 'visible', timeout: 30000 });
@@ -127,90 +127,107 @@ test("Fiscal-Year Google Sheets Processor", async ({ page }) => {
             try {
 
                 await page.locator('text=/^EX-101$/i').first().click();
+                await page.waitForTimeout(3000); // Wait for the frame to load after clicking EX-101
+                const xbrlFrame = page.locator('div.HtmlViewer__viewer___ZSwJe iframe').first().contentFrame();
+                await xbrlFrame.locator('td.pl, .xbrl, table').first().waitFor({
+                    state: 'visible',
+                    timeout: 20000
+                });
+
+                // const xbrlTab = page
+                //     .locator('.toolTipWraper')
+                //     .locator('//span[contains(text(), "XBRL")]');
+                // if (await xbrlTab.count() > 0) {
+                //     try {
+                //         await xbrlTab.first().click({ button: 'left', timeout: 5000 });
+                //     }
+                //     catch (e) {
+
+                //     }
+                // }
+
+                // Find all iframe elements
+                const iframes = page.locator('iframe');
+                const count = await iframes.count();
+                console.log(`Total iframes found: ${count}`);
+
+                // Loop through and print the 'src' of each
+                for (let i = 0; i < count; i++) {
+                    const src = await iframes.nth(i).getAttribute('src');
+                    console.log(`Iframe ${i} source: ${src}`);
+                }
+                //  const xbrlFrame = page.frameLocator('iframe[src*="/SECFilings/Documents/"]').first();
+                // const xbrlFrameLocator = page.locator('iframe').filter({
+                //     has: page.locator('tr').filter({ hasText: /Current Fiscal Year End Date|Fiscal Year End/i })
+                // }).first();
+                // const src = await xbrlFrameLocator.getAttribute('src');
+                // console.log(`Iframe source: ${src}`);
+                // const xbrlFrame = xbrlFrameLocator.contentFrame();
+
+                // 2. IMPORTANT: You MUST wait for the content to actually appear inside the frame.
+                // If you don't wait, getValue() runs on an empty frame and returns "".
+                console.log(`Waiting for XBRL content to load in frame...`);
+                // await xbrlFrame.locator('tr').filter({
+                //     hasText: /Current Fiscal Year End Date|Fiscal Year End/i
+                // }).first().waitFor({ state: 'visible', timeout: 240000 });
+                // const getValue = async (labels: string[]) => {
+                //     const combinedSelector = labels.map(label => `tr:has-text("${label}")`).join(', ');
+                //     const row = xbrlFrame.locator(combinedSelector).first();
+                //     return await row.evaluate(tr => {
+                //         const cells = Array.from(tr.querySelectorAll('td'));
+                //         const dataCells = cells.map(c => c.textContent?.trim()).filter(text => text);
+                //         console.log("data cells" , dataCells);
+                //         const xbrlDateCell = dataCells.find(text => text?.startsWith('--'));
+                //         return xbrlDateCell || (dataCells.length > 0 ? dataCells[dataCells.length - 1] : "");
+                //     });
+                // };
+                const getValue = async (labels: string[]) => {
+                    for (const label of labels) {
+                        const row = xbrlFrame
+                            .locator('tr')
+                            .filter({
+                                has: xbrlFrame.locator('td.pl >> text="' + label + '"')
+                            })
+                            .first();
+
+                        if (await row.count() > 0) {
+                            const valueCell = row.locator('td.text').first();
+                            return (await valueCell.textContent())?.trim() || "";
+                        }
+                    }
+                    return "";
+                };
+
+                const yearEnd = await getValue(["Current Fiscal Year End Date", "Fiscal Year End"]);
+
+                if (periodEndValue && yearEnd) {
+                    const calc = calculateDynamicFiscal(periodEndValue, yearEnd);
+                    const resultLabelJ = String(`${calc.quarter} ${calc.fiscalYear}`).trim();
+
+                    const isMatch = String(existingValueI) === String(resultLabelJ);
+                    const statusK = isMatch ? "TRUE" : "FALSE";
+
+                    console.log(`Result J: ${resultLabelJ} | Match: ${statusK}`);
+
+                    await sheets.spreadsheets.values.update({
+                        spreadsheetId: SPREADSHEET_ID,
+                        range: `'${SHEET_NAME}'!J${i + 2}:M${i + 2}`,
+                        valueInputOption: 'USER_ENTERED',
+                        requestBody: {
+                            values: [[
+                                resultLabelJ,
+                                statusK,
+                                "",
+                                "Playwright-Bot"
+                            ]]
+                        },
+                    });
+                } else {
+                    console.log(`row ${i} , fiscal year end date ${yearEnd} not found `);
+                }
 
             } catch (e) {
                 console.log(`Target row found for ${accNum}, but ex101Link never appeared.`);
-            }
-
-
-            // Find all iframe elements
-            const iframes = page.locator('iframe');
-            const count = await iframes.count();
-            console.log(`Total iframes found: ${count}`);
-
-            // Loop through and print the 'src' of each
-            for (let i = 0; i < count; i++) {
-                const src = await iframes.nth(i).getAttribute('src');
-                console.log(`Iframe ${i} source: ${src}`);
-            }
-            const xbrlFrame = page.locator('iframe[src*="/SECFilings/Documents/"]').first().contentFrame();
-            // const xbrlFrameLocator = page.locator('iframe').filter({
-            //     has: page.locator('tr').filter({ hasText: /Current Fiscal Year End Date|Fiscal Year End/i })
-            // }).first();
-            // const src = await xbrlFrameLocator.getAttribute('src');
-            // console.log(`Iframe source: ${src}`);
-            // const xbrlFrame = xbrlFrameLocator.contentFrame();
-
-            // 2. IMPORTANT: You MUST wait for the content to actually appear inside the frame.
-            // If you don't wait, getValue() runs on an empty frame and returns "".
-            console.log(`Waiting for XBRL content to load in frame...`);
-            // await xbrlFrame.locator('tr').filter({
-            //     hasText: /Current Fiscal Year End Date|Fiscal Year End/i
-            // }).first().waitFor({ state: 'visible', timeout: 240000 });
-            // const getValue = async (labels: string[]) => {
-            //     const combinedSelector = labels.map(label => `tr:has-text("${label}")`).join(', ');
-            //     const row = xbrlFrame.locator(combinedSelector).first();
-            //     return await row.evaluate(tr => {
-            //         const cells = Array.from(tr.querySelectorAll('td'));
-            //         const dataCells = cells.map(c => c.textContent?.trim()).filter(text => text);
-            //         console.log("data cells" , dataCells);
-            //         const xbrlDateCell = dataCells.find(text => text?.startsWith('--'));
-            //         return xbrlDateCell || (dataCells.length > 0 ? dataCells[dataCells.length - 1] : "");
-            //     });
-            // };
-            const getValue = async (labels: string[]) => {
-                for (const label of labels) {
-                    const row = xbrlFrame
-                        .locator('tr')
-                        .filter({
-                            has: xbrlFrame.locator('td.pl >> text="' + label + '"')
-                        })
-                        .first();
-
-                    if (await row.count() > 0) {
-                        const valueCell = row.locator('td.text').first();
-                        return (await valueCell.textContent())?.trim() || "";
-                    }
-                }
-                return "";
-            };
-
-            const yearEnd = await getValue(["Current Fiscal Year End Date", "Fiscal Year End"]);
-
-            if (periodEndValue && yearEnd) {
-                const calc = calculateDynamicFiscal(periodEndValue, yearEnd);
-                const resultLabelJ = String(`${calc.quarter} ${calc.fiscalYear}`).trim();
-
-                const isMatch = String(existingValueI) === String(resultLabelJ);
-                const statusK = isMatch ? "TRUE" : "FALSE";
-
-                console.log(`Result J: ${resultLabelJ} | Match: ${statusK}`);
-
-                await sheets.spreadsheets.values.update({
-                    spreadsheetId: SPREADSHEET_ID,
-                    range: `'${SHEET_NAME}'!J${i + 2}:M${i + 2}`,
-                    valueInputOption: 'USER_ENTERED',
-                    requestBody: {
-                        values: [[
-                            resultLabelJ,
-                            statusK,
-                            "",
-                            "Playwright-Bot"
-                        ]]
-                    },
-                });
-            } else {
-                console.log(`row ${i} , fiscal year end date ${yearEnd} not found `);
             }
 
         } catch (error: any) {
