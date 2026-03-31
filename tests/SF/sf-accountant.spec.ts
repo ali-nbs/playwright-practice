@@ -1,21 +1,20 @@
 import { test, expect, Page, Locator } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
-import { google } from "googleapis";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 
 const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
-const IDENTIFIER = "sf_auditor";
+const IDENTIFIER = "sf_accountant";
 
 const setupLogger = () => {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 16);
-  const logDirectory = path.resolve(__dirname, "./Results/sf-auditor");
+  const logDirectory = path.resolve(__dirname, "./Results/sf-accountant");
 
   if (!fs.existsSync(logDirectory)) {
     fs.mkdirSync(logDirectory, { recursive: true });
   }
 
-  const fileName = path.join(logDirectory, `sf-auditor-${timestamp}.txt`);
+  const fileName = path.join(logDirectory, `sf-accountant-${timestamp}.txt`);
 
   return (message: string) => {
     fs.appendFileSync(fileName, message + "\n");
@@ -47,7 +46,6 @@ const performLogin = async (page: Page, logToFile: Function) => {
 };
 
 const typeValue = async (locator: Locator, value: string, delay: number) => {
-  // await locator.click({ force: true });
   await locator.focus();
   await locator.fill("");
   await locator.pressSequentially(value, { delay: delay });
@@ -72,13 +70,14 @@ const getTabText = async (
     '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
   );
   await expect(tabLocator.nth(expectedIndex)).toBeVisible({ timeout: 240000 });
-  //return await tabLocator.nth(expectedIndex).innerText();
   let text = await tabLocator.nth(expectedIndex).innerText();
+
   return text;
 };
 
 const parseCount = (text: string): number => {
   const digits = text.replace(/[^0-9]/g, "");
+
   return digits ? parseInt(digits, 10) : 0;
 };
 
@@ -108,15 +107,11 @@ const scrapeResults = async (targetCount: number, page: Page) => {
           const cleanContent = texts
             .map((t) => t.trim())
             .filter((t) => t.length > 0);
-          //  console.log(`Row ${rowId}:`, cleanContent.join(' | '));
-          //  console.log('```````````````````````````````````````');
-          // console.log('```````````````````````````````````````');
           console.log("```````````````````````````````````````");
           const accessionNo =
             cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
             "N/A";
 
-          // 2. Find Auditor dynamically to avoid index shifting
           const auditorIndex = cleanContent.indexOf("Audited By");
           const auditorName =
             auditorIndex !== -1
@@ -137,8 +132,6 @@ const scrapeResults = async (targetCount: number, page: Page) => {
           }
           console.log(`Acc.No: ${accessionNo} || Auditor ${auditorName}`);
           console.log("```````````````````````````````````````");
-          //   console.log('```````````````````````````````````````');
-          //   console.log('```````````````````````````````````````');
           processedIds.add(rowId);
           await page.waitForTimeout(500);
           resultsFound++;
@@ -149,6 +142,7 @@ const scrapeResults = async (targetCount: number, page: Page) => {
 
       if (resultsFound >= targetCount) break;
     }
+
     if (resultsFound < targetCount) {
       await page.waitForTimeout(500);
       await rows.last().scrollIntoViewIfNeeded();
@@ -156,19 +150,20 @@ const scrapeResults = async (targetCount: number, page: Page) => {
     }
   }
   console.log(`Successfully scraped ${resultsFound} rows.`);
+
   return {
     text: rowsData.join("\n"),
     isValid: isScenarioValid,
   };
 };
-test.describe("SF-Auditor Automation", () => {
+test.describe("SF-Accountant Automation", () => {
   if (fs.existsSync(AUTH_PATH)) {
     test.use({ storageState: AUTH_PATH });
   }
 
-  test("SF-Auditor", async ({ page }) => {
+  test("SF-Accountant", async ({ page }) => {
     const logToFile = setupLogger();
-    logToFile("--- Starting SF-Auditor Report ---");
+    logToFile("--- Starting SF-Accountant Report ---");
 
     await performLogin(page, logToFile);
 
@@ -182,8 +177,15 @@ test.describe("SF-Auditor Automation", () => {
     const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
 
     const testCases = [
-      { date: "Today", formType: "10-k", count: 15 },
-      // { date: 'Yesterday', formType: '10-k', count: 15 },
+      { id: 1, formType: "10-k", accountant: "Deloitte & Touche", count: 15 },
+      { id: 2, formType: "10-k", accountant: "Ernst & Young", count: 15 },
+      { id: 3, formType: "10-k", accountant: "KPMG", count: 15 },
+      {
+        id: 4,
+        formType: "10-k",
+        accountant: "PriceWaterhouseCoopers",
+        count: 15,
+      },
     ];
 
     let tabIndex = 0;
@@ -196,28 +198,43 @@ test.describe("SF-Auditor Automation", () => {
       await page.waitForTimeout(5000);
       let findings = { text: "No Results Found", isValid: true };
 
-      let amendmentFillingsRadioButton = page.getByTestId(
-        "amendmentFilings-radio-EXC",
-      );
-      await amendmentFillingsRadioButton.click();
+      const sectionFilterBlock = page
+        .locator("div.styles__focusContainer___13rFy")
+        .filter({ has: page.locator("label", { hasText: /^Accountant$/ }) });
+      const sectionPlusBtn = sectionFilterBlock
+        .locator("span._icon_1jkal_249.Add")
+        .first();
+      const modal = page.locator("div.PopupBody__popup__body___1J_d3");
 
-      let ownershipFormsRadioButton = page.getByTestId(
-        "ownershipForms-radio-INC",
-      );
-      await ownershipFormsRadioButton.click();
+      while (!(await modal.isVisible())) {
+        await sectionPlusBtn.click({ force: true }).catch(() => {});
+        await page.waitForTimeout(500);
+      }
+      const auditorSelection = modal
+        .locator("label._checkbox__icon_1xotg_257 ")
+        .nth(scenario.id);
+      await auditorSelection.click();
 
-      logToFile(`\nTesting Scenario: ${scenario.date}`);
-      await fillAndEnter(page, dateInput, scenario.date, 50);
+      await modal
+        .locator('div[id="Audited the filing (10-K, 20-F, 40-F)"]')
+        .locator("div")
+        .nth(0)
+        .click();
+
+      //  await page.pause();
+      await page.getByRole("button", { name: /^OK$/ }).click();
+
       logToFile(`\nTesting Form Type: ${scenario.formType}`);
       await fillAndEnter(page, formsInput, scenario.formType, 3000);
       //await formsInput.press('Enter');
       let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
       await exhibitsCheckbox.click();
+      await page.waitForTimeout(1000);
       await searchBtn.click();
 
       const textDateOnly = await getTabText(page, tabIndex++, logToFile);
-      logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
+      logToFile(`Baseline (${scenario.id}): ${textDateOnly}`);
 
       if (textDateOnly.includes("Docs")) {
         if (selectCheckboxes) {
@@ -296,9 +313,10 @@ test.describe("SF-Auditor Automation", () => {
         findings = await scrapeResults(actualTarget, page);
       }
       const scenarioBlock = [
-        `Date: ${scenario.date}`,
         `Doc Count: ${actualTarget}`,
-        ``,
+        `Auditor: ${scenario.accountant}`,
+        `Scope: Audited the filing (10-K, 20-F, 40-F)`,
+        `Exhibits to Filings: Exclude`,
         `Results:`,
         findings.text,
         ``,

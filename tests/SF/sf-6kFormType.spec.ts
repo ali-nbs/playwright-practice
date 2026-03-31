@@ -80,30 +80,38 @@
 //     await page.pause();
 // });
 
-
-
 import { test } from "@playwright/test";
-import { SECFilingsPage } from "./sf-6kFormType.class.spec";
+import { SECFilingsPage } from "./sf-6kFormType.class";
+import * as path from "path";
+import * as fs from "fs";
+const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
 
 const TEST_DATA = [
-    { id: 0, form: '6-K', day: 'Today', count: 25 },
-    { id: 1, form: '6-K', day: 'Yesterday', count: 25 },
+  // { id: 0, form: '6-K', day: 'Today', count: 25 },
+  { id: 1, form: "6-K", day: "Last 7 Days", count: 25 },
 ];
 
-for (const data of TEST_DATA) {
-    test(`Verify filings for subform: ${data.id}`, async ({ page }) => {
-        const filingsPage = new SECFilingsPage(page);
-
-        await page.goto("/");
-        await filingsPage.login();
-        await filingsPage.selectFormType(data.form);
-        await filingsPage.executeSearch(data.day);
-        const availableDocs = await filingsPage.getAvailableDocCount(data.form, data.day);
-        if (availableDocs > 0) {
-            const finalScrapeLimit = Math.min(data.count, availableDocs);
-            await filingsPage.scrapeResults(finalScrapeLimit, data.form);
-        } else {
-            console.log(`Index ${data.id}: Move to next...`);
-        }
-    });
+if (fs.existsSync(AUTH_PATH)) {
+  test.use({ storageState: AUTH_PATH });
 }
+test(`Verify filings for subform`, async ({ page }) => {
+  const filingsPage = new SECFilingsPage(page);
+
+  await page.goto("/");
+  await filingsPage.login(AUTH_PATH);
+  for (const data of TEST_DATA) {
+    await filingsPage.selectFormType(data.form);
+    await filingsPage.executeSearch(data.day);
+    const availableDocs = await filingsPage.getAvailableDocCount(
+      data.form,
+      data.day,
+    );
+    if (availableDocs > 0) {
+      await filingsPage.configureDisplayColumns();
+      const finalScrapeLimit = Math.min(data.count, availableDocs);
+      await filingsPage.scrapeResults(finalScrapeLimit, data.form);
+    } else {
+      console.log(`Index ${data.id}: Move to next...`);
+    }
+  }
+});

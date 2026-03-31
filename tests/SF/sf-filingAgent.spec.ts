@@ -1,21 +1,20 @@
 import { test, expect, Page, Locator } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
-import { google } from "googleapis";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 
 const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
-const IDENTIFIER = "sf_auditor";
+const IDENTIFIER = "sf_filingAgent";
 
 const setupLogger = () => {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 16);
-  const logDirectory = path.resolve(__dirname, "./Results/sf-auditor");
+  const logDirectory = path.resolve(__dirname, "./Results/sf-filingAgent");
 
   if (!fs.existsSync(logDirectory)) {
     fs.mkdirSync(logDirectory, { recursive: true });
   }
 
-  const fileName = path.join(logDirectory, `sf-auditor-${timestamp}.txt`);
+  const fileName = path.join(logDirectory, `sf-filingAgent-${timestamp}.txt`);
 
   return (message: string) => {
     fs.appendFileSync(fileName, message + "\n");
@@ -46,11 +45,15 @@ const performLogin = async (page: Page, logToFile: Function) => {
   }
 };
 
-const typeValue = async (locator: Locator, value: string, delay: number) => {
+const typeValue = async (
+  page: Page,
+  locator: Locator,
+  value: string,
+  delay: number,
+) => {
   // await locator.click({ force: true });
   await locator.focus();
-  await locator.fill("");
-  await locator.pressSequentially(value, { delay: delay });
+  await page.keyboard.type(value, { delay: 50 });
 };
 
 const fillAndEnter = async (
@@ -59,7 +62,7 @@ const fillAndEnter = async (
   value: string,
   delay: number,
 ) => {
-  await typeValue(locator, value, delay);
+  await typeValue(page, locator, value, delay);
   await page.keyboard.press("Enter");
 };
 
@@ -82,7 +85,11 @@ const parseCount = (text: string): number => {
   return digits ? parseInt(digits, 10) : 0;
 };
 
-const scrapeResults = async (targetCount: number, page: Page) => {
+const scrapeResults = async (
+  targetCount: number,
+  page: Page,
+  expectedAgent: string,
+) => {
   let resultsFound = 0;
   const processedIds = new Set<string>();
   let rowsData: string[] = [];
@@ -117,25 +124,28 @@ const scrapeResults = async (targetCount: number, page: Page) => {
             "N/A";
 
           // 2. Find Auditor dynamically to avoid index shifting
-          const auditorIndex = cleanContent.indexOf("Audited By");
-          const auditorName =
+          const auditorIndex = cleanContent.indexOf("Filing Agent");
+          const filingAgent =
             auditorIndex !== -1
               ? cleanContent[auditorIndex + 1]
-              : "No Auditor Found";
+              : "No Filing Agent Found";
           const isLineMissingData =
-            auditorName == "No Auditor Found" || !accessionNo;
-
+            filingAgent == "No Filing Agent Found" || !accessionNo;
+          const match = filingAgent
+            .toLowerCase()
+            .includes(expectedAgent.toLowerCase());
           if (isLineMissingData) {
             isScenarioValid = false;
             rowsData.push(
-              `❌ MISSING DATA >> Acc.No: ${accessionNo} | auditorName: ${auditorName}`,
+              `❌ MISSING DATA >> Acc.No: ${accessionNo} | auditorName: ${filingAgent}`,
             );
-          } else {
+          } else if (!match || filingAgent === "No Filing Agent Found") {
+            isScenarioValid = false;
             rowsData.push(
-              `Acc.No: ${accessionNo} | auditorName: ${auditorName}`,
+              `❌ WRONG Filing Agent >> Acc.No: ${accessionNo} | auditorName: ${filingAgent}`,
             );
           }
-          console.log(`Acc.No: ${accessionNo} || Auditor ${auditorName}`);
+          console.log(`Acc.No: ${accessionNo} || Filing Agent ${filingAgent}`);
           console.log("```````````````````````````````````````");
           //   console.log('```````````````````````````````````````');
           //   console.log('```````````````````````````````````````');
@@ -161,14 +171,14 @@ const scrapeResults = async (targetCount: number, page: Page) => {
     isValid: isScenarioValid,
   };
 };
-test.describe("SF-Auditor Automation", () => {
+test.describe("SF-FilingAgent Automation", () => {
   if (fs.existsSync(AUTH_PATH)) {
     test.use({ storageState: AUTH_PATH });
   }
 
-  test("SF-Auditor", async ({ page }) => {
+  test("SF-FilingAgent", async ({ page }) => {
     const logToFile = setupLogger();
-    logToFile("--- Starting SF-Auditor Report ---");
+    logToFile("--- Starting SF-Filing Agent Report ---");
 
     await performLogin(page, logToFile);
 
@@ -182,8 +192,17 @@ test.describe("SF-Auditor Automation", () => {
     const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
 
     const testCases = [
-      { date: "Today", formType: "10-k", count: 15 },
-      // { date: 'Yesterday', formType: '10-k', count: 15 },
+      {
+        date: "Yesterday",
+        agent: "Akin Gump Strauss Hauer & Feld LLP",
+        count: 15,
+      },
+      {
+        date: "Yesterday",
+        agent: "Broadridge Financial Solutions, Inc",
+        count: 15,
+      },
+      { date: "Yesterday", agent: "Donnelley Financial Solutions", count: 15 },
     ];
 
     let tabIndex = 0;
@@ -208,8 +227,9 @@ test.describe("SF-Auditor Automation", () => {
 
       logToFile(`\nTesting Scenario: ${scenario.date}`);
       await fillAndEnter(page, dateInput, scenario.date, 50);
-      logToFile(`\nTesting Form Type: ${scenario.formType}`);
-      await fillAndEnter(page, formsInput, scenario.formType, 3000);
+      let filingAgentInput = page.getByTestId("filingAgentAndSoftware-input");
+      await fillAndEnter(page, filingAgentInput, scenario.agent, 50);
+      //  await page.pause();
       //await formsInput.press('Enter');
       let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
       await page.waitForTimeout(2000);
@@ -250,7 +270,7 @@ test.describe("SF-Auditor Automation", () => {
           const auditorCheckbox = page
             .locator(".PopupBody__popup__body___1J_d3")
             .locator("div")
-            .filter({ hasText: /^Audited By$/ })
+            .filter({ hasText: /^Filing Agent$/ })
             .locator("._checkbox__icon_1xotg_257");
 
           await auditorCheckbox.click();
@@ -293,16 +313,16 @@ test.describe("SF-Auditor Automation", () => {
         const docsCount = parseCount(textDateOnly);
         actualTarget = Math.min(scenario.count, docsCount);
 
-        findings = await scrapeResults(actualTarget, page);
+        findings = await scrapeResults(actualTarget, page, scenario.agent);
       }
       const scenarioBlock = [
-        `Date: ${scenario.date}`,
-        `Doc Count: ${actualTarget}`,
-        ``,
-        `Results:`,
-        findings.text,
-        ``,
         `Scenario Status: ${findings.isValid ? "VALID ✅" : "INVALID ❌ (Missing Data)"}`,
+        `Date: ${scenario.date}`,
+        `Agent Name: ${scenario.agent}`,
+        ``,
+        `${findings.text.includes("No Results Found") ? "Results:" : "Failure Accession IDs:"}`,
+        `${findings.text.trim().length > 0 ? findings.text : "None"}`,
+        ``,
       ].join("\n");
 
       allScenarioResults.push(scenarioBlock);
@@ -314,7 +334,7 @@ test.describe("SF-Auditor Automation", () => {
     );
 
     try {
-      await updateGoogleSheet(finalDump, IDENTIFIER);
+      await updateGoogleSheet(finalDump, IDENTIFIER, []);
       logToFile("Sheet updated successfully.");
     } catch (e: any) {
       logToFile(`Sheet update failed: ${e.message}`);

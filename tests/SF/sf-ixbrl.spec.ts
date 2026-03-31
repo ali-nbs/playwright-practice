@@ -5,12 +5,12 @@ import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 
 const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
 
-test.describe("SF-XBRL Parsing Automation", () => {
+test.describe("SF-iXBRL Automation", () => {
   if (fs.existsSync(AUTH_PATH)) {
     test.use({ storageState: AUTH_PATH });
   }
 
-  test("SF-XBRL Parsing", async ({ page }) => {
+  test("SF-iXBRL", async ({ page }) => {
     await page.goto("/");
 
     const userField = page.locator("#userid");
@@ -35,7 +35,7 @@ test.describe("SF-XBRL Parsing Automation", () => {
     await formsInput.press("Enter");
 
     await page.locator('label[for="-ExhibitsToFilings"]').click();
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(500);
     await page.getByRole("button", { name: /^Search$/i }).click();
 
     const statusLocator = page.locator(
@@ -151,41 +151,116 @@ test.describe("SF-XBRL Parsing Automation", () => {
         cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
         "N/A";
       console.log(`Accession No: ${accessionNo}`);
+
       const viewBtn = currentRow.getByRole("button", { name: /View/i }).last();
-      const isixbrlBtn = currentRow
+
+      const hasiXBRLbtn = currentRow
         .getByRole("button", { name: /iXBRL/i })
         .first();
-      if (!(await isixbrlBtn.isVisible({ timeout: 5000 }).catch(() => false))) {
-        console.log(`iXBRL doc not found for ${accessionNo}, skipping...`);
 
-        processedCount++;
-        continue;
-      }
+      const hasiXBRLLabel = await hasiXBRLbtn.isVisible();
+      console.log(`iXBRL Label on Grid: ${hasiXBRLLabel ? "YES" : "NO"}`);
 
       try {
         if (await viewBtn.isVisible({ timeout: 5000 })) {
           await viewBtn.click();
 
-          const ixbrlBtn = page.locator("text=/^iXBRL$/i").first();
-          if (await ixbrlBtn.isVisible({ timeout: 8000 })) {
-            await ixbrlBtn.click();
-            const ex101Link = page.locator("text=/^EX-101$/i").first();
-            if (await ex101Link.isVisible()) {
-              await ex101Link.click();
+          // Locate the iXBRL button inside the viewer
+          const ixbrlTab = page.locator("#ixbrl");
+          await ixbrlTab.waitFor({ state: "attached", timeout: 10000 });
+          //  await page.waitForTimeout(5000);
+
+          // 2. Check for the disabled class from your screenshot (styles__disabled___mfjwS)
+          const className = (await ixbrlTab.getAttribute("class")) || "";
+          const isGreyedOut = className.includes("styles__disabled");
+
+          if (!hasiXBRLLabel) {
+            await expect(page.locator("#ixbrl")).toHaveClass(/disabled/, {
+              timeout: 60000,
+            });
+            // EXPECTATION: Should be greyed out
+            if (isGreyedOut) {
+              console.log(
+                `✅ Success: iXBRL is correctly greyed out (Class: ${className})`,
+              );
             } else {
+              console.log(
+                `❌ Failure: iXBRL should be greyed out but is ACTIVE for ${accessionNo}`,
+              );
               isFailed = true;
+              failureLogs.push(
+                `${accessionNo} (Expected Greyed Out - Found Active)`,
+              );
             }
-            console.log(
-              `Successfully accessed EX-101 for Item ${processedCount + 1}`,
-            );
           } else {
-            isFailed = true;
+            await expect(page.locator("#ixbrl")).not.toHaveClass(/disabled/, {
+              timeout: 60000,
+            });
+            console.log(
+              "SCENARIO: Label WAS on grid -> Section MUST be active",
+            );
+            // SCENARIO: Label WAS on grid -> Section MUST be active
+            try {
+              // This 'expect' will wait up to 5s for Row 14/15 to "un-grey"
+              await expect(ixbrlTab).not.toHaveClass(/disabled/, {
+                timeout: 60000,
+              });
+              console.log(`SCENARIO: Label WAS on grid -> Section is active.`);
+
+              await ixbrlTab.click();
+              const ex101Link = page.locator("text=/^EX-101$/i").first();
+              if (!(await ex101Link.isVisible({ timeout: 5000 }))) {
+                isFailed = true;
+                failureLogs.push(
+                  `${accessionNo} (Active iXBRL but EX-101 missing)`,
+                );
+              }
+              const infoTabLink = page
+                .locator("text=/^Info$/i")
+                .first()
+                .click();
+              const SECLink = page
+                .locator(".styles__panel-row___uCFjv")
+                .filter({ hasText: "SEC Link" })
+                .locator("a")
+                .first();
+              const [secTab] = await Promise.all([
+                page.context().waitForEvent("page"),
+                SECLink.click(),
+              ]);
+              await secTab.waitForLoadState();
+              console.log("Opened SEC Tab:", await secTab.title());
+              const tableRows = secTab.locator("table.tableFile tr");
+              if ((await tableRows.count()) > 0) {
+                const ixbrlCell = tableRows
+                  .nth(1)
+                  .locator("td")
+                  .filter({ hasText: "iXBRL" });
+                await expect(ixbrlCell).toBeVisible({ timeout: 10000 });
+
+                console.log(
+                  "✅ iXBRL confirmation found in SEC table.",
+                  ixbrlCell,
+                );
+              } else {
+                console.log("⚠️ No rows found in the SEC Filing Detail table.");
+              }
+              await secTab.close();
+            } catch (e) {
+              console.log(
+                `❌ Failure: iXBRL is GREYED OUT despite badge on grid for ${accessionNo}`,
+              );
+              isFailed = true;
+              failureLogs.push(
+                `${accessionNo} (Expected Active - Found Greyed Out)`,
+              );
+            }
           }
         }
       } catch (e: any) {
-        console.log(
-          `Extraction failed for item at index ${processedCount}: ${e.message}`,
-        );
+        console.log(`Extraction error for ${accessionNo}`);
+        isFailed = true;
+        failureLogs.push(`${accessionNo}`);
       }
 
       const resultsTab = page
@@ -207,6 +282,6 @@ test.describe("SF-XBRL Parsing Automation", () => {
       `${failureLogs.length === 0 ? "None" : failureLogs.join("\n")}`,
     ].join("\n");
 
-    await updateGoogleSheet(scenarioBlock, "sf_xbrl_parsing", failureLogs);
+    await updateGoogleSheet(scenarioBlock, "sf_ixbrl", failureLogs);
   });
 });
