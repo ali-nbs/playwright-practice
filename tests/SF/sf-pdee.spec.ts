@@ -1,6 +1,7 @@
 import { test, expect, Locator, Page } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
+import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 
 const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
 
@@ -65,7 +66,7 @@ const getRandomIndices = (count: number, max: number) => {
   return Array.from(indices);
 };
 
-test.describe("SF-PDEE Automation", () => {
+test.describe("SF-PDEE Automation", async () => {
   if (fs.existsSync(AUTH_PATH)) {
     test.use({ storageState: AUTH_PATH });
   }
@@ -154,6 +155,8 @@ test.describe("SF-PDEE Automation", () => {
       await downloadBtn.click();
       await page.locator('label[for="coverPage"]').click({ force: true });
 
+      await page.locator('div[name="formats"]').nth(0).click({ force: true });
+
       const [pdfDownload] = await Promise.all([
         page.waitForEvent("download"),
         page.getByRole("button", { name: /ok/i }).click(),
@@ -162,6 +165,34 @@ test.describe("SF-PDEE Automation", () => {
         path.join("./downloads", pdfDownload.suggestedFilename()),
       );
       logToFile(`Downloaded PDF: ${pdfDownload.suggestedFilename()}`);
+
+      await downloadBtn.click();
+      await page.locator('label[for="coverPage"]').click({ force: true });
+
+      await page.locator('div[name="formats"]').nth(1).click({ force: true });
+
+      const [docxDownload] = await Promise.all([
+        page.waitForEvent("download"),
+        page.getByRole("button", { name: /ok/i }).click(),
+      ]);
+      await docxDownload.saveAs(
+        path.join("./downloads", docxDownload.suggestedFilename()),
+      );
+      logToFile(`Downloaded DOCX: ${docxDownload.suggestedFilename()}`);
+
+      await downloadBtn.click();
+      await page.locator('label[for="coverPage"]').click({ force: true });
+
+      await page.locator('div[name="formats"]').nth(2).click({ force: true });
+
+      const [htmlDownload] = await Promise.all([
+        page.waitForEvent("download"),
+        page.getByRole("button", { name: /ok/i }).click(),
+      ]);
+      await htmlDownload.saveAs(
+        path.join("./downloads", htmlDownload.suggestedFilename()),
+      );
+      logToFile(`Downloaded HTML: ${htmlDownload.suggestedFilename()}`);
 
       logToFile("Action: Processing Excel Download...");
       await page.locator('button:has-text("Excel List")').click();
@@ -181,4 +212,19 @@ test.describe("SF-PDEE Automation", () => {
       );
     }
   });
+  const scenarioBlock = [
+    `Status: "VALID ✅"`,
+    ``,
+    `Filters Used`,
+    `Date: Last 7 Days`,
+    `Exhibits to Filings: Exclude`,
+    `Search For: Filings`,
+    `PDEE Used`,
+    ``,
+    `PDF Download: Passed`,
+    `Docx Download: Passed`,
+    `HTML Download: Passed`,
+    `Excel Download: Passed`,
+  ].join("\n");
+  await updateGoogleSheet(scenarioBlock, "sf_pdee", []);
 });
