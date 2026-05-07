@@ -211,20 +211,21 @@ test.describe("SF-PDEE Automation", async () => {
         "=".repeat(30) + `\nREPORT END: ${new Date().toLocaleString()}`,
       );
     }
+
+    const scenarioBlock = [
+      `Status: "VALID ✅"`,
+      ``,
+      `Filters Used`,
+      `Date: Last 7 Days`,
+      `Exhibits to Filings: Exclude`,
+      `Search For: Filings`,
+      `PDEE Used`,
+      ``,
+      `PDF Download: Passed`,
+      `Docx Download: Passed`,
+      `HTML Download: Passed`,
+      `Excel Download: Passed`,
+    ].join("\n");
+    await updateGoogleSheet(scenarioBlock, "sf_pdee", []);
   });
-  const scenarioBlock = [
-    `Status: "VALID ✅"`,
-    ``,
-    `Filters Used`,
-    `Date: Last 7 Days`,
-    `Exhibits to Filings: Exclude`,
-    `Search For: Filings`,
-    `PDEE Used`,
-    ``,
-    `PDF Download: Passed`,
-    `Docx Download: Passed`,
-    `HTML Download: Passed`,
-    `Excel Download: Passed`,
-  ].join("\n");
-  await updateGoogleSheet(scenarioBlock, "sf_pdee", []);
 });

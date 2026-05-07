@@ -234,7 +234,7 @@ export const getRandomIndices = (maxRange: number, count: number): number[] => {
 
 export const closeAllOpenTabs = async (page: Page) => {
   const activeTab = page.locator(
-    '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
+    '//span[contains(text(), "Docs:") or contains(text(), "Results:") or contains(text(), "No Results Found")]',
   );
   if ((await activeTab.count()) > 0) {
     try {
