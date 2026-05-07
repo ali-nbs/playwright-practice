@@ -81,7 +81,11 @@ const parseCount = (text: string): number => {
   return digits ? parseInt(digits, 10) : 0;
 };
 
-const scrapeResults = async (targetCount: number, page: Page) => {
+const scrapeResults = async (
+  targetCount: number,
+  page: Page,
+  targetAuditor: string,
+) => {
   let resultsFound = 0;
   const processedIds = new Set<string>();
   let rowsData: string[] = [];
@@ -108,32 +112,73 @@ const scrapeResults = async (targetCount: number, page: Page) => {
             .map((t) => t.trim())
             .filter((t) => t.length > 0);
           console.log("```````````````````````````````````````");
+          // for (const [index, text] of cleanContent.entries()) {
+          //   console.log(index, text);
+          // }
+          console.log("```````````````````````````````````````");
           const accessionNo =
             cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
             "N/A";
 
           const auditorIndex = cleanContent.indexOf("Audited By");
+          const recentAuditorIndex = cleanContent.indexOf("Recent Auditor");
+          console.log("auditorIndex", auditorIndex);
+          console.log("recentAuditorIndex", recentAuditorIndex);
+          const recentAuditorName =
+            recentAuditorIndex !== -1
+              ? cleanContent[recentAuditorIndex + 1]
+              : "No Recent Auditor Found";
           const auditorName =
             auditorIndex !== -1
               ? cleanContent[auditorIndex + 1]
               : "No Auditor Found";
           const isLineMissingData =
-            auditorName == "No Auditor Found" || !accessionNo;
+            (auditorName == "No Auditor Found" &&
+              recentAuditorName == "No Recent Auditor Found") ||
+            !accessionNo;
+
+          const splitAuditors = (str: string) =>
+            (str || "")
+              .split("●")
+              .map((s) => s.trim())
+              .filter(Boolean);
+          const normalize = (s: string) =>
+            s
+              .toLowerCase()
+              .replace(/\u00A0/g, " ")
+              .replace(/[^a-z& ]/g, "")
+              .replace(/\s+/g, " ")
+              .trim();
+          const auditors =
+            auditorName !== "No Auditor Found"
+              ? splitAuditors(auditorName)
+              : splitAuditors(recentAuditorName);
+
+          const isMatch = auditors.some(
+            (a) => normalize(a) === normalize(targetAuditor),
+          );
 
           if (isLineMissingData) {
             isScenarioValid = false;
             rowsData.push(
               `❌ MISSING DATA >> Acc.No: ${accessionNo} | auditorName: ${auditorName}`,
             );
+          } else if (!isMatch) {
+            isScenarioValid = false;
+            rowsData.push(
+              `❌ WRONG AUDITOR >> Acc.No: ${accessionNo} | auditorName: ${auditorName !== "No Auditor Found" ? auditorName : recentAuditorName}`,
+            );
           } else {
             rowsData.push(
-              `Acc.No: ${accessionNo} | auditorName: ${auditorName}`,
+              `Acc.No: ${accessionNo} | auditorName: ${auditorName !== "No Auditor Found" ? auditorName : recentAuditorName}`,
             );
           }
-          console.log(`Acc.No: ${accessionNo} || Auditor ${auditorName}`);
+          console.log(
+            `Acc.No: ${accessionNo} || Auditor: ${auditorName !== "No Auditor Found" ? auditorName : recentAuditorName}`,
+          );
           console.log("```````````````````````````````````````");
           processedIds.add(rowId);
-          await page.waitForTimeout(500);
+          await page.waitForTimeout(700);
           resultsFound++;
         } catch (e) {
           console.log(`Skipping Row ${rowId} due to re-render.`);
@@ -145,12 +190,12 @@ const scrapeResults = async (targetCount: number, page: Page) => {
 
     if (resultsFound < targetCount) {
       await page.waitForTimeout(500);
-      await rows.last().scrollIntoViewIfNeeded();
+      await rows.last().evaluate((el) => el.scrollIntoView({ block: "start" }));
+      //  await rows.last().scroll({ block: "start" });
       await page.waitForTimeout(500);
     }
   }
   console.log(`Successfully scraped ${resultsFound} rows.`);
-
   return {
     text: rowsData.join("\n"),
     isValid: isScenarioValid,
@@ -298,6 +343,14 @@ test.describe("SF-Accountant Automation", () => {
           await companyInfoCheckbox.click();
           await page.waitForTimeout(500);
 
+          const recentAuditorCheckbox = page
+            .locator(".PopupBody__popup__body___1J_d3")
+            .locator("div")
+            .filter({ hasText: /^Recent Auditor$/ })
+            .locator("._checkbox__icon_1xotg_257");
+
+          await recentAuditorCheckbox.click();
+          await page.waitForTimeout(500);
           await page
             .getByRole("button", {
               name: "Apply",
@@ -310,7 +363,7 @@ test.describe("SF-Accountant Automation", () => {
         const docsCount = parseCount(textDateOnly);
         actualTarget = Math.min(scenario.count, docsCount);
 
-        findings = await scrapeResults(actualTarget, page);
+        findings = await scrapeResults(actualTarget, page, scenario.accountant);
       }
       const scenarioBlock = [
         `Doc Count: ${actualTarget}`,

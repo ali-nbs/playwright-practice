@@ -11,5 +11,7 @@
     "dotenv": "^17.2.3",
     "googleapis": "^169.0.0"
   },
-  "scripts": {}
+  "scripts": {
+    "run-all-tests": "node run-tests.js"
+  }
 }

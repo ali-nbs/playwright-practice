@@ -2,23 +2,113 @@ import { test, expect, Page } from "@playwright/test";
 import { google } from "googleapis";
 import path from "path";
 import fs from "fs";
+import { AUTH_PATH, closeAllOpenTabs } from "../..//utils/helpers";
 
 const SPREADSHEET_ID = "1ArHNlvrv-4vMedIlz5cohymFZtMhHhEK6FRAg7KqlIU";
 
-const SHEET_NAMES = ["3/19", "3/20", "3/23"];
+const SHEET_NAMES = [
+  // "1/20",
+  // "1/23",
+  // "1/26",
+  // "1/27",
+  // "1/28",
+  // "1/29",
+  // "1/30",
+  // "2/3",
+  // "2/4",
+  // "2/5",
+  // "2/6",
+  // "2/9",
+  // "2/10",
+  // "2/11",
+  // "2/12",
+  // "2/13",
+  // "2/17",
+  // "2/19",
+  // "2/20",
+  // "2/23",
+  // "2/24",
+  // "2/25",
+  // "2/27",
+  // "2/26",
+  // "3/3",
+  // "3/4",
+  // "3/5",
+  // "3/6",
+  // "3/9",
+  // "3/10",
+  // "3/11",
+  // "3/12",
+  // "3/13",
+  // "3/16",
+  // "3/17",
+  // "3/18",
+  // "3/19",
+  // "3/20",
+  // "3/23",
+  // "3/24",
+  // "3/25",
+  // "3/26",
+  // "3/27",
+  // "3/30",
+  // "3/31",
+  // "4/1",
+  // "4/2",
+  // "4/3",
+  // "4/6",
+  // "4/7",
+  // "4/8",
+  // "4/9",
+  // "4/10",
+  // "4/13",
+  // "4/14",
+  // "4/15",
+  // "4/16",
+  // "4/30",
+  // "5/1",
+  "5/5",
+];
 const KEY_FILE = path.resolve(process.cwd(), "credentials.json");
-const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
-const PROCESS_ALL_ROWS = true;
-
-if (fs.existsSync(AUTH_PATH)) {
-  test.use({ storageState: AUTH_PATH });
-}
+const PROCESS_ALL_ROWS = false;
 
 test.describe("Batch Fiscal-Year Processor", () => {
-  for (const sheetName of SHEET_NAMES) {
-    test(`Process Sheet ${sheetName}`, async ({ page, context }) => {
+  // Use the auth state if it exists
+  if (fs.existsSync(AUTH_PATH)) {
+    test.use({ storageState: AUTH_PATH });
+  }
+
+  test("Process all sheets in a single session", async ({ page }) => {
+    // 1. Initial Navigation (Only happens ONCE)
+    await page.goto("/");
+
+    // 2. Handle Login only if redirected to login page
+    if (
+      page.url().includes("login") ||
+      (await page
+        .locator("#userid")
+        .isVisible()
+        .catch(() => false))
+    ) {
+      console.log("Session expired or missing. Logging in...");
+      await page.locator("#userid").fill(process.env.APP_USERNAME!);
+      await page.getByRole("button", { name: "Next" }).click();
+      await page.locator("#password").fill(process.env.APP_PASSWORD!);
+      await page.getByRole("button", { name: "Sign in" }).click();
+      await page.waitForURL(/.*apps.intelligize.com/, {
+        waitUntil: "networkidle",
+      });
+      await page.context().storageState({ path: AUTH_PATH });
+    }
+
+    // 3. Navigate to the starting point (SEC Filings) ONCE
+    const secLink = page.locator("text=/SEC Filings/i").first();
+    await secLink.click();
+
+    for (const sheetName of SHEET_NAMES) {
+      // await page.goto("/");
+
       const auth = new google.auth.GoogleAuth({
         keyFile: KEY_FILE,
         scopes: SCOPES,
@@ -27,23 +117,6 @@ test.describe("Batch Fiscal-Year Processor", () => {
         version: "v4",
         auth: (await auth.getClient()) as any,
       });
-
-      // 2. Perform Login once if session is missing
-      await page.goto("/");
-      const userIdInput = page.locator("#userid");
-      if (await userIdInput.isVisible({ timeout: 8000 }).catch(() => false)) {
-        console.log("Performing manual login...");
-        await userIdInput.fill(process.env.APP_USERNAME!);
-        await page.getByRole("button", { name: "Next" }).click();
-        await page.locator("#password").fill(process.env.APP_PASSWORD!);
-        await page.getByRole("button", { name: "Sign in" }).click();
-        await page.waitForURL(/.*apps.intelligize.com/, {
-          waitUntil: "networkidle",
-        });
-        await context.storageState({ path: AUTH_PATH });
-      }
-
-      // 3. Batch Loop for Multi-Sheet Run
       console.log(
         `\n========== STARTING BATCH: SHEET [${sheetName}] ==========`,
       );
@@ -173,12 +246,12 @@ test.describe("Batch Fiscal-Year Processor", () => {
             .locator('iframe[src*="/SECFilings/Documents/"]')
             .first()
             .contentFrame();
-          const currentFYELocator = docFrame.locator(
-            'ix\\:nonnumeric[name="dei:CurrentFiscalYearEndDate"]',
-          );
-          const docPeriodLocator = docFrame.locator(
-            'ix\\:nonnumeric[name="dei:DocumentPeriodEndDate"]',
-          );
+          const currentFYELocator = docFrame
+            .locator('ix\\:nonnumeric[name="dei:CurrentFiscalYearEndDate"]')
+            .first();
+          const docPeriodLocator = docFrame
+            .locator('ix\\:nonnumeric[name="dei:DocumentPeriodEndDate"]')
+            .first();
 
           let fiscalYearEndValue: string | null = null;
 
@@ -219,15 +292,19 @@ test.describe("Batch Fiscal-Year Processor", () => {
           //  const ex101Link = page.locator('a').filter({ hasText: /^EX-101$/ }).first();
           try {
             await page.locator("text=/^EX-101$/i").first().click();
-            await page.waitForTimeout(3000); // Wait for the frame to load after clicking EX-101
-            const xbrlFrame = page
-              .locator("div.HtmlViewer__viewer___ZSwJe iframe")
+
+            const xbrlFrame = page.frameLocator(
+              "div.HtmlViewer__viewer___ZSwJe iframe",
+            );
+
+            // wait for XBRL-specific element
+            await xbrlFrame
+              .locator(".HtmlViewer-styles__xbrl-report-table-attribs___2OtRf")
               .first()
-              .contentFrame();
-            await xbrlFrame.locator("td.pl, .xbrl, table").first().waitFor({
-              state: "visible",
-              timeout: 20000,
-            });
+              .waitFor({
+                state: "visible",
+                timeout: 40000,
+              });
 
             // const xbrlTab = page
             //     .locator('.toolTipWraper')
@@ -281,13 +358,21 @@ test.describe("Batch Fiscal-Year Processor", () => {
                 const row = xbrlFrame
                   .locator("tr")
                   .filter({
-                    has: xbrlFrame.locator('td.pl >> text="' + label + '"'),
+                    has: xbrlFrame.locator(`td.pl >> text=/^${label}$/i`),
                   })
                   .first();
 
                 if ((await row.count()) > 0) {
-                  const valueCell = row.locator("td.text").first();
-                  return (await valueCell.textContent())?.trim() || "";
+                  const cells = row.locator("td.text");
+                  const cellCount = await cells.count();
+
+                  for (let i = 0; i < cellCount; i++) {
+                    const text =
+                      (await cells.nth(i).textContent())?.trim() || "";
+                    if (/\d+/.test(text)) {
+                      return text;
+                    }
+                  }
                 }
               }
               return "";
@@ -330,26 +415,27 @@ test.describe("Batch Fiscal-Year Processor", () => {
         } catch (error: any) {
           console.error(`Error processing ${accNum}: ${error.message}`);
         } finally {
-          const activeTab = page.locator(
-            '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-          );
-          if ((await activeTab.count()) > 0) {
-            try {
-              await activeTab.first().click({ button: "right", timeout: 5000 });
-              const closeAllBtn = page
-                .locator("div.react-contextmenu-item:visible")
-                .filter({ hasText: "Close all tabs" })
-                .first();
-              await closeAllBtn.dispatchEvent("click");
-              await expect(activeTab).toHaveCount(0, { timeout: 15000 });
-            } catch (cleanupError) {
-              await page.reload();
-            }
-          }
+          //   const activeTab = page.locator(
+          //     '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
+          //   );
+          //   if ((await activeTab.count()) > 0) {
+          //     try {
+          //       await activeTab.first().click({ button: "right", timeout: 5000 });
+          //       const closeAllBtn = page
+          //         .locator("div.react-contextmenu-item:visible")
+          //         .filter({ hasText: "Close all tabs" })
+          //         .first();
+          //       await closeAllBtn.dispatchEvent("click");
+          //       await expect(activeTab).toHaveCount(0, { timeout: 15000 });
+          //     } catch (cleanupError) {
+          //       await page.reload();
+          //     }
+          //   }
+          await closeAllOpenTabs(page);
         }
       }
-    });
-  }
+    }
+  });
 });
 
 function calculateDynamicFiscal(periodStr: string, yearEndStr: string) {

@@ -118,7 +118,8 @@ test.describe("SF-CompanyType Automation", () => {
 
       const formsInput = page.locator("#Forms").getByRole("textbox");
       await formsInput.click();
-      await formsInput.pressSequentially("10-K", { delay: 500 });
+      //await formsInput.pressSequentially("10-K", { delay: 500 });
+      await page.keyboard.type("10-K", { delay: 100 });
       await page.waitForTimeout(500);
       await formsInput.press("Enter");
       let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');

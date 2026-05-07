@@ -107,7 +107,7 @@ const validateFiscalYear = async (page: Page, activeTab: Locator) => {
   const companyTabIndex = (await activeTab.count()) - 1;
   const rows = page.locator("tr.periodicFilingsContent__tableRow___trkDv");
   const rowCount = await rows.count();
-  const limit = Math.min(rowCount, 3);
+  const limit = Math.min(rowCount, 1);
 
   console.log(`Total rows found: ${rowCount}`);
 
@@ -406,7 +406,7 @@ test.describe("SF-fiscalYear Automation", () => {
 
       const docsCount = parseCount(textDateOnly);
 
-      actualTarget = Math.min(3, docsCount);
+      actualTarget = Math.min(1, docsCount);
 
       findings = await scrapeResults(actualTarget, page);
     }

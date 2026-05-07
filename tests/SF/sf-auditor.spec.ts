@@ -108,22 +108,31 @@ const scrapeResults = async (targetCount: number, page: Page) => {
           const cleanContent = texts
             .map((t) => t.trim())
             .filter((t) => t.length > 0);
-          //  console.log(`Row ${rowId}:`, cleanContent.join(' | '));
-          //  console.log('```````````````````````````````````````');
-          // console.log('```````````````````````````````````````');
-          console.log("```````````````````````````````````````");
+
           const accessionNo =
             cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
             "N/A";
 
-          // 2. Find Auditor dynamically to avoid index shifting
           const auditorIndex = cleanContent.indexOf("Audited By");
+          const recentAuditorIndex = cleanContent.indexOf("Recent Auditor");
+
+          console.log("auditorIndex", auditorIndex);
+          console.log("recentAuditorIndex", recentAuditorIndex);
+
+          const recentAuditorName =
+            recentAuditorIndex !== -1
+              ? cleanContent[recentAuditorIndex + 1]
+              : "No Recent Auditor Found";
+
           const auditorName =
             auditorIndex !== -1
               ? cleanContent[auditorIndex + 1]
               : "No Auditor Found";
+
           const isLineMissingData =
-            auditorName == "No Auditor Found" || !accessionNo;
+            (auditorName == "No Auditor Found" &&
+              recentAuditorName == "No Recent Auditor Found") ||
+            !accessionNo;
 
           if (isLineMissingData) {
             isScenarioValid = false;
@@ -132,13 +141,13 @@ const scrapeResults = async (targetCount: number, page: Page) => {
             );
           } else {
             rowsData.push(
-              `Acc.No: ${accessionNo} | auditorName: ${auditorName}`,
+              `Acc.No: ${accessionNo} | auditorName: ${auditorName != "No Auditor Found" ? auditorName : recentAuditorName}`,
             );
           }
-          console.log(`Acc.No: ${accessionNo} || Auditor ${auditorName}`);
-          console.log("```````````````````````````````````````");
-          //   console.log('```````````````````````````````````````');
-          //   console.log('```````````````````````````````````````');
+
+          console.log(
+            `Acc.No: ${accessionNo} || Auditor ${auditorName != "No Auditor Found" ? auditorName : recentAuditorName}`,
+          );
           processedIds.add(rowId);
           await page.waitForTimeout(500);
           resultsFound++;
@@ -151,11 +160,11 @@ const scrapeResults = async (targetCount: number, page: Page) => {
     }
     if (resultsFound < targetCount) {
       await page.waitForTimeout(500);
-      await rows.last().scrollIntoViewIfNeeded();
+      await rows.last().evaluate((el) => el.scrollIntoView({ block: "start" }));
       await page.waitForTimeout(500);
     }
   }
-  console.log(`Successfully scraped ${resultsFound} rows.`);
+
   return {
     text: rowsData.join("\n"),
     isValid: isScenarioValid,
@@ -212,8 +221,9 @@ test.describe("SF-Auditor Automation", () => {
       await fillAndEnter(page, formsInput, scenario.formType, 3000);
       //await formsInput.press('Enter');
       let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
-      await page.waitForTimeout(2000);
+
       await exhibitsCheckbox.click();
+      await page.waitForTimeout(2000);
       await searchBtn.click();
 
       const textDateOnly = await getTabText(page, tabIndex++, logToFile);
@@ -279,6 +289,15 @@ test.describe("SF-Auditor Automation", () => {
           await companyInfoCheckbox.click();
           await page.waitForTimeout(500);
           await companyInfoCheckbox.click();
+          await page.waitForTimeout(500);
+
+          const recentAuditorCheckbox = page
+            .locator(".PopupBody__popup__body___1J_d3")
+            .locator("div")
+            .filter({ hasText: /^Recent Auditor$/ })
+            .locator("._checkbox__icon_1xotg_257");
+
+          await recentAuditorCheckbox.click();
           await page.waitForTimeout(500);
 
           await page

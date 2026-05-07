@@ -3,7 +3,7 @@ import { google } from "googleapis";
 import path from "path";
 
 const SPREADSHEET_ID = "1ArHNlvrv-4vMedIlz5cohymFZtMhHhEK6FRAg7KqlIU";
-const SHEET_NAME = "3/30";
+const SHEET_NAME = "4/29";
 const KEY_FILE = path.resolve(process.cwd(), "credentials.json");
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
@@ -162,25 +162,32 @@ test("Fiscal-Year Google Sheets Processor", async ({ page }) => {
         .locator('iframe[src*="/SECFilings/Documents/"]')
         .first()
         .contentFrame();
-      const currentFYELocator = docFrame.locator(
-        'ix\\:nonnumeric[name="dei:CurrentFiscalYearEndDate"]',
-      );
-      const docPeriodLocator = docFrame.locator(
-        'ix\\:nonnumeric[name="dei:DocumentPeriodEndDate"]',
-      );
+      const currentFYELocator = docFrame
+        .locator('ix\\:nonnumeric[name="dei:CurrentFiscalYearEndDate"]')
+        .first();
+      const docPeriodLocator = docFrame
+        .locator('ix\\:nonnumeric[name="dei:DocumentPeriodEndDate"]')
+        .first();
 
       let fiscalYearEndValue: string | null = null;
 
       if (
-        await currentFYELocator.isVisible({ timeout: 10000 }).catch(() => false)
+        await currentFYELocator.isVisible({ timeout: 30000 }).catch(() => false)
       ) {
-        fiscalYearEndValue = await currentFYELocator.textContent();
+        fiscalYearEndValue = await currentFYELocator.textContent({
+          timeout: 60000,
+        });
       } else {
-        await docPeriodLocator.waitFor({ state: "attached", timeout: 60000 });
-        fiscalYearEndValue = await docPeriodLocator.textContent();
+        fiscalYearEndValue = await docPeriodLocator.textContent({
+          timeout: 60000,
+        });
       }
       const innerText =
-        (await currentFYELocator.textContent().catch(() => "")) || "";
+        (await currentFYELocator
+          .textContent({
+            timeout: 60000,
+          })
+          .catch(() => "")) || "";
 
       // 2. The Logic: If inner has the value AND a year, use it.
       // Otherwise, grab the outer tag which always has the "full" picture.
@@ -203,16 +210,29 @@ test("Fiscal-Year Google Sheets Processor", async ({ page }) => {
       //  const ex101Link = page.locator('a').filter({ hasText: /^EX-101$/ }).first();
       try {
         await page.locator("text=/^EX-101$/i").first().click();
-        await page.waitForTimeout(3000); // Wait for the frame to load after clicking EX-101
-        const xbrlFrame = page
-          .locator("div.HtmlViewer__viewer___ZSwJe iframe")
-          .first()
-          .contentFrame();
-        await xbrlFrame.locator("td.pl, .xbrl, table").first().waitFor({
-          state: "visible",
-          timeout: 40000,
-        });
+        // await page.waitForTimeout(3000); // Wait for the frame to load after clicking EX-101
+        // const xbrlFrame = page
+        //   .locator("div.HtmlViewer__viewer___ZSwJe iframe")
+        //   .first()
+        //   .contentFrame();
+        // await xbrlFrame.locator("td.pl, .xbrl, table").first().waitFor({
+        //   state: "visible",
+        //   timeout: 40000,
+        // });
+        await page.locator("text=/^EX-101$/i").first().click();
 
+        const xbrlFrame = page.frameLocator(
+          "div.HtmlViewer__viewer___ZSwJe iframe",
+        );
+
+        // wait for XBRL-specific element
+        await xbrlFrame
+          .locator(".HtmlViewer-styles__xbrl-report-table-attribs___2OtRf")
+          .first()
+          .waitFor({
+            state: "visible",
+            timeout: 40000,
+          });
         const iframes = page.locator("iframe");
         const count = await iframes.count();
         console.log(`Total iframes found: ${count}`);
@@ -229,7 +249,7 @@ test("Fiscal-Year Google Sheets Processor", async ({ page }) => {
             const row = xbrlFrame
               .locator("tr")
               .filter({
-                has: xbrlFrame.locator('td.pl >> text="' + label + '"'),
+                has: xbrlFrame.locator(`td.pl >> text=/^${label}$/i`),
               })
               .first();
 

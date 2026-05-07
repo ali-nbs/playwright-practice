@@ -171,7 +171,11 @@ test.describe("SF-Crawling Automation", () => {
     let tabIndex = 0;
 
     for (const scenario of testCases) {
-      await page.locator('label[for="-ExhibitsToFilings"]').click();
+      await clearBtn.click();
+      let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
+
+      await exhibitsCheckbox.click();
+      await page.waitForTimeout(2000);
       await page.getByTestId("amendmentFilings-radio-EXC").click();
       await page.getByTestId("ownershipForms-radio-INC").click();
 
@@ -233,7 +237,7 @@ test.describe("SF-Crawling Automation", () => {
       ].join("\n");
 
       allScenarioResults.push(scenarioBlock);
-      await clearBtn.click();
+      // await clearBtn.click();
     }
 
     const finalDump = allScenarioResults.join(

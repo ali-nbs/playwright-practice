@@ -153,11 +153,9 @@ test("SF-BoilerPlate", async ({ page }) => {
       const popupBody = page.locator(
         "div.PopupBody__popup__body___1J_d3.styles__tabs-container___1kNEn",
       );
-      const nonMaterialRow = popupBody
-        .locator("div")
-        .filter({
-          has: page.locator("span", { hasText: /^Non-Material Sections$/ }),
-        });
+      const nonMaterialRow = popupBody.locator("div").filter({
+        has: page.locator("span", { hasText: /^Non-Material Sections$/ }),
+      });
       await nonMaterialRow
         .locator("span._icon_1jkal_249.Add")
         .first()
@@ -420,7 +418,7 @@ test("SF-BoilerPlate", async ({ page }) => {
   } catch (sheetError) {
     console.error("Failed to update Google Sheet:", sheetError);
   }
-  await page.pause();
+  //await page.pause();
 });
 
 function getBoilerplateType(text: string): string | null {
