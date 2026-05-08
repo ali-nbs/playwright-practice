@@ -4,9 +4,8 @@ import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToAgreementsAndOtherExhibits,
   navigateToSECFilings,
-} from "../utils/helpers";
+} from "../../utils/helpers";
 import { runCrossReferenceLinksTest } from "./sf-crossReferenceLinks-logic";
 
 test.describe("SF-Cross Reference Links Automation - Isolated Mode", () => {
@@ -15,7 +14,10 @@ test.describe("SF-Cross Reference Links Automation - Isolated Mode", () => {
   }
 
   test("SF-Cross Reference Links Test", async ({ page }) => {
-    const logToFile = setupLogger("sf-crossReferenceLinks", "SF");
+    const logToFile = setupLogger(
+      "sf-crossReferenceLinks",
+      "SF/Daily-Test-Cases",
+    );
     await ensureLoggedIn(page, logToFile);
     await navigateToSECFilings(page);
     await runCrossReferenceLinksTest(page, logToFile);

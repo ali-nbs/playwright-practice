@@ -1,11 +1,11 @@
 import { expect, Page } from "@playwright/test";
-import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import {
   getTabText,
   parseCount,
   closeAllOpenTabs,
   configureDisplayColumns,
-} from "../utils/helpers";
+} from "../../utils/helpers";
 
 const IDENTIFIER = "sf_crossReferenceLinks";
 
@@ -151,13 +151,20 @@ const scrapeResults = async (
             if (await viewBtn.isVisible()) {
               await viewBtn.click();
               await page.waitForTimeout(1000);
+
               const docFrame = page.frameLocator("iframe").first();
               await docFrame
                 .locator("body")
                 .waitFor({ state: "visible", timeout: 15000 });
+              await docFrame
+                .locator(".cross-reference-anchor")
+                .first()
+                .waitFor({ state: "attached", timeout: 15000 })
+                .catch(() => {});
               const crossReferenceLinksCount = await docFrame
                 .locator(".cross-reference-anchor")
                 .count();
+
               console.log(
                 `Cross Reference Links found: ${crossReferenceLinksCount}`,
               );

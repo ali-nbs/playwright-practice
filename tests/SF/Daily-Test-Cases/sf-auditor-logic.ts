@@ -1,0 +1,188 @@
+import { Page } from "@playwright/test";
+import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
+import {
+  fillAndEnter,
+  getTabText,
+  parseCount,
+  configureDisplayColumns,
+  closeAllOpenTabs,
+} from "../../utils/helpers";
+
+const IDENTIFIER = "sf_auditor";
+
+export const runAuditorTest = async (page: Page, logToFile: Function) => {
+  logToFile("--- Starting SF-Auditor Report ---");
+
+  const dateInput = page.locator(
+    '//label[text()="Date"]/ancestor::div[5]//input',
+  );
+  const formsInput = page.locator("#Forms").getByRole("textbox");
+  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
+  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+
+  const testCases = [{ date: "Yesterday", formType: "10-k", count: 15 }];
+
+  let tabIndex = 0;
+  let selectCheckboxes = true;
+  let actualTarget = 0;
+  let allScenarioResults: string[] = [];
+
+  for (const scenario of testCases) {
+    await clearBtn.click();
+    await page.waitForTimeout(5000);
+    let findings = { text: "No Results Found", isValid: true };
+
+    let amendmentFillingsRadioButton = page.getByTestId(
+      "amendmentFilings-radio-EXC",
+    );
+    // await amendmentFillingsRadioButton.click();
+
+    let ownershipFormsRadioButton = page.getByTestId(
+      "ownershipForms-radio-INC",
+    );
+    await ownershipFormsRadioButton.click();
+
+    logToFile(`\nTesting Scenario: ${scenario.date}`);
+    await fillAndEnter(page, dateInput, scenario.date, 50);
+    logToFile(`\nTesting Form Type: ${scenario.formType}`);
+    await fillAndEnter(page, formsInput, scenario.formType, 3000);
+
+    let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
+    await page.waitForTimeout(2000);
+    await exhibitsCheckbox.click();
+    await searchBtn.click();
+
+    const textDateOnly = await getTabText(page, tabIndex++, logToFile);
+    logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
+
+    if (textDateOnly.includes("Docs")) {
+      if (selectCheckboxes) {
+        await configureDisplayColumns(page, {
+          "Filing Info": ["Accession #", "Audited By"],
+          "Company Info": ["Recent Auditor"],
+        });
+        selectCheckboxes = false;
+      }
+      await page.waitForTimeout(500);
+      const docsCount = parseCount(textDateOnly);
+      actualTarget = Math.min(scenario.count, docsCount);
+
+      findings = await scrapeAuditorResults(actualTarget, page);
+    }
+
+    const scenarioBlock = [
+      `Date: ${scenario.date}`,
+      `Doc Count: ${actualTarget}`,
+      ``,
+      `Results:`,
+      findings.text,
+      ``,
+      `Scenario Status: ${findings.isValid ? "VALID ✅" : "INVALID ❌ (Missing Data)"}`,
+    ].join("\n");
+
+    allScenarioResults.push(scenarioBlock);
+  }
+
+  const finalDump = allScenarioResults.join(
+    "\n---------------------------------\n",
+  );
+
+  try {
+    await updateGoogleSheet(finalDump, IDENTIFIER);
+    logToFile("Sheet updated successfully.");
+  } catch (e: any) {
+    logToFile(`Sheet update failed: ${e.message}`);
+  }
+  logToFile("\n--- End of Report ---");
+
+  await closeAllOpenTabs(page);
+};
+
+const scrapeAuditorResults = async (targetCount: number, page: Page) => {
+  let resultsFound = 0;
+  const processedIds = new Set<string>();
+  let rowsData: string[] = [];
+  let isScenarioValid = true;
+
+  while (resultsFound < targetCount || resultsFound == 24) {
+    const scroller = page.locator(".ReactVirtualized__Grid").last();
+    const rows = scroller.locator('div[data-test="resultRow"]');
+    const visibleRowCount = await rows.count();
+
+    if (visibleRowCount === 0) {
+      await page.waitForTimeout(500);
+      continue;
+    }
+
+    for (let i = 0; i < visibleRowCount; i++) {
+      const row = rows.nth(i);
+      const rowId = await row.getAttribute("id");
+
+      if (rowId && !processedIds.has(rowId)) {
+        try {
+          const texts = await row.locator("span").allInnerTexts();
+          const cleanContent = texts
+            .map((t) => t.trim())
+            .filter((t) => t.length > 0);
+
+          const accessionNo =
+            cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
+            "N/A";
+
+          const auditorIndex = cleanContent.indexOf("Audited By");
+          const recentAuditorIndex = cleanContent.indexOf("Recent Auditor");
+
+          console.log("auditorIndex", auditorIndex);
+          console.log("recentAuditorIndex", recentAuditorIndex);
+
+          const recentAuditorName =
+            recentAuditorIndex !== -1
+              ? cleanContent[recentAuditorIndex + 1]
+              : "No Recent Auditor Found";
+
+          const auditorName =
+            auditorIndex !== -1
+              ? cleanContent[auditorIndex + 1]
+              : "No Auditor Found";
+
+          const isLineMissingData =
+            (auditorName == "No Auditor Found" &&
+              recentAuditorName == "No Recent Auditor Found") ||
+            !accessionNo;
+
+          if (isLineMissingData) {
+            isScenarioValid = false;
+            rowsData.push(
+              `❌ MISSING DATA >> Acc.No: ${accessionNo} | auditorName: ${auditorName}`,
+            );
+          } else {
+            rowsData.push(
+              `Acc.No: ${accessionNo} | auditorName: ${auditorName != "No Auditor Found" ? auditorName : recentAuditorName}`,
+            );
+          }
+
+          console.log(
+            `Acc.No: ${accessionNo} || Auditor ${auditorName != "No Auditor Found" ? auditorName : recentAuditorName}`,
+          );
+          processedIds.add(rowId);
+          await page.waitForTimeout(500);
+          resultsFound++;
+        } catch (e) {
+          console.log(`Skipping Row ${rowId} due to re-render.`);
+        }
+      }
+
+      if (resultsFound >= targetCount) break;
+    }
+    if (resultsFound < targetCount) {
+      await page.waitForTimeout(500);
+      await rows.last().evaluate((el) => el.scrollIntoView({ block: "start" }));
+      await page.waitForTimeout(500);
+    }
+  }
+
+  return {
+    text: rowsData.join("\n"),
+    isValid: isScenarioValid,
+  };
+};

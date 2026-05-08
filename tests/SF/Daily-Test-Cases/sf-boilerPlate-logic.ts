@@ -1,9 +1,13 @@
-import { test, expect } from "@playwright/test";
-import * as fs from "fs";
-import * as path from "path";
-import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { Page, expect } from "@playwright/test";
+import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
+import {
+  fillAndEnter,
+  getTabText,
+  parseCount,
+  configureDisplayColumns,
+  closeAllOpenTabs,
+} from "../../utils/helpers";
 
-const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
 const IDENTIFIER = "sf_boilerPlate";
 
 const TEST_COMBINATIONS = [
@@ -27,10 +31,7 @@ const TEST_COMBINATIONS = [
           "Item 4. Mine Safety Disclosures",
         ],
       },
-      {
-        type: "10-Q",
-        sections: ["Item 1. Financial Statements"],
-      },
+      { type: "10-Q", sections: ["Item 1. Financial Statements"] },
     ],
     exclude: ["Not Applicable", "Reserved", "Other"],
   },
@@ -55,6 +56,7 @@ const TEST_COMBINATIONS = [
     exclude: ["Cross-References", "Not Applicable", "Other"],
   },
 ];
+
 const ALL_BOILERPLATE_TYPES = [
   "Not Applicable",
   "Reserved",
@@ -82,113 +84,27 @@ const KEYWORDS_CROSS_REFERENCE = [
 const KEYWORDS_RESERVED = ["reserved"];
 const TARGET_ROW_COUNT = 25;
 const BOX_WIDTH = 65;
-if (fs.existsSync(AUTH_PATH)) {
-  test.use({ storageState: AUTH_PATH });
-}
 
-test("SF-BoilerPlate", async ({ page }) => {
-  await page.goto("/");
-  const userField = page.locator("#userid");
-  if (await userField.isVisible({ timeout: 5000 }).catch(() => false)) {
-    await userField.fill(process.env.APP_USERNAME!);
-    await page.getByRole("button", { name: "Next" }).click();
-    await page.locator("#password").fill(process.env.APP_PASSWORD!);
-    await page.getByRole("button", { name: "Sign in" }).click();
-    await page.waitForURL(/.*apps.intelligize.com/, { timeout: 60000 });
-    await page.context().storageState({ path: AUTH_PATH });
-  }
-
-  await page.locator("text=/SEC Filings/i").first().click();
+export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
+  logToFile("--- Starting SF-BoilerPlate Report ---");
 
   const allScenarioResults: string[] = [];
   let isFirstSearch = true;
-
+  let index = 0;
   for (const combo of TEST_COMBINATIONS) {
     try {
       console.log(`\n STARTING COMBINATION: ${combo.name}`);
       let comboFindings: string[] = [];
       let isScenarioValid = true;
 
-      const sectionFilterBlock = page
-        .locator("div.styles__focusContainer___13rFy")
-        .filter({ has: page.locator("label", { hasText: /^Section$/ }) });
-      const sectionPlusBtn = sectionFilterBlock
-        .locator("span._icon_1jkal_249.Add")
-        .first();
-      const modal = page.locator("div.PopupBody__popup__body___1J_d3");
+      await selectSectionFilters(page, combo);
 
-      while (!(await modal.isVisible())) {
-        await sectionPlusBtn.click({ force: true }).catch(() => {});
-        await page.waitForTimeout(500);
-      }
-
-      for (const formEntry of combo.forms) {
-        console.log(`Selecting Form: ${formEntry.type}`);
-
-        const formTypeItem = modal
-          .locator("li.styles__item-list___17b6k")
-          .filter({
-            has: page.locator("span", {
-              hasText: new RegExp(`^${formEntry.type}$`, "i"),
-            }),
-          });
-        await formTypeItem.click();
-        await page.waitForTimeout(800);
-
-        for (const sectionName of formEntry.sections) {
-          const checkbox = page.locator(`input[name="${sectionName}"]`);
-          await checkbox.evaluate((node: HTMLInputElement) => {
-            node.checked = true;
-            node.dispatchEvent(new Event("click", { bubbles: true }));
-          });
-          await page.locator("label").filter({ hasText: sectionName }).click();
-        }
-      }
-
-      await page
-        .locator("label")
-        .filter({ hasText: /^Only$/ })
-        .last()
-        .click();
-      const popupBody = page.locator(
-        "div.PopupBody__popup__body___1J_d3.styles__tabs-container___1kNEn",
-      );
-      const nonMaterialRow = popupBody.locator("div").filter({
-        has: page.locator("span", { hasText: /^Non-Material Sections$/ }),
-      });
-      await nonMaterialRow
-        .locator("span._icon_1jkal_249.Add")
-        .first()
-        .click({ force: true });
-
-      for (const excludeName of combo.exclude) {
-        const row = page
-          .locator("li.styles__check-list-item__container___233d9")
-          .filter({ hasText: new RegExp(excludeName) });
-        await row
-          .locator("label._checkbox__icon_1xotg_257")
-          .click({ force: true });
-      }
-
-      await popupBody.getByRole("button", { name: /^OK$/ }).click();
-
-      await sectionFilterBlock.getByRole("button", { name: /^OK$/ }).click();
-      //  await page.pause();
       await page
         .getByRole("button", { name: /^Search$/i })
         .first()
         .click();
-      // await page.pause();
 
-      const statusLocator = page
-        .locator(
-          '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-        )
-        .last();
-      await expect(statusLocator.last()).toBeVisible({ timeout: 60000 });
-
-      const statusText = await statusLocator.innerText();
-      //console.log(`[${combo.name}] Status: ${statusText}`);
+      const statusText = await getTabText(page, index++, logToFile, false);
       if (statusText.toLowerCase().includes("no results found")) {
         console.log(`\n╔${"═".repeat(BOX_WIDTH)}╗`);
         console.log(
@@ -196,101 +112,46 @@ test("SF-BoilerPlate", async ({ page }) => {
         );
         console.log(`╚${"═".repeat(BOX_WIDTH)}╝\n`);
         allScenarioResults.push(`[${combo.name}]\nStatus: (No Results Found)`);
-
         continue;
       }
+
       if (isFirstSearch) {
-        const filingInfoPopupCheckbox = page
-          .locator(".styles__popupContainer___36f60")
-          .filter({ hasText: "Filing Info" })
-          .locator("._checkbox__icon_1xotg_257");
-
-        await filingInfoPopupCheckbox.click();
-        await page.waitForTimeout(500);
-
-        const filingInfoCheckbox = page
-          .locator(".PopupBody__popup__body___1J_d3")
-          .locator("div")
-          .filter({ hasText: /^Filing Info$/ })
-          .locator("._checkbox__icon_1xotg_257");
-        await filingInfoCheckbox.click();
-        await page.waitForTimeout(500);
-        await filingInfoCheckbox.click();
-        await page.waitForTimeout(500);
-
-        const accessionCheckbox = page
-          .locator(".PopupBody__popup__body___1J_d3")
-          .locator("div")
-          .filter({ hasText: /^Accession #$/ })
-          .locator("._checkbox__icon_1xotg_257");
-
-        await accessionCheckbox.click();
-        await page.waitForTimeout(500);
-
-        await page
-          .getByRole("button", {
-            name: "Apply",
-          })
-          .click();
-
-        const companyInfoPopupCheckbox = page
-          .locator(".styles__popupContainer___36f60")
-          .filter({ hasText: "Company Info" })
-          .locator("._checkbox__icon_1xotg_257");
-
-        await companyInfoPopupCheckbox.click();
-        await page.waitForTimeout(500);
-
-        const companyInfoCheckbox = page
-          .locator(".PopupBody__popup__body___1J_d3")
-          .locator("div")
-          .filter({ hasText: /^Company Info$/ })
-          .locator("._checkbox__icon_1xotg_257");
-
-        await companyInfoCheckbox.click();
-        await page.waitForTimeout(500);
-        await companyInfoCheckbox.click();
-        await page.waitForTimeout(500);
-
-        await page
-          .getByRole("button", {
-            name: "Apply",
-          })
-          .click();
-
-        await page.waitForTimeout(500);
+        await configureDisplayColumns(page, {
+          "Filing Info": ["Accession #"],
+          "Company Info": [],
+        });
         isFirstSearch = false;
       }
+
       const docCountMatch = statusText.match(/Docs:\s*([\d,]+)/i);
       let totalAvailableDocs = 0;
       if (docCountMatch) {
-        const cleanNumberString = docCountMatch[1].replace(/,/g, "");
-        totalAvailableDocs = parseInt(cleanNumberString, 10);
+        totalAvailableDocs = parseInt(docCountMatch[1].replace(/,/g, ""), 10);
       }
 
       const label = `[${combo.name}]`;
       const countInfo = `Total Documents Found: ${totalAvailableDocs.toLocaleString()}`;
-
       console.log(`\n╔${"═".repeat(BOX_WIDTH)}╗`);
       console.log(`║ ${label.padEnd(BOX_WIDTH - 2)} ║`);
-      console.log(`╠${"═".repeat(BOX_WIDTH)}╣`);
-      console.log(`║ ${countInfo.padEnd(BOX_WIDTH - 2)} ║`);
       console.log(`╚${"═".repeat(BOX_WIDTH)}╝\n`);
 
-      let resultsFound = 0;
       const loopLimit = Math.min(TARGET_ROW_COUNT, totalAvailableDocs);
+      let resultsFound = 0;
+
       while (resultsFound < loopLimit) {
         const scroller = page.locator(".ReactVirtualized__Grid").last();
         let resultsContainer = scroller.locator('> div[role="rowgroup"]');
         let currentRow = resultsContainer
           .locator(`> div > div[data-test="resultRow"][id="${resultsFound}"]`)
           .first();
+
         if (!((await currentRow.count()) > 0)) {
           await page.mouse.wheel(0, 600);
           await page.waitForTimeout(1000);
           if (resultsFound > 0 && !((await currentRow.count()) > 0)) break;
           continue;
         }
+
         const texts = await currentRow.locator("span").allInnerTexts();
         const cleanContent = texts
           .map((t) => t.trim())
@@ -301,11 +162,6 @@ test("SF-BoilerPlate", async ({ page }) => {
         const accessionNo = await fillingInforesultLabel
           .locator("xpath=following-sibling::span")
           .innerText();
-
-        //  console.log(`Accession No : ${accessionNo}`);
-        // const accessionNo = cleanContent.find(text =>
-        //     /^\d{10}-?\d{2}-?\d{6}$/.test(text)
-        // ) || "N/A";
 
         const allContent = currentRow.locator("a, p");
         const totalItems = await allContent.count();
@@ -318,24 +174,18 @@ test("SF-BoilerPlate", async ({ page }) => {
             .catch(() => "")
         ).toLowerCase();
         const shouldTrackReserved = !combo.exclude.includes("Reserved");
+
         if (lastAnchorText && shouldTrackReserved) {
           const type = getBoilerplateType(lastAnchorText);
           if (type && !combo.exclude.includes(type)) {
             rowMatchedAnyExclude = true;
           }
-          console.log(`[Accession No , ${accessionNo}`);
+          console.log(`[Accession No , ${accessionNo}]`);
           console.log(`╚${combo.name}] Row ${resultsFound}: ${lastAnchorText}`);
-          console.log(
-            "-------------------------------------------------------------",
-          );
           console.log(`╚${type || "Substantive"} from anchor tag`);
-          console.log(
-            "-------------------------------------------------------------",
-          );
-          console.log("");
         }
-        let startIdx = totalItems < 4 ? 0 : 2;
 
+        let startIdx = totalItems < 4 ? 0 : 2;
         for (let j = startIdx; j < totalItems; j++) {
           const element = allContent.nth(j);
           const tagName = await element.evaluate((node) =>
@@ -348,18 +198,12 @@ test("SF-BoilerPlate", async ({ page }) => {
             if (type && !combo.exclude.includes(type)) {
               rowMatchedAnyExclude = true;
             }
-            console.log(`[Accession No , ${accessionNo}`);
+            console.log(`[Accession No , ${accessionNo}]`);
             console.log(`╚${combo.name}] Row ${resultsFound}: ${text}`);
-            console.log(
-              "-------------------------------------------------------------",
-            );
             console.log(`╚${type || "Substantive"} from ${tagName} tag`);
-            console.log(
-              "-------------------------------------------------------------",
-            );
-            console.log("");
           }
         }
+
         if (!rowMatchedAnyExclude) {
           isScenarioValid = false;
           comboFindings.push(accessionNo);
@@ -367,6 +211,7 @@ test("SF-BoilerPlate", async ({ page }) => {
         resultsFound++;
         await currentRow.last().scrollIntoViewIfNeeded();
       }
+
       const includedTypes = ALL_BOILERPLATE_TYPES.filter(
         (type) => !combo.exclude.includes(type),
       );
@@ -380,7 +225,6 @@ test("SF-BoilerPlate", async ({ page }) => {
         `Docs Checked: ${resultsFound}`,
         `Failure IDs: ${comboFindings.length > 0 ? comboFindings.join(", ") : "None"}`,
       ].join("\n");
-
       allScenarioResults.push(scenarioBlock);
 
       if (
@@ -388,29 +232,11 @@ test("SF-BoilerPlate", async ({ page }) => {
       ) {
         await page.getByRole("button", { name: /Clear Filters/i }).click();
       }
-
-      //  await page.waitForTimeout(1000);
     } catch (error: any) {
       console.error(`Error processing ${combo}: ${error.message}`);
-    } finally {
-      const activeTab = page
-        .locator(
-          '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-        )
-        .first();
-      try {
-        if (await activeTab.isVisible()) {
-          await activeTab.click({ button: "right" });
-          await page
-            .locator("text=/Close all tabs/i")
-            .click()
-            .catch(() => {});
-        }
-      } catch (cleanupError) {
-        await page.reload();
-      }
     }
   }
+
   const finalDump = allScenarioResults.join("\n" + "═".repeat(30) + "\n");
   try {
     await updateGoogleSheet(finalDump, IDENTIFIER);
@@ -418,8 +244,70 @@ test("SF-BoilerPlate", async ({ page }) => {
   } catch (sheetError) {
     console.error("Failed to update Google Sheet:", sheetError);
   }
-  //await page.pause();
-});
+
+  logToFile("\n--- End of Report ---");
+  await closeAllOpenTabs(page);
+};
+
+async function selectSectionFilters(page: Page, combo: any) {
+  const sectionFilterBlock = page
+    .locator("div.styles__focusContainer___13rFy")
+    .filter({ has: page.locator("label", { hasText: /^Section$/ }) });
+  const sectionPlusBtn = sectionFilterBlock
+    .locator("span._icon_1jkal_249.Add")
+    .first();
+  const modal = page.locator("div.PopupBody__popup__body___1J_d3");
+
+  while (!(await modal.isVisible())) {
+    await sectionPlusBtn.click({ force: true }).catch(() => {});
+    await page.waitForTimeout(500);
+  }
+
+  for (const formEntry of combo.forms) {
+    console.log(`Selecting Form: ${formEntry.type}`);
+    const formTypeItem = modal.locator("li.styles__item-list___17b6k").filter({
+      has: page.locator("span", {
+        hasText: new RegExp(`^${formEntry.type}$`, "i"),
+      }),
+    });
+    await formTypeItem.click();
+    await page.waitForTimeout(800);
+
+    for (const sectionName of formEntry.sections) {
+      const checkbox = page.locator(`input[name="${sectionName}"]`);
+      await checkbox.evaluate((node: HTMLInputElement) => {
+        node.checked = true;
+        node.dispatchEvent(new Event("click", { bubbles: true }));
+      });
+    }
+  }
+
+  await page
+    .locator("label")
+    .filter({ hasText: /^Only$/ })
+    .last()
+    .click();
+  const popupBody = page.locator(
+    "div.PopupBody__popup__body___1J_d3.styles__tabs-container___1kNEn",
+  );
+  const nonMaterialRow = popupBody.locator("div").filter({
+    has: page.locator("span", { hasText: /^Non-Material Sections$/ }),
+  });
+  await nonMaterialRow
+    .locator("span._icon_1jkal_249.Add")
+    .first()
+    .click({ force: true });
+
+  for (const excludeName of combo.exclude) {
+    const row = page
+      .locator("li.styles__check-list-item__container___233d9")
+      .filter({ hasText: new RegExp(excludeName) });
+    await row.locator("label._checkbox__icon_1xotg_257").click({ force: true });
+  }
+
+  await popupBody.getByRole("button", { name: /^OK$/ }).click();
+  await sectionFilterBlock.getByRole("button", { name: /^OK$/ }).click();
+}
 
 function getBoilerplateType(text: string): string | null {
   const cleanText = text.trim();

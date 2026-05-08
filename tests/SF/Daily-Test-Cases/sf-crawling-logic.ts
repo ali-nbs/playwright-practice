@@ -1,0 +1,150 @@
+import { Page, Locator } from "@playwright/test";
+import * as fs from "fs";
+import * as path from "path";
+import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
+import {
+  fillAndEnter,
+  getTabText,
+  configureDisplayColumns,
+  closeAllOpenTabs,
+} from "../../utils/helpers";
+
+const IDENTIFIER = "sf_crawling";
+
+export const runCrawlingTest = async (page: Page, logToFile: Function) => {
+  logToFile("--- Starting SF-Crawling Report ---");
+  let allScenarioResults: string[] = [];
+
+  const dateInput = page.locator(
+    '//label[text()="Date"]/ancestor::div[5]//input',
+  );
+  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
+  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+
+  const testCases = [{ date: "Today", count: 15 }];
+
+  let tabIndex = 0;
+
+  for (const scenario of testCases) {
+    const exhibitstoFilingdCheckbox = await page.locator(
+      'label[for="-ExhibitsToFilings"]',
+    );
+    await exhibitstoFilingdCheckbox.click({ force: true });
+    await page.waitForTimeout(300);
+    await page.getByTestId("amendmentFilings-radio-EXC").click();
+    await page.getByTestId("ownershipForms-radio-INC").click();
+
+    await fillAndEnter(page, dateInput, scenario.date);
+    await searchBtn.click();
+
+    const textDateOnly = await getTabText(page, tabIndex++, logToFile);
+    let findings = { text: "No Results Found", isValid: true };
+
+    if (textDateOnly.includes("Docs")) {
+      await configureDisplayColumns(page, {
+        "Filing Info": ["Accession #"],
+        "Company Info": [],
+      });
+      findings = await scrapeCrawlingResults(scenario.count, page);
+    }
+
+    const scenarioBlock = [
+      `Date: ${scenario.date}`,
+      `Target Doc Count: ${scenario.count}`,
+      ``,
+      `Results:`,
+      findings.text,
+      ``,
+      `Scenario Status: ${findings.isValid ? "VALID ✅" : "INVALID ❌ (Missing Data)"}`,
+    ].join("\n");
+
+    allScenarioResults.push(scenarioBlock);
+    await clearBtn.click();
+  }
+
+  const finalDump = allScenarioResults.join(
+    "\n---------------------------------\n",
+  );
+
+  try {
+    await updateGoogleSheet(finalDump, IDENTIFIER);
+    logToFile("Sheet updated successfully.");
+  } catch (e: any) {
+    logToFile(`Sheet update failed: ${e.message}`);
+  }
+  logToFile("\n--- End of Report ---");
+
+  await closeAllOpenTabs(page);
+};
+
+const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
+  let resultsFound = 0;
+  const processedIds = new Set<string>();
+  let rowsData: string[] = [];
+  let isScenarioValid = true;
+
+  while (resultsFound < targetCount) {
+    const scroller = page.locator(".ReactVirtualized__Grid").last();
+    const rows = scroller.locator('div[data-test="resultRow"]');
+    const visibleRowCount = await rows.count();
+
+    if (visibleRowCount === 0) {
+      await page.waitForTimeout(500);
+      continue;
+    }
+
+    for (let i = 0; i < visibleRowCount; i++) {
+      const row = rows.nth(i);
+      const rowId = await row.getAttribute("id");
+
+      if (rowId && !processedIds.has(rowId)) {
+        try {
+          const texts = await row.locator("span").allInnerTexts();
+          const cleanContent = texts
+            .map((t) => t.trim())
+            .filter((t) => t.length > 0);
+
+          const companyName = cleanContent[4] || "";
+          const pages = cleanContent[5] || "";
+          const docSize = cleanContent[6] || "";
+          const accessionNo = cleanContent[cleanContent.length - 1] || "";
+
+          const isLineMissingData =
+            !companyName || !pages || !docSize || !accessionNo;
+
+          if (isLineMissingData) {
+            isScenarioValid = false;
+            rowsData.push(
+              `❌ MISSING DATA >> Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`,
+            );
+          } else {
+            rowsData.push(
+              `Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`,
+            );
+          }
+          console.log("```````````````````````````````````````");
+          console.log(`Row ${rowId}:`);
+          console.log(
+            `Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`,
+          );
+          console.log("```````````````````````````````````````");
+          processedIds.add(rowId);
+          await page.waitForTimeout(500);
+          resultsFound++;
+        } catch (e) {
+          continue;
+        }
+      }
+      if (resultsFound >= targetCount) break;
+    }
+    if (resultsFound < targetCount) {
+      await page.waitForTimeout(500);
+      await rows.last().scrollIntoViewIfNeeded();
+      await page.waitForTimeout(500);
+    }
+  }
+  return {
+    text: rowsData.join("\n"),
+    isValid: isScenarioValid,
+  };
+};

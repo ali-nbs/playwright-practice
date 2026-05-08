@@ -1,7 +1,7 @@
 import { test, expect, Page } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
-import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 
 const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
 const TARGET_ROW_COUNT = 1;

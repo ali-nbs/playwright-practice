@@ -102,6 +102,7 @@ export const runDBMAnalyticsTest = async (page: Page, logToFile: Function) => {
   );
   console.log("Final Dump:\n", finalDump);
   await updateGoogleSheet(finalDump, IDENTIFIER, []);
+  await closeAllOpenTabs(page);
   logToFile("Testing complete.");
 };
 
