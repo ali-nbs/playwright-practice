@@ -218,9 +218,9 @@ const scrapeResults = async (
             .filter((t) => t.length > 0);
 
           console.log("---------------------------------");
-          for (const [index, text] of cleanContent.entries()) {
-            console.log(index, text);
-          }
+          // for (const [index, text] of cleanContent.entries()) {
+          //   console.log(index, text);
+          // }
           console.log("---------------------------------");
           const idIndex = cleanContent.findIndex((t) => /^\d{7,8}$/.test(t));
 

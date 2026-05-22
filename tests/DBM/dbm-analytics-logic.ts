@@ -70,7 +70,7 @@ export const runDBMAnalyticsTest = async (page: Page, logToFile: Function) => {
     let findings = { text: "No Results Found", isValid: true };
 
     if (
-      searchResultTextOnly.includes("Results") ||
+      !searchResultTextOnly.includes("No Results Found") ||
       searchResultTextOnly.match(/\d/)
     ) {
       await page.waitForTimeout(500);
@@ -84,17 +84,16 @@ export const runDBMAnalyticsTest = async (page: Page, logToFile: Function) => {
       });
 
       findings = await scrapeResults(page, scenario.isBlankSearch, logToFile);
-
-      await closeAllOpenTabs(page);
-
-      const scenarioBlock = [
-        `Scenario: ${scenario.name}`,
-        `Results:`,
-        `Status: ${findings.isValid ? "VALID ✅" : "INVALID ❌"}`,
-      ].join("\n");
-
-      allScenarioResults.push(scenarioBlock);
     }
+    await closeAllOpenTabs(page);
+
+    const scenarioBlock = [
+      `Scenario: ${scenario.name}`,
+      `Results:`,
+      `Status: ${findings.isValid ? "VALID ✅" : "INVALID ❌"}`,
+    ].join("\n");
+
+    allScenarioResults.push(scenarioBlock);
   }
 
   const finalDump = allScenarioResults.join(

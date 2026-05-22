@@ -1,0 +1,205 @@
+import { Page, expect } from "@playwright/test";
+import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
+import { closeAllOpenTabs, configureDisplayColumns } from "../../utils/helpers";
+
+const TARGET_ROW_COUNT = 5;
+const Categories = [
+  {
+    id: "IsSPAC",
+    SIC_Code: "6770",
+    name: "Special Purpose Acquisition Co (SPAC)",
+    identifier: "sf_companyType_SPAC",
+  },
+  {
+    id: "IsREIT",
+    SIC_Code: "6798",
+    name: "Real Estate Investment Trust (REIT)",
+    identifier: "sf_companyType",
+  },
+  {
+    id: "IsBDC",
+    SIC_Code: "",
+    name: "Business Development Company (BDC)",
+    identifier: "sf_companyType",
+  },
+  {
+    id: "IsFPI",
+    SIC_Code: "",
+    name: "Foreign Private Issuer (FPI)",
+    identifier: "sf_companyType",
+  },
+  {
+    id: "IsInvestmentCompany",
+    SIC_Code: "",
+    name: "Investment Company",
+    identifier: "sf_companyType",
+  },
+];
+
+export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
+  page: Page,
+  logToFile: Function,
+) => {
+  logToFile(
+    "--- Starting Extended Company Type Report (SPAC/REIT/BDC/FPI/INV) ---",
+  );
+
+  let finalSummaryReport: string[] = [];
+
+  for (const category of Categories) {
+    logToFile(`\n--- Starting Category: ${category.name} ---`);
+
+    const clearBtn = await page.getByRole("button", {
+      name: /^Clear Filters$/i,
+    });
+    await clearBtn.click({ force: true });
+
+    const companyTypeFilterBlock = page
+      .locator("div.styles__focusContainer___13rFy")
+      .filter({
+        has: page.locator("label", { hasText: /^Company Type\/Status$/ }),
+      });
+
+    const sectionPlusBtn = companyTypeFilterBlock
+      .locator("span._icon_1jkal_249.Add")
+      .first();
+    const modal = page.locator("div.PopupBody__popup__body___1J_d3");
+
+    // Open Modal
+    let attempts = 0;
+    while (!(await modal.isVisible()) && attempts < 5) {
+      await sectionPlusBtn.click({ force: true }).catch(() => {});
+      await page.waitForTimeout(1000);
+      attempts++;
+    }
+
+    await modal.locator(`label[for="${category.id}"]`).click();
+    await page.getByRole("button", { name: /^OK$/ }).click();
+
+    const exhibitsTofilingsCheckbox = await page.locator(
+      'label[for="-ExhibitsToFilings"]',
+    );
+    await exhibitsTofilingsCheckbox.click({ force: true });
+    await page
+      .getByRole("button", { name: /^Search$/i })
+      .first()
+      .click();
+
+    // 2. Verify Results Exist
+    const statusLocator = page.locator(
+      '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
+    );
+    await expect(statusLocator.first()).toBeVisible({ timeout: 60000 });
+
+    if (
+      (await statusLocator.first().innerText()).includes("No Results Found")
+    ) {
+      logToFile(`⚠️ No results found for ${category.name}. Skipping.`);
+      const reportBlock = [
+        `Status: Passed ✅}`,
+        `Company Type/Status: ${category.name}`,
+        `Search Result: No Result Found`,
+        `Failure IDs: None`,
+      ].join("\n");
+
+      // SPAC is updated immediately per original logic, others are bundled
+      if (category.id === "IsSPAC") {
+        await updateGoogleSheet(reportBlock, category.identifier, []);
+      } else {
+        finalSummaryReport.push(reportBlock);
+      }
+      await closeAllOpenTabs(page);
+      continue;
+    }
+
+    await configureDisplayColumns(page, {
+      "Filing Info": ["Accession #"],
+      "Company Info": ["Company Type/Status", "SIC - Industry"],
+    });
+    const failureLogs = await validateExtendedRows(page, category, logToFile);
+
+    // 5. Prepare Report Block
+    const isSuccess = failureLogs.length === 0;
+    const reportBlock = [
+      `Status: ${isSuccess ? "Passed ✅" : "Failed ❌"}`,
+      `Company Type/Status: ${category.name}`,
+      `Failure IDs: ${isSuccess ? "None" : failureLogs.join("\n")}`,
+    ].join("\n");
+
+    // SPAC is updated immediately per original logic, others are bundled
+    if (category.id === "IsSPAC") {
+      await updateGoogleSheet(reportBlock, category.identifier, failureLogs);
+    } else {
+      finalSummaryReport.push(reportBlock);
+    }
+    await closeAllOpenTabs(page);
+  }
+
+  // Final dump for REIT/BDC/FPI/INV
+  if (finalSummaryReport.length > 0) {
+    await updateGoogleSheet(
+      finalSummaryReport.join("\n" + "-".repeat(40) + "\n"),
+      "sf_companyType",
+      [],
+    );
+  }
+};
+
+async function validateExtendedRows(
+  page: Page,
+  category: any,
+  logToFile: Function,
+) {
+  let resultsFound = 0;
+  let failureLogs: string[] = [];
+
+  while (resultsFound < TARGET_ROW_COUNT) {
+    const scroller = page.locator(".ReactVirtualized__Grid").last();
+    const currentRow = scroller
+      .locator(`div[data-test="resultRow"][id="${resultsFound}"]`)
+      .first();
+
+    if (!(await currentRow.count())) {
+      await scroller.evaluate((el) => (el.scrollTop += 500));
+      await page.waitForTimeout(1000);
+      continue;
+    }
+
+    await currentRow.scrollIntoViewIfNeeded();
+
+    // Validate Company Type Text
+    const uiText = await currentRow
+      .locator('span:has-text("Company Type/Status")')
+      .locator("xpath=..")
+      .locator("p")
+      .allInnerTexts();
+    const typeMatch = uiText.some((t) =>
+      t.toLowerCase().includes(category.name.toLowerCase()),
+    );
+
+    // Validate SIC Industry (if applicable)
+    let sicMatch = true;
+    if (category.SIC_Code !== "") {
+      const sicText = await currentRow
+        .locator('span:has-text("SIC - Industry")')
+        .locator("xpath=..")
+        .locator("p")
+        .allInnerTexts();
+      sicMatch = sicText.some((t) => t.includes(category.SIC_Code));
+    }
+
+    if (!typeMatch || !sicMatch) {
+      const accNo = await currentRow
+        .locator('span:has-text("Accession #")')
+        .locator("xpath=following-sibling::span")
+        .innerText();
+      failureLogs.push(accNo.trim());
+      logToFile(
+        `❌ Failure on Acc# ${accNo}: TypeMatch=${typeMatch}, SICMatch=${sicMatch}`,
+      );
+    }
+
+    resultsFound++;
+  }
+  return failureLogs;
+}

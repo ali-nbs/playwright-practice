@@ -1,38 +1,30 @@
 import { Page, Locator } from "@playwright/test";
-import * as fs from "fs";
-import * as path from "path";
-import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
+import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import {
   fillAndEnter,
   getTabText,
   configureDisplayColumns,
   closeAllOpenTabs,
-} from "../../utils/helpers";
+} from "../utils/helpers";
 
-const IDENTIFIER = "sf_crawling";
+const IDENTIFIER = "src_crawling";
 
-export const runCrawlingTest = async (page: Page, logToFile: Function) => {
-  logToFile("--- Starting SF-Crawling Report ---");
+export const runSRCCrawlingTest = async (page: Page, logToFile: Function) => {
+  logToFile("--- Starting SRC-Crawling Report ---");
   let allScenarioResults: string[] = [];
 
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
+  const dateInput = page
+    .locator(".styles__focusContainer___13rFy")
+    .filter({ has: page.locator("label", { hasText: /^Date$/ }) })
+    .locator("input");
   const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
   const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
 
-  const testCases = [{ date: "Today", count: 15 }];
+  const testCases = [{ date: "Yesterday", count: 15 }];
 
   let tabIndex = 0;
 
   for (const scenario of testCases) {
-    const exhibitstoFilingsCheckbox = page.locator(
-      'label[for="-ExhibitsToFilings"]',
-    );
-    await exhibitstoFilingsCheckbox.click({ force: true });
-    await page.getByTestId("amendmentFilings-radio-EXC").click();
-    await page.getByTestId("ownershipForms-radio-INC").click();
-
     await fillAndEnter(page, dateInput, scenario.date);
     await searchBtn.click();
 
@@ -40,10 +32,9 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
     let findings = { text: "No Results Found", isValid: true };
 
     if (textDateOnly.includes("Docs")) {
-      await configureDisplayColumns(page, {
-        "Filing Info": ["Accession #"],
-        "Company Info": [],
-      });
+      //   await configureDisplayColumns(page, {
+      //     "Document Info": [],
+      //   });
       await page.waitForTimeout(300);
       findings = await scrapeCrawlingResults(scenario.count, page);
     }
@@ -82,6 +73,7 @@ const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
   const processedIds = new Set<string>();
   let rowsData: string[] = [];
   let isScenarioValid = true;
+  let fileOrReleaseNoCount = 0;
 
   while (resultsFound < targetCount) {
     const scroller = page.locator(".ReactVirtualized__Grid").last();
@@ -100,32 +92,63 @@ const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
       if (rowId && !processedIds.has(rowId)) {
         try {
           const texts = await row.locator("span").allInnerTexts();
+          let fileNo = null;
+          let releaseNo = null;
+
+          const fileLocator = row
+            .locator("div")
+            .filter({ hasText: "File #" })
+            .locator("span")
+            .last();
+
+          if (await fileLocator.count()) {
+            fileNo = await fileLocator.innerText();
+          }
+
+          const releaseLocator = row
+            .locator("div")
+            .filter({ hasText: "Release #" })
+            .locator("span")
+            .last();
+
+          if (await releaseLocator.count()) {
+            releaseNo = await releaseLocator.innerText();
+          }
+          console.log({ fileNo, releaseNo });
+          if (fileNo || releaseNo) {
+            fileOrReleaseNoCount++;
+          }
+
+          console.log({ fileNo, releaseNo });
           const cleanContent = texts
             .map((t) => t.trim())
             .filter((t) => t.length > 0);
 
-          const companyName = cleanContent[4] || "";
-          const pages = cleanContent[5] || "";
-          const docSize = cleanContent[6] || "";
-          const accessionNo = cleanContent[cleanContent.length - 1] || "";
+          console.log("------------------------------------------------------");
+          //   for (const [index, content] of cleanContent.entries()) {
+          //     console.log("index", index, "content", content);
+          //   }
+          console.log("------------------------------------------------------");
+
+          const title = cleanContent[2] || "";
+          const sourceType = cleanContent[3] || "";
+          const materialCategory = cleanContent[4] || "";
+          const materialType = cleanContent[5] || "";
+          //const accessionNo = cleanContent[cleanContent.length - 1] || "";
 
           const isLineMissingData =
-            !companyName || !pages || !docSize || !accessionNo;
+            !title || !sourceType || !materialCategory || !materialType;
 
           if (isLineMissingData) {
             isScenarioValid = false;
             rowsData.push(
-              `❌ MISSING DATA >> Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`,
-            );
-          } else {
-            rowsData.push(
-              `Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`,
+              `❌ MISSING DATA >> File.No: ${fileNo} | Release.No: ${releaseNo}  | Title: ${title} | Source: ${sourceType} | Category: ${materialCategory} | Type: ${materialType}`,
             );
           }
           console.log("```````````````````````````````````````");
           console.log(`Row ${rowId}:`);
           console.log(
-            `Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`,
+            `File.No: ${fileNo} | Release.No: ${releaseNo}  | Title: ${title} | Source: ${sourceType} | Category: ${materialCategory} | Type: ${materialType}`,
           );
           console.log("```````````````````````````````````````");
           processedIds.add(rowId);
@@ -141,6 +164,15 @@ const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
       await rows.last().evaluate((el) => el.scrollIntoView({ block: "start" }));
       await page.waitForTimeout(500);
     }
+  }
+  if (targetCount - fileOrReleaseNoCount > 5) {
+    isScenarioValid = false;
+
+    rowsData.push(
+      `❌ MISSING DATA >> File No / Release No missing above threshold (5). Missing count: ${
+        targetCount - fileOrReleaseNoCount
+      }`,
+    );
   }
   return {
     text: rowsData.join("\n"),

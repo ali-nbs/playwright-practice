@@ -91,7 +91,7 @@ export const getTabText = async (
 ) => {
   console.log("expected index ", expectedIndex);
   const tabLocator = page.locator(
-    '//span[contains(text(), "Docs:") or contains(text(), "Results:") or contains(text(), "No Results Found")]',
+    '//span[contains(text(), "Docs:") or contains(text(), "Results:") or contains(text(), "Offerings:") or contains(text(), "No Results Found")]',
   );
   await expect(tabLocator.nth(expectedIndex)).toBeVisible({ timeout: 240000 });
   let text = await tabLocator.nth(expectedIndex).innerText();
@@ -221,9 +221,38 @@ export const navigateToSECFilings = async (page: Page) => {
 export const navigateToAgreementsAndOtherExhibits = async (page: Page) => {
   await page.locator("text=/Agreements & Other Exhibits/i").first().click();
 };
+export const navigateToSecuritiesRegulationAndCompliance = async (
+  page: Page,
+) => {
+  await page
+    .locator("text=/Securities Regulation & Compliance/i")
+    .first()
+    .click();
+};
 
 export const navigateToDisclosureBenchmarking = async (page: Page) => {
   await page.locator("text=/Disclosure Benchmarking/i").first().click();
+};
+
+export const navigateToNoActionLetters = async (page: Page) => {
+  await page.locator("text=/No-Action Letters/i").first().click();
+};
+
+export const navigateToRegisteredOfferings = async (page: Page) => {
+  await page.locator("text=/Registered Offerings/i").first().click();
+};
+
+export const navigateToSECEnforcement = async (page: Page) => {
+  await page.locator("text=/SEC Enforcement/i").first().click();
+};
+
+export const navigateToSourceToTargetApp = async (
+  page: Page,
+  sourcePage: String,
+  targetPage: String,
+) => {
+  await page.locator(`text=/${sourcePage}/i`).first().click({ force: true });
+  await page.locator(`text=/${targetPage}/i`).first().click({ force: true });
 };
 
 export const getRandomIndices = (maxRange: number, count: number): number[] => {
