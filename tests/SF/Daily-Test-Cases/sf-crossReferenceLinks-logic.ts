@@ -5,6 +5,7 @@ import {
   parseCount,
   closeAllOpenTabs,
   configureDisplayColumns,
+  fillAndEnter,
 } from "../../utils/helpers";
 
 const IDENTIFIER = "sf_crossReferenceLinks";
@@ -28,6 +29,8 @@ export const runCrossReferenceLinksTest = async (
   let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
   await exhibitsCheckbox.click();
   await page.waitForTimeout(300);
+  const dateInput = page.getByTestId("date-input");
+  await fillAndEnter(page, dateInput, "Yesterday");
   await searchBtn.click();
 
   const searchResultTextOnly = await getTabText(page, tabIndex++, logToFile);

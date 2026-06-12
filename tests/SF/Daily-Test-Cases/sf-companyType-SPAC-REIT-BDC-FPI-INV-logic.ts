@@ -79,7 +79,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
     const exhibitsTofilingsCheckbox = await page.locator(
       'label[for="-ExhibitsToFilings"]',
     );
-    await exhibitsTofilingsCheckbox.click({ force: true });
+    await exhibitsTofilingsCheckbox.uncheck({ force: true });
     await page
       .getByRole("button", { name: /^Search$/i })
       .first()
@@ -167,24 +167,32 @@ async function validateExtendedRows(
 
     await currentRow.scrollIntoViewIfNeeded();
 
-    // Validate Company Type Text
     const uiText = await currentRow
       .locator('span:has-text("Company Type/Status")')
-      .locator("xpath=..")
       .locator("p")
       .allInnerTexts();
     const typeMatch = uiText.some((t) =>
       t.toLowerCase().includes(category.name.toLowerCase()),
     );
 
-    // Validate SIC Industry (if applicable)
     let sicMatch = true;
+    // if (category.SIC_Code !== "") {
+    //   const sicText = await currentRow
+    //     .locator('span:has-text("SIC - Industry")')
+    //     .locator("p")
+    //     .allInnerTexts();
+    //   sicMatch = sicText.some((t) => t.includes(category.SIC_Code));
+    // }
     if (category.SIC_Code !== "") {
-      const sicText = await currentRow
+      const sicLocator = currentRow
         .locator('span:has-text("SIC - Industry")')
-        .locator("xpath=..")
-        .locator("p")
-        .allInnerTexts();
+        .locator("p");
+
+      await expect
+        .soft(sicLocator.first())
+        .toContainText(category.SIC_Code, { timeout: 5000 });
+
+      const sicText = await sicLocator.allInnerTexts();
       sicMatch = sicText.some((t) => t.includes(category.SIC_Code));
     }
 

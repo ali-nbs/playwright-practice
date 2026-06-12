@@ -66,7 +66,7 @@ const SHEET_NAMES = [
   // "4/16",
   // "4/30",
   // "5/1",
-  "5/21",
+  "6/11",
 ];
 const KEY_FILE = path.resolve(process.cwd(), "credentials.json");
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
@@ -220,16 +220,17 @@ test.describe("Batch Fiscal-Year Processor", () => {
               },
             });
 
-            const activeTab = page
-              .locator('//span[contains(text(), "Docs:")]')
-              .first();
-            if (await activeTab.isVisible()) {
-              await activeTab.click({ button: "right" });
-              await page
-                .locator("text=/Close all tabs/i")
-                .click()
-                .catch(() => {});
-            }
+            // const activeTab = page
+            //   .locator('//span[contains(text(), "Docs:")]')
+            //   .first();
+            // if (await activeTab.isVisible()) {
+            //   await activeTab.click({ button: "right" });
+            //   await page
+            //     .locator("text=/Close all tabs/i")
+            //     .click()
+            //     .catch(() => {});
+            // }
+            await closeAllOpenTabs(page);
 
             continue;
           }

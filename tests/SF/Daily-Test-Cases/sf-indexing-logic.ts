@@ -23,7 +23,7 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
 
   const testCases = [
     {
-      date: "Today",
+      date: "Yesterday",
       keyword: "is OR the OR a",
       NotKeyword: "NOT (is OR the OR a)",
     },
@@ -36,7 +36,7 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
     await clearBtn.click();
     await page.waitForTimeout(3000);
     let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
-    await exhibitsCheckbox.click({ force: true });
+    await exhibitsCheckbox.uncheck({ force: true });
     await page.waitForTimeout(300);
 
     let ownershipFormsRadioButton = page.getByTestId(
@@ -65,7 +65,7 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
 
     if (!isValid) {
       await clearBtn.click();
-      await exhibitsCheckbox.click();
+      await exhibitsCheckbox.uncheck({ force: true });
       await ownershipFormsRadioButton.click();
       await fillAndEnter(page, dateInput, scenario.date);
       await fillAndEnter(page, keywordsInput, scenario.NotKeyword);

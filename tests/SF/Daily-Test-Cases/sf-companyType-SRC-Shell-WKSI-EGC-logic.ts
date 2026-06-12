@@ -7,24 +7,28 @@ const Categories = [
   {
     id: "IsSRC",
     label: "Entity Small Business",
+    pattern: /Entity Small Business/i,
     name: "SRC",
     identifier: "sf_companyType_SRC",
   },
   {
     id: "IsShellCompany",
     label: "Entity Shell Company",
+    pattern: /Entity Shell Company/i,
     name: "Shell Company",
     identifier: "sf_companyType_ShellCompany",
   },
   {
     id: "IsWKSI",
-    label: "Entity Well-known Seasoned Issuer",
+    label: "Entity Well Known Seasoned Issuer",
+    pattern: /Entity Well[- ]known Seasoned Issuer/i, // ✅ Matches both "Well-known" and "Well Known"
     name: "WKSI",
     identifier: "sf_companyType_WKSI",
   },
   {
     id: "IsEGC",
     label: "Entity Emerging Growth Company",
+    pattern: /Entity Emerging Growth Company/i,
     name: "EGC",
     identifier: "sf_companyType_EGC",
   },
@@ -72,10 +76,11 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
     await page.keyboard.type("10-K", { delay: 100 });
     await formsInput.press("Enter");
 
-    const exhibitsTofilingsCheckbox = await page.locator(
+    const exhibitsTofilingsCheckbox = page.locator(
       'label[for="-ExhibitsToFilings"]',
     );
-    await exhibitsTofilingsCheckbox.click({ force: true });
+    //await exhibitsTofilingsCheckbox.click({ force: true });
+    await exhibitsTofilingsCheckbox.uncheck({ force: true });
     await page
       .getByRole("button", { name: /^Search$/i })
       .first()
@@ -133,20 +138,14 @@ async function validateRows(page: Page, category: any, logToFile: Function) {
 
     // Get Accession #
     const accLabel = currentRow.locator("span", { hasText: "Accession #" });
-    const accValues = await accLabel
-      .locator("xpath=..")
-      .locator("span")
-      .allInnerTexts();
+    const accValues = await accLabel.locator("span").allInnerTexts();
     const accessionNo = accValues.find((t) => t.includes("-"))?.trim() || "N/A";
 
     // Check UI Status
     const uiLabel = currentRow.locator("span", {
       hasText: "Company Type/Status",
     });
-    const uiValues = await uiLabel
-      .locator("xpath=..")
-      .locator("p")
-      .allInnerTexts();
+    const uiValues = await uiLabel.locator("p").allInnerTexts();
     const uiMatchFound = uiValues.some(
       (val) =>
         val.toLowerCase().includes(category.name.toLowerCase()) ||
@@ -157,35 +156,75 @@ async function validateRows(page: Page, category: any, logToFile: Function) {
     if (await viewBtn.isVisible()) {
       try {
         await viewBtn.click();
-        await page.locator("text=/^iXBRL$/i").first().click();
-        await page.locator("text=/^EX-101$/i").first().click();
 
-        const xbrlFrame = page
-          .frameLocator('iframe[src*="/SECFilings/Documents/"]')
-          .first();
-        const rowSelector = `tr:has-text("${category.label}")`;
+        const ixbrlTab = page.locator("text=/^iXBRL$/i").first();
+        await ixbrlTab
+          .waitFor({ state: "visible", timeout: 10000 })
+          .catch(() => {});
+        await ixbrlTab.click();
 
-        const xbrlValue = await xbrlFrame
-          .locator(rowSelector)
-          .first()
-          .evaluate((tr) => {
-            const cells = Array.from(tr.querySelectorAll("td.text"));
-            const bool = cells.find((c) => {
-              const txt = c.textContent?.trim().toLowerCase();
-              return ["true", "false", "yes", "no"].includes(txt!);
+        const ex101Tab = page.locator("text=/^EX-101$/i").first();
+        await ex101Tab
+          .waitFor({ state: "visible", timeout: 20000 })
+          .catch(() => {});
+
+        if (await ex101Tab.isVisible()) {
+          await ex101Tab.click({ force: true });
+
+          const xbrlFrame = page
+            .frameLocator('iframe[src*="/SECFilings/Documents/"]')
+            .first();
+
+          const targetRows = xbrlFrame
+            .locator("tr")
+            .filter({ hasText: category.pattern });
+
+          try {
+            await targetRows
+              .first()
+              .waitFor({ state: "attached", timeout: 20000 });
+          } catch (e) {
+            failureLogs.push(
+              `Acc# ${accessionNo}: XBRL row containing "${category.label}" not found.`,
+            );
+          }
+
+          const rowCount = await targetRows.count();
+          expect.soft(rowCount).toBeGreaterThan(0);
+
+          if (rowCount === 0) {
+            failureLogs.push(
+              `Acc# ${accessionNo}: XBRL row containing "${category.label}" not found.`,
+            );
+          } else {
+            const xbrlValue = await targetRows.first().evaluate((tr) => {
+              const cells = Array.from(tr.querySelectorAll("td.text"));
+              const bool = cells.find((c) => {
+                const txt = c.textContent?.trim().toLowerCase();
+                return ["true", "false", "yes", "no"].includes(txt!);
+              });
+              return bool ? bool.textContent?.trim() : "value not found";
             });
-            return bool ? bool.textContent?.trim() : "value not found";
-          });
 
-        const xbrlMatch =
-          xbrlValue.toLowerCase() === "true" ||
-          xbrlValue.toLowerCase() === "yes";
+            const xbrlMatch =
+              xbrlValue.toLowerCase() === "true" ||
+              xbrlValue.toLowerCase() === "yes";
 
-        if (!uiMatchFound || !xbrlMatch || xbrlValue === "value not found") {
-          const reason = !uiMatchFound
-            ? "UI Mismatch"
-            : `XBRL Error: ${xbrlValue}`;
-          failureLogs.push(`Acc# ${accessionNo}: ${reason}`);
+            if (
+              !uiMatchFound ||
+              !xbrlMatch ||
+              xbrlValue === "value not found"
+            ) {
+              const reason = !uiMatchFound
+                ? "UI Mismatch"
+                : `XBRL Error: ${xbrlValue}`;
+              failureLogs.push(`Acc# ${accessionNo}: ${reason}`);
+            }
+          }
+        } else {
+          failureLogs.push(
+            `Acc# ${accessionNo}: EX-101 tab failed to click or load.`,
+          );
         }
       } catch (e) {
         logToFile(`⚠️ XBRL content not found for row ${resultsFound}`);

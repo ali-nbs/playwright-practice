@@ -120,7 +120,7 @@ export const runMatrixTest = async (page: Page, logToFile: Function) => {
   }
 
   const scenarioBlock = [
-    `Scenario: DBM Past Redline Version`,
+    `Scenario: DBM Matrix`,
     `Results: ${findings.text}`,
     `Scenario Status: ${findings.isValid ? "VALID ✅" : "INVALID ❌"}`,
   ].join("\n");

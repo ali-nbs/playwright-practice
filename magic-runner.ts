@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import { test } from "@playwright/test";
 import { run6kFormTypeTest } from "./tests/SF/Daily-Test-Cases/sf-6kFormType-logic";
 import { runAccountantTest } from "./tests/SF/Daily-Test-Cases/sf-accountant-logic";
 import { runAuditorTest } from "./tests/SF/Daily-Test-Cases/sf-auditor-logic";
@@ -25,9 +26,12 @@ import { runNalIndexingTest } from "./tests/NAL/nal-indexing-logic";
 import { runRoIndexingTest } from "./tests/RO/ro-indexing-logic";
 import {
   navigateToRegisteredOfferings,
+  navigateToSECFilings,
   navigateToSourceToTargetApp,
+  setupLogger,
 } from "./tests/utils/helpers";
 import { runSEIndexingTest } from "./tests/SE/se-indexing-logic";
+import { runCompanyType_SRC_Shell_WKSI_EGC_Test } from "./tests/SF/Daily-Test-Cases/sf-companyType-SRC-Shell-WKSI-EGC-logic";
 
 async function devSandbox() {
   const CDP_URL = "http://localhost:9222";
@@ -58,51 +62,11 @@ async function devSandbox() {
       );
     }
     console.log("---------------------------------------------------");
+    const logToFile = setupLogger("master-suite", "Daily-Test-Cases");
 
     const liveLog = (msg: string) => console.log(`[LIVE] ${msg}`);
 
-    // await navigateToSourceToTargetApp(
-    //   page,
-    //   "SEC Enforcement",
-    //   "Securities Regulation & Compliance",
-    // );
-
-    // await runSRCIndexingTest(page, liveLog);
-    // await runSRCCrawlingTest(page, liveLog);
-    // await runSRCDocViewTest(page, liveLog);
-    // await runSRCOutlineTest(page, liveLog);
-
-    //await runCrawlingTest(page, liveLog);
-
-    // await navigateToSourceToTargetApp(
-    //   page,
-    //   "Securities Reg. & Compliance",
-    //   "Registered Offerings",
-    // );
-    //await runRoIndexingTest(page, liveLog);
-
-    // await run6kFormTypeTest(page, liveLog);
-    // await runAccountantTest(page, liveLog);
-    // await runFiscalYearTest(page, liveLog);
-    await navigateToSourceToTargetApp(
-      page,
-      "Registered Offerings",
-      "Agreements & Other Exhibits",
-    );
-
-    await runAccountantMappingTest(page, liveLog);
-    await runDealPointsTest(page, liveLog);
-
-    await navigateToSourceToTargetApp(
-      page,
-      "Agreements & Other Exhibits",
-      "Disclosure Benchmarking",
-    );
-
-    await runDBMAnalyticsTest(page, liveLog);
-    await runPastRedlineVersionTest(page, liveLog);
-    await runMatrixTest(page, liveLog);
-
+    await runIndexingTest(page, liveLog);
     console.log("---------------------------------------------------");
     console.log("✅ Run Complete. Browser is still open for your next edit.");
 

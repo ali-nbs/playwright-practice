@@ -101,6 +101,7 @@ export const getTabText = async (
       .locator('a:has-text("Load more results")')
       .last()
       .click({ force: true });
+
     text = await tabLocator.nth(expectedIndex).innerText();
   }
 
@@ -155,9 +156,24 @@ export const configureDisplayColumns = async (
       .filter({ hasText: new RegExp(`^${category}$`) })
       .locator("._checkbox__icon_1xotg_257");
 
-    await selectAllCheckbox.click();
-    // await page.waitForTimeout(300);
-    await selectAllCheckbox.click();
+    // await selectAllCheckbox.click();
+    // // await page.waitForTimeout(300);
+    // await selectAllCheckbox.click();
+    const isMasterChecked = await selectAllCheckbox.evaluate((el) => {
+      const nativeInput = el.querySelector(
+        'input[type="checkbox"]',
+      ) as HTMLInputElement;
+      return nativeInput ? nativeInput.checked : false;
+    });
+
+    // Your logic: Master checked = 1 click, else 2 clicks
+    if (isMasterChecked) {
+      await selectAllCheckbox.click();
+    } else {
+      await selectAllCheckbox.click();
+      await page.waitForTimeout(300);
+      await selectAllCheckbox.click();
+    }
     await page.waitForTimeout(300);
 
     for (const item of items) {
@@ -252,6 +268,13 @@ export const navigateToSourceToTargetApp = async (
   targetPage: String,
 ) => {
   await page.locator(`text=/${sourcePage}/i`).first().click({ force: true });
+  const isChecked = await page.locator("input#sameWindow").isChecked();
+
+  // 2. If it is checked, click the visible text label to cleanly turn it off
+  if (isChecked) {
+    await page.getByText("Open in a New Browser Tab").click();
+    await page.waitForTimeout(200); // Small buffer for framework state to complete
+  }
   await page.locator(`text=/${targetPage}/i`).first().click({ force: true });
 };
 
