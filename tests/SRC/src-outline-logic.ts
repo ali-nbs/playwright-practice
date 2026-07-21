@@ -25,7 +25,7 @@ export const runSRCOutlineTest = async (page: Page, logToFile: Function) => {
     .locator("input");
 
   await fillAndEnter(page, dateInput, "Last 60 Days");
-  await fillAndEnter(page, lawsAndRegsInput, "Securities Regs");
+  await fillAndEnter(page, lawsAndRegsInput, "Securities Regs", 200);
 
   await searchBtn.click();
 

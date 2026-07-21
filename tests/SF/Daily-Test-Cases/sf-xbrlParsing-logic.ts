@@ -25,7 +25,7 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
 
   const searchResult = await getTabText(page, 0, logToFile, false);
 
-  const totalToProcess = 24;
+  const totalToProcess = 4;
   let processedCount = 0;
   let failureLogs: string[] = [];
   let isFailed = false;

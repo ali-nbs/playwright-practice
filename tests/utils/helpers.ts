@@ -166,7 +166,6 @@ export const configureDisplayColumns = async (
       return nativeInput ? nativeInput.checked : false;
     });
 
-    // Your logic: Master checked = 1 click, else 2 clicks
     if (isMasterChecked) {
       await selectAllCheckbox.click();
     } else {
@@ -236,6 +235,9 @@ export const navigateToSECFilings = async (page: Page) => {
 
 export const navigateToAgreementsAndOtherExhibits = async (page: Page) => {
   await page.locator("text=/Agreements & Other Exhibits/i").first().click();
+};
+export const navigateToBoardProfilesAndCompensation = async (page: Page) => {
+  await page.locator("text=/Board Profiles & Compensation/i").first().click();
 };
 export const navigateToSecuritiesRegulationAndCompliance = async (
   page: Page,

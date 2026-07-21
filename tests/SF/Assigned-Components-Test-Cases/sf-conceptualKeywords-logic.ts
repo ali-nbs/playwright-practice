@@ -5,7 +5,7 @@ import {
   parseCount,
   closeAllOpenTabs,
   configureDisplayColumns,
-} from "../../utils/sf-helpers";
+} from "../../utils/helpers";
 
 // ============================================================================
 // 1. LOCATOR FACTORIES

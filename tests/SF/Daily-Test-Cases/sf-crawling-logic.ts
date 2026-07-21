@@ -29,7 +29,7 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
     const exhibitstoFilingsCheckbox = page.locator(
       'label[for="-ExhibitsToFilings"]',
     );
-    await exhibitstoFilingsCheckbox.click({ force: true });
+    await exhibitstoFilingsCheckbox.uncheck({ force: true });
     await page.getByTestId("amendmentFilings-radio-EXC").click();
     await page.getByTestId("ownershipForms-radio-INC").click();
 

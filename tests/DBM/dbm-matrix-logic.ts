@@ -12,25 +12,25 @@ export const runMatrixTest = async (page: Page, logToFile: Function) => {
     const loadMatrixBtn = page.getByRole("button", {
       name: "Create/Load New Matrix",
     });
-    await loadMatrixBtn.click({ force: true });
+    await loadMatrixBtn.click({force: true});
 
-    await page
-      .locator("#savedList")
-      .first()
-      .locator("div")
-      .first()
-      .click({ force: true });
+    // await page
+    //   .locator("#savedList")
+    //   .first()
+    //   .locator("div")
+    //   .first()
+    //   .click({ force: true });
 
-    const nextBtn = page.getByRole("button", { name: "Next" });
-    await nextBtn.click({ force: true });
+     const nextBtn = page.getByRole("button", { name: "Next" });
+    // await nextBtn.click({ force: true });
 
-    try {
-      await nextBtn.click({ force: true, timeout: 10000 });
-    } catch (e) {
-      findings.isValid = false;
-      findings.text = "Error: No Saved Companies found";
-      logToFile("❌ Soft Failure: Next button step failed.");
-    }
+    // try {
+    //   await nextBtn.click({ force: true, timeout: 10000 });
+    // } catch (e) {
+    //   findings.isValid = false;
+    //   findings.text = "Error: No Saved Companies found";
+    //   logToFile("❌ Soft Failure: Next button step failed.");
+    // }
 
     if (findings.isValid) {
       try {

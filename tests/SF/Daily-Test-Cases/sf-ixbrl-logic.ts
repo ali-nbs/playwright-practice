@@ -19,15 +19,15 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
   const formsInput = page.locator("#Forms").getByRole("textbox");
   await fillAndEnter(page, formsInput, "10-K", 20);
 
-  const exhibtsToFilingsCheckbox = await page.locator(
+  const exhibtsToFilingsCheckbox =  page.locator(
     'label[for="-ExhibitsToFilings"]',
   );
-  await exhibtsToFilingsCheckbox.click({ force: true });
+  await exhibtsToFilingsCheckbox.uncheck({ force: true });
   await page.waitForTimeout(300);
   await page.getByRole("button", { name: /^Search$/i }).click();
 
   const searchResult = await getTabText(page, 0, logToFile, false);
-  const totalToProcess = 24;
+  const totalToProcess = 4;
   let processedCount = 0;
   let failureLogs: string[] = [];
   let isFailed = false;

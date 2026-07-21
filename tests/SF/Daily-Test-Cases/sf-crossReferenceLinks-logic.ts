@@ -40,7 +40,7 @@ export const runCrossReferenceLinksTest = async (
     await configureDisplayColumns(
       page,
       {
-        "Filing Info": ["Accession #"],
+        "Filing Info": ["Intelligize ID"],
         "Company Info": [],
       },
       {
@@ -121,19 +121,30 @@ const scrapeResults = async (
             .filter((t) => t.length > 0);
 
           console.log("---------------------------------------------");
-          //   for (const [index, text] of cleanContent.entries()) {
-          //     console.log(index, text);
-          //   }
+            // for (const [index, text] of cleanContent.entries()) {
+            //   console.log(index, text);
+            // }
           console.log("-------------------------------------------");
 
-          const accessionNo =
-            cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
-            "N/A";
+          // const accessionNo =
+          //   cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
+          //   "N/A";
 
-          console.log(
-            `Row: ${resultsFound + 1} || Accession ID: ${accessionNo} `,
+          const intelligizeIdIndex = cleanContent.findIndex(
+            item => item === "Intelligize ID"
           );
 
+          const intelligizeId =
+            intelligizeIdIndex !== -1
+              ? cleanContent[intelligizeIdIndex + 1]
+              : undefined;
+
+          const formType = cleanContent[2];    
+
+          console.log(
+            `Row: ${resultsFound + 1} || Intelligize ID: ${intelligizeId} `,
+          );
+          
           const targetedLink = allpTags
             .locator('a[href*="/SecuritiesRegulationAndCompliance?"]')
             .first();
@@ -142,11 +153,11 @@ const scrapeResults = async (
           } else {
             isScenarioValid = false;
             rowsData.push(
-              `Accession ${accessionNo} on Result Grid -> missing highlighting of the Cross Reference link.`,
+              `Intelligize ID: ${intelligizeId} | FormType ${formType} -> on Result Grid -> missing highlighting of the Cross Reference link.`,
             );
-            logToFile(
-              `❌ Row ${resultsFound + 1}: Accession ${accessionNo} on Result Grid -> missing highlighting of the Cross Reference link.`,
-            );
+            // logToFile(
+            //   `❌ Row ${resultsFound + 1}: Accession ${accessionNo} on Result Grid -> missing highlighting of the Cross Reference link.`,
+            // );
           }
 
           if (targetDocViewerCount > 0 && resultsFound < targetDocViewerCount) {
@@ -173,16 +184,14 @@ const scrapeResults = async (
               );
               if (crossReferenceLinksCount === 0) {
                 isScenarioValid = false;
-                logToFile(
-                  `❌ Accession ${accessionNo} is missing cross-reference links.`,
-                );
+               
                 rowsData.push(
-                  `Accession ${accessionNo} in Document Viewer -> missing highlighting of cross-reference links.`,
+                  `Intelligize ID: ${intelligizeId} | FormType ${formType} -> in Document Viewer -> missing highlighting of cross-reference links.`,
                 );
               } else {
-                logToFile(
-                  `✅ Accession ${accessionNo} has ${crossReferenceLinksCount} cross-reference links.`,
-                );
+                // logToFile(
+                //   `✅ Accession ${accessionNo} has ${crossReferenceLinksCount} cross-reference links.`,
+                // );
               }
               const activeTab = page
                 .locator(

@@ -5,6 +5,7 @@ import {
   getTabText,
   configureDisplayColumns,
   closeAllOpenTabs,
+  parseCount,
 } from "../utils/helpers";
 
 const IDENTIFIER = "src_crawling";
@@ -29,6 +30,7 @@ export const runSRCCrawlingTest = async (page: Page, logToFile: Function) => {
     await searchBtn.click();
 
     const textDateOnly = await getTabText(page, tabIndex++, logToFile);
+    const resultCount = await parseCount(textDateOnly);
     let findings = { text: "No Results Found", isValid: true };
 
     if (textDateOnly.includes("Docs")) {
@@ -36,7 +38,7 @@ export const runSRCCrawlingTest = async (page: Page, logToFile: Function) => {
       //     "Document Info": [],
       //   });
       await page.waitForTimeout(300);
-      findings = await scrapeCrawlingResults(scenario.count, page);
+      findings = await scrapeCrawlingResults(Math.min(scenario.count, resultCount), page);
     }
 
     const scenarioBlock = [
@@ -51,6 +53,7 @@ export const runSRCCrawlingTest = async (page: Page, logToFile: Function) => {
 
     allScenarioResults.push(scenarioBlock);
     await clearBtn.click();
+    await closeAllOpenTabs(page);
   }
 
   const finalDump = allScenarioResults.join(
@@ -65,7 +68,7 @@ export const runSRCCrawlingTest = async (page: Page, logToFile: Function) => {
   }
   logToFile("\n--- End of Report ---");
 
-  await closeAllOpenTabs(page);
+  //await closeAllOpenTabs(page);
 };
 
 const scrapeCrawlingResults = async (targetCount: number, page: Page) => {

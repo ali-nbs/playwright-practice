@@ -1,12 +1,12 @@
 import { test } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
-import { AUTH_PATH } from "../../utils/sf-helpers";
+import { AUTH_PATH } from "../../utils/helpers";
 import {
   setupLogger,
   ensureLoggedIn,
   navigateToSECFilings,
-} from "../../utils/sf-helpers";
+} from "../../utils/helpers";
 import { runBooleanKeywordsTest } from "./sf-booleanKeywords-logic";
 
 test.describe("SF-Boolean Keywords Automation - Isolated Mode", () => {

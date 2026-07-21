@@ -14,6 +14,8 @@ const SHEET_NAMES = [
   // "1/28",
   // "1/29",
   // "1/30",
+  // "7/2",
+  // "2/2",
   // "2/3",
   // "2/4",
   // "2/5",
@@ -31,6 +33,7 @@ const SHEET_NAMES = [
   // "2/25",
   // "2/27",
   // "2/26",
+  // "2/27",
   // "3/3",
   // "3/4",
   // "3/5",
@@ -52,27 +55,36 @@ const SHEET_NAMES = [
   // "3/27",
   // "3/30",
   // "3/31",
+  // "7/1",
   // "4/1",
-  // "4/2",
-  // "4/3",
-  // "4/6",
-  // "4/7",
-  // "4/8",
-  // "4/9",
-  // "4/10",
-  // "4/13",
-  // "4/14",
-  // "4/15",
-  // "4/16",
-  // "4/30",
-  // "5/1",
-  "6/11",
+  // "3/2",
+  // "3/3",
+  // "3/4",
+  // "3/5",
+  // "3/6",
+  // "3/9",
+  // "3/10",
+  // "3/11",
+  // "3/12",
+  // "3/13",
+  // "3/16",
+  // "3/17",
+  // "3/18",
+  // "3/19",
+  // "3/20", 
+  // "3/23",
+  // "3/25",
+  // "3/26",
+  // "3/27",
+  // "3/30",
+  "7/20"
 ];
 const KEY_FILE = path.resolve(process.cwd(), "credentials.json");
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
-const PROCESS_ALL_ROWS = false;
+const PROCESS_ALL_ROWS = true;
 
+// export const runFiscalYearBatch = async (page: Page) => {
 test.describe("Batch Fiscal-Year Processor", () => {
   // Use the auth state if it exists
   if (fs.existsSync(AUTH_PATH)) {
@@ -156,7 +168,7 @@ test.describe("Batch Fiscal-Year Processor", () => {
         }
 
         console.log(
-          `\n--- [${i + 1}/${rows.length}] Processing: ${accNum} ---`,
+          `\n--- Sheet Name [${sheetName}] -> Row: [${i + 1}/${rows.length}] Processing: ${accNum} ---`,
         );
 
         try {
@@ -216,7 +228,7 @@ test.describe("Batch Fiscal-Year Processor", () => {
               range: `'${sheetName}'!L${i + 2}:M${i + 2}`,
               valueInputOption: "USER_ENTERED",
               requestBody: {
-                values: [["XBRL doc not found", "Playwright-Bot"]],
+                values: [["XBRL doc not found", "Hafiz Ali"]],
               },
             });
 
@@ -400,7 +412,7 @@ test.describe("Batch Fiscal-Year Processor", () => {
                 range: `'${sheetName}'!J${i + 2}:M${i + 2}`,
                 valueInputOption: "USER_ENTERED",
                 requestBody: {
-                  values: [[resultLabelJ, statusK, "", "Playwright-Bot"]],
+                  values: [[resultLabelJ, statusK, "", "Hafiz Ali"]],
                 },
               });
             } else {
@@ -412,6 +424,15 @@ test.describe("Batch Fiscal-Year Processor", () => {
             console.log(
               `Target row found for ${accNum}, but ex101Link never appeared.`,
             );
+             await sheets.spreadsheets.values.update({
+                spreadsheetId: SPREADSHEET_ID,
+                range: `'${sheetName}'!J${i + 2}:M${i + 2}`,
+                valueInputOption: "USER_ENTERED",
+                requestBody: {
+                  values: [["", "", "", "Hafiz Ali"]],
+                },
+              });
+
           }
         } catch (error: any) {
           console.error(`Error processing ${accNum}: ${error.message}`);
@@ -436,24 +457,103 @@ test.describe("Batch Fiscal-Year Processor", () => {
         }
       }
     }
-  });
+  }
+
+)
 });
 
-function calculateDynamicFiscal(periodStr: string, yearEndStr: string) {
+// function calculateDynamicFiscal(periodStr: string, yearEndStr: string) {
+//   const periodDate = new Date(periodStr);
+//   const pMonth = periodDate.getMonth() + 1;
+//   const pYear = periodDate.getFullYear();
+
+//   const parts = yearEndStr.split("-");
+//   const fyEndMonth = parseInt(parts[parts.length - 2]);
+//   const fyEndDay = parseInt(parts[parts.length - 1]) || 31; // Capture custom day
+//   const fyStartMonth = (fyEndMonth % 12) + 1;
+//   console.log(`periodStrh: ${periodStr}, yearEndStr: ${yearEndStr}, fyEndDay: ${fyEndDay}`);
+
+//   let monthsSinceStart = (pMonth - fyStartMonth + 12) % 12;
+//   let quarterNum = Math.floor(monthsSinceStart / 3) + 1;
+
+//   let yearOfCycleStart = pMonth < fyStartMonth ? pYear - 1 : pYear;
+
+//   let yearCountMap: Record<number, number> = {};
+
+//   for (let i = 0; i < 12; i++) {
+//     let m = ((fyStartMonth + i - 1) % 12) + 1;
+//     let yearOfTrailingMonth =
+//       m < fyStartMonth ? yearOfCycleStart + 1 : yearOfCycleStart;
+
+//     yearCountMap[yearOfTrailingMonth] =
+//       (yearCountMap[yearOfTrailingMonth] || 0) + 1;
+//   }
+
+//   const years = Object.keys(yearCountMap)
+//     .map(Number)
+//     .sort((a, b) => b - a);
+//   let finalFiscalYear = years[0];
+
+//   if (years.length > 1) {
+//     const latestYear = years[0];
+//     const earlierYear = years[1];
+
+//     if (yearCountMap[earlierYear] > yearCountMap[latestYear]) {
+//       finalFiscalYear = earlierYear;
+//     }
+//   }
+//   console.log(`Cycle Years:`, yearCountMap);
+//   console.log(`Result: Q${quarterNum} ${finalFiscalYear}`);
+
+//   return {
+//     quarter: `Q${quarterNum}`.replace(/^Q4$/, `FY`),
+//     fiscalYear: finalFiscalYear,
+//   };
+// }
+
+
+function calculateDynamicFiscal(periodStr: string, yearEndStr: string, leverageDays: number = 30) {
   const periodDate = new Date(periodStr);
-  const pMonth = periodDate.getMonth() + 1;
-  const pYear = periodDate.getFullYear();
+  let pMonth = periodDate.getMonth() + 1;
+  let pYear = periodDate.getFullYear();
 
   const parts = yearEndStr.split("-");
   const fyEndMonth = parseInt(parts[parts.length - 2]);
+  const fyEndDay = parseInt(parts[parts.length - 1]) || 31; // Capture custom day
   const fyStartMonth = (fyEndMonth % 12) + 1;
-  console.log(`periodStrh: ${periodStr}, yearEndStr: ${yearEndStr}`);
 
+  console.log(`periodStr: ${periodStr}, yearEndStr: ${yearEndStr}`);
+
+  // 🎯 THE LEVERAGE SHORTCUT (No Loops)
+  // Find the closest previous quarter-end month relative to the current pMonth
+  let monthsPast = (pMonth - fyEndMonth + 12) % 3;
+  let qEndMonth = pMonth - monthsPast;
+  let qEndYear = pYear;
+
+  if (qEndMonth <= 0) {
+    qEndMonth += 12;
+    qEndYear -= 1;
+  }
+
+  // Construct that specific quarter-end date
+  const maxDays = new Date(qEndYear, qEndMonth, 0).getDate();
+  const targetQuarterEnd = new Date(qEndYear, qEndMonth - 1, Math.min(fyEndDay, maxDays));
+
+  // Calculate day difference
+  const diffDays = (periodDate.getTime() - targetQuarterEnd.getTime()) / (1000 * 60 * 60 * 24);
+
+  // If it falls within the late-filing grace period, snap the parameters back
+  if (diffDays >= 0 && diffDays <= leverageDays) {
+    console.log(`👉 Late filing detected (${Math.round(diffDays)} days). Snapping back to Month ${qEndMonth}`);
+    pMonth = qEndMonth;
+    pYear = qEndYear;
+  }
+
+  // ── Core Calculations (100% Preserved from your original script) ──────────────────
   let monthsSinceStart = (pMonth - fyStartMonth + 12) % 12;
   let quarterNum = Math.floor(monthsSinceStart / 3) + 1;
 
   let yearOfCycleStart = pMonth < fyStartMonth ? pYear - 1 : pYear;
-
   let yearCountMap: Record<number, number> = {};
 
   for (let i = 0; i < 12; i++) {
@@ -477,8 +577,10 @@ function calculateDynamicFiscal(periodStr: string, yearEndStr: string) {
     if (yearCountMap[earlierYear] > yearCountMap[latestYear]) {
       finalFiscalYear = earlierYear;
     }
+    console.log("lastest year" , latestYear , yearCountMap[latestYear]);
+    console.log("earlierYear " , earlierYear , yearCountMap[earlierYear] );
   }
-  console.log(`Cycle Years:`, yearCountMap);
+  
   console.log(`Result: Q${quarterNum} ${finalFiscalYear}`);
 
   return {

@@ -32,6 +32,11 @@ import {
 } from "./tests/utils/helpers";
 import { runSEIndexingTest } from "./tests/SE/se-indexing-logic";
 import { runCompanyType_SRC_Shell_WKSI_EGC_Test } from "./tests/SF/Daily-Test-Cases/sf-companyType-SRC-Shell-WKSI-EGC-logic";
+import { runBpcCrawlingTest } from "./tests/BPC/bpc-crawling-logic";
+
+import { runBpcDisplayBarTest } from "./tests/BPC/bpc-displayBar-logic";
+
+import { runBpcCompareTest } from "./tests/BPC/bpc-profileCompare-logic";
 
 async function devSandbox() {
   const CDP_URL = "http://localhost:9222";
@@ -66,7 +71,9 @@ async function devSandbox() {
 
     const liveLog = (msg: string) => console.log(`[LIVE] ${msg}`);
 
-    await runIndexingTest(page, liveLog);
+    //await runMatrixTest(page, liveLog);
+   // await navigateToSourceToTargetApp(page, "SEC Filings" ,"Board Profiles & Compensation");
+    await runBpcCompareTest(page, liveLog);
     console.log("---------------------------------------------------");
     console.log("✅ Run Complete. Browser is still open for your next edit.");
 

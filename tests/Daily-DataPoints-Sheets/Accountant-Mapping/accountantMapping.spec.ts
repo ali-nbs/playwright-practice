@@ -12,7 +12,7 @@ import {
 import path from "path";
 
 const SPREADSHEET_ID = "1DOnzSxSjCQYeQKewr0JDQiMzq_w4LM1dWHvMSW-9QUg";
-const SHEET_NAME = "6/11";
+const SHEET_NAME = "7/20";
 const KEY_FILE = path.resolve(process.cwd(), "credentials.json");
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
@@ -89,7 +89,7 @@ test("Accountant Mapping Google Sheets Processor", async ({ page }) => {
           range: `'${SHEET_NAME}'!I${i + 2}:L${i + 2}`,
           valueInputOption: "USER_ENTERED",
           requestBody: {
-            values: [["", "FALSE", "No Result Found", "Playwright-Bot"]],
+            values: [["", "FALSE", "No Result Found", "Hafiz Ali"]],
           },
         });
         await closeAllOpenTabs(page);
@@ -125,7 +125,7 @@ test("Accountant Mapping Google Sheets Processor", async ({ page }) => {
           valueInputOption: "USER_ENTERED",
           requestBody: {
             values: [
-              ["", "FALSE", "No Firm Found in Result Grid", "Playwright-Bot"],
+              ["", "FALSE", "No Firm Found in Result Grid", "Hafiz Ali"],
             ],
           },
         });
@@ -229,7 +229,7 @@ test("Accountant Mapping Google Sheets Processor", async ({ page }) => {
               firmFoundInPopUp,
               errorMessage.length > 0 ? "FALSE" : "TRUE",
               errorMessage,
-              "Playwright-Bot",
+              "Hafiz Ali",
             ],
           ],
         },

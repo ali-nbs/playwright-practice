@@ -56,7 +56,7 @@ export const runPastRedlineVersionTest = async (
     actualTarget = Math.min(25, docsCount);
     console.log(`Actual target for scenario ${actualTarget}`);
     findings = await scrapeResults(actualTarget, page, logToFile);
-    await page.pause();
+    //await page.pause();
     await closeAllOpenTabs(page);
 
     const scenarioBlock = [

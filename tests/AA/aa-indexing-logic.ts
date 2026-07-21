@@ -7,10 +7,10 @@ import {
   parseCount,
 } from "../utils/helpers";
 
-const IDENTIFIER = "nal_indexing";
+const IDENTIFIER = "aa_indexingAndDocView";
 
-export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
-  logToFile("--- Starting NAL-Indexing Report ---");
+export const runAAIndexingAndDocViewTest = async (page: Page, logToFile: Function) => {
+  logToFile("--- Starting AA-indexingAndDocView Report ---");
 
   const dateInput = page.locator(
     '//label[text()="Date"]/ancestor::div[5]//input',
@@ -23,7 +23,7 @@ export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
 
   const testCases = [
     {
-      date: "Last 30 Days",
+      date: "Yesterday",
       keyword: "is OR the OR a",
       NotKeyword: "NOT (is OR the OR a)",
     },
@@ -51,15 +51,15 @@ export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
     const textDateOnlyCount = parseCount(textDateOnly);
     let textWithKeywordCount = parseCount(textWithKeyword);
 
-    console.log("NAL Baseline Count ->", textDateOnlyCount);
-    console.log("NAL Keyword Count ->", textWithKeywordCount);
+    console.log("AA Baseline Count ->", textDateOnlyCount);
+    console.log("AA Keyword Count ->", textWithKeywordCount);
 
     let isValid = textDateOnlyCount === textWithKeywordCount;
     let notKeywordPart = "";
 
     if (!isValid) {
       logToFile(
-        "⚠️ Mismatch detected. Firing NAL NOT keyword fallback verification...",
+        "⚠️ Mismatch detected. Firing AA NOT keyword fallback verification...",
       );
 
       await clearBtn.click();
@@ -78,7 +78,7 @@ export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
       logToFile(`With Not Keyword: ${textWithNotKeyword}`);
 
       const sum = textWithKeywordCount + parseCount(textWithNotKeyword);
-      console.log("NAL Validation Sum ->", sum);
+      console.log("AA Validation Sum ->", sum);
 
       isValid = sum === textDateOnlyCount;
       notKeywordPart = `Data: ${scenario.date} + NotKeyword: ${scenario.NotKeyword}\nDoc Found: ${parseCount(textWithNotKeyword)}\n`;
