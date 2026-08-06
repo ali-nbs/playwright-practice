@@ -5,6 +5,89 @@ import { updateGoogleSheet } from "./dumpDataOnGoogleSheet";
 
 export const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
 
+// Strips ANSI escape/color codes (e.g. the `\x1B[2m`/`\x1B[22m` sequences
+// Playwright wraps its own assertion error messages in) before anything
+// is written to a log file or Google Sheets. Without this, a failure like
+// `expect(locator).toBeVisible()` shows up in the saved log/report as an
+// unreadable string of raw escape bytes (`␛[2mexpect(␛[22m...`) instead of
+// plain text, which is what made past failure logs impossible to read.
+// Terminal output (console.log) keeps the color codes since a real
+// terminal renders them fine there.
+const ANSI_PATTERN = /\x1B\[[0-9;]*[a-zA-Z]/g; // eslint-disable-line no-control-regex
+export const stripAnsi = (text: string): string => text.replace(ANSI_PATTERN, "");
+
+// Reduces a caught Playwright/JS error to one clean, ANSI-free line
+// suitable for a failure log entry. Playwright assertion errors are
+// multi-line (message + a "Call log:" trace) and color-coded; callers
+// that just need "what failed, briefly" for a summary line should use
+// this instead of raw `e.message.split("\n")[0]`, which still contains
+// escape codes.
+export const cleanErrorMessage = (error: unknown): string => {
+  const raw = error instanceof Error ? error.message : String(error);
+  const firstLine = stripAnsi(raw).split("\n")[0].trim();
+  return firstLine || "Unknown error (no message)";
+};
+
+// Structured per-row result entry used by the AA "process N rows and
+// report" scripts (indexing, accounting disclosures, audit opinions,
+// ...). Centralizing this format means every one of those scripts
+// produces a log/report block that is easy to scan and easy to trace
+// back to a specific document -- instead of each script hand-rolling
+// its own ad hoc string with a raw, possibly ANSI-coded error appended.
+export type RowFinding = {
+  passed: boolean;
+  label: string; // e.g. "Row 2 (Intelligize ID: 23653931)"
+  details: string[]; // one line per sub-check, already prefixed with an emoji
+  error?: unknown; // set only when the row threw before sub-checks could run
+};
+
+export const formatRowFinding = (finding: RowFinding): string => {
+  const status = finding.passed ? "✅" : "❌";
+  const lines = [`${status} ${finding.label}`];
+  if (finding.error !== undefined) {
+    lines.push(`   -> ERROR: ${cleanErrorMessage(finding.error)}`);
+  }
+  for (const detail of finding.details) {
+    lines.push(`   ${detail}`);
+  }
+  return lines.join("\n");
+};
+
+// Builds the full "N docs verified, here is every failing one with full
+// context" block for one filter/scenario label. Always includes the
+// scenario header and totals even when everything passed, so a reader
+// scanning the log/sheet can tell "0 failures reported" apart from "this
+// scenario never ran". Only FAILED rows are listed in detail -- passed
+// rows are summarized as a count -- so a long run with mostly-passing
+// rows doesn't bury the handful that actually need investigation.
+export const formatScenarioReport = (
+  scenarioLabel: string,
+  totalFound: number,
+  findings: RowFinding[],
+): { text: string; isValid: boolean } => {
+  const failed = findings.filter((f) => !f.passed);
+  const passedCount = findings.length - failed.length;
+  const isValid = failed.length === 0;
+
+  const lines = [
+    `Scenario: ${scenarioLabel}`,
+    `Total Found: ${totalFound}`,
+    `Docs Verified: ${findings.length} (${passedCount} passed, ${failed.length} failed)`,
+    "",
+  ];
+
+  if (findings.length === 0) {
+    lines.push("ℹ️ No results to verify for this scenario.");
+  } else if (failed.length === 0) {
+    lines.push(`✅ All ${passedCount} verified row(s) passed.`);
+  } else {
+    lines.push(...failed.map(formatRowFinding));
+  }
+
+  lines.push("", `Scenario Result: ${isValid ? "Valid ✅" : "Invalid ❌"}`);
+
+  return { text: lines.join("\n"), isValid };
+};
 export const setupLogger = (
   testName: string,
   logPath: string = "SF/Assigned-Components-Test-Cases",
@@ -30,15 +113,79 @@ export const setupLogger = (
   const fileName = path.join(logDirectory, `${testName}-${timestamp}.txt`);
 
   return (message: string) => {
-    fs.appendFileSync(fileName, message + "\n");
+    // Always write ANSI-free text to the log FILE (that's what gets read
+    // later / pasted into Google Sheets); keep the original, color-coded
+    // message on the live console for readability while the run is
+    // actively being watched in a terminal.
+    fs.appendFileSync(fileName, stripAnsi(message) + "\n");
     console.log(message);
   };
+};
+
+// Purely diagnostic — logs every real API call (fetch/xhr) this page makes:
+// timestamp, method, URL, and either its response status (+ a body snippet
+// on error) or the exact network-level failure reason if it never got a
+// response at all (net::ERR_*, the real cause hiding behind "Failed to
+// fetch"). Also logs console errors and uncaught page errors, trimmed to a
+// few lines for readability. Everything is written line-by-line to the same
+// log file via logToFile, so it's already on disk and survives past a
+// crash/navigation that would otherwise wipe DevTools' Network/Console tabs.
+export const attachDiagnostics = (
+  page: Page,
+  logToFile: Function = () => {},
+) => {
+  const timestamp = () =>
+    new Date().toISOString().split("T")[1].replace("Z", "");
+
+  const isApiCall = (request: { resourceType: () => string }) =>
+    request.resourceType() === "fetch" || request.resourceType() === "xhr";
+
+  page.on("response", async (response) => {
+    const request = response.request();
+    if (!isApiCall(request)) return;
+
+    const status = response.status();
+    const marker = status >= 400 ? "✖" : "✓";
+    let line = `[${timestamp()}] ${marker} ${status} ${request.method()} ${response.url()}`;
+
+    if (status >= 400) {
+      const body = await response.text().catch(() => "");
+      if (body) line += `\n    ↳ response: ${body.slice(0, 500)}`;
+    }
+
+    logToFile(line);
+  });
+
+  page.on("requestfailed", (request) => {
+    if (!isApiCall(request)) return;
+    const failure = request.failure();
+    logToFile(
+      `[${timestamp()}] ✖ NETWORK ERROR ${request.method()} ${request.url()} — ${failure?.errorText ?? "unknown"}`,
+    );
+  });
+
+  page.on("console", (msg) => {
+    if (msg.type() === "error") {
+      logToFile(`[${timestamp()}] 🔴 console error: ${msg.text().split("\n")[0]}`);
+    }
+  });
+
+  page.on("pageerror", (error) => {
+    const firstStackLines = (error.stack ?? "")
+      .split("\n")
+      .slice(0, 3)
+      .join("\n    ");
+    logToFile(
+      `[${timestamp()}] 🔴 uncaught page error: ${error.message}\n    ${firstStackLines}`,
+    );
+  });
 };
 
 export const ensureLoggedIn = async (
   page: Page,
   logToFile: Function = () => {},
 ) => {
+  //attachDiagnostics(page, logToFile);
   await page.goto("/");
 
   const userIdInput = page.locator("#userid");
@@ -83,6 +230,44 @@ export const fillAndEnter = async (
   await page.keyboard.press("Enter");
 };
 
+// getTabText throws a plain Error tagged with `.kind` when the result grid
+// shows an error state instead of a count, or when the app's crash screen
+// ("Oops! Something went wrong.") appears instead of the app entirely.
+// Callers check `error.kind` ("error" | "crash") to decide whether to skip
+// to the next scenario or recover + abort.
+const throwGridStateError = (kind: "error" | "crash", message: string) => {
+  const err: any = new Error(message);
+  err.kind = kind;
+  throw err;
+};
+
+// The app's generic React crash boundary: a centered "Oops! / Something
+// went wrong. / Go Back" block replacing the entire UI. Confirmed live via
+// screenshot (apps.intelligize.com/BoardProfilesAndCompensation).
+export const getCrashScreenLocator = (page: Page) =>
+  page.getByText("Oops!", { exact: false }).first();
+
+export const recoverFromAppCrash = async (
+  page: Page,
+  logToFile: Function = () => {},
+) => {
+  logToFile("💥 App crash screen detected — attempting recovery...");
+  const goBackBtn = page.getByRole("button", { name: /^Go Back$/i });
+
+  try {
+    if (await goBackBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await goBackBtn.click();
+    } else {
+      await page.reload({ waitUntil: "domcontentloaded" });
+    }
+  } catch {
+    await page.reload({ waitUntil: "domcontentloaded" }).catch(() => {});
+  }
+
+  await page.waitForTimeout(2000);
+  logToFile("Recovery attempt complete.");
+};
+
 export const getTabText = async (
   page: Page,
   expectedIndex: number,
@@ -90,11 +275,43 @@ export const getTabText = async (
   isNeedLoadMoreResults: boolean = false,
 ) => {
   console.log("expected index ", expectedIndex);
+  // Widened to also match an error state in any casing ("Error", "error!",
+  // "ERROR:", ...) rendered in the same tab-label span as "Docs:"/"Results:".
   const tabLocator = page.locator(
-    '//span[contains(text(), "Docs:") or contains(text(), "Results:") or contains(text(), "Offerings:") or contains(text(), "No Results Found")]',
+    '//span[contains(text(), "Docs:") or contains(text(), "Results:") or contains(text(), "Offerings:") or contains(text(), "No Results Found") or contains(translate(text(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "error")]',
   );
-  await expect(tabLocator.nth(expectedIndex)).toBeVisible({ timeout: 240000 });
-  let text = await tabLocator.nth(expectedIndex).innerText();
+  const target = tabLocator.nth(expectedIndex);
+  const crashLocator = getCrashScreenLocator(page);
+
+  // Race the normal tab text against the crash screen so a crash is caught
+  // within seconds instead of burning the full 240s timeout.
+  await Promise.race([
+    expect(target).toBeVisible({ timeout: 240000 }).catch(() => {}),
+    expect(crashLocator).toBeVisible({ timeout: 240000 }).catch(() => {}),
+  ]);
+
+  if (await crashLocator.isVisible().catch(() => false)) {
+    throwGridStateError(
+      "crash",
+      `App crash screen ("Oops! Something went wrong") appeared instead of the results tab (index ${expectedIndex}).`,
+    );
+  }
+
+  if (!(await target.isVisible().catch(() => false))) {
+    throwGridStateError(
+      "error",
+      `Timed out waiting for results tab (index ${expectedIndex}): neither a results count nor a crash screen appeared within 240s.`,
+    );
+  }
+
+  let text = await target.innerText();
+
+  if (/error/i.test(text)) {
+    throwGridStateError(
+      "error",
+      `Result grid returned an error state instead of a count: "${text}"`,
+    );
+  }
 
   if (text.includes("Docs: 2,000+") && isNeedLoadMoreResults) {
     await page
@@ -256,6 +473,10 @@ export const navigateToNoActionLetters = async (page: Page) => {
   await page.locator("text=/No-Action Letters/i").first().click();
 };
 
+export const navigateToAccountingAnalytics = async (page: Page) => {
+  await page.locator("text=/Accounting Analytics/i").first().click();
+};
+
 export const navigateToRegisteredOfferings = async (page: Page) => {
   await page.locator("text=/Registered Offerings/i").first().click();
 };
@@ -292,7 +513,7 @@ export const closeAllOpenTabs = async (page: Page) => {
   );
   if ((await activeTab.count()) > 0) {
     try {
-      await activeTab.first().click({ button: "right", timeout: 5000 });
+      await activeTab.first().click({ button: "right", timeout: 10000 });
       const closeAllBtn = page
         .locator(".react-contextmenu--visible")
         .getByRole("menuitem", { name: /Close all tabs/i });
@@ -325,4 +546,98 @@ export const closeTabsToTheRight = async (page: Page) => {
       await page.reload();
     }
   }
+};
+
+export function getTargetDateString(): string {
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  let daysToSubtract = 1;
+
+  if (dayOfWeek === 1) {
+    // Today is Monday -> look back 3 days to Friday
+    daysToSubtract = 3;
+  } 
+
+  const targetDate = new Date(today);
+  targetDate.setDate(today.getDate() - daysToSubtract);
+
+  const mm = String(targetDate.getMonth() + 1).padStart(2, "0");
+  const dd = String(targetDate.getDate()).padStart(2, "0");
+  const yyyy = targetDate.getFullYear();
+
+  return `${mm}/${dd}/${yyyy}`;
+}
+
+// ---------------------------------------------------------------------
+// Result-grid row lookup that is safe when "Exhibits to Filings" is ON.
+// ---------------------------------------------------------------------
+//
+// LIVE-CONFIRMED (2026-08-06, via playwright-cli headed session against
+// Accounting Analytics with Exhibits to Filings checked): the app renders
+// each filing followed by its own exhibit sub-rows (EX-31.1, EX-31.2,
+// EX-32.1, EX-101, ...) as SEPARATE `div[data-test="resultRow"]` elements
+// interleaved in the same virtualized grid. Exhibit sub-rows reuse the
+// SAME small `id` sequence (0, 1, 2, 3...) independently per filing --
+// they are not globally unique -- so selecting a row by
+// `[data-test="resultRow"][id="N"]` can match an exhibit sub-row instead
+// of the Nth real filing. Exhibit sub-rows have no "View" button, so the
+// resulting failure is a generic, unhelpful `expect(locator).toBeVisible()`
+// timeout on the View button with no indication that the wrong row was
+// ever selected. This was the actual root cause behind AA row-verification
+// scripts reporting "Row 2/Row 3 failed" while Row 1 always passed --
+// Row 1 legitimately is the first `resultRow`, but Row 2/3 by `id` landed
+// on that same filing's own exhibit rows.
+//
+// Fix: identify real filing rows by the presence of a "View" button
+// (`getByRole("button", { name: /View/i })`), not by raw `id`. This is
+// correct whether or not "Exhibits to Filings" is checked, so callers no
+// longer need to remember to uncheck that filter as a workaround.
+export const findResultRowByIndex = async (
+  page: Page,
+  targetIndex: number, // 1-based: 1 = first real filing row, 2 = second, ...
+  logToFile: Function = () => {},
+): Promise<Locator | null> => {
+  const scroller = page.locator(".ReactVirtualized__Grid:visible").last();
+  const MAX_STAGNANT_SCROLLS = 12;
+  let stagnantScrolls = 0;
+  let lastSeenRowCount = -1;
+
+  const isFilingRow = async (row: Locator): Promise<boolean> =>
+    (await row.getByRole("button", { name: /View/i }).count()) > 0;
+
+  while (stagnantScrolls <= MAX_STAGNANT_SCROLLS) {
+    const rows = scroller.locator('div[data-test="resultRow"]');
+    const rowCount = await rows.count();
+
+    if (rowCount > 0) {
+      let filingRowsSeen = 0;
+      for (let i = 0; i < rowCount; i++) {
+        const row = rows.nth(i);
+        if (!(await isFilingRow(row))) continue; // skip exhibit sub-rows
+        filingRowsSeen++;
+        if (filingRowsSeen === targetIndex) {
+          return row;
+        }
+      }
+    }
+
+    stagnantScrolls = rowCount === lastSeenRowCount ? stagnantScrolls + 1 : 0;
+    lastSeenRowCount = rowCount;
+
+    if (rowCount === 0) {
+      await page.waitForTimeout(600);
+      continue;
+    }
+
+    await rows
+      .last()
+      .evaluate((el) => el.scrollIntoView({ block: "end" }));
+    await page.waitForTimeout(600);
+  }
+
+  logToFile(
+    `⚠️ Could not find filing row #${targetIndex} (by View button, exhibit-safe) ` +
+      `after ${MAX_STAGNANT_SCROLLS} stagnant scroll attempts.`,
+  );
+  return null;
 };
