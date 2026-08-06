@@ -23,13 +23,23 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   timeout: 0,
   expect: {
-    timeout: 3000000,
+    // Default timeout for any expect() that doesn't set its own `timeout`
+    // option. This was previously 3,000,000ms (50 minutes) — almost
+    // certainly a typo for 30000. That misconfiguration is the actual
+    // cause of "AA-indexing fails/is slow": a real but short-lived UI race
+    // (Results tab briefly has a "disabled" class right after clicking
+    // View) hit an unguarded expect() and silently retried for up to 50
+    // minutes per occurrence before failing, instead of failing fast.
+    // Individual assertions that genuinely need longer (e.g. crawling
+    // status polling) already set their own explicit timeout and are
+    // unaffected by this default.
+    timeout: 30000,
   },
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
     baseURL: process.env.BASE_URL,
-    storageState: "auth.json",
+    // storageState: "auth.json",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
     screenshot: "only-on-failure",
