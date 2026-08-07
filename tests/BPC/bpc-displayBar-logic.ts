@@ -5,7 +5,8 @@ import { closeAllOpenTabs, getTabText } from "../utils/helpers";
 const IDENTIFIER = "bpc_displayBar";
 
 async function fetchNames(page: Page, logToFile: Function, tabName: string): Promise<string[]> {
-  const uniqueNames = new Set<string>();
+  const uniqueKeys = new Set<string>();
+  const uniqueNames: string[] = [];
   const scrollerSelector = 'div[class*="resultsScrollList"]';
   const scroller = page.locator(scrollerSelector).first();
 
@@ -50,7 +51,10 @@ async function fetchNames(page: Page, logToFile: Function, tabName: string): Pro
 
       const spans = currentRow.locator("span[title]");
       const spanCount = await spans.count();
-      
+
+      let rowName = "";
+      let rowCik = "";
+
       for (let j = 0; j < spanCount; j++) {
         const titleText = (await spans.nth(j).getAttribute("title"))?.trim() || "";
         if (!titleText) continue;
@@ -60,10 +64,26 @@ async function fetchNames(page: Page, logToFile: Function, tabName: string): Pro
         const isCikNumber = /^\d+$/.test(titleText);
         const isStatusOrFlag = /^(Yes|No|Male|Female|Appointed|Departed|Role Change)$/i.test(titleText);
         const isCurrencyOrMetric = /^\$/.test(titleText) || /\d+(K|M|B|x|%)/i.test(titleText);
-      
-        if (!isFilingDate && !isFormType && !isCikNumber && !isStatusOrFlag && !isCurrencyOrMetric) {
-          uniqueNames.add(titleText);
-          break; 
+
+        // A CIK is the pure-numeric title that identifies the company a
+        // person is tied to on this row. Capture it so the same person
+        // appearing under two different companies (different CIKs) on the
+        // same date isn't collapsed into a single entry.
+        if (isCikNumber && !rowCik) {
+          rowCik = titleText;
+          continue;
+        }
+
+        if (!isFilingDate && !isFormType && !isCikNumber && !isStatusOrFlag && !isCurrencyOrMetric && !rowName) {
+          rowName = titleText;
+        }
+      }
+
+      if (rowName) {
+        const key = `${rowName}::${rowCik}`;
+        if (!uniqueKeys.has(key)) {
+          uniqueKeys.add(key);
+          uniqueNames.push(rowCik ? `${rowName} (CIK: ${rowCik})` : rowName);
         }
       }
 
@@ -76,7 +96,7 @@ async function fetchNames(page: Page, logToFile: Function, tabName: string): Pro
     }
   }
 
-  const resultsArray = Array.from(uniqueNames);
+  const resultsArray = uniqueNames;
   logToFile(`✨ [${tabName}] Successfully extracted ${resultsArray.length} names from page 1.`);
   
   resultsArray.forEach((name, index) => {
@@ -92,6 +112,12 @@ export const runBpcDisplayBarTest = async (page: Page, logToFile: Function) => {
   const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
   let resultsSummary: string[] = [];
 
+  // The BPC app crashes ("Oops!" — filterHasValue reading .isEmpty on an
+  // undefined filter value, a known app bug) if Search is clicked before
+  // its background filter-init API calls finish populating Redux defaults.
+  // Give it a moment to settle before submitting a blank/unfiltered search.
+  await searchBtn.waitFor({ state: "visible" });
+  await page.waitForTimeout(3000);
   await searchBtn.click();
   await getTabText(page, 0, logToFile, false);
 
