@@ -7,18 +7,15 @@ import {
   closeAllOpenTabs,
   getTargetDateString,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_indexing";
 
 export const runIndexingTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-Indexing Report ---");
 
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
-  const keywordsInput = page.locator('[data-testid="keywords-input"]');
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const sf = new SfPage(page);
+
 
   logToFile("Exhibits to Filings: Checked");
 
@@ -34,9 +31,9 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
   let resultsSummary: string[] = [];
 
   for (const scenario of testCases) {
-    await clearBtn.click();
+    await sf.clearFilters();
     await page.waitForTimeout(3000);
-    let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
+    let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsCheckbox.uncheck({ force: true });
     await page.waitForTimeout(300);
 
@@ -47,12 +44,12 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
-    await fillAndEnter(page, dateInput, scenario.date);
-    await searchBtn.click();
+    await fillAndEnter(page, sf.dateInput, scenario.date);
+    await sf.search();
     const textDateOnly = await getTabText(page, tabIndex++, logToFile, true);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
-    await fillAndEnter(page, keywordsInput, scenario.keyword);
+    await fillAndEnter(page, sf.keywordsInput, scenario.keyword);
 
     let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
@@ -65,11 +62,11 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
     let notKeywordPart = "";
 
     if (!isValid) {
-      await clearBtn.click();
+      await sf.clearFilters();
       await exhibitsCheckbox.uncheck({ force: true });
       await ownershipFormsRadioButton.click();
-      await fillAndEnter(page, dateInput, scenario.date);
-      await fillAndEnter(page, keywordsInput, scenario.NotKeyword);
+      await fillAndEnter(page, sf.dateInput, scenario.date);
+      await fillAndEnter(page, sf.keywordsInput, scenario.NotKeyword);
 
       const textWithNotKeyword = await getTabText(
         page,

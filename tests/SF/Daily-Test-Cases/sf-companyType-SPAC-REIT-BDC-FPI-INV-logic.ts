@@ -1,6 +1,7 @@
 import { Page, expect } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import { closeAllOpenTabs, configureDisplayColumns } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const TARGET_ROW_COUNT = 5;
 const Categories = [
@@ -46,6 +47,8 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
 
   let finalSummaryReport: string[] = [];
 
+  const sf = new SfPage(page);
+
   for (const category of Categories) {
     logToFile(`\n--- Starting Category: ${category.name} ---`);
 
@@ -76,9 +79,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
     await modal.locator(`label[for="${category.id}"]`).click();
     await page.getByRole("button", { name: /^OK$/ }).click();
 
-    const exhibitsTofilingsCheckbox = await page.locator(
-      'label[for="-ExhibitsToFilings"]',
-    );
+    const exhibitsTofilingsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsTofilingsCheckbox.uncheck({ force: true });
     await page
       .getByRole("button", { name: /^Search$/i })

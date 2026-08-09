@@ -1,6 +1,7 @@
 import { test, expect, Page } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import { closeAllOpenTabs, configureDisplayColumns } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const TARGET_ROW_COUNT = 1;
 const Categories = [
@@ -40,11 +41,12 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
 ) => {
   logToFile("--- Starting Company Type (SRC/Shell/WKSI/EGC) Report ---");
 
+  const sf = new SfPage(page);
+
   for (const category of Categories) {
     logToFile(`\n--- Starting Category: ${category.name} ---`);
 
-    const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
-    await clearBtn.click();
+      await sf.clearFilters();
     await page.waitForTimeout(2000);
 
     // 1. Handle the Modal Filter for Company Type
@@ -71,14 +73,11 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
     await page.getByRole("button", { name: /^OK$/ }).click();
 
     // 2. Set Form 10-K and Exclude Exhibits
-    const formsInput = page.locator("#Forms").getByRole("textbox");
-    await formsInput.click();
+      await sf.formsInput.click();
     await page.keyboard.type("10-K", { delay: 100 });
-    await formsInput.press("Enter");
+    await sf.formsInput.press("Enter");
 
-    const exhibitsTofilingsCheckbox = page.locator(
-      'label[for="-ExhibitsToFilings"]',
-    );
+    const exhibitsTofilingsCheckbox = sf.exhibitsToFilingsLabel;
     //await exhibitsTofilingsCheckbox.click({ force: true });
     await exhibitsTofilingsCheckbox.uncheck({ force: true });
     await page

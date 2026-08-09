@@ -8,6 +8,7 @@ import {
   fillAndEnter,
   getTargetDateString,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_crossReferenceLinks";
 
@@ -17,22 +18,23 @@ export const runCrossReferenceLinksTest = async (
 ) => {
   logToFile("--- Starting SF-Cross Reference Links Test ---");
 
+  const sf = new SfPage(page);
+
   let tabIndex = 0;
   let actualTarget = 0;
   let allScenarioResults: string[] = [];
   let findings = { text: "No Results Found", isValid: true };
 
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
   const searchBtn = page.getByRole("button", { name: /^Search$/i });
 
-  await clearBtn.click();
+  await sf.clearFilters();
   await page.waitForTimeout(500);
-  let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
+  let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
   await exhibitsCheckbox.click();
   await page.waitForTimeout(300);
   const dateInput = page.getByTestId("date-input");
-  await fillAndEnter(page, dateInput, getTargetDateString());
-  await searchBtn.click();
+  await fillAndEnter(page, sf.dateInput, getTargetDateString());
+  await sf.search();
 
   const searchResultTextOnly = await getTabText(page, tabIndex++, logToFile);
   logToFile(`Baseline: ${searchResultTextOnly}`);
@@ -69,7 +71,7 @@ export const runCrossReferenceLinksTest = async (
   ].join("\n");
 
   allScenarioResults.push(scenarioBlock);
-  await clearBtn.click();
+  await sf.clearFilters();
 
   const finalDump = allScenarioResults.join(
     "\n---------------------------------\n",

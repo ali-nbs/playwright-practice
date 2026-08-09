@@ -8,18 +8,15 @@ import {
   closeAllOpenTabs,
   getTargetDateString,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_auditor";
 
 export const runAuditorTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-Auditor Report ---");
 
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
-  const formsInput = page.locator("#Forms").getByRole("textbox");
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const sf = new SfPage(page);
+
 
   const testCases = [{ date: getTargetDateString(), formType: "10-k", count: 15 }];
 
@@ -29,7 +26,7 @@ export const runAuditorTest = async (page: Page, logToFile: Function) => {
   let allScenarioResults: string[] = [];
 
   for (const scenario of testCases) {
-    await clearBtn.click();
+    await sf.clearFilters();
     await page.waitForTimeout(5000);
     let findings = { text: "No Results Found", isValid: true };
 
@@ -44,14 +41,14 @@ export const runAuditorTest = async (page: Page, logToFile: Function) => {
     await ownershipFormsRadioButton.click();
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
-    await fillAndEnter(page, dateInput, scenario.date, 50);
+    await fillAndEnter(page, sf.dateInput, scenario.date, 50);
     logToFile(`\nTesting Form Type: ${scenario.formType}`);
-    await fillAndEnter(page, formsInput, scenario.formType, 3000);
+    await fillAndEnter(page, sf.formsInput, scenario.formType, 3000);
 
-    let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
+    let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
     await page.waitForTimeout(2000);
     await exhibitsCheckbox.click();
-    await searchBtn.click();
+    await sf.search();
 
     const textDateOnly = await getTabText(page, tabIndex++, logToFile);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);

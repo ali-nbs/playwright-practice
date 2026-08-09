@@ -8,17 +8,15 @@ import {
   getTargetDateString,
   parseCount,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_filingAgent";
 
 export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-Filing Agent Report ---");
 
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const sf = new SfPage(page);
+
 
   const testCases = [
     {
@@ -53,7 +51,7 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
   let allScenarioResults: string[] = [];
 
   for (const scenario of testCases) {
-    await clearBtn.click();
+    await sf.clearFilters();
     await page.waitForTimeout(300);
     let findings = { text: "No Results Found", isValid: true };
 
@@ -61,15 +59,15 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
     await page.getByTestId("ownershipForms-radio-INC").click();
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
-    await fillAndEnter(page, dateInput, scenario.date, 50);
+    await fillAndEnter(page, sf.dateInput, scenario.date, 50);
 
     let filingAgentInput = page.getByTestId("filingAgentAndSoftware-input");
     await fillAndEnter(page, filingAgentInput, scenario.agent, 50);
 
-    let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
+    let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsCheckbox.click({ force: true });
     await page.waitForTimeout(300);
-    await searchBtn.click();
+    await sf.search();
 
     const textDateOnly = await getTabText(page, tabIndex++, logToFile);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);

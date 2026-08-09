@@ -6,22 +6,22 @@ import {
   fillAndEnter,
   getTabText,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_ixbrl";
 
 export const runIxbrlTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-iXBRL Report ---");
 
+  const sf = new SfPage(page);
+
   const clearBtn = await page.getByRole("button", { name: /^Clear Filters$/i });
-  await clearBtn.click({ force: true });
+  await sf.clearFiltersBtn.click({ force: true });
   await page.waitForTimeout(300);
 
-  const formsInput = page.locator("#Forms").getByRole("textbox");
-  await fillAndEnter(page, formsInput, "10-K", 20);
+  await fillAndEnter(page, sf.formsInput, "10-K", 20);
 
-  const exhibtsToFilingsCheckbox =  page.locator(
-    'label[for="-ExhibitsToFilings"]',
-  );
+  const exhibtsToFilingsCheckbox =  sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckbox.uncheck({ force: true });
   await page.waitForTimeout(300);
   await page.getByRole("button", { name: /^Search$/i }).click();

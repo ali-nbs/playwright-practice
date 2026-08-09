@@ -8,6 +8,7 @@ import {
   getTargetDateString,
   parseCount,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_6k_subformType";
 

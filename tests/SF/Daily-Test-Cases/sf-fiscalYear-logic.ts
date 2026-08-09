@@ -7,6 +7,7 @@ import {
   getTargetDateString,
   parseCount,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 import { calculateDynamicFiscal } from "../../Daily-DataPoints-Sheets/Fiscal-Year/fiscalYear.batch.spec";
 
 const IDENTIFIER = "sf_fiscalYear";
@@ -14,26 +15,21 @@ const IDENTIFIER = "sf_fiscalYear";
 export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-fiscalYear Report ---");
 
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const sf = new SfPage(page);
 
-  await clearBtn.click({ force: true });
+
+  await sf.clearFiltersBtn.click({ force: true });
   await page.waitForTimeout(2000);
 
   await page.getByTestId("amendmentFilings-radio-EXC").click();
   await page.getByTestId("ownershipForms-radio-INC").click();
 
   logToFile(`Testing Scenario: Yesterday`);
-  await fillAndEnter(page, dateInput, getTargetDateString());
+  await fillAndEnter(page, sf.dateInput, getTargetDateString());
 
-  const exhibtsToFilingsCheckbox = page.locator(
-    'label[for="-ExhibitsToFilings"]',
-  );
+  const exhibtsToFilingsCheckbox = sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckbox.click({ force: true });
-  await searchBtn.click();
+  await sf.search();
 
   const textDateOnly = await getTabText(page, 0, logToFile);
   logToFile(`Baseline (Yesterday): ${textDateOnly}`);

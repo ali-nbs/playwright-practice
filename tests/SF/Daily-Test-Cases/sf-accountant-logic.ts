@@ -7,15 +7,15 @@ import {
   closeAllOpenTabs,
   configureDisplayColumns,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_accountant";
 
 export const runAccountantTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-Accountant Report ---");
 
-  const formsInput = page.locator("#Forms").getByRole("textbox");
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const sf = new SfPage(page);
+
 
   const testCases = [
     { id: 1, formType: "10-k", accountant: "Deloitte & Touche", count: 15 },
@@ -35,7 +35,7 @@ export const runAccountantTest = async (page: Page, logToFile: Function) => {
   let allScenarioResults: string[] = [];
 
   for (const scenario of testCases) {
-    await clearBtn.click();
+    await sf.clearFilters();
     await page.waitForTimeout(1000);
     let findings = { text: "No Results Found", isValid: true };
 
@@ -66,12 +66,12 @@ export const runAccountantTest = async (page: Page, logToFile: Function) => {
     await page.getByRole("button", { name: /^OK$/ }).click();
 
     logToFile(`\nTesting Form Type: ${scenario.formType}`);
-    await fillAndEnter(page, formsInput, scenario.formType, 200);
-    //await formsInput.press('Enter');
-    let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
+    await fillAndEnter(page, sf.formsInput, scenario.formType, 200);
+    //await sf.formsInput.press('Enter');
+    let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsCheckbox.click({ force: true });
     await page.waitForTimeout(1000);
-    await searchBtn.click();
+    await sf.search();
 
     const textDateOnly = await getTabText(page, tabIndex++, logToFile);
     logToFile(`Baseline (${scenario.id}): ${textDateOnly}`);
@@ -102,7 +102,7 @@ export const runAccountantTest = async (page: Page, logToFile: Function) => {
     ].join("\n");
 
     allScenarioResults.push(scenarioBlock);
-    // await clearBtn.click();
+    // await sf.clearFilters();
   }
 
   const finalDump = allScenarioResults.join(

@@ -6,20 +6,19 @@ import {
   fillAndEnter,
   getTabText,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_xbrl_parsing";
 
 export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-XBRL Parsing Report ---");
 
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
-  await clearBtn.click({ force: true });
-  const formsInput = page.locator("#Forms").getByRole("textbox");
-  await fillAndEnter(page, formsInput, "10-K", 20);
+  const sf = new SfPage(page);
 
-  const exhibtsToFilingsCheckBox = await page.locator(
-    'label[for="-ExhibitsToFilings"]',
-  );
+  await sf.clearFiltersBtn.click({ force: true });
+  await fillAndEnter(page, sf.formsInput, "10-K", 20);
+
+  const exhibtsToFilingsCheckBox = await sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckBox.click({ force: true });
   await page.getByRole("button", { name: /^Search$/i }).click();
 

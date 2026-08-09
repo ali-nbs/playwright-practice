@@ -7,23 +7,21 @@ import {
   getRandomIndices,
   getTabText,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_pdee";
 
 export const runPDEETest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-PDEE (Download & Validation) Report ---");
 
+  const sf = new SfPage(page);
+
   const clearBtn = await page.getByRole("button", { name: /^Clear Filters$/i });
-  await clearBtn.click({ force: true });
-  const exhibtsToFilingsCheckbox = page.locator(
-    'label[for="-ExhibitsToFilings"]',
-  );
+  await sf.clearFiltersBtn.click({ force: true });
+  const exhibtsToFilingsCheckbox = sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckbox.click({ force: true });
 
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
-  await fillAndEnter(page, dateInput, "Last 7 Days", 20);
+  await fillAndEnter(page, sf.dateInput, "Last 7 Days", 20);
   await page.getByRole("button", { name: /^Search$/i }).click();
 
   const statusText = await getTabText(page, 0, logToFile);

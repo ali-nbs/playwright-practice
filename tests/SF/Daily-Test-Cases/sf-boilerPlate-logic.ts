@@ -7,6 +7,7 @@ import {
   configureDisplayColumns,
   closeAllOpenTabs,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_boilerPlate";
 
@@ -87,6 +88,8 @@ const BOX_WIDTH = 65;
 
 export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-BoilerPlate Report ---");
+
+  const sf = new SfPage(page);
 
   const allScenarioResults: string[] = [];
   let isFirstSearch = true;

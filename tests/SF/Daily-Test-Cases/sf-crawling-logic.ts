@@ -8,33 +8,29 @@ import {
   configureDisplayColumns,
   closeAllOpenTabs,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_crawling";
 
 export const runCrawlingTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-Crawling Report ---");
+
+  const sf = new SfPage(page);
   let allScenarioResults: string[] = [];
 
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
 
   const testCases = [{ date: "Today", count: 15 }];
 
   let tabIndex = 0;
 
   for (const scenario of testCases) {
-    const exhibitstoFilingsCheckbox = page.locator(
-      'label[for="-ExhibitsToFilings"]',
-    );
+    const exhibitstoFilingsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitstoFilingsCheckbox.uncheck({ force: true });
     await page.getByTestId("amendmentFilings-radio-EXC").click();
     await page.getByTestId("ownershipForms-radio-INC").click();
 
-    await fillAndEnter(page, dateInput, scenario.date);
-    await searchBtn.click();
+    await fillAndEnter(page, sf.dateInput, scenario.date);
+    await sf.search();
 
     const textDateOnly = await getTabText(page, tabIndex++, logToFile);
     let findings = { text: "No Results Found", isValid: true };
@@ -59,7 +55,7 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
     ].join("\n");
 
     allScenarioResults.push(scenarioBlock);
-    await clearBtn.click();
+    await sf.clearFilters();
   }
 
   const finalDump = allScenarioResults.join(
