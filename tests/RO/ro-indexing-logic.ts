@@ -7,20 +7,14 @@ import {
   closeAllOpenTabs,
   getTargetDateString,
 } from "../utils/helpers";
+import { RoPage } from "../pages/RoPage";
 
 const IDENTIFIER = "ro_indexing";
 
 export const runRoIndexingTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting RO-Indexing Report ---");
 
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
-  const keywordsInput = page.locator(
-    '//label[text()="Keywords"]/following::textarea[1]',
-  );
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const ro = new RoPage(page);
 
   const testCases = [
     // {
@@ -44,17 +38,17 @@ export const runRoIndexingTest = async (page: Page, logToFile: Function) => {
   let resultsSummary: string[] = [];
 
   for (const scenario of testCases) {
-    await clearBtn.click();
+    await ro.clearFilters();
     await page.waitForTimeout(2000);
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
-    await fillAndEnter(page, dateInput, scenario.date);
-    await searchBtn.click();
+    await fillAndEnter(page, ro.dateInput, scenario.date);
+    await ro.search();
     const textDateOnly = await getTabText(page, tabIndex++, logToFile, false);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
-    await fillAndEnter(page, keywordsInput, scenario.keyword);
+    await fillAndEnter(page, ro.keywordsInput, scenario.keyword);
     let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
@@ -72,11 +66,11 @@ export const runRoIndexingTest = async (page: Page, logToFile: Function) => {
         "⚠️ Mismatch detected. Firing RO NOT keyword fallback verification...",
       );
 
-      await clearBtn.click();
+      await ro.clearFilters();
       await page.waitForTimeout(1000);
 
-      await fillAndEnter(page, dateInput, scenario.date);
-      await fillAndEnter(page, keywordsInput, scenario.NotKeyword);
+      await fillAndEnter(page, ro.dateInput, scenario.date);
+      await fillAndEnter(page, ro.keywordsInput, scenario.NotKeyword);
 
       const textWithNotKeyword = await getTabText(
         page,

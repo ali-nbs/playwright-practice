@@ -6,20 +6,14 @@ import {
   getTabText,
   parseCount,
 } from "../utils/helpers";
+import { NalPage } from "../pages/NalPage";
 
 const IDENTIFIER = "nal_indexing";
 
 export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting NAL-Indexing Report ---");
 
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
-  const keywordsInput = page.locator(
-    '//label[text()="Keywords"]/following::textarea[1]',
-  );
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const nal = new NalPage(page);
 
   const testCases = [
     {
@@ -33,18 +27,18 @@ export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
   let resultsSummary: string[] = [];
 
   for (const scenario of testCases) {
-    await clearBtn.click();
+    await nal.clearFilters();
     await page.waitForTimeout(2000);
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
-    await fillAndEnter(page, dateInput, scenario.date);
-    await searchBtn.click();
+    await fillAndEnter(page, nal.dateInput, scenario.date);
+    await nal.search();
     const textDateOnly = await getTabText(page, tabIndex++, logToFile, false);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
-    await fillAndEnter(page, keywordsInput, scenario.keyword);
-   // await searchBtn.click();
+    await fillAndEnter(page, nal.keywordsInput, scenario.keyword);
+   // await nal.search();
     let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
@@ -62,12 +56,12 @@ export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
         "⚠️ Mismatch detected. Firing NAL NOT keyword fallback verification...",
       );
 
-      await clearBtn.click();
+      await nal.clearFilters();
       await page.waitForTimeout(1000);
 
-      await fillAndEnter(page, dateInput, scenario.date);
-      await fillAndEnter(page, keywordsInput, scenario.NotKeyword);
-      await searchBtn.click();
+      await fillAndEnter(page, nal.dateInput, scenario.date);
+      await fillAndEnter(page, nal.keywordsInput, scenario.NotKeyword);
+      await nal.search();
 
       const textWithNotKeyword = await getTabText(
         page,

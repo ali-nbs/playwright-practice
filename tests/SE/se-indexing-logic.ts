@@ -7,18 +7,14 @@ import {
   closeAllOpenTabs,
   getTargetDateString,
 } from "../utils/helpers";
+import { SePage } from "../pages/SePage";
 
 const IDENTIFIER = "se_indexing";
 
 export const runSEIndexingTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SE-Indexing Report ---");
 
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
-  const keywordsInput = page.locator('[data-testid="keywords-input"]');
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const se = new SePage(page);
 
   const testCases = [
     // {
@@ -42,18 +38,18 @@ export const runSEIndexingTest = async (page: Page, logToFile: Function) => {
   let resultsSummary: string[] = [];
 
   for (const scenario of testCases) {
-    await clearBtn.click();
+    await se.clearFilters();
     await page.waitForTimeout(2000);
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
-    await fillAndEnter(page, dateInput, scenario.date);
-    await searchBtn.click();
+    await fillAndEnter(page, se.dateInput, scenario.date);
+    await se.search();
     const textDateOnly = await getTabText(page, tabIndex++, logToFile, false);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
-    await fillAndEnter(page, keywordsInput, scenario.keyword);
-    // await searchBtn.click();
+    await fillAndEnter(page, se.keywordsInput, scenario.keyword);
+    // await se.search();
     let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
@@ -71,12 +67,12 @@ export const runSEIndexingTest = async (page: Page, logToFile: Function) => {
         "⚠️ Mismatch detected. Firing SE NOT keyword fallback verification...",
       );
 
-      await clearBtn.click();
+      await se.clearFilters();
       await page.waitForTimeout(1000);
 
-      await fillAndEnter(page, dateInput, scenario.date);
-      await fillAndEnter(page, keywordsInput, scenario.NotKeyword);
-      // await searchBtn.click();
+      await fillAndEnter(page, se.dateInput, scenario.date);
+      await fillAndEnter(page, se.keywordsInput, scenario.NotKeyword);
+      // await se.search();
 
       const textWithNotKeyword = await getTabText(
         page,
