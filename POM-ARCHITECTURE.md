@@ -17,6 +17,9 @@ These are non-negotiable constraints for every change that follows:
 4. **No new assertions, validations, retries, or error handling.**
 5. **No reordering of operations.** Click order, wait order, tab order all stay.
 6. **If it works today, it must do the exact same thing tomorrow.**
+7. **Every locator's `LIVE-CONFIRMED (date, method, evidence)` comment moves
+   with it.** Provenance is not lost during the move — a bare getter with no
+   history of how it was confirmed defeats the point.
 
 The acceptance test for any migrated file: *the browser does the identical
 sequence of actions it did before.* If a refactor changes runtime behavior, the
@@ -91,38 +94,52 @@ per-app. That is precisely the shape that a base class + subclasses fits.
 
 ---
 
-## 3. Proposed structure
+## 3. Proposed structure — one page-object class per app
+
+Not one file per screen. Each app has multiple screens (search, doc viewer,
+etc.), but with 11 apps that would mean 20-30+ tiny page files — too much to
+navigate. One class per app instead, with each screen's locators grouped
+inside it under a comment header.
 
 ```
 tests/
+  pages/
+    AAPage.ts              <- ALL of AA's screens (search, doc viewer, ...)
+    BPCPage.ts              <- ALL of BPC's screens
+    SFPage.ts                 <- ALL of SF's screens
+    ... one file per app
   core/
     BaseApp.ts            <- shared shell: search, clear, tabs, grid, docviewer
-    session.ts            <- ensureLoggedIn, AUTH_PATH  (uses page, not a screen)
-    selectors.ts          <- obfuscated CSS class constants, one place
+    session.ts             <- ensureLoggedIn, AUTH_PATH  (uses page, not a screen)
+    selectors.ts             <- obfuscated CSS class constants, one place
   components/
-    ResultGrid.ts         <- virtualized grid scroll + row iteration
-    DocViewer.ts          <- open doc, wait for load
-    TabBar.ts             <- "Docs: N" tabs, close tabs, crash screen
-    FilterPanel.ts        <- checkbox/popup filter interactions
-  apps/
-    SrcApp.ts             <- extends BaseApp, adds lawsAndRegs
-    SfApp.ts              <- extends BaseApp, adds forms
-    ... one per app
+    ResultGrid.ts          <- virtualized grid scroll + row iteration
+    DocViewer.ts             <- open doc, wait for load
+    TabBar.ts                  <- "Docs: N" tabs, close tabs, crash screen
+    FilterPanel.ts                <- checkbox/popup filter interactions
   utils/
-    format.ts             <- parseCount, parseCurrency, stripAnsi, ...
-    logger.ts             <- setupLogger
-    sheets.ts             <- updateGoogleSheet
-  SRC/
-    src-docView-logic.ts  <- flow: unchanged sequence, now calls components
-    src-docView.spec.ts   <- ~5 lines
+    format.ts              <- parseCount, parseCurrency, stripAnsi, ...
+    logger.ts                <- setupLogger
+    sheets.ts                  <- updateGoogleSheet
+  AA/                       <- UNCHANGED location. Existing -logic.ts files
+    aa-...-logic.ts             now import AAPage and call its methods
+    aa-...-spec.ts            <- unchanged
+  BPC/                      <- UNCHANGED location, same pattern
+  SF/                       <- UNCHANGED location, same pattern
 ```
+
+`pages/` is new. `core/`, `components/`, `utils/` are new (or reorganized from
+existing `utils/helpers.ts`). **`AA/`, `BPC/`, `SF/`, and every other existing
+app folder stay exactly where they are today** — only the *content* of each
+`-logic.ts` file changes, from calling `page.locator(...)` directly to calling
+methods on the app's page object.
 
 Layering:
 
 ```mermaid
 graph TD
     A["specs (~5 lines each)"] --> B["flows (existing *-logic.ts)"]
-    B --> C["apps/ SrcApp, SfApp ... extends BaseApp"]
+    B --> C["pages/ AAPage, BPCPage, SFPage ... one per app"]
     C --> D["components/ ResultGrid, DocViewer, TabBar, FilterPanel"]
     C --> E["core/ session, selectors"]
     B --> F["utils/ pure functions, no page"]
@@ -130,14 +147,17 @@ graph TD
 
 ---
 
-## 4. The rule: base class vs utils
+## 4. The rule: base class vs utils vs page class
 
-One question decides it every time:
+Two questions decide it every time:
 
 > **Does it need `page`, and does it represent something on screen?**
-> **Yes → base class / component. No → utils.**
+> **No → utils. Yes → keep reading.**
+>
+> **Is it shared across most/all apps, or unique to one app's screens?**
+> **Shared → `BaseApp`/`components/`. Unique to one app → that app's `Page` class.**
 
-### Goes in `BaseApp` (needs `page`, is on screen, shared by many apps)
+### Goes in `BaseApp` / `components/` (needs `page`, is on screen, shared by many apps)
 
 | Member | Why |
 | --- | --- |
@@ -147,6 +167,14 @@ One question decides it every time:
 | `grid` (ResultGrid) | 29 files |
 | `docViewer` (DocViewer) | doc-view flows |
 | `configureDisplayColumns()` | 6 apps |
+
+### Goes in that app's own `Page` class (needs `page`, is on screen, unique to this app)
+
+| Example | App |
+| --- | --- |
+| `lawsAndRegsInput`, `selectAllLawsAndRegs()` | SRC only → `SrcPage.ts` |
+| `formsInput`, `setFormType()` | SF/AA only → `SfPage.ts` / `AAPage.ts` |
+| ACCT tab, sub-section highlight checks | AA only → `AAPage.ts` |
 
 ### Goes in `utils/` (pure functions — never touch the browser)
 
@@ -166,12 +194,12 @@ which is why it is 640+ lines and why essentially every file imports it.
 
 | Thing | Where it goes | Why |
 | --- | --- | --- |
-| `ensureLoggedIn` | `core/session.ts` | Takes `page`, but is **not** part of any app's screen. It is session bootstrap, shared by all 11 apps. Putting it on `BaseApp` would imply "an app can log itself in", which is wrong — login happens before any app exists. |
-| `navigateToX()` (9 near-identical one-liners) | each subclass's `navigate()` | They differ only by the link text. They become one base method + a per-app `appLinkText`. |
-| `navigateToSourceToTargetApp` | `core/session.ts` or a `Shell` helper | Operates across two apps, so it belongs to neither subclass. |
-| `recoverFromAppCrash` (3 apps) | `TabBar` / `BaseApp` | Touches the shared crash screen (`Oops!`), which is shell-level. |
-| `findResultRowByIndex` (AA only) | `ResultGrid` | Only 1 app uses it today, but it is pure grid logic and is exactly the kind of thing other apps should have reused. |
-| `#container-dropdown` (BPC + DBM only) | a small shared mixin, **not** `BaseApp` | Used by 2 of 11 apps. Putting it on `BaseApp` would pollute 9 apps that never use it. |
+| `ensureLoggedIn` | `core/session.ts` | Takes `page`, but is **not** part of any app's screen. It is session bootstrap, shared by all 11 apps. Putting it on a per-app page class or `BaseApp` would imply "an app can log itself in", which is wrong — login happens before any app exists. |
+| `navigateToX()` (9 near-identical one-liners) | each app's `Page` class, or a `navigate()` on `BaseApp` taking a link-text parameter | They differ only by the link text. |
+| `navigateToSourceToTargetApp` | `core/session.ts` or a `Shell` helper | Operates across two apps, so it belongs to neither app's page class. |
+| `recoverFromAppCrash` (3 apps) | `TabBar` / `BaseApp` | Touches the shared crash screen (`Oops!`), which is shell-level, not app-specific. |
+| `findResultRowByIndex` (AA only) | `ResultGrid` (shared component) | Only 1 app uses it today, but it is pure grid logic and is exactly the kind of thing other apps should have reused — belongs in the shared component, not `AAPage.ts`. |
+| `#container-dropdown` (BPC + DBM only) | duplicated in `BPCPage.ts` and `DBMPage.ts` | Used by 2 of 11 apps. A shared mixin for 2 users adds more indirection than it saves — simpler to just have it in both. |
 
 ---
 
@@ -191,7 +219,6 @@ export abstract class BaseApp {
   readonly docViewer: DocViewer;
   readonly tabs: TabBar;
 
-  // Each subclass supplies the left-nav link text for its own app.
   protected abstract readonly appLinkText: string;
 
   constructor(protected readonly page: Page) {
@@ -200,7 +227,6 @@ export abstract class BaseApp {
     this.tabs = new TabBar(page);
   }
 
-  // Locators moved VERBATIM from the current code.
   get searchBtn() {
     return this.page.getByRole("button", { name: /^Search$/i }).first();
   }
@@ -210,7 +236,6 @@ export abstract class BaseApp {
   }
 
   async navigate() {
-    // same as navigateToSecuritiesRegulationAndCompliance() etc.
     await this.page.locator(`text=/${this.appLinkText}/i`).first().click();
   }
 
@@ -220,38 +245,87 @@ export abstract class BaseApp {
 }
 ```
 
-### 5.2 A subclass — only what is unique to that app
+### 5.2 One page-object class per app — every screen's locators together
 
 ```ts
-// tests/apps/SrcApp.ts
+// tests/pages/AAPage.ts
 import { BaseApp } from "../core/BaseApp";
 
-export class SrcApp extends BaseApp {
-  protected readonly appLinkText = "Securities Regulation & Compliance";
+export class AAPage extends BaseApp {
+  protected readonly appLinkText = "Accounting Analytics";
 
-  // #LawsAndRegs exists ONLY in SRC -> belongs here, not in BaseApp.
-  get lawsAndRegsInput() {
-    return this.page.locator("#LawsAndRegs").locator("input");
+  // ---- Search screen ----
+
+  // LIVE-CONFIRMED (2026-07-29, via playwright-cli headed session): simple
+  // CSS id, confirmed working for both 10-K and 10-Q values.
+  get formsInput() {
+    return this.page.locator("#Forms").locator("input").first();
   }
 
-  get lawsAndRegsPlusBtn() {
-    // NOTE: obfuscated class kept exactly as-is, on purpose.
-    return this.page.locator("#LawsAndRegs").locator("._icon_1jkal_249").first();
+  async setFormType(value: string) {
+    await this.formsInput.click();
+    await this.formsInput.press("Control+A");
+    await this.formsInput.press("Backspace");
+    await this.page.keyboard.type(value, { delay: 30 });
+    // ... exact-match suggestion click, moved verbatim from
+    // selectTypeaheadChip in aa-accountingDisclosuresAndPolicies-logic.ts
   }
 
-  async selectAllLawsAndRegs() {
-    await this.lawsAndRegsPlusBtn.click();
-    await this.page
-      .locator("div.styles__tabHeader___2qy2T")
-      .filter({ hasText: "Select All" })
-      .locator("label")
-      .check();
-    await this.page.getByRole("button", { name: "OK" }).click();
+  // ---- Doc viewer screen (ACCT tab) ----
+
+  get acctTab() {
+    return this.page.getByText("ACCT", { exact: true }).first();
+  }
+
+  async openAcctTab() {
+    await this.acctTab.click();
+  }
+
+  // ---- ACCT highlight checks: TWO methods, not one ----
+  //
+  // These two look similar but are NOT interchangeable, and must never be
+  // merged into a single "checkHighlight()" with a flag. They scope the
+  // highlight search in fundamentally different ways, each for a
+  // live-confirmed reason. See section 6.1.
+
+  // Used by the accounting-disclosures flow. Safe to COUNT here because the
+  // topic CSS class (.New-Accounting-Disclosures-and-Policies) already
+  // narrows the match to a single topic near a specific heading.
+  //
+  // LIVE-CONFIRMED (2026-07-30, via CDP diagnostic against a real manual
+  // click, not guessed): this app's accounting-item highlight is NOT an
+  // <em> tag - it's <span class="acctItem-highlight <Topic>"> with a
+  // reddish rgba background. <em> was copied from aa-indexing-logic.ts's
+  // unrelated keyword-highlight convention and never actually matched
+  // anything here, so this check always failed even on a real click.
+  countTopicHighlightsNearHeading(topicClass: string, headingText: string) {
+    // selector moved verbatim from
+    // claude-aa-accoutingDisclousureAndParties-logic.ts
+  }
+
+  // Used by the audit-opinions flow, which clicks ARBITRARY sub-section
+  // labels and therefore cannot scope by a fixed topic class. It must match
+  // on the clicked text instead.
+  //
+  // LIVE-CONFIRMED (2026-07-31): raw `.acctItem-highlight` COUNT is not a
+  // usable pass/fail signal on a real filing -- a large-filer 10-K already
+  // has ~78 pre-existing highlighted spans (every previously-indexed topic
+  // stays highlighted) before clicking anything new.
+  findHighlightMatchingText(exactLabelText: string) {
+    // .locator(".acctItem-highlight")
+    //   .filter({ hasText: new RegExp(escapeRegExp(exactLabelText), "i") })
+    // moved verbatim from claude-aa-auditOpinionsAndPolicies-logic.ts
   }
 }
 ```
 
-### 5.3 `DocViewer` — the bug that had to be fixed twice
+**Why two methods and not one with a parameter:** a single
+`checkHighlight(text, { byCount })` would let a future reader pick the wrong
+mode silently, and the `~78 pre-existing spans` trap is exactly the mistake
+that has already been made once in this repo. Two names with two documented
+reasons make the wrong choice hard to make by accident.
+
+### 5.3 `DocViewer` (shared component) — the bug that had to be fixed twice
 
 This is the strongest argument for the whole refactor. Today this logic is
 duplicated in `src-docView-logic.ts` and `src-outline-logic.ts`.
@@ -302,14 +376,13 @@ Proposed:
 defineAppTest({
   name: "src-docView",
   logPath: "SRC/Daily-Test-Cases",
-  app: SrcApp,
+  app: SrcPage,
   run: runSRCDocViewTest,
 });
 ```
 
 `defineAppTest` performs the *same* steps in the *same* order: storageState →
 logger → `ensureLoggedIn` → navigate → run. It just isn't retyped 46 times.
-It also removes the whole class of copy-paste naming bugs.
 
 ### 5.5 Flow files keep their exact sequence
 
@@ -343,27 +416,39 @@ guard and uses 500ms.
 preference:
 
 1. Add an explicit parameter with defaults that reproduce each caller's current
-   behavior:
-   `scrape({ settleMs: 500, maxStagnantScrolls: undefined })`
+   behavior: `scrape({ settleMs: 500, maxStagnantScrolls: undefined })`
 2. If too divergent, keep two methods (`scrape()` / `scrapeWithStagnationGuard()`).
 3. If still unclear, **leave that file alone.** Not every file must migrate.
 
 A shared component must not quietly change any caller's timing.
+
+**Worked precedent — the two ACCT highlight checks (see 5.2).** The AA
+disclosures flow and the AA audit-opinions flow both look for
+`.acctItem-highlight`, and a careless dedupe would merge them. They must stay
+separate:
+
+| Flow | Scopes by | Why it cannot use the other |
+| --- | --- | --- |
+| disclosures | topic CSS class + heading proximity | counts are meaningful *because* the topic class narrows the match |
+| audit opinions | text of the clicked label | label varies per click, so no fixed topic class exists; raw count is meaningless (~78 pre-existing spans) |
+
+This is option 2 above (two methods), chosen over a parameter flag precisely
+because picking the wrong mode is a mistake already made once in this repo.
 
 ### 6.2 `magic-runner` must keep working
 
 `magic-runner.ts` imports logic functions directly and connects over CDP. Two
 implications:
 
-- Flow signatures stay `(page, logToFile)`; the app object is constructed
-  *inside* the flow (`const app = new SrcApp(page)`), **or** an optional third
-  parameter is added. Either way, existing magic-runner calls keep compiling.
+- Flow signatures stay `(page, logToFile)`; the app's page object is
+  constructed *inside* the flow (`const app = new AAPage(page)`).
 - Page objects must never import from `@playwright/test` **fixtures**. Importing
-  `expect` is fine (already proven safe outside the runner); calling
-  `test()` / `test.describe()` at module scope is *not* — it throws
-  `Playwright Test did not expect test.describe() to be called here`.
+  `expect` is fine; calling `test()` / `test.describe()` at module scope is
+  **not** — it throws `Playwright Test did not expect test.describe() to be
+  called here`.
 
-**This is why POM classes must live in plain `.ts` files, never in `.spec.ts`.**
+**This is why page-object classes must live in plain `.ts` files, never in
+`.spec.ts`.**
 
 ### 6.3 Obfuscated CSS classes
 
@@ -399,15 +484,23 @@ Migrating 86 files at once would be reckless and unreviewable.
 Mitigation: incremental migration (section 7); old `helpers.ts` keeps working
 throughout by re-exporting from its new home, so nothing breaks mid-migration.
 
+### 6.8 One page class per app can grow large
+
+`AAPage.ts` will hold every screen AA has, grouped under comment headers
+(`// ---- Search screen ----`, `// ---- Doc viewer screen ----`). This is a
+deliberate tradeoff: fewer files to navigate, at the cost of longer individual
+files. If any single app's page class grows unmanageable (500+ lines), split
+that ONE app's file by screen at that point — not all 11 apps preemptively.
+
 ---
 
 ## 7. Migration plan (incremental, reversible)
 
 | Phase | Scope | Why |
 | --- | --- | --- |
-| 0 | Write `core/`, `components/`, one `SrcApp`. **Change no existing test.** | Pattern exists but nothing is at risk. |
+| 0 | Write `core/`, `components/`, one `SrcPage.ts`. **Change no existing test.** | Pattern exists but nothing is at risk. |
 | 1 | Migrate **SRC only** (4 flows). Run headed, compare against current behavior. | Small, well understood, already deeply debugged. |
-| 2 | Review together. Adjust the pattern before it spreads. | Cheapest moment to change our minds. |
+| 2 | Review together. Adjust the pattern before it spreads. Check `/usage` cost for phases 0-2 as a bounded checkpoint before continuing. | Cheapest moment to change our minds — on pattern AND on cost. |
 | 3 | Roll out app by app: SE → NAL → RO → AOE → DBM → BPC → AA → SF. | One reviewable PR each. |
 | 4 | `defineAppTest` for spec boilerplate. | Mechanical, low risk. |
 | 5 | `Daily-DataPoints-Sheets` if it fits. | Different shape; may stay as-is. |
@@ -423,13 +516,16 @@ its current state is known-good (9/9 rows, 0 timeouts, verified 2026-08-09).
 
 ## 8. Open questions for you
 
-1. **Components as `BaseApp` properties (`app.grid.scrape()`) or standalone
-   classes you construct?** I lean properties — every app has them anyway.
-2. **Do flows construct their own app object, or receive it as a parameter?**
-   Constructing internally keeps `magic-runner` call sites unchanged.
-3. **`#container-dropdown` (BPC + DBM only): shared mixin, or duplicate in both
-   subclasses?** Two copies may honestly be simpler than a mixin.
-4. **Is SRC-first the right starting point,** or would you rather prove it on a
-   suite you personally touch more often?
-5. Should I strip the `isScenarioValid = false` line I added during the
-   2026-08-09 doc-view fix, to keep that fix purely behavioral-neutral?
+1. **Do flows construct their own app-page object, or receive it as a
+   parameter?** Constructing internally keeps `magic-runner` call sites
+   unchanged — recommended.
+2. **`#container-dropdown` (BPC + DBM only): duplicated in both page classes,
+   or a small shared mixin?** Two copies is simpler for 2 users — recommended.
+3. **Is SRC-first the right starting point,** or would you rather prove it on
+   a suite you personally touch more often?
+4. Should the `isScenarioValid = false` line added during the 2026-08-09
+   doc-view fix be stripped, to keep that fix purely behavioral-neutral before
+   migration starts?
+5. If any single app's page class later grows past ~500 lines, split that one
+   app by screen at that point (see 6.8) — agreed threshold, or a different
+   number?
