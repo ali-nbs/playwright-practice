@@ -37,24 +37,12 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
       "Company Info": [],
     });
     while (processedCount < totalToProcess) {
-      const scroller = page.locator(".ReactVirtualized__Grid").last();
-      let resultsContainer = scroller.locator('> div[role="rowgroup"]');
+      const scroller = sf.scroller;
+      const rowHeight = await sf.rowHeight();
 
-      const rowHeight = await scroller.evaluate((el) => {
-        const sampleRow = el.querySelector('[data-test="resultRow"]');
-        return sampleRow ? sampleRow.getBoundingClientRect().height : 115;
-      });
+      await sf.scrollToRowIndex(processedCount, rowHeight);
 
-      await scroller.evaluate(
-        (el, { index, height }) => {
-          el.scrollTop = index * height;
-        },
-        { index: processedCount, height: rowHeight },
-      );
-
-      let currentRow = resultsContainer
-        .locator(`> div > div[data-test="resultRow"][id="${processedCount}"]`)
-        .first();
+      let currentRow = sf.rowById(processedCount);
 
       const rowExists = (await currentRow.count()) > 0;
       if (rowExists) {
@@ -68,16 +56,13 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
       }
 
       console.log(`Processing Row: ${1 + processedCount}`);
-      const texts = await currentRow.locator("span").allInnerTexts();
-      const cleanContent = texts
-        .map((t) => t.trim())
-        .filter((t) => t.length > 0);
+      const cleanContent = await sf.rowTexts(currentRow);
       const accessionNo =
         cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
         "N/A";
       console.log(`Accession No: ${accessionNo}`);
 
-      const viewBtn = currentRow.getByRole("button", { name: /View/i }).last();
+      const viewBtn = sf.viewButton(currentRow).last();
       const hasiXBRLbtn = currentRow
         .getByRole("button", { name: /iXBRL/i })
         .first();

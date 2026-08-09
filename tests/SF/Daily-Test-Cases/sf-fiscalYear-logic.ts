@@ -70,14 +70,15 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
 };
 
 const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
+  const sf = new SfPage(page);
   let resultsFound = 0;
   const processedIds = new Set<string>();
   let failureCompanies: string[] = [];
   const activeTab = page.locator("div.react-contextmenu-wrapper");
 
   while (resultsFound < targetCount) {
-    const scroller = page.locator(".ReactVirtualized__Grid").last();
-    const rows = scroller.locator('div[data-test="resultRow"]');
+    const scroller = sf.scroller;
+    const rows = sf.rows;
 
     if ((await rows.count()) === 0) {
       await page.waitForTimeout(500);

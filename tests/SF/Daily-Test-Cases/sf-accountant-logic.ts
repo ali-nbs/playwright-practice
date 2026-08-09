@@ -124,14 +124,15 @@ const scrapeResults = async (
   page: Page,
   targetAuditor: string,
 ) => {
+  const sf = new SfPage(page);
   let resultsFound = 0;
   const processedIds = new Set<string>();
   let rowsData: string[] = [];
   let isScenarioValid = true;
 
   while (resultsFound < targetCount || resultsFound == 24) {
-    const scroller = page.locator(".ReactVirtualized__Grid").last();
-    const rows = scroller.locator('div[data-test="resultRow"]');
+    const scroller = sf.scroller;
+    const rows = sf.rows;
     const visibleRowCount = await rows.count();
 
     if (visibleRowCount === 0) {
@@ -145,10 +146,7 @@ const scrapeResults = async (
 
       if (rowId && !processedIds.has(rowId)) {
         try {
-          const texts = await row.locator("span").allInnerTexts();
-          const cleanContent = texts
-            .map((t) => t.trim())
-            .filter((t) => t.length > 0);
+          const cleanContent = await sf.rowTexts(row);
           console.log("```````````````````````````````````````");
           // for (const [index, text] of cleanContent.entries()) {
           //   console.log(index, text);

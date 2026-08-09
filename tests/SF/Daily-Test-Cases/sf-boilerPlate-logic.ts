@@ -142,8 +142,8 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
       let resultsFound = 0;
 
       while (resultsFound < loopLimit) {
-        const scroller = page.locator(".ReactVirtualized__Grid").last();
-        let resultsContainer = scroller.locator('> div[role="rowgroup"]');
+        const scroller = sf.scroller;
+        let resultsContainer = sf.resultsContainer;
         let currentRow = resultsContainer
           .locator(`> div > div[data-test="resultRow"][id="${resultsFound}"]`)
           .first();
@@ -155,10 +155,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
           continue;
         }
 
-        const texts = await currentRow.locator("span").allInnerTexts();
-        const cleanContent = texts
-          .map((t) => t.trim())
-          .filter((t) => t.length > 0);
+        const cleanContent = await sf.rowTexts(currentRow);
         const fillingInforesultLabel = currentRow.locator("span", {
           hasText: "Accession #",
         });

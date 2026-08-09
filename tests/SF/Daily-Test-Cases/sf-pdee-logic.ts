@@ -41,25 +41,15 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
     `Action: Targeting random row indices: ${targetIndices.join(", ")}`,
   );
 
-  const scroller = page.locator(".ReactVirtualized__Grid").last();
-  const resultsContainer = scroller.locator('> div[role="rowgroup"]');
+  const scroller = sf.scroller;
+  const resultsContainer = sf.resultsContainer;
 
   for (const index of targetIndices) {
-    const rowHeight = await scroller.evaluate((el) => {
-      const sampleRow = el.querySelector('[data-test="resultRow"]');
-      return sampleRow ? sampleRow.getBoundingClientRect().height : 115;
-    });
+    const rowHeight = await sf.rowHeight();
 
-    await scroller.evaluate(
-      (el, { i, h }) => {
-        el.scrollTop = i * h;
-      },
-      { i: index, h: rowHeight },
-    );
+    await sf.scrollToRowIndex(index, rowHeight);
 
-    const currentRow = resultsContainer
-      .locator(`> div > div[data-test="resultRow"][id="${index}"]`)
-      .first();
+    const currentRow = sf.rowById(index);
 
     if ((await currentRow.count()) > 0) {
       await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));

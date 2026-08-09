@@ -95,14 +95,15 @@ const scrapeResults = async (
   page: Page,
   logToFile: Function,
 ) => {
+  const sf = new SfPage(page);
   let resultsFound = 0;
   const processedIds = new Set<string>();
   let rowsData: string[] = [];
   let isScenarioValid = true;
 
   while (resultsFound < targetCount || resultsFound === 24) {
-    const scroller = page.locator(".ReactVirtualized__Grid").last();
-    const rows = scroller.locator('div[data-test="resultRow"]');
+    const scroller = sf.scroller;
+    const rows = sf.rows;
     const visibleRowCount = await rows.count();
 
     if (visibleRowCount === 0) {
@@ -164,7 +165,7 @@ const scrapeResults = async (
           }
 
           if (targetDocViewerCount > 0 && resultsFound < targetDocViewerCount) {
-            const viewBtn = row.getByRole("button", { name: /View/i }).first();
+            const viewBtn = sf.viewButton(row).first();
             if (await viewBtn.isVisible()) {
               await viewBtn.click();
               await page.waitForTimeout(1000);

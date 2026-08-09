@@ -48,6 +48,50 @@ export class BasePage {
       .locator('div[data-test="resultRow"]');
   }
 
+  /** The virtualized grid's scroll container. */
+  get scroller(): Locator {
+    return this.page.locator(".ReactVirtualized__Grid").last();
+  }
+
+  /** The rowgroup wrapper some flows scope their row lookups through. */
+  get resultsContainer(): Locator {
+    return this.scroller.locator('> div[role="rowgroup"]');
+  }
+
+  /**
+   * One row by its `id` attribute, scoped through the rowgroup.
+   *
+   * Several flows walk rows by index (`id="0"`, `id="1"`, ...) rather than
+   * iterating whatever happens to be rendered, so this is the direct-lookup
+   * counterpart to `rows`.
+   */
+  rowById(id: number | string): Locator {
+    return this.resultsContainer
+      .locator(`> div > div[data-test="resultRow"][id="${id}"]`)
+      .first();
+  }
+
+  /**
+   * Measures a rendered row's height, falling back to 115 when the grid has
+   * not drawn a row yet. Used by flows that scroll by `index * rowHeight`.
+   */
+  async rowHeight(): Promise<number> {
+    return this.scroller.evaluate((el) => {
+      const sampleRow = el.querySelector('[data-test="resultRow"]');
+      return sampleRow ? sampleRow.getBoundingClientRect().height : 115;
+    });
+  }
+
+  /** Scrolls the grid so that row `index` is at the top. */
+  async scrollToRowIndex(index: number, height: number) {
+    await this.scroller.evaluate(
+      (el, { i, h }) => {
+        el.scrollTop = i * h;
+      },
+      { i: index, h: height },
+    );
+  }
+
   /** The "View" button inside a result row. */
   viewButton(row: Locator): Locator {
     return row.getByRole("button", { name: /View/i });
@@ -85,11 +129,22 @@ export class BasePage {
    * only writes the part that is actually different: what to do with a row.
    *
    * Rows that throw are logged and skipped, exactly as before.
+   *
+   * `scrollStyle` covers the two ways the existing flows advance the grid.
+   * They are NOT interchangeable, so each caller keeps the one it used:
+   *   "intoViewStart"    -> rows.last().evaluate(el => el.scrollIntoView(...))
+   *   "intoViewIfNeeded" -> rows.last().scrollIntoViewIfNeeded()
    */
   async forEachResultRow(
     targetCount: number,
     handleRow: (row: Locator, rowId: string) => Promise<void>,
+    options: {
+      scrollStyle?: "intoViewStart" | "intoViewIfNeeded";
+      logRowId?: boolean;
+    } = {},
   ) {
+    const { scrollStyle = "intoViewStart", logRowId = true } = options;
+
     let resultsFound = 0;
     const processedIds = new Set<string>();
 
@@ -105,7 +160,7 @@ export class BasePage {
       for (let i = 0; i < visibleRowCount; i++) {
         const row = rows.nth(i);
         const rowId = await row.getAttribute("id");
-        console.log("row id ", rowId);
+        if (logRowId) console.log("row id ", rowId);
 
         if (rowId && !processedIds.has(rowId)) {
           try {
@@ -122,9 +177,13 @@ export class BasePage {
       }
 
       if (resultsFound < targetCount) {
-        await rows
-          .last()
-          .evaluate((el) => el.scrollIntoView({ block: "start" }));
+        if (scrollStyle === "intoViewIfNeeded") {
+          await rows.last().scrollIntoViewIfNeeded();
+        } else {
+          await rows
+            .last()
+            .evaluate((el) => el.scrollIntoView({ block: "start" }));
+        }
         await this.page.waitForTimeout(500);
       }
     }
