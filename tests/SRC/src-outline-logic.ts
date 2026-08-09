@@ -6,6 +6,8 @@ import {
   configureDisplayColumns,
   closeAllOpenTabs,
   parseCount,
+  countDocViewContainers,
+  waitForDocViewLoaded,
 } from "../utils/helpers";
 
 const IDENTIFIER = "src_outline";
@@ -121,20 +123,20 @@ const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
 
           await expect(viewBtn).toBeVisible({ timeout: 5000 });
 
+          // Snapshot how many document viewers are already mounted BEFORE
+          // clicking. The app appends a new viewer per opened document and
+          // never unmounts the old ones, so this baseline is what lets the
+          // wait below tell "the document I just opened" apart from the
+          // stale viewers left behind by previous rows.
+          const containersBefore = await countDocViewContainers(page);
+
           await viewBtn.click();
 
           try {
-            await expect(
-              page.locator('div[id="DocViewContainer"][tabindex="0"]').or(
-                page.locator('div[tabindex="0"]').filter({
-                  has: page.locator(
-                    'div.pdfViewer > div[data-page-number="1"]',
-                  ),
-                }),
-              ),
-            ).toBeVisible({ timeout: 30000 });
+            await waitForDocViewLoaded(page, containersBefore, 30000);
           } catch (error) {
             console.log("error :", error);
+            isScenarioValid = false;
             rowsData.push(
               `Doc View Content not Loaded >> Title: ${title} | Source: ${sourceType} | Category: ${materialCategory} | Type: ${materialType} | Date: ${date}\n`,
             );

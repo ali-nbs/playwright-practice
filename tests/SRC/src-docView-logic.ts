@@ -6,6 +6,8 @@ import {
   configureDisplayColumns,
   closeAllOpenTabs,
   parseCount,
+  countDocViewContainers,
+  waitForDocViewLoaded,
 } from "../utils/helpers";
 
 const IDENTIFIER = "src_docView";
@@ -15,12 +17,20 @@ export const runSRCDocViewTest = async (page: Page, logToFile: Function) => {
   let allScenarioResults: string[] = [];
 
   const lawsAndRegsInput = page.locator("#LawsAndRegs").locator("input");
+  const lawsAndRegsPlsBtn = page.locator("#LawsAndRegs").locator("._icon_1jkal_249").first();
   const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
   const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
 
   let tabIndex = 0;
 
-  await fillAndEnter(page, lawsAndRegsInput, "Securities Laws");
+  await lawsAndRegsPlsBtn.click();
+  await page
+    .locator("div.styles__tabHeader___2qy2T")
+    .filter({ hasText: "Select All" })
+    .locator("label").check();
+  await page.getByRole("button", { name: "OK" }).click();
+
+  // await fillAndEnter(page, lawsAndRegsInput, "Securities Laws");
   await searchBtn.click();
 
   const searchResult = await getTabText(page, tabIndex++, logToFile);
@@ -46,7 +56,7 @@ export const runSRCDocViewTest = async (page: Page, logToFile: Function) => {
   ].join("\n");
 
   try {
-    await updateGoogleSheet(scenarioBlock, IDENTIFIER);
+    //   await updateGoogleSheet(scenarioBlock, IDENTIFIER);
     logToFile("Sheet updated successfully.");
   } catch (e: any) {
     logToFile(`Sheet update failed: ${e.message}`);
@@ -118,20 +128,20 @@ const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
 
           await expect(viewBtn).toBeVisible({ timeout: 5000 });
 
+          // Snapshot how many document viewers are already mounted BEFORE
+          // clicking. The app appends a new viewer per opened document and
+          // never unmounts the old ones, so this baseline is what lets the
+          // wait below tell "the document I just opened" apart from the
+          // stale viewers left behind by previous rows.
+          const containersBefore = await countDocViewContainers(page);
+
           await viewBtn.click();
 
           try {
-            await expect(
-              page.locator('div[id="DocViewContainer"][tabindex="0"]').or(
-                page.locator('div[tabindex="0"]').filter({
-                  has: page.locator(
-                    'div.pdfViewer > div[data-page-number="1"]',
-                  ),
-                }),
-              ),
-            ).toBeVisible({ timeout: 30000 });
+            await waitForDocViewLoaded(page, containersBefore, 30000);
           } catch (error) {
             console.log("error :", error);
+            isScenarioValid = false;
             rowsData.push(
               `Doc View Content not Loaded >> Title: ${title} | Source: ${sourceType} | Category: ${materialCategory} | Type: ${materialType} | Date: ${date}`,
             );
