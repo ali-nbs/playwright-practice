@@ -37,6 +37,12 @@ import { runBpcCrawlingTest } from "./tests/BPC/bpc-crawling-logic";
 import { runBpcDisplayBarTest } from "./tests/BPC/bpc-displayBar-logic";
 
 import { runBpcCompareTest } from "./tests/BPC/bpc-profileCompare-logic";
+import { runAAIndexingAndDocViewTest } from "./tests/AA/aa-indexing-logic";
+// import { runAccountingPoliciesAndDisclosureTest } from "./tests/AA/aa-accountingPoliciesAndDisclosure-logic";
+import { runAAAccountingDisclosuresAndPoliciesTest } from "./tests/AA/claude-aa-accoutingDisclousureAndParties-logic";
+import { runBpcProfileViewTest } from "./tests/BPC/bpc-profileView-logic";
+import { runAAAuditOpinionsAndPoliciesTest } from "./tests/AA/claude-aa-auditOpinionsAndPolicies-logic";
+
 
 async function devSandbox() {
   const CDP_URL = "http://localhost:9222";
@@ -73,7 +79,16 @@ async function devSandbox() {
 
     //await runMatrixTest(page, liveLog);
    // await navigateToSourceToTargetApp(page, "SEC Filings" ,"Board Profiles & Compensation");
-    await runBpcCompareTest(page, liveLog);
+   // await runAAAccountingDisclosuresAndPoliciesTest(page, liveLog);
+     //await runSRCDocViewTest(page, logToFile);
+    // await runBpcDisplayBarTest(page, logToFile);
+    // await runBpcProfileViewTest(page, logToFile);
+   // await runBpcCompareTest(page, logToFile);
+  //  await runAAIndexingAndDocViewTest(page, liveLog);
+   // await runAAAccountingDisclosuresAndPoliciesTest(page, liveLog);
+    await runAAAuditOpinionsAndPoliciesTest(page, liveLog);
+   
+   
     console.log("---------------------------------------------------");
     console.log("✅ Run Complete. Browser is still open for your next edit.");
 

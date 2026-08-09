@@ -98,6 +98,11 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
   await excelDownload.saveAs(
     path.join("./downloads", excelDownload.suggestedFilename()),
   );
+
+ await page.locator('span[title="Email the selected items from the list below"]').click();
+ page.getByRole("button", { name: /ok/i }).click();
+
+
   const summary = [
     `Status: "VALID ✅"`,
     `Date: Last 7 Days`,

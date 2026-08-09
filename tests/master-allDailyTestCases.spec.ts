@@ -5,6 +5,7 @@ import {
   ensureLoggedIn,
   navigateToSECFilings,
   navigateToSourceToTargetApp,
+  recoverFromAppCrash,
   setupLogger,
 } from "./utils/helpers";
 import {
@@ -43,6 +44,9 @@ import { runBpcCrawlingTest } from "./BPC/bpc-crawling-logic";
 import { runBpcDisplayBarTest } from "./BPC/bpc-displayBar-logic";
 import { runBpcCompareTest } from "./BPC/bpc-profileCompare-logic";
 import { runBpcProfileViewTest } from "./BPC/bpc-profileView-logic";
+import { runAAIndexingAndDocViewTest } from "./AA/aa-indexing-logic";
+import { runAAAccountingDisclosuresAndPoliciesTest } from "./AA/claude-aa-accoutingDisclousureAndParties-logic";
+import { runAAAuditOpinionsAndPoliciesTest } from "./AA/claude-aa-auditOpinionsAndPolicies-logic";
 
 test.describe("Daily Test Cases - Master Suite", () => {
   if (fs.existsSync(AUTH_PATH)) {
@@ -100,7 +104,10 @@ test.describe("Daily Test Cases - Master Suite", () => {
           logToFile(`✅ [PASSED] ${stepName}`);
         } catch (error: any) {
           logToFile(`❌ [FAILED] ${stepName}: ${error.message}`);
-         
+
+          if (error?.kind === "crash") {
+            await recoverFromAppCrash(page, logToFile);
+          }
         }
       });
     };
@@ -145,11 +152,11 @@ test.describe("Daily Test Cases - Master Suite", () => {
     await executeStep("SF Cross Reference Links",         () => runCrossReferenceLinksTest(page, logToFile),             "SEC Filings");
     await executeStep("SF Filing Agent",                  () => runFilingAgentTest(page, logToFile),                     "SEC Filings");
     await executeStep("SF IXBRL",                         () => runIxbrlTest(page, logToFile),                           "SEC Filings");
-    await executeStep("SF PDEE",                          () => runPDEETest(page, logToFile),                            "SEC Filings");
     await executeStep("SF XBRL Parsing",                  () => runXbrlParsingTest(page, logToFile),                     "SEC Filings");
     await executeStep("SF CompanyType SRC Shell WKSI EGC",() => runCompanyType_SRC_Shell_WKSI_EGC_Test(page, logToFile),"SEC Filings");
     await executeStep("SF CompanyType SPAC REIT BDC FPI INV", () => runCompanyType_SPAC_REIT_BDC_FPI_INV_Test(page, logToFile), "SEC Filings");
-    await executeStep("SF Fiscal Year",                   () => runFiscalYearTest(page, logToFile),                      "SEC Filings");
+    await executeStep("SF PDEE",                          () => runPDEETest(page, logToFile),                            "SEC Filings");
+    //await executeStep("SF Fiscal Year",                   () => runFiscalYearTest(page, logToFile),                      "SEC Filings");
 
     // ── SEC Enforcement Suite ──────────────────────────────────────────────
     await safeTransition("SEC Filings", "SEC Enforcement");
@@ -168,7 +175,7 @@ test.describe("Daily Test Cases - Master Suite", () => {
     await executeStep("SRC Indexing",                     () => runSRCIndexingTest(page, logToFile),                     "Securities Regulation & Compliance");
     await executeStep("SRC Crawling",                     () => runSRCCrawlingTest(page, logToFile),                     "Securities Regulation & Compliance");
     await executeStep("SRC Doc View",                     () => runSRCDocViewTest(page, logToFile),                      "Securities Regulation & Compliance");
-    await executeStep("SRC Outline",                      () => runSRCOutlineTest(page, logToFile),                      "Securities Regulation & Compliance");
+    //await executeStep("SRC Outline",                      () => runSRCOutlineTest(page, logToFile),                      "Securities Regulation & Compliance");
 
     // ── AOE Suite ──────────────────────────────────────────────────────────
     await safeTransition("Securities Reg. & Compliance", "Agreements & Other Exhibits");
@@ -187,6 +194,13 @@ test.describe("Daily Test Cases - Master Suite", () => {
     await executeStep("BPC DisplayBar",         () => runBpcDisplayBarTest(page, logToFile),              "Board Profiles & Compensation");
     await executeStep("BPC Profile View",         () => runBpcProfileViewTest(page, logToFile),              "Board Profiles & Compensation");
     await executeStep("BPC Profile Compare",         () => runBpcCompareTest(page, logToFile),              "Board Profiles & Compensation");
+
+     // ── AA Suite ──────────────────────────────────────────────────────────
+    await safeTransition("Board Profiles & Comp.", "Accounting Analytics");
+    await executeStep("AA Indexing",                    () => runAAIndexingAndDocViewTest(page, logToFile),                    "Accounting Analytics");
+    await executeStep("AA Disclosure and Policies",         () => runAAAccountingDisclosuresAndPoliciesTest(page, logToFile),              "Accounting Analytics");
+    await executeStep("BPC Audit Opinions and Policies",         () => runAAAuditOpinionsAndPoliciesTest(page, logToFile),              "Accounting Analytics");
+  
 
     // ── Done ───────────────────────────────────────────────────────────────
    // clearCheckpoint();

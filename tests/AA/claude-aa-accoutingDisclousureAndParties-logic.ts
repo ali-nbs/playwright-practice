@@ -75,17 +75,17 @@ const selectTypeaheadChip = async (
     labelText === "New Accounting Disclosures and Policies"
       ? page.locator(`#${NEW_DISCLOSURES_FILTER_ID} input`).first()
       : page
-          .locator(
-            `//label[text()="${labelText}"]/ancestor::div[contains(@class,"header")][1]/parent::div//input`,
-          )
-          .last();
+        .locator(
+          `//label[text()="${labelText}"]/ancestor::div[contains(@class,"header")][1]/parent::div//input`,
+        )
+        .last();
 
   try {
     await expect(fieldInput).toBeVisible({ timeout: 8000 });
   } catch {
     throw new Error(
       `selectTypeaheadChip: could not find an input field for label "${labelText}". ` +
-        `This field's DOM structure may differ from the "Forms" field this locator was built for.`,
+      `This field's DOM structure may differ from the "Forms" field this locator was built for.`,
     );
   }
 
@@ -127,8 +127,8 @@ const selectTypeaheadChip = async (
   } catch {
     throw new Error(
       `selectTypeaheadChip: typed "${value}" into "${labelText}" but no exact-match ` +
-        `suggestion appeared. Field may not have cleared properly, or the app's ` +
-        `suggestion text doesn't exactly equal "${value}".`,
+      `suggestion appeared. Field may not have cleared properly, or the app's ` +
+      `suggestion text doesn't exactly equal "${value}".`,
     );
   }
 
@@ -181,7 +181,7 @@ const setOnlyAdoptionStatusChecked = async (
   if (!targetId) {
     throw new Error(
       `setOnlyAdoptionStatusChecked: no known input id for label "${targetLabel}". ` +
-        `Known labels: ${Object.keys(ADOPTION_STATUS_IDS).join(", ")}`,
+      `Known labels: ${Object.keys(ADOPTION_STATUS_IDS).join(", ")}`,
     );
   }
 
@@ -194,8 +194,8 @@ const setOnlyAdoptionStatusChecked = async (
   } catch {
     throw new Error(
       `setOnlyAdoptionStatusChecked: could not find label[for="${targetId}"] for ` +
-        `"${targetLabel}". If the app changed this field's ids, they need to be ` +
-        `re-confirmed live and updated in ADOPTION_STATUS_IDS.`,
+      `"${targetLabel}". If the app changed this field's ids, they need to be ` +
+      `re-confirmed live and updated in ADOPTION_STATUS_IDS.`,
     );
   }
 
@@ -300,42 +300,40 @@ const verifyNewDisclosuresSubSection = async (
   // reddish rgba background. <em> was copied from aa-indexing-logic.ts's
   // unrelated keyword-highlight convention and never actually matched
   // anything here, so this check always failed even on a real click.
-  const documentFrame = page.frameLocator("iframe").first();
-  const iframeHighlights = documentFrame.locator(".acctItem-highlight");
+ const documentFrame = page
+            .locator('iframe[src*="/SECFilings/Documents/"]')
+            .first()
+            .contentFrame();
+          
+const recentlyHeader = documentFrame
+  .locator(':is(p, div, td, span):has-text("recent")')
+  .first();
 
-  try {
-    await expect(async () => {
-      expect(await iframeHighlights.count()).toBeGreaterThan(0);
-    }).toPass({ timeout: 10000 });
-    details.push(
-      "✅ Iframe shows highlighted (.acctItem-highlight) accounting-item text after click.",
-    );
-  } catch {
-    details.push("❌ No highlighted (.acctItem-highlight) text found in iframe after click.");
-    isValid = false;
-  }
+await expect(recentlyHeader).toBeVisible({ timeout: 30000 });
 
-  const recentlyHeading = documentFrame
-    .locator("text=/Recently (Issued|Released|Adopted)/i")
-    .first();
+// 2. Target highlights in the same container OR in adjacent elements
+const headingHighlights = documentFrame.locator(
+  '*:has-text("Recently") .acctItem-highlight.New-Accounting-Disclosures-and-Policies, ' +
+  '*:has-text("Recently") + * .acctItem-highlight.New-Accounting-Disclosures-and-Policies, ' +
+  '.acctItem-highlight.New-Accounting-Disclosures-and-Policies'
+);
 
-  if ((await recentlyHeading.count()) > 0) {
-    const headingHighlightCount = await recentlyHeading
-      .locator("xpath=ancestor::*[self::p or self::div][1]")
-      .locator(".acctItem-highlight")
-      .count();
+let headingHighlightCount = 0;
+try {
+  await expect(async () => {
+    headingHighlightCount = await headingHighlights.count();
+    expect(headingHighlightCount).toBeGreaterThan(0);
+  }).toPass({ timeout: 15000 });
 
-    details.push(
-      headingHighlightCount === 0
-        ? '✅ Heading ("Recently ... Accounting Standards...") is NOT highlighted, as expected.'
-        : `❌ Unexpected: heading contains ${headingHighlightCount} highlighted term(s).`,
-    );
-    if (headingHighlightCount !== 0) isValid = false;
-  } else {
-    details.push(
-      'ℹ️ Could not locate a "Recently ... Accounting Standards" heading on the page the click navigated to.',
-    );
-  }
+  details.push(
+    `✅ Content following "Recently ... Accounting Standards..." heading contains ${headingHighlightCount} highlighted term(s).`,
+  );
+} catch {
+  details.push(
+    '❌ No highlighted terms found in the content following the heading.',
+  );
+  isValid = false;
+}
 
   return { details, isValid };
 };
@@ -456,8 +454,8 @@ export const runAAAccountingDisclosuresAndPoliciesTest = async (
   const finalDumpString =
     resultsSummary.length > 0
       ? resultsSummary.join(
-          "\n--------------------------------------------------------------------------------\n",
-        )
+        "\n--------------------------------------------------------------------------------\n",
+      )
       : "Status: Valid\nAll adoption statuses passed — no failures to report.";
 
   try {

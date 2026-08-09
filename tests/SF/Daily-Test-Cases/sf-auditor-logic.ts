@@ -6,6 +6,7 @@ import {
   parseCount,
   configureDisplayColumns,
   closeAllOpenTabs,
+  getTargetDateString,
 } from "../../utils/helpers";
 
 const IDENTIFIER = "sf_auditor";
@@ -20,7 +21,7 @@ export const runAuditorTest = async (page: Page, logToFile: Function) => {
   const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
   const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
 
-  const testCases = [{ date: "Yesterday", formType: "10-k", count: 15 }];
+  const testCases = [{ date: getTargetDateString(), formType: "10-k", count: 15 }];
 
   let tabIndex = 0;
   let selectCheckboxes = true;

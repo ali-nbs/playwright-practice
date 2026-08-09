@@ -56,7 +56,7 @@ export const runSRCDocViewTest = async (page: Page, logToFile: Function) => {
   ].join("\n");
 
   try {
-    //   await updateGoogleSheet(scenarioBlock, IDENTIFIER);
+    await updateGoogleSheet(scenarioBlock, IDENTIFIER);
     logToFile("Sheet updated successfully.");
   } catch (e: any) {
     logToFile(`Sheet update failed: ${e.message}`);

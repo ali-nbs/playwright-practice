@@ -1,0 +1,11 @@
+[-5956312ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:7062098
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:211582)
+    at wy (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9825185)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9832202
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861297
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861459) @ https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:0

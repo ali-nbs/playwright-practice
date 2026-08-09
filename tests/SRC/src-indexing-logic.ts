@@ -5,6 +5,7 @@ import {
   getTabText,
   parseCount,
   closeAllOpenTabs,
+  getTargetDateString,
 } from "../utils/helpers";
 
 const IDENTIFIER = "src_indexing";
@@ -26,7 +27,7 @@ export const runSRCIndexingTest = async (page: Page, logToFile: Function) => {
 
   const testCases = [
     {
-      date: "Yesterday",
+      date: getTargetDateString(),
       keyword: "is OR the OR a",
       NotKeyword: "NOT (is OR the OR a)",
     },

@@ -1,0 +1,30 @@
+[   14984ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:7062098
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:211582)
+    at wy (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9825185)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9832202
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861297
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861459) @ https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:0
+[  114865ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:7062098
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:211582)
+    at wy (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9825185)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9832202
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861297
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861459) @ https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:0
+[  126571ms] TypeError: Cannot read properties of undefined (reading 'type')
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3729
+    at dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:106:16228)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934419
+    at Array.forEach (<anonymous>)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934396
+    at bu (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:385:87769)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934375

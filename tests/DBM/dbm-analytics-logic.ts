@@ -4,6 +4,8 @@ import {
   getTabText,
   parseCount,
   closeAllOpenTabs,
+  recoverFromAppCrash,
+  getTargetDateString,
 } from "../utils/helpers";
 import path from "path";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
@@ -25,7 +27,7 @@ const scenarios: SearchScenario[] = [
   {
     name: "Section Specific Search",
     isBlankSearch: false,
-    date: "Yesterday",
+    date: getTargetDateString(),
     sections: [
       "10-Q ➤ Item 1. Financial Statements",
       "10-K ➤ Item 1A. Risk Factors",

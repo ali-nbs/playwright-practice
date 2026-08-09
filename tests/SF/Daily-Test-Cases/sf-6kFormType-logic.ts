@@ -5,6 +5,7 @@ import {
   closeAllOpenTabs,
   configureDisplayColumns,
   getTabText,
+  getTargetDateString,
   parseCount,
 } from "../../utils/helpers";
 
@@ -13,7 +14,7 @@ const IDENTIFIER = "sf_6k_subformType";
 export const run6kFormTypeTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-6K Form Type Report ---");
 
-  const TEST_DATA = [{ id: 1, form: "6-K", day: "Last 7 Days", count: 25 }];
+  const TEST_DATA = [{ id: 1, form: "6-K", day: getTargetDateString(), count: 25 }];
 
   for (const data of TEST_DATA) {
     await selectFormTypeAndSearch(page, data.form, data.day);

@@ -1,0 +1,1123 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e5]:
+    - navigation [ref=f3e6]:
+      - generic "Click here to return to main menu" [ref=f3e10] [cursor=pointer]:
+        - img "Intelligize" [ref=f3e11]
+      - generic [ref=f3e12]:
+        - generic [ref=f3e17]:
+          - textbox "Company Name, Ticker, CIK or List to search in Accounting Analytics" [ref=f3e23]
+          - button [ref=f3e25] [cursor=pointer]
+        - generic [ref=f3e29]:
+          - generic [ref=f3e31] [cursor=pointer]:
+            - generic [ref=f3e32]: "Client ID:"
+            - generic "None" [ref=f3e33]: "- None -"
+          - button "My Workspace" [ref=f3e35] [cursor=pointer]
+          - generic [ref=f3e36]: Support
+      - generic "hafiz.a!i007 - hafiz.ali@northbaysolutions.net" [ref=f3e45] [cursor=pointer]: HA
+    - generic [ref=f3e46]:
+      - generic [ref=f3e47]:
+        - generic [ref=f3e48] [cursor=pointer]: Document Details
+        - generic [ref=f3e15719]:
+          - generic [ref=f3e15720]: Accounting Analytics
+          - generic [ref=f3e15728]:
+            - button [ref=f3e15729] [cursor=pointer]
+            - generic [ref=f3e15734]:
+              - generic [ref=f3e15735]:
+                - generic "Outline" [ref=f3e15738] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f3e15739]:
+                - generic "Exhibits" [ref=f3e15742] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f3e15743]:
+                - generic "iXBRL" [ref=f3e15746] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f3e15747]:
+                - generic "Info" [ref=f3e15750] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f3e15751]:
+                - generic:
+                  - generic:
+                    - generic "Results"
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f3e15752]:
+                - generic "Notes" [ref=f3e15755] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab" [disabled]
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right" [disabled]
+                    - menuitem "Close tabs to the left" [disabled]
+                    - menuitem "Close all tabs" [disabled]
+              - generic [ref=f3e15756]:
+                - generic "ACCT" [ref=f3e15759] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+            - button [ref=f3e15760] [cursor=pointer]
+          - generic [ref=f3e15764]:
+            - generic [ref=f3e15765]:
+              - button "Expand All" [ref=f3e15766] [cursor=pointer]
+              - button "Collapse All" [ref=f3e15770] [cursor=pointer]
+            - generic [ref=f3e15777]:
+              - generic [ref=f3e15778]: 10-Q 2026-07-23
+              - generic [ref=f3e15790]:
+                - generic [ref=f3e15791]: PART I
+                - generic [ref=f3e15804]:
+                  - generic [ref=f3e15806]:
+                    - generic [ref=f3e15807]: Item 1. Financial Statements
+                    - generic [ref=f3e15822]:
+                      - generic [ref=f3e15823]: NOTES TO CONDENSED CONSOLIDATED FINANCIAL STATEMENTS
+                      - generic [ref=f3e15835]:
+                        - generic [ref=f3e15837]:
+                          - generic [ref=f3e15838]: 2. Revenue
+                          - generic [ref=f3e15853]:
+                            - generic [ref=f3e15854]: Performance Obligations
+                            - generic [ref=f3e15879] [cursor=pointer]:
+                              - generic [ref=f3e15880]: Accounting Standards -
+                              - generic [ref=f3e15884]: ASC 606 - Revenue from Contracts with Customers
+                        - generic [ref=f3e15886]:
+                          - generic [ref=f3e15887]: 11. Financial Instruments
+                          - generic [ref=f3e15902]:
+                            - generic [ref=f3e15903]: Fair Value Measurements
+                            - generic [ref=f3e15928] [cursor=pointer]:
+                              - generic [ref=f3e15929]: Accounting Standards -
+                              - generic [ref=f3e15933]: ASC 820 - Fair Value Measurement
+                        - generic [ref=f3e15935]:
+                          - generic [ref=f3e15936]: 16. Segment Information
+                          - generic [ref=f3e15949]:
+                            - generic [ref=f3e15951]:
+                              - generic [ref=f3e15952]: Reconciliation Of Revenue From Segments To Consolidated
+                              - generic [ref=f3e15964]:
+                                - generic [ref=f3e15976] [cursor=pointer]:
+                                  - generic [ref=f3e15977]: Non-Gaap -
+                                  - generic [ref=f3e15981]: Adjusted Costs
+                                - generic [ref=f3e15994] [cursor=pointer]:
+                                  - generic [ref=f3e15995]: Non-Gaap -
+                                  - generic [ref=f3e15999]: Adjusted Sales, General & Administrative (S,G&A)
+                            - generic [ref=f3e16001]:
+                              - generic [ref=f3e16002]: Segment Information Table 1 of 4
+                              - generic [ref=f3e16015]:
+                                - generic [ref=f3e16027] [cursor=pointer]:
+                                  - generic [ref=f3e16028]: Non-Gaap -
+                                  - generic [ref=f3e16032]: Adjusted Operating Costs
+                                - generic [ref=f3e16045] [cursor=pointer]:
+                                  - generic [ref=f3e16046]: Non-Gaap -
+                                  - generic [ref=f3e16050]: Adjusted Other Expense
+                            - generic [ref=f3e16053]:
+                              - generic [ref=f3e16054]: Segment Information Table 2 of 4
+                              - generic [ref=f3e16079] [cursor=pointer]:
+                                - generic [ref=f3e16080]: Non-Gaap -
+                                - generic [ref=f3e16084]: Other Non-GAAP Items
+                        - generic [ref=f3e16087]:
+                          - generic [ref=f3e16088]: 19. Recent Accounting Pronouncements
+                          - generic [ref=f3e16101]:
+                            - generic [ref=f3e16103]:
+                              - generic [ref=f3e16104]: Recently Issued Accounting Standards
+                              - generic [ref=f3e16117]:
+                                - generic [ref=f3e16129] [cursor=pointer]:
+                                  - generic [ref=f3e16130]: New Accounting Disclosures and Policies -
+                                  - generic [ref=f3e16134]: 2024-03
+                                - generic [ref=f3e16146] [cursor=pointer]:
+                                  - generic [ref=f3e16147]: New Accounting Disclosures and Policies -
+                                  - generic [ref=f3e16151]: 2026-02
+                                - generic [ref=f3e16163] [cursor=pointer]:
+                                  - generic [ref=f3e16164]: Accounting Standards -
+                                  - generic [ref=f3e16168]: ASC 220 - Income Statement-Reporting Comprehensive Income
+                            - generic [ref=f3e16170]:
+                              - generic [ref=f3e16171]: Recently Adopted Accounting Standard
+                              - generic [ref=f3e16184]:
+                                - generic [ref=f3e16196] [cursor=pointer]:
+                                  - generic [ref=f3e16197]: New Accounting Disclosures and Policies -
+                                  - generic [ref=f3e16201]: 2023-09
+                                - generic [ref=f3e16213] [cursor=pointer]:
+                                  - generic [ref=f3e16214]: New Accounting Disclosures and Policies -
+                                  - generic [ref=f3e16218]: 2025-05
+                                - generic [ref=f3e16230] [cursor=pointer]:
+                                  - generic [ref=f3e16231]: New Accounting Disclosures and Policies -
+                                  - generic [ref=f3e16235]: 2025-06
+                                - generic [ref=f3e16247] [cursor=pointer]:
+                                  - generic [ref=f3e16248]: Accounting Standards -
+                                  - generic [ref=f3e16252]: ASC 326 - Financial Instruments-Credit Losses
+                                - generic [ref=f3e16264] [cursor=pointer]:
+                                  - generic [ref=f3e16265]: Accounting Standards -
+                                  - generic [ref=f3e16269]: ASC 350 - Intangibles-Goodwill and Other
+                                - generic [ref=f3e16281] [cursor=pointer]:
+                                  - generic [ref=f3e16282]: Accounting Standards -
+                                  - generic [ref=f3e16286]: ASC 740 - Income Taxes
+                  - generic [ref=f3e16288]:
+                    - generic [ref=f3e16289]: Item 2. Management's Discussion and Analysis of Financial Condition and Results of Operations
+                    - generic [ref=f3e16301]:
+                      - generic [ref=f3e16303]:
+                        - generic [ref=f3e16304]: OVERVIEW
+                        - generic [ref=f3e16317]:
+                          - generic [ref=f3e16329] [cursor=pointer]:
+                            - generic [ref=f3e16330]: Non-Gaap -
+                            - generic [ref=f3e16334]: Organic Sales/Revenue
+                          - generic [ref=f3e16347] [cursor=pointer]:
+                            - generic [ref=f3e16348]: Non-Gaap -
+                            - generic [ref=f3e16352]: Organic Sales/Revenue Growth
+                      - generic [ref=f3e16354]:
+                        - generic [ref=f3e16355]: CONSOLIDATED RESULTS OF OPERATIONS
+                        - generic [ref=f3e16370]:
+                          - generic [ref=f3e16371]: Revenue
+                          - generic [ref=f3e16396] [cursor=pointer]:
+                            - generic [ref=f3e16397]: Non-Gaap -
+                            - generic [ref=f3e16401]: Organic Sales/Revenue Growth
+                      - generic [ref=f3e16403]:
+                        - generic [ref=f3e16404]: SEGMENT RESULTS OF OPERATIONS
+                        - generic [ref=f3e16417]:
+                          - generic [ref=f3e16419]:
+                            - generic [ref=f3e16420]: Engineered Products
+                            - generic [ref=f3e16433]:
+                              - generic [ref=f3e16435]:
+                                - generic [ref=f3e16436]: Engineered Products Table 1 of 1
+                                - generic [ref=f3e16449]:
+                                  - generic [ref=f3e16461] [cursor=pointer]:
+                                    - generic [ref=f3e16462]: Non-Gaap -
+                                    - generic [ref=f3e16466]: Organic Sales/Revenue
+                                  - generic [ref=f3e16479] [cursor=pointer]:
+                                    - generic [ref=f3e16480]: Non-Gaap -
+                                    - generic [ref=f3e16484]: Organic Sales/Revenue Growth
+                                  - generic [ref=f3e16496] [cursor=pointer]:
+                                    - generic [ref=f3e16497]: Non-Gaap -
+                                    - generic [ref=f3e16501]: Other Non-GAAP Items
+                              - generic [ref=f3e16504]:
+                                - generic [ref=f3e16505]: Second Quarter 2026 Compared to the Second Quarter 2025
+                                - generic [ref=f3e16529] [cursor=pointer]:
+                                  - generic [ref=f3e16530]: Non-Gaap -
+                                  - generic [ref=f3e16534]: Organic Sales/Revenue Growth
+                              - generic [ref=f3e16536]:
+                                - generic [ref=f3e16537]: Six Months Ended June 30, 2026 Compared to the Six Months Ended June 30, 2025
+                                - generic [ref=f3e16561] [cursor=pointer]:
+                                  - generic [ref=f3e16562]: Non-Gaap -
+                                  - generic [ref=f3e16566]: Organic Sales/Revenue Growth
+                              - generic [ref=f3e16578] [cursor=pointer]:
+                                - generic [ref=f3e16579]: Non-Gaap -
+                                - generic [ref=f3e16583]: Organic Sales/Revenue Growth
+                          - generic [ref=f3e16585]:
+                            - generic [ref=f3e16586]: Clean Energy & Fueling
+                            - generic [ref=f3e16599]:
+                              - generic [ref=f3e16601]:
+                                - generic [ref=f3e16602]: Clean Energy & Fueling
+                                - generic [ref=f3e16615]:
+                                  - generic [ref=f3e16627] [cursor=pointer]:
+                                    - generic [ref=f3e16628]: Non-Gaap -
+                                    - generic [ref=f3e16632]: Organic Sales/Revenue
+                                  - generic [ref=f3e16645] [cursor=pointer]:
+                                    - generic [ref=f3e16646]: Non-Gaap -
+                                    - generic [ref=f3e16650]: Organic Sales/Revenue Growth
+                                  - generic [ref=f3e16662] [cursor=pointer]:
+                                    - generic [ref=f3e16663]: Non-Gaap -
+                                    - generic [ref=f3e16667]: Other Non-GAAP Items
+                              - generic [ref=f3e16670]:
+                                - generic [ref=f3e16671]: Second Quarter 2026 Compared to the Second Quarter 2025
+                                - generic [ref=f3e16695] [cursor=pointer]:
+                                  - generic [ref=f3e16696]: Non-Gaap -
+                                  - generic [ref=f3e16700]: Organic Sales/Revenue Growth
+                              - generic [ref=f3e16702]:
+                                - generic [ref=f3e16703]: Six Months Ended June 30, 2026 Compared to the Six Months Ended June 30, 2025
+                                - generic [ref=f3e16727] [cursor=pointer]:
+                                  - generic [ref=f3e16728]: Non-Gaap -
+                                  - generic [ref=f3e16732]: Organic Sales/Revenue Growth
+                              - generic [ref=f3e16744] [cursor=pointer]:
+                                - generic [ref=f3e16745]: Non-Gaap -
+                                - generic [ref=f3e16749]: Organic Sales/Revenue Growth
+                          - generic [ref=f3e16751]:
+                            - generic [ref=f3e16752]: Imaging & Identification
+                            - generic [ref=f3e16765]:
+                              - generic [ref=f3e16767]:
+                                - generic [ref=f3e16768]: Imaging & Identification
+                                - generic [ref=f3e16781]:
+                                  - generic [ref=f3e16793] [cursor=pointer]:
+                                    - generic [ref=f3e16794]: Non-Gaap -
+                                    - generic [ref=f3e16798]: Organic Sales/Revenue
+                                  - generic [ref=f3e16811] [cursor=pointer]:
+                                    - generic [ref=f3e16812]: Non-Gaap -
+                                    - generic [ref=f3e16816]: Organic Sales/Revenue Growth
+                                  - generic [ref=f3e16828] [cursor=pointer]:
+                                    - generic [ref=f3e16829]: Non-Gaap -
+                                    - generic [ref=f3e16833]: Other Non-GAAP Items
+                              - generic [ref=f3e16836]:
+                                - generic [ref=f3e16837]: Second Quarter 2026 Compared to the Second Quarter 2025
+                                - generic [ref=f3e16861] [cursor=pointer]:
+                                  - generic [ref=f3e16862]: Non-Gaap -
+                                  - generic [ref=f3e16866]: Organic Sales/Revenue Growth
+                              - generic [ref=f3e16868]:
+                                - generic [ref=f3e16869]: Six Months Ended June 30, 2026 Compared to the Six Months Ended June 30, 2025
+                                - generic [ref=f3e16893] [cursor=pointer]:
+                                  - generic [ref=f3e16894]: Non-Gaap -
+                                  - generic [ref=f3e16898]: Organic Sales/Revenue
+                          - generic [ref=f3e16901]:
+                            - generic [ref=f3e16902]: Pumps & Process Solutions
+                            - generic [ref=f3e16915]:
+                              - generic [ref=f3e16917]:
+                                - generic [ref=f3e16918]: Pumps & Process Solutions
+                                - generic [ref=f3e16931]:
+                                  - generic [ref=f3e16943] [cursor=pointer]:
+                                    - generic [ref=f3e16944]: Non-Gaap -
+                                    - generic [ref=f3e16948]: Organic Sales/Revenue
+                                  - generic [ref=f3e16961] [cursor=pointer]:
+                                    - generic [ref=f3e16962]: Non-Gaap -
+                                    - generic [ref=f3e16966]: Organic Sales/Revenue Growth
+                                  - generic [ref=f3e16978] [cursor=pointer]:
+                                    - generic [ref=f3e16979]: Non-Gaap -
+                                    - generic [ref=f3e16983]: Other Non-GAAP Items
+                              - generic [ref=f3e16986]:
+                                - generic [ref=f3e16987]: Second Quarter 2026 Compared to the Second Quarter 2025
+                                - generic [ref=f3e17011] [cursor=pointer]:
+                                  - generic [ref=f3e17012]: Non-Gaap -
+                                  - generic [ref=f3e17016]: Organic Sales/Revenue Growth
+                          - generic [ref=f3e17018]:
+                            - generic [ref=f3e17019]: Climate & Sustainability Technologies
+                            - generic [ref=f3e17032]:
+                              - generic [ref=f3e17034]:
+                                - generic [ref=f3e17035]: Climate & Sustainability Technologies
+                                - generic [ref=f3e17048]:
+                                  - generic [ref=f3e17060] [cursor=pointer]:
+                                    - generic [ref=f3e17061]: Non-Gaap -
+                                    - generic [ref=f3e17065]: Organic Sales/Revenue
+                                  - generic [ref=f3e17078] [cursor=pointer]:
+                                    - generic [ref=f3e17079]: Non-Gaap -
+                                    - generic [ref=f3e17083]: Organic Sales/Revenue Growth
+                                  - generic [ref=f3e17095] [cursor=pointer]:
+                                    - generic [ref=f3e17096]: Non-Gaap -
+                                    - generic [ref=f3e17100]: Other Non-GAAP Items
+                              - generic [ref=f3e17103]:
+                                - generic [ref=f3e17104]: Second Quarter 2026 Compared to the Second Quarter 2025
+                                - generic [ref=f3e17128] [cursor=pointer]:
+                                  - generic [ref=f3e17129]: Non-Gaap -
+                                  - generic [ref=f3e17133]: Organic Sales/Revenue Growth
+                              - generic [ref=f3e17135]:
+                                - generic [ref=f3e17136]: Six Months Ended June 30, 2026 Compared to the Six Months Ended June 30, 2025
+                                - generic [ref=f3e17160] [cursor=pointer]:
+                                  - generic [ref=f3e17161]: Non-Gaap -
+                                  - generic [ref=f3e17165]: Organic Sales/Revenue Growth
+                              - generic [ref=f3e17167]:
+                                - generic [ref=f3e17168]: Reconciliation of Segment Earnings to Earnings from Continuing Operations
+                                - generic [ref=f3e17180]:
+                                  - generic [ref=f3e17192] [cursor=pointer]:
+                                    - generic [ref=f3e17193]: Non-Gaap -
+                                    - generic [ref=f3e17197]: Adjusted Operating Costs
+                                  - generic [ref=f3e17210] [cursor=pointer]:
+                                    - generic [ref=f3e17211]: Non-Gaap -
+                                    - generic [ref=f3e17215]: Other Non-GAAP Items
+                              - generic [ref=f3e17218]:
+                                - generic [ref=f3e17219]: Restructuring and Other Costs (Benefits)
+                                - generic [ref=f3e17232]:
+                                  - generic [ref=f3e17234]:
+                                    - generic [ref=f3e17235]: Restructuring and Other Costs (Benefits) Table 1 of 4
+                                    - generic [ref=f3e17247]:
+                                      - generic [ref=f3e17259] [cursor=pointer]:
+                                        - generic [ref=f3e17260]: Non-Gaap -
+                                        - generic [ref=f3e17264]: Adjusted Operating Costs
+                                      - generic [ref=f3e17276] [cursor=pointer]:
+                                        - generic [ref=f3e17277]: Non-Gaap -
+                                        - generic [ref=f3e17281]: Adjusted Other Expense
+                                  - generic [ref=f3e17284]:
+                                    - generic [ref=f3e17285]: Restructuring and Other Costs (Benefits) Table 2 of 4
+                                    - generic [ref=f3e17297]:
+                                      - generic [ref=f3e17309] [cursor=pointer]:
+                                        - generic [ref=f3e17310]: Non-Gaap -
+                                        - generic [ref=f3e17314]: Adjusted Operating Costs
+                                      - generic [ref=f3e17326] [cursor=pointer]:
+                                        - generic [ref=f3e17327]: Non-Gaap -
+                                        - generic [ref=f3e17331]: Adjusted Other Expense
+                                  - generic [ref=f3e17334]:
+                                    - generic [ref=f3e17335]: Restructuring and Other Costs (Benefits) Table 3 of 4
+                                    - generic [ref=f3e17347]:
+                                      - generic [ref=f3e17359] [cursor=pointer]:
+                                        - generic [ref=f3e17360]: Non-Gaap -
+                                        - generic [ref=f3e17364]: Adjusted Operating Costs
+                                      - generic [ref=f3e17376] [cursor=pointer]:
+                                        - generic [ref=f3e17377]: Non-Gaap -
+                                        - generic [ref=f3e17381]: Adjusted Other Expense
+                                  - generic [ref=f3e17384]:
+                                    - generic [ref=f3e17385]: Restructuring and Other Costs (Benefits) Table 4 of 4
+                                    - generic [ref=f3e17397]:
+                                      - generic [ref=f3e17409] [cursor=pointer]:
+                                        - generic [ref=f3e17410]: Non-Gaap -
+                                        - generic [ref=f3e17414]: Adjusted Operating Costs
+                                      - generic [ref=f3e17426] [cursor=pointer]:
+                                        - generic [ref=f3e17427]: Non-Gaap -
+                                        - generic [ref=f3e17431]: Adjusted Other Expense
+                              - generic [ref=f3e17434]:
+                                - generic [ref=f3e17435]: Purchase Accounting Expenses
+                                - generic [ref=f3e17460] [cursor=pointer]:
+                                  - generic [ref=f3e17461]: Non-Gaap -
+                                  - generic [ref=f3e17465]: Other Non-GAAP Items
+                          - generic [ref=f3e17478] [cursor=pointer]:
+                            - generic [ref=f3e17479]: Non-Gaap -
+                            - generic [ref=f3e17483]: Organic Sales/Revenue Growth
+                      - generic [ref=f3e17485]:
+                        - generic [ref=f3e17486]: FINANCIAL CONDITION
+                        - generic [ref=f3e17501]:
+                          - generic [ref=f3e17502]: Cash Flow Summary
+                          - generic [ref=f3e17517]:
+                            - generic [ref=f3e17518]: Operating Activities
+                            - generic [ref=f3e17533]:
+                              - generic [ref=f3e17534]: "Adjusted Working Capital:"
+                              - generic [ref=f3e17547]:
+                                - generic [ref=f3e17549]:
+                                  - generic [ref=f3e17550]: Calculation of adjusted working capital
+                                  - generic [ref=f3e17574] [cursor=pointer]:
+                                    - generic [ref=f3e17575]: Non-Gaap -
+                                    - generic [ref=f3e17579]: Adjusted Working Capital
+                                - generic [ref=f3e17591] [cursor=pointer]:
+                                  - generic [ref=f3e17592]: Non-Gaap -
+                                  - generic [ref=f3e17596]: Adjusted Working Capital
+                      - generic [ref=f3e17598]:
+                        - generic [ref=f3e17599]: Liquidity and Capital Resources
+                        - generic [ref=f3e17612]:
+                          - generic [ref=f3e17614]:
+                            - generic [ref=f3e17615]: Free Cash Flow
+                            - generic [ref=f3e17628]:
+                              - generic [ref=f3e17630]:
+                                - generic [ref=f3e17631]: Non-GAAP Reconciliation
+                                - generic [ref=f3e17656] [cursor=pointer]:
+                                  - generic [ref=f3e17657]: Non-Gaap -
+                                  - generic [ref=f3e17661]: Free Cash Flow
+                              - generic [ref=f3e17674] [cursor=pointer]:
+                                - generic [ref=f3e17675]: Non-Gaap -
+                                - generic [ref=f3e17679]: Free Cash Flow
+                              - generic [ref=f3e17692] [cursor=pointer]:
+                                - generic [ref=f3e17693]: Non-Gaap -
+                                - generic [ref=f3e17697]: Free Cash Flow as a Percentage of Revenue
+                          - generic [ref=f3e17699]:
+                            - generic [ref=f3e17700]: Capitalization
+                            - generic [ref=f3e17713]:
+                              - generic [ref=f3e17715]:
+                                - generic [ref=f3e17716]: Calculation of net debt to net capitalization from the most directly comparable GAAP measures
+                                - generic [ref=f3e17740] [cursor=pointer]:
+                                  - generic [ref=f3e17741]: Non-Gaap -
+                                  - generic [ref=f3e17745]: Net Debt
+                              - generic [ref=f3e17758] [cursor=pointer]:
+                                - generic [ref=f3e17759]: Non-Gaap -
+                                - generic [ref=f3e17763]: EBITDA
+                              - generic [ref=f3e17776] [cursor=pointer]:
+                                - generic [ref=f3e17777]: Non-Gaap -
+                                - generic [ref=f3e17781]: Net Debt
+                      - generic [ref=f3e17784]:
+                        - generic [ref=f3e17785]: Non-GAAP Disclosures
+                        - generic [ref=f3e17798]:
+                          - generic [ref=f3e17810] [cursor=pointer]:
+                            - generic [ref=f3e17811]: Non-Gaap -
+                            - generic [ref=f3e17815]: Adjusted Working Capital
+                          - generic [ref=f3e17828] [cursor=pointer]:
+                            - generic [ref=f3e17829]: Non-Gaap -
+                            - generic [ref=f3e17833]: Free Cash Flow
+                          - generic [ref=f3e17846] [cursor=pointer]:
+                            - generic [ref=f3e17847]: Non-Gaap -
+                            - generic [ref=f3e17851]: Free Cash Flow as a Percentage of Revenue
+                          - generic [ref=f3e17863] [cursor=pointer]:
+                            - generic [ref=f3e17864]: Non-Gaap -
+                            - generic [ref=f3e17868]: Net Debt
+                          - generic [ref=f3e17881] [cursor=pointer]:
+                            - generic [ref=f3e17882]: Non-Gaap -
+                            - generic [ref=f3e17886]: Organic Sales/Revenue Growth
+                  - generic [ref=f3e17898] [cursor=pointer]:
+                    - generic [ref=f3e17899]: Non-Gaap -
+                    - generic [ref=f3e17903]: Adjusted Working Capital
+                  - generic [ref=f3e17916] [cursor=pointer]:
+                    - generic [ref=f3e17917]: Non-Gaap -
+                    - generic [ref=f3e17921]: Free Cash Flow
+                  - generic [ref=f3e17934] [cursor=pointer]:
+                    - generic [ref=f3e17935]: Non-Gaap -
+                    - generic [ref=f3e17939]: Net Debt
+                  - generic [ref=f3e17952] [cursor=pointer]:
+                    - generic [ref=f3e17953]: Non-Gaap -
+                    - generic [ref=f3e17957]: Organic Sales/Revenue Growth
+      - generic [ref=f3e1172]:
+        - generic [ref=f3e1175]:
+          - generic [ref=f3e1177]:
+            - generic [ref=f3e1178]:
+              - generic "Home" [ref=f3e1187] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab" [disabled]
+                  - menuitem "Close tab" [disabled]
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right" [disabled]
+                  - menuitem "Close tabs to the left" [disabled]
+                  - menuitem "Close all tabs" [disabled]
+            - generic [ref=f3e2372]:
+              - 'generic "Docs: 95" [ref=f3e2381] [cursor=pointer]'
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left" [disabled]
+                  - menuitem "Close all tabs"
+            - generic [ref=f3e3670]:
+              - generic "10-Q 07/28/2026" [ref=f3e3682] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+            - generic [ref=f3e5537]:
+              - generic "10-Q 07/28/2026" [ref=f3e5549] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+            - generic [ref=f3e10139]:
+              - 'generic "Docs: 11,835" [ref=f3e10328] [cursor=pointer]'
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+            - generic [ref=f3e10851]:
+              - generic "10-Q/A 07/29/2026" [ref=f3e10863] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+            - generic [ref=f3e17960]:
+              - generic "10-Q 07/23/2026" [ref=f3e17972] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right" [disabled]
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+          - button "Save Tabs" [ref=f3e1739] [cursor=pointer]
+        - generic [ref=f3e1193]:
+          - generic [ref=f3e1194]:
+            - generic [ref=f3e1196]:
+              - button "Configure Home" [ref=f3e1201] [cursor=pointer]
+              - generic [ref=f3e1206]:
+                - article [ref=f3e1207]:
+                  - heading "Audit Item Matrix" [level=1] [ref=f3e1211]
+                  - generic [ref=f3e1214]:
+                    - generic [ref=f3e1215]:
+                      - generic [ref=f3e1216]: A quick and easy way to compare audit items across companies. You can see audit items by rankings, word counts, and heat maps.
+                      - generic [ref=f3e1217] [cursor=pointer]: Request Training
+                    - generic [ref=f3e1222]:
+                      - generic [ref=f3e1223]:
+                        - generic [ref=f3e1224]: Select a Peer Group to make Quick Matrix
+                        - generic "Select Peer Group" [ref=f3e1227] [cursor=pointer]
+                      - generic [ref=f3e1231]:
+                        - generic [ref=f3e1232]: Create New Matrix
+                        - button "Create/Load New Matrix" [ref=f3e1233] [cursor=pointer]
+                - article [ref=f3e1235]:
+                  - generic [ref=f3e1236]:
+                    - generic [ref=f3e1237]: Comment Letters
+                    - generic [ref=f3e1242]:
+                      - button "Excel List" [ref=f3e1244] [cursor=pointer]
+                      - button "Unpin" [ref=f3e1249] [cursor=pointer]
+                      - generic [ref=f3e1254] [cursor=pointer]: View All
+                  - generic [ref=f3e1256]:
+                    - generic [ref=f3e1257]:
+                      - generic [ref=f3e1258]:
+                        - textbox "Type to filter" [ref=f3e1260]
+                        - generic [ref=f3e1261]:
+                          - generic [ref=f3e1262]: Peer Group
+                          - generic "My Company & Peers" [ref=f3e1265] [cursor=pointer]
+                          - button [disabled] [ref=f3e1269]
+                      - generic [ref=f3e1273]:
+                        - generic [ref=f3e1274] [cursor=pointer]: Non-GAAP
+                        - generic [ref=f3e1276] [cursor=pointer]: ASC
+                        - generic [ref=f3e1278] [cursor=pointer]: 10-K Items
+                    - paragraph [ref=f3e1282]: 0 Results
+                    - generic [ref=f3e1283]: "* Non-GAAP information is currently available for Large Accelerated Filers."
+                - article [ref=f3e1285]:
+                  - generic [ref=f3e1286]:
+                    - generic [ref=f3e1287]: Top Non-GAAP Metrics Disclosures
+                    - generic [ref=f3e1292]:
+                      - button "Excel List" [ref=f3e1294] [cursor=pointer]
+                      - button "Unpin" [ref=f3e1299] [cursor=pointer]
+                  - generic [ref=f3e1305]:
+                    - generic [ref=f3e1306]:
+                      - generic [ref=f3e1307]:
+                        - generic [ref=f3e1311]:
+                          - generic [ref=f3e1312]: Peer Group
+                          - generic "My Company & Peers" [ref=f3e1315] [cursor=pointer]
+                          - button [disabled] [ref=f3e1319]
+                        - generic [ref=f3e1324]:
+                          - button [ref=f3e1325] [cursor=pointer]
+                          - button [ref=f3e1329] [cursor=pointer]
+                      - generic [ref=f3e1334]:
+                        - generic [ref=f3e1636]:
+                          - generic [ref=f3e1637]:
+                            - textbox [ref=f3e1640]: 07/29/2023
+                            - textbox [ref=f3e1647]: 07/29/2026
+                          - generic [ref=f3e1652]:
+                            - generic [ref=f3e1653] [cursor=pointer]: 1M
+                            - generic [ref=f3e1654] [cursor=pointer]: 3M
+                            - generic [ref=f3e1655] [cursor=pointer]: 6M
+                            - generic [ref=f3e1656] [cursor=pointer]: YTD
+                            - generic [ref=f3e1657] [cursor=pointer]: 1Y
+                            - generic [ref=f3e1658] [cursor=pointer]: 3Y
+                            - generic [ref=f3e1659] [cursor=pointer]: 5Y
+                            - generic [ref=f3e1660] [cursor=pointer]: ALL
+                        - paragraph [ref=f3e1663]: 0 Results
+                    - generic [ref=f3e1338]: "* Non-GAAP information is currently available for Large Accelerated Filers."
+                - article [ref=f3e1340]:
+                  - generic [ref=f3e1341]:
+                    - generic [ref=f3e1342]: Critical Audit Matters (CAM) Topics
+                    - generic [ref=f3e1347]:
+                      - button "Excel List" [ref=f3e1349] [cursor=pointer]
+                      - button "Unpin" [ref=f3e1354] [cursor=pointer]
+                      - generic [ref=f3e1359] [cursor=pointer]: View All
+                  - generic [ref=f3e1361]:
+                    - generic [ref=f3e1362]:
+                      - generic [ref=f3e1363]:
+                        - textbox "Type to filter" [ref=f3e1365]
+                        - generic [ref=f3e1366]:
+                          - generic [ref=f3e1367]: Peer Group
+                          - generic "My Company & Peers" [ref=f3e1370] [cursor=pointer]
+                          - button [disabled] [ref=f3e1374]
+                      - generic [ref=f3e1378]:
+                        - generic [ref=f3e1379] [cursor=pointer]: By Year
+                        - generic [ref=f3e1381] [cursor=pointer]: By Company
+                    - paragraph [ref=f3e1385]: 0 Results
+                    - generic [ref=f3e1386]: "* CAMs information is currently available for Large Accelerated Filers."
+                - article [ref=f3e1388]:
+                  - generic [ref=f3e1389]:
+                    - generic [ref=f3e1390]: Auditor Information
+                    - generic [ref=f3e1395]:
+                      - button "Excel List" [ref=f3e1397] [cursor=pointer]
+                      - button "Unpin" [ref=f3e1402] [cursor=pointer]
+                  - generic [ref=f3e1408]:
+                    - generic [ref=f3e1409]:
+                      - generic [ref=f3e1411]:
+                        - generic [ref=f3e1412]: Peer Group
+                        - generic "My Company & Peers" [ref=f3e1415] [cursor=pointer]
+                        - button [disabled] [ref=f3e1419]
+                      - generic [ref=f3e1423]:
+                        - generic [ref=f3e1424] [cursor=pointer]: Audit Fees
+                        - generic [ref=f3e1426] [cursor=pointer]: Distribution
+                    - paragraph [ref=f3e1430]: 0 Results
+                    - generic [ref=f3e1431]: "* Auditor information is currently available for Large Accelerated Filers."
+                - article [ref=f3e1433]:
+                  - generic [ref=f3e1435]:
+                    - heading "Research Library" [level=1] [ref=f3e1437]
+                    - button "Unpin" [ref=f3e1440] [cursor=pointer]
+                  - generic [ref=f3e1446]:
+                    - generic [ref=f3e1447]:
+                      - generic "All Apps" [ref=f3e1451] [cursor=pointer]
+                      - textbox "What are you looking for?" [ref=f3e1457]
+                    - generic [ref=f3e1461]:
+                      - paragraph [ref=f3e1463]: Category
+                      - paragraph [ref=f3e1465]: App
+                    - grid "grid" [ref=f3e1467]:
+                      - rowgroup [ref=f3e1468]:
+                        - listitem [ref=f3e1470]:
+                          - paragraph [ref=f3e1475]:
+                            - generic [ref=f3e1479]: Recommended
+                        - listitem [ref=f3e1481]:
+                          - paragraph [ref=f3e1486]:
+                            - generic [ref=f3e1487]: COVID
+                        - listitem [ref=f3e1489]:
+                          - paragraph [ref=f3e1494]:
+                            - generic [ref=f3e1495]: Current Events
+                        - listitem [ref=f3e1497]:
+                          - paragraph [ref=f3e1502]:
+                            - generic [ref=f3e1503]: Cybersecurity
+                        - listitem [ref=f3e1505]:
+                          - paragraph [ref=f3e1510]:
+                            - generic [ref=f3e1511]: Enforcement
+                        - listitem [ref=f3e1513]:
+                          - paragraph [ref=f3e1518]:
+                            - generic [ref=f3e1519]: Finance & Accounting
+                        - listitem [ref=f3e1521]:
+                          - paragraph [ref=f3e1526]:
+                            - generic [ref=f3e1527]: Governance / ESG
+                        - listitem [ref=f3e1529]:
+                          - paragraph [ref=f3e1534]:
+                            - generic [ref=f3e1535]: MD&A
+                        - listitem [ref=f3e1537]:
+                          - paragraph [ref=f3e1542]:
+                            - generic [ref=f3e1543]: Regulatory
+                        - listitem [ref=f3e1545]:
+                          - paragraph [ref=f3e1550]:
+                            - generic [ref=f3e1551]: Risk Factors
+                        - listitem [ref=f3e1553]:
+                          - paragraph [ref=f3e1558]:
+                            - generic [ref=f3e1559]: Transactions
+            - contentinfo [ref=f3e1561]:
+              - link [ref=f3e1564] [cursor=pointer]:
+                - /url: https://www.lexisnexis.com/
+                - img "LexisNexis Logo" [ref=f3e1565]
+              - generic [ref=f3e1566]:
+                - list [ref=f3e1568]:
+                  - listitem [ref=f3e1569]:
+                    - link "About" [ref=f3e1570] [cursor=pointer]:
+                      - /url: https://www.intelligize.com/about/
+                  - listitem [ref=f3e1571]:
+                    - link "Privacy" [ref=f3e1572] [cursor=pointer]:
+                      - /url: http://www.lexisnexis.com/en-us/terms/privacy-policy.page
+                  - listitem [ref=f3e1573]:
+                    - link "Trust Center" [ref=f3e1574] [cursor=pointer]:
+                      - /url: https://trust.lexisnexis.com
+                  - listitem [ref=f3e1575]:
+                    - link "Cookie Policy" [ref=f3e1576] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=f3e1577]:
+                    - link "Terms & Conditions" [ref=f3e1578] [cursor=pointer]:
+                      - /url: https://www.intelligize.com/terms-of-service/
+                - list [ref=f3e1580]:
+                  - listitem [ref=f3e1581]:
+                    - text: "Call Support:"
+                    - strong [ref=f3e1582]: 1-888-925-8627
+                  - listitem [ref=f3e1583]:
+                    - text: "Email Support:"
+                    - link "support@intelligize.com" [ref=f3e1584] [cursor=pointer]:
+                      - /url: mailto:support@intelligize.com
+                  - listitem [ref=f3e1585]:
+                    - link "© 2026 LexisNexis®" [ref=f3e1586] [cursor=pointer]:
+                      - /url: https://www.lexisnexis.com/terms/copr/lngp/us/
+              - link [ref=f3e1589] [cursor=pointer]:
+                - /url: http://www.relxgroup.com/Pages/Home.aspx
+                - img "LexisNexis Logo" [ref=f3e1590]
+          - generic [ref=f3e3686]:
+            - generic [ref=f3e3687]:
+              - generic [ref=f3e3688]:
+                - generic [ref=f3e3689]:
+                  - generic [ref=f3e3690]:
+                    - button "Download" [ref=f3e3692] [cursor=pointer]
+                    - button "Email" [ref=f3e3697] [cursor=pointer]
+                    - button "Copy link to this document" [ref=f3e3702] [cursor=pointer]
+                    - generic [ref=f3e3706]:
+                      - button [ref=f3e3707] [cursor=pointer]
+                      - generic:
+                        - button "Print the selected items from the list below" [ref=f3e3713] [cursor=pointer]
+                        - button [ref=f3e3719] [cursor=pointer]
+                  - button "Notes & Highlights" [ref=f3e17977] [cursor=pointer]
+                - generic [ref=f3e3732]:
+                  - generic [ref=f3e3735]: "Search in Document:"
+                  - generic [ref=f3e3736]:
+                    - generic [ref=f3e3737]: Text
+                    - generic [ref=f3e3745]: iXBRL
+                  - textbox "Search" [ref=f3e3756]
+                - button [ref=f3e3760] [cursor=pointer]
+              - generic [ref=f3e3764]:
+                - generic [ref=f3e3765]: Cross-Reference
+                - generic [ref=f3e3773]: Highlight Accounting Items
+                - generic [ref=f3e3781]: Table Options
+            - generic [ref=f3e3790]:
+              - generic [ref=f3e3791]:
+                - generic "BLOOM ENERGY CORP" [ref=f3e3799] [cursor=pointer]
+                - generic [ref=f3e3800]: •
+                - generic [ref=f3e3801]: 10-Q (Q2 2026)
+                - generic [ref=f3e3803]: •
+                - generic [ref=f3e3804]: 07/28/2026
+              - generic [ref=f3e3806]:
+                - generic [ref=f3e3807]:
+                  - generic [ref=f3e3808]: "Zoom:"
+                  - generic [ref=f3e3809]: 100%
+                - generic [ref=f3e3822]:
+                  - button "Previous" [disabled] [ref=f3e3823]
+                  - button "Next" [ref=f3e3828] [cursor=pointer]
+            - generic [ref=f3e3839]:
+              - generic [ref=f3e3840]:
+                - button [ref=f3e3841] [cursor=pointer]
+                - generic [ref=f3e3846]:
+                  - button "1" [ref=f3e3847] [cursor=pointer]
+                  - button "2" [ref=f3e3848] [cursor=pointer]
+                  - button "3" [ref=f3e3849] [cursor=pointer]
+                  - button "4" [ref=f3e3850] [cursor=pointer]
+                  - button "5" [ref=f3e3851] [cursor=pointer]
+                  - button "6" [ref=f3e3852] [cursor=pointer]
+                  - button "7" [ref=f3e3853] [cursor=pointer]
+                  - button "8" [ref=f3e3854] [cursor=pointer]
+                  - button "9" [ref=f3e3855] [cursor=pointer]
+                  - button "10" [ref=f3e3856] [cursor=pointer]
+                  - button "11" [ref=f3e3857] [cursor=pointer]
+                  - button "12" [ref=f3e3858] [cursor=pointer]
+                  - button "13" [ref=f3e3859] [cursor=pointer]
+                  - button "14" [ref=f3e3860] [cursor=pointer]
+                  - button "15" [ref=f3e3861] [cursor=pointer]
+                  - button "16" [ref=f3e3862] [cursor=pointer]
+                  - button "17" [ref=f3e3863] [cursor=pointer]
+                  - button "18" [ref=f3e3864] [cursor=pointer]
+                  - button "19" [ref=f3e3865] [cursor=pointer]
+                  - button "20" [ref=f3e3866] [cursor=pointer]
+                  - button "21" [ref=f3e3867] [cursor=pointer]
+                  - button "22" [ref=f3e3868] [cursor=pointer]
+                  - button "23" [ref=f3e3869] [cursor=pointer]
+                  - button "24" [ref=f3e3870] [cursor=pointer]
+                  - button "25" [ref=f3e3871] [cursor=pointer]
+                  - button "26" [ref=f3e3872] [cursor=pointer]
+                  - button "27" [ref=f3e3873] [cursor=pointer]
+                  - button "28" [ref=f3e3874] [cursor=pointer]
+                  - button "29" [ref=f3e3875] [cursor=pointer]
+                  - button "30" [ref=f3e3876] [cursor=pointer]
+                  - button "31" [ref=f3e3877] [cursor=pointer]
+                  - button "32" [ref=f3e3878] [cursor=pointer]
+                  - button "33" [ref=f3e3879] [cursor=pointer]
+                  - button "34" [ref=f3e3880] [cursor=pointer]
+                  - button "35" [ref=f3e3881] [cursor=pointer]
+                  - button "36" [ref=f3e3882] [cursor=pointer]
+                  - button "37" [ref=f3e3883] [cursor=pointer]
+                  - button "38" [ref=f3e3884] [cursor=pointer]
+                  - button "39" [ref=f3e3885] [cursor=pointer]
+                  - button "40" [ref=f3e3886] [cursor=pointer]
+                  - button "41" [ref=f3e3887] [cursor=pointer]
+                  - button "42" [ref=f3e3888] [cursor=pointer]
+                  - button "43" [ref=f3e3889] [cursor=pointer]
+                  - button "44" [ref=f3e3890] [cursor=pointer]
+                  - button "45" [ref=f3e3891] [cursor=pointer]
+                  - button "46" [ref=f3e3892] [cursor=pointer]
+                  - button "47" [ref=f3e3893] [cursor=pointer]
+                  - button "48" [ref=f3e3894] [cursor=pointer]
+                  - button "49" [ref=f3e3895] [cursor=pointer]
+                  - button "50" [ref=f3e3896] [cursor=pointer]
+                  - button "51" [ref=f3e3897] [cursor=pointer]
+                  - button "52" [ref=f3e3898] [cursor=pointer]
+                  - button "53" [ref=f3e3899] [cursor=pointer]
+                  - button "54" [ref=f3e3900] [cursor=pointer]
+                  - button "55" [ref=f3e3901] [cursor=pointer]
+                  - button "56" [ref=f3e3902] [cursor=pointer]
+                  - button "57" [ref=f3e3903] [cursor=pointer]
+                  - button "58" [ref=f3e3904] [cursor=pointer]
+                - button [ref=f3e3905] [cursor=pointer]
+              - generic [ref=f3e3909]:
+                - generic [ref=f3e13084]: 
+                - generic [ref=f3e3911]:
+                  - generic [ref=f3e3912]: 58 pages
+                  - text: Html2MB
+          - generic [ref=f3e5566]:
+            - generic [ref=f3e5567]:
+              - generic [ref=f3e5568]:
+                - generic [ref=f3e5569]:
+                  - generic [ref=f3e5570]:
+                    - button "Download" [ref=f3e5572] [cursor=pointer]
+                    - button "Email" [ref=f3e5577] [cursor=pointer]
+                    - button "Copy link to this document" [ref=f3e5582] [cursor=pointer]
+                    - generic [ref=f3e5586]:
+                      - button [ref=f3e5587] [cursor=pointer]
+                      - generic:
+                        - button "Print the selected items from the list below" [ref=f3e5593] [cursor=pointer]
+                        - button [ref=f3e5599] [cursor=pointer]
+                  - button "Notes & Highlights" [ref=f3e17990] [cursor=pointer]
+                - generic [ref=f3e6402]:
+                  - generic [ref=f3e6405]: "Search in Document:"
+                  - generic [ref=f3e6406]:
+                    - generic [ref=f3e6407]: Text
+                    - generic [ref=f3e6415]: iXBRL
+                  - textbox "Search" [ref=f3e6426]
+                - button [ref=f3e5621] [cursor=pointer]
+              - generic [ref=f3e5625]:
+                - generic [ref=f3e5626]: Cross-Reference
+                - generic [ref=f3e5634]: Highlight Accounting Items
+                - generic [ref=f3e6430]: Table Options
+            - generic [ref=f3e5642]:
+              - generic [ref=f3e5643]:
+                - generic "EQUITY LIFESTYLE PROPERTIES INC" [ref=f3e6446] [cursor=pointer]
+                - generic [ref=f3e5644]: •
+                - generic [ref=f3e6447]: 10-Q (Q2 2026)
+                - generic [ref=f3e5645]: •
+                - generic [ref=f3e6449]: 07/28/2026
+              - generic [ref=f3e5646]:
+                - generic [ref=f3e5647]:
+                  - generic [ref=f3e5648]: "Zoom:"
+                  - generic [ref=f3e5649]: 100%
+                - generic [ref=f3e5662]:
+                  - button "Previous" [ref=f3e5663] [cursor=pointer]
+                  - button "Next" [ref=f3e5668] [cursor=pointer]
+            - generic [ref=f3e5679]:
+              - generic [ref=f3e5680]:
+                - button [ref=f3e5681] [cursor=pointer]
+                - generic [ref=f3e5686]:
+                  - button "C" [ref=f3e5687] [cursor=pointer]
+                  - button "2" [ref=f3e5688] [cursor=pointer]
+                  - button "3" [ref=f3e5689] [cursor=pointer]
+                  - button "4" [ref=f3e5690] [cursor=pointer]
+                  - button "5" [ref=f3e5691] [cursor=pointer]
+                  - button "6" [ref=f3e5692] [cursor=pointer]
+                  - button "7" [ref=f3e5693] [cursor=pointer]
+                  - button "8" [ref=f3e5694] [cursor=pointer]
+                  - button "9" [ref=f3e5695] [cursor=pointer]
+                  - button "10" [ref=f3e5696] [cursor=pointer]
+                  - button "11" [ref=f3e5697] [cursor=pointer]
+                  - button "12" [ref=f3e5698] [cursor=pointer]
+                  - button "13" [ref=f3e5699] [cursor=pointer]
+                  - button "14" [ref=f3e5700] [cursor=pointer]
+                  - button "15" [ref=f3e5701] [cursor=pointer]
+                  - button "16" [ref=f3e5702] [cursor=pointer]
+                  - button "17" [ref=f3e5703] [cursor=pointer]
+                  - button "18" [ref=f3e5704] [cursor=pointer]
+                  - button "19" [ref=f3e5705] [cursor=pointer]
+                  - button "20" [ref=f3e5706] [cursor=pointer]
+                  - button "21" [ref=f3e5707] [cursor=pointer]
+                  - button "22" [ref=f3e5708] [cursor=pointer]
+                  - button "23" [ref=f3e5709] [cursor=pointer]
+                  - button "24" [ref=f3e5710] [cursor=pointer]
+                  - button "25" [ref=f3e5711] [cursor=pointer]
+                  - button "26" [ref=f3e5712] [cursor=pointer]
+                  - button "27" [ref=f3e5713] [cursor=pointer]
+                  - button "28" [ref=f3e5714] [cursor=pointer]
+                  - button "29" [ref=f3e5715] [cursor=pointer]
+                  - button "30" [ref=f3e5716] [cursor=pointer]
+                  - button "31" [ref=f3e5717] [cursor=pointer]
+                  - button "32" [ref=f3e5718] [cursor=pointer]
+                  - button "33" [ref=f3e5719] [cursor=pointer]
+                  - button "34" [ref=f3e5720] [cursor=pointer]
+                  - button "35" [ref=f3e5721] [cursor=pointer]
+                  - button "36" [ref=f3e5722] [cursor=pointer]
+                  - button "37" [ref=f3e5723] [cursor=pointer]
+                  - button "38" [ref=f3e5724] [cursor=pointer]
+                  - button "39" [ref=f3e5725] [cursor=pointer]
+                  - button "40" [ref=f3e5726] [cursor=pointer]
+                - button [ref=f3e5727] [cursor=pointer]
+              - generic [ref=f3e5731]:
+                - generic [ref=f3e13092]: 
+                - generic [ref=f3e5733]:
+                  - generic [ref=f3e5734]: 40 pages
+                  - text: Html2MB
+          - generic [ref=f3e10893]:
+            - generic [ref=f3e10894]:
+              - generic [ref=f3e10895]:
+                - generic [ref=f3e10896]:
+                  - generic [ref=f3e10897]:
+                    - button "Download" [ref=f3e10899] [cursor=pointer]
+                    - button "Email" [ref=f3e10904] [cursor=pointer]
+                    - button "Copy link to this document" [ref=f3e10909] [cursor=pointer]
+                    - generic [ref=f3e10913]:
+                      - button [ref=f3e10914] [cursor=pointer]
+                      - generic:
+                        - button "Print the selected items from the list below" [ref=f3e10920] [cursor=pointer]
+                        - button [ref=f3e10926] [cursor=pointer]
+                  - button "Notes & Highlights" [ref=f3e18003] [cursor=pointer]
+                - generic [ref=f3e11700]:
+                  - generic [ref=f3e11703]: "Search in Document:"
+                  - generic [ref=f3e11704]:
+                    - generic [ref=f3e11705]: Text
+                    - generic [ref=f3e11713]: iXBRL
+                  - textbox "Search" [ref=f3e11724]
+                - button [ref=f3e10948] [cursor=pointer]
+              - generic [ref=f3e10952]:
+                - generic [ref=f3e10953]: Cross-Reference
+                - generic [ref=f3e10961]: Highlight Accounting Items
+                - generic [ref=f3e11728]: Table Options
+            - generic [ref=f3e10969]:
+              - generic [ref=f3e10970]:
+                - generic "BLOOM ENERGY CORP" [ref=f3e11744] [cursor=pointer]
+                - generic [ref=f3e10971]: •
+                - generic [ref=f3e11745]: 10-Q/A (Q2 2026)
+                - generic [ref=f3e10972]: •
+                - generic [ref=f3e11747]: 07/29/2026
+              - generic [ref=f3e10973]:
+                - generic [ref=f3e10974]:
+                  - generic [ref=f3e10975]: "Zoom:"
+                  - generic [ref=f3e10976]: 100%
+                - generic [ref=f3e10989]:
+                  - button "Previous" [disabled] [ref=f3e10990]
+                  - button "Next" [ref=f3e10995] [cursor=pointer]
+            - generic [ref=f3e11006]:
+              - generic [ref=f3e11007]:
+                - button [ref=f3e11008] [cursor=pointer]
+                - generic [ref=f3e11013]:
+                  - button "1" [ref=f3e11014] [cursor=pointer]
+                  - button "2" [ref=f3e11015] [cursor=pointer]
+                  - button "3" [ref=f3e11016] [cursor=pointer]
+                  - button "4" [ref=f3e11017] [cursor=pointer]
+                  - button "5" [ref=f3e11018] [cursor=pointer]
+                  - button "6" [ref=f3e11019] [cursor=pointer]
+                  - button "7" [ref=f3e11020] [cursor=pointer]
+                  - button "8" [ref=f3e11021] [cursor=pointer]
+                  - button "9" [ref=f3e11022] [cursor=pointer]
+                  - button "10" [ref=f3e11023] [cursor=pointer]
+                  - button "11" [ref=f3e11024] [cursor=pointer]
+                  - button "12" [ref=f3e11025] [cursor=pointer]
+                  - button "13" [ref=f3e11026] [cursor=pointer]
+                  - button "14" [ref=f3e11027] [cursor=pointer]
+                  - button "15" [ref=f3e11028] [cursor=pointer]
+                  - button "16" [ref=f3e11029] [cursor=pointer]
+                  - button "17" [ref=f3e11030] [cursor=pointer]
+                  - button "18" [ref=f3e11031] [cursor=pointer]
+                  - button "19" [ref=f3e11032] [cursor=pointer]
+                  - button "20" [ref=f3e11033] [cursor=pointer]
+                  - button "21" [ref=f3e11034] [cursor=pointer]
+                  - button "22" [ref=f3e11035] [cursor=pointer]
+                  - button "23" [ref=f3e11036] [cursor=pointer]
+                  - button "24" [ref=f3e11037] [cursor=pointer]
+                  - button "25" [ref=f3e11038] [cursor=pointer]
+                  - button "26" [ref=f3e11039] [cursor=pointer]
+                  - button "27" [ref=f3e11040] [cursor=pointer]
+                  - button "28" [ref=f3e11041] [cursor=pointer]
+                  - button "29" [ref=f3e11042] [cursor=pointer]
+                  - button "30" [ref=f3e11043] [cursor=pointer]
+                  - button "31" [ref=f3e11044] [cursor=pointer]
+                  - button "32" [ref=f3e11045] [cursor=pointer]
+                  - button "33" [ref=f3e11046] [cursor=pointer]
+                  - button "34" [ref=f3e11047] [cursor=pointer]
+                  - button "35" [ref=f3e11048] [cursor=pointer]
+                  - button "36" [ref=f3e11049] [cursor=pointer]
+                  - button "37" [ref=f3e11050] [cursor=pointer]
+                  - button "38" [ref=f3e11051] [cursor=pointer]
+                  - button "39" [ref=f3e11052] [cursor=pointer]
+                  - button "40" [ref=f3e11053] [cursor=pointer]
+                  - button "41" [ref=f3e11054] [cursor=pointer]
+                - button [ref=f3e11055] [cursor=pointer]
+              - generic [ref=f3e11059]:
+                - generic [ref=f3e13100]: 
+                - generic [ref=f3e11061]:
+                  - generic [ref=f3e11062]: 41 pages
+                  - text: Html2MB
+          - generic [ref=f3e18015]:
+            - generic [ref=f3e18016]:
+              - generic [ref=f3e18017]:
+                - generic [ref=f3e18018]:
+                  - generic [ref=f3e18019]:
+                    - button "Download" [ref=f3e18021] [cursor=pointer]
+                    - button "Email" [ref=f3e18026] [cursor=pointer]
+                    - button "Copy link to this document" [ref=f3e18031] [cursor=pointer]
+                    - generic [ref=f3e18035]:
+                      - button [ref=f3e18036] [cursor=pointer]
+                      - generic:
+                        - button "Print the selected items from the list below" [ref=f3e18042] [cursor=pointer]
+                        - button [ref=f3e18048] [cursor=pointer]
+                  - button "Notes & Highlights" [ref=f3e18055] [cursor=pointer]
+                - generic [ref=f3e18061]:
+                  - generic [ref=f3e18064]: "Search in Document:"
+                  - generic [ref=f3e18065]:
+                    - generic [ref=f3e18066]: Text
+                    - generic [ref=f3e18074]: iXBRL
+                  - textbox "Search" [ref=f3e18085]
+                - button [ref=f3e18089] [cursor=pointer]
+              - generic [ref=f3e18093]:
+                - generic [ref=f3e18094]: Cross-Reference
+                - generic [ref=f3e18102]: Highlight Accounting Items
+                - generic [ref=f3e18110]: Table Options
+            - generic [ref=f3e18119]:
+              - generic [ref=f3e18120]:
+                - generic "DOVER CORP" [ref=f3e18128] [cursor=pointer]
+                - generic [ref=f3e18129]: •
+                - generic [ref=f3e18130]: 10-Q (Q2 2026)
+                - generic [ref=f3e18132]: •
+                - generic [ref=f3e18133]: 07/23/2026
+              - generic [ref=f3e18135]:
+                - generic [ref=f3e18136]:
+                  - generic [ref=f3e18137]: "Zoom:"
+                  - generic [ref=f3e18138]: 100%
+                - generic [ref=f3e18151]:
+                  - button "Previous" [ref=f3e18152] [cursor=pointer]
+                  - button "Next" [ref=f3e18157] [cursor=pointer]
+            - generic [ref=f3e18164]:
+              - iframe [ref=f3e18167]:
+                
+              - generic [ref=f3e18168]:
+                - generic [ref=f3e18169]:
+                  - button [ref=f3e18170] [cursor=pointer]
+                  - generic [ref=f3e18175]:
+                    - button "C" [ref=f3e18176] [cursor=pointer]
+                    - button "T" [ref=f3e18177] [cursor=pointer]
+                    - button "1" [ref=f3e18178] [cursor=pointer]
+                    - button "2" [ref=f3e18179] [cursor=pointer]
+                    - button "3" [ref=f3e18180] [cursor=pointer]
+                    - button "4" [ref=f3e18181] [cursor=pointer]
+                    - button "5" [ref=f3e18182] [cursor=pointer]
+                    - button "6" [ref=f3e18183] [cursor=pointer]
+                    - button "7" [ref=f3e18184] [cursor=pointer]
+                    - button "8" [ref=f3e18185] [cursor=pointer]
+                    - button "9" [ref=f3e18186] [cursor=pointer]
+                    - button "10" [ref=f3e18187] [cursor=pointer]
+                    - button "11" [ref=f3e18188] [cursor=pointer]
+                    - button "12" [ref=f3e18189] [cursor=pointer]
+                    - button "13" [ref=f3e18190] [cursor=pointer]
+                    - button "14" [ref=f3e18191] [cursor=pointer]
+                    - button "15" [ref=f3e18192] [cursor=pointer]
+                    - button "16" [ref=f3e18193] [cursor=pointer]
+                    - button "17" [ref=f3e18194] [cursor=pointer]
+                    - button "18" [ref=f3e18195] [cursor=pointer]
+                    - button "19" [ref=f3e18196] [cursor=pointer]
+                    - button "20" [ref=f3e18197] [cursor=pointer]
+                    - button "21" [ref=f3e18198] [cursor=pointer]
+                    - button "22" [ref=f3e18199] [cursor=pointer]
+                    - button "23" [ref=f3e18200] [cursor=pointer]
+                    - button "24" [ref=f3e18201] [cursor=pointer]
+                    - button "25" [ref=f3e18202] [cursor=pointer]
+                    - button "26" [ref=f3e18203] [cursor=pointer]
+                    - button "27" [ref=f3e18204] [cursor=pointer]
+                    - button "28" [ref=f3e18205] [cursor=pointer]
+                    - button "29" [ref=f3e18206] [cursor=pointer]
+                    - button "30" [ref=f3e18207] [cursor=pointer]
+                    - button "31" [ref=f3e18208] [cursor=pointer]
+                    - button "32" [ref=f3e18209] [cursor=pointer]
+                    - button "33" [ref=f3e18210] [cursor=pointer]
+                    - button "34" [ref=f3e18211] [cursor=pointer]
+                    - button "35" [ref=f3e18212] [cursor=pointer]
+                    - button "36" [ref=f3e18213] [cursor=pointer]
+                    - button "37" [ref=f3e18214] [cursor=pointer]
+                    - button "38" [ref=f3e18215] [cursor=pointer]
+                    - button "39" [ref=f3e18216] [cursor=pointer]
+                    - button "40" [ref=f3e18217] [cursor=pointer]
+                    - button "41" [ref=f3e18218] [cursor=pointer]
+                    - button "42" [ref=f3e18219] [cursor=pointer]
+                    - button "43" [ref=f3e18220] [cursor=pointer]
+                    - button "44" [ref=f3e18221] [cursor=pointer]
+                    - button "45" [ref=f3e18222] [cursor=pointer]
+                    - button "46" [ref=f3e18223] [cursor=pointer]
+                  - button [ref=f3e18224] [cursor=pointer]
+                - generic [ref=f3e18228]:
+                  - generic [ref=f3e18229]: 
+                  - generic [ref=f3e18230]:
+                    - generic [ref=f3e18231]: 48 pages
+                    - text: Html2MB
+      - generic "Support Chat" [ref=f3e1591]:
+        - button "Live Person" [ref=f3e1593]
+  - generic:
+    - generic:
+      - iframe

@@ -5,6 +5,7 @@ import {
   configureDisplayColumns,
   fillAndEnter,
   getTabText,
+  getTargetDateString,
   parseCount,
 } from "../../utils/helpers";
 
@@ -21,16 +22,29 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
 
   const testCases = [
     {
-      date: "Yesterday",
+      date: getTargetDateString(),
       agent: "Akin Gump Strauss Hauer & Feld LLP",
+      alias: ["Akin Gump Strauss Hauer & Feld LLP"],
       count: 15,
     },
     {
-      date: "Yesterday",
+      date: getTargetDateString(),
       agent: "Broadridge Financial Solutions, Inc",
+      alias: ["Broadridge Financial Solutions, Inc./FA", "Broadridge Investor Communication Solutions, Inc"],
       count: 15,
     },
-    { date: "Yesterday", agent: "Donnelley Financial Solutions", count: 15 },
+    {
+      date: getTargetDateString(),
+      agent: "Donnelley Financial Solutions",
+      alias: [
+        "Donnelley Financial /ArcFiling/",
+        "DONNELLEY FINANCIAL SOLUTIONS",
+        "DONNELLEY FINANCIAL SOLUTIONS /FA/",
+        "DONNELLEY FINANCIAL SOLUTIONS 03/FA",
+        "DONNELLEY FINANCIAL SOLUTIONS/NY",
+      ],
+      count: 15
+    },
   ];
 
   let tabIndex = 0;
@@ -75,7 +89,7 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
       findings = await scrapeFilingAgentResults(
         actualTarget,
         page,
-        scenario.agent,
+        scenario,
       );
     }
 
@@ -110,7 +124,7 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
 async function scrapeFilingAgentResults(
   targetCount: number,
   page: Page,
-  expectedAgent: string,
+  scenario: any,
 ) {
   let resultsFound = 0;
   const processedIds = new Set<string>();
@@ -149,9 +163,11 @@ async function scrapeFilingAgentResults(
 
           const isLineMissingData =
             filingAgent == "No Filing Agent Found" || !accessionNo;
-          const match = filingAgent
-            .toLowerCase()
-            .includes(expectedAgent.toLowerCase());
+         
+          const names = [scenario.agent, ...scenario.alias];
+          const match = names.some(name =>
+            filingAgent.toLowerCase().includes(name.toLowerCase())
+          );
 
           if (isLineMissingData) {
             isScenarioValid = false;

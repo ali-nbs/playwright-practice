@@ -4,8 +4,10 @@ import {
   closeAllOpenTabs,
   fillAndEnter,
   getTabText,
+  getTargetDateString,
   parseCount,
 } from "../../utils/helpers";
+import { calculateDynamicFiscal } from "../../Daily-DataPoints-Sheets/Fiscal-Year/fiscalYear.batch.spec";
 
 const IDENTIFIER = "sf_fiscalYear";
 
@@ -21,12 +23,11 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
   await clearBtn.click({ force: true });
   await page.waitForTimeout(2000);
 
-  // 1. Set Initial Filters
   await page.getByTestId("amendmentFilings-radio-EXC").click();
   await page.getByTestId("ownershipForms-radio-INC").click();
 
   logToFile(`Testing Scenario: Yesterday`);
-  await fillAndEnter(page, dateInput, "Yesterday");
+  await fillAndEnter(page, dateInput, getTargetDateString());
 
   const exhibtsToFilingsCheckbox = page.locator(
     'label[for="-ExhibitsToFilings"]',
@@ -41,7 +42,7 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
     logToFile("No results to process.");
     const scenarioBlock = [
       `Scenario Status: "VALID ✅" `,
-      `Date: Yesterday`,
+      `Date: ${getTargetDateString()}`,
       `Failure Companies:"None"}`,
     ].join("\n");
     await updateGoogleSheet(scenarioBlock, IDENTIFIER, []);
@@ -50,15 +51,12 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
     return;
   }
 
-  // 2. Column Configuration (Checkbox setup)
   await configureFiscalYearColumns(page);
 
-  // 3. Process Results
   const docsCount = parseCount(textDateOnly);
-  const actualTarget = Math.min(1, docsCount); // Processing 1 as per original script
+  const actualTarget = Math.min(5, docsCount); 
   const findings = await scrapeFiscalYearResults(actualTarget, page);
 
-  // 4. Reporting
   const scenarioBlock = [
     `Scenario Status: ${findings.isValid ? "VALID ✅" : "INVALID ❌"}`,
     `Date: Yesterday`,
@@ -75,9 +73,6 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
   logToFile("--- End of Report ---");
 };
 
-/**
- * Internal Logic: Scrape and Validate
- */
 const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
   let resultsFound = 0;
   const processedIds = new Set<string>();
@@ -104,10 +99,10 @@ const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
           await page.waitForTimeout(500);
 
           const isValid = await validateFiscalYear(page, activeTab);
-          if (!isValid) failureCompanies.push(anchorLinks[0]);
+          if (!isValid.status) failureCompanies.push(anchorLinks[0]);
 
           processedIds.add(rowId);
-          await activeTab.nth(1).click(); // Return to results tab
+          await activeTab.nth(1).click(); 
           resultsFound++;
         } catch (e) {
           continue;
@@ -123,53 +118,132 @@ const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
   return { text: failureCompanies, isValid: failureCompanies.length === 0 };
 };
 
-/**
- * Internal Logic: iXBRL and XBRL Frame Validation
- */
-const validateFiscalYear = async (page: Page, activeTab: Locator) => {
+const validateFiscalYear = async (
+  page: Page,
+  activeTab: Locator,
+): Promise<{ status: boolean; reason: string }> => {
   const fiscalYearRow = page
     .locator("div.CompanyInfoSummary__company-info__row___3nnEE")
     .filter({ hasText: "Fiscal Year End" });
+
   await page.waitForTimeout(2000);
 
-  if ((await fiscalYearRow.count()) <= 0) return false;
+  if ((await fiscalYearRow.count()) === 0) {
+    return {
+      status: false,
+      reason: "Fiscal Year End field missing in Company Profile",
+    };
+  }
+
+  const fiscalYearEndValue = (
+    await fiscalYearRow.locator("div").last().textContent()
+  )?.trim();
 
   const companyTabIndex = (await activeTab.count()) - 1;
+
   const rows = page.locator("tr.periodicFilingsContent__tableRow___trkDv");
 
-  if ((await rows.count()) > 0) {
-    const link = rows
-      .first()
-      .locator("td.periodicFilingsContent__formType___L_1Ma a")
-      .first();
-    const linkText = await link.innerText();
-
-    if (linkText.match(/10-K|10-Q|20-F/) && !linkText.includes("NT")) {
-      await link.click();
-      const ixbrlBtn = page.locator("text=/^iXBRL$/i").first();
-      await ixbrlBtn.click();
-
-      try {
-        await page.locator("text=/^EX-101$/i").first().click();
-        const xbrlFrame = page
-          .locator("div.HtmlViewer__viewer___ZSwJe iframe")
-          .first()
-          .contentFrame();
-        await xbrlFrame
-          .locator("td.pl, .xbrl, table")
-          .first()
-          .waitFor({ state: "visible", timeout: 20000 });
-
-        // Return to company tab
-        await activeTab.nth(companyTabIndex).click();
-      } catch (e) {}
-    }
+  if ((await rows.count()) === 0) {
+    return {
+      status: false,
+      reason: "No filing rows found.",
+    };
   }
-  return true;
-};
 
+  const link = rows
+    .first()
+    .locator("td.periodicFilingsContent__formType___L_1Ma a")
+    .first();
+
+  const linkText = await link.innerText();
+
+  if (
+    !/\b(?:10|20)-(?:K|Q|F)(?:\/A)?\b/.test(linkText) ||
+    linkText.includes("NT")
+  ) {
+    return {
+      status: false,
+      reason: "Latest filing is not a supported annual/quarterly filing.",
+    };
+  }
+
+  await link.click();
+
+  try {
+    await page.locator("text=/^iXBRL$/i").first().click();
+    await page.locator("text=/^EX-101$/i").first().click();
+
+    const xbrlFrame = page.frameLocator(
+      "div.HtmlViewer__viewer___ZSwJe iframe",
+    );
+
+    await xbrlFrame
+      .locator(".HtmlViewer-styles__xbrl-report-table-attribs___2OtRf")
+      .first()
+      .waitFor({
+        state: "visible",
+        timeout: 40000,
+      });
+
+    const getValue = async (labels: string[]): Promise<string> => {
+      for (const label of labels) {
+        const row = xbrlFrame
+          .locator("tr")
+          .filter({
+            has: xbrlFrame.locator(`td.pl >> text=/^${label}$/i`),
+          })
+          .first();
+
+        if ((await row.count()) === 0) continue;
+
+        const cells = row.locator("td.text");
+
+        for (let i = 0; i < (await cells.count()); i++) {
+          const text = (await cells.nth(i).textContent())?.trim() ?? "";
+          if (/\d/.test(text)) {
+            return text;
+          }
+        }
+      }
+
+      return "";
+    };
+
+    const yearEnd = await getValue([
+      "Current Fiscal Year End Date",
+      "Fiscal Year End",
+    ]);
+
+    await activeTab.nth(companyTabIndex).click();
+
+    if (!yearEnd) {
+      return {
+        status: false,
+        reason: "Fiscal Year End not found in XBRL.",
+      };
+    }
+    
+    const normalize = (value: string) => value.replace(/^--/, "").trim();
+
+    const isMatch =
+      normalize(fiscalYearEndValue ?? "") === normalize(yearEnd);
+
+    return {
+      status: isMatch,
+      reason: isMatch
+        ? ""
+        : `Mismatch. Company Profile: ${fiscalYearEndValue}, XBRL: ${yearEnd}`,
+    };
+  } catch {
+    await activeTab.nth(companyTabIndex).click();
+
+    return {
+      status: false,
+      reason: "Unable to read Fiscal Year End from XBRL.",
+    };
+  }
+};
 const configureFiscalYearColumns = async (page: Page) => {
-  // Helper to handle the "Filing Info" and "Company Info" checkbox logic
   const sections = ["Filing Info", "Company Info"];
   for (const section of sections) {
     await page
@@ -183,9 +257,9 @@ const configureFiscalYearColumns = async (page: Page) => {
       .locator("div")
       .filter({ hasText: new RegExp(`^${section}$`) })
       .locator("._checkbox__icon_1xotg_257");
-    await mainCheckbox.click(); // Toggle off
+    await mainCheckbox.click();
     await page.waitForTimeout(500);
-    await mainCheckbox.click(); // Toggle on (to ensure clean slate)
+    await mainCheckbox.click(); 
 
     if (section === "Filing Info") {
       await page

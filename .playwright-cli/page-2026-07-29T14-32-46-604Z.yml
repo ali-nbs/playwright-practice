@@ -1,0 +1,955 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e5]:
+    - navigation [ref=f3e6]:
+      - generic "Click here to return to main menu" [ref=f3e10] [cursor=pointer]:
+        - img "Intelligize" [ref=f3e11]
+      - generic [ref=f3e12]:
+        - generic [ref=f3e17]:
+          - textbox "Company Name, Ticker, CIK or List to search in Accounting Analytics" [ref=f3e23]
+          - button [ref=f3e25] [cursor=pointer]
+        - generic [ref=f3e29]:
+          - generic [ref=f3e31] [cursor=pointer]:
+            - generic [ref=f3e32]: "Client ID:"
+            - generic "None" [ref=f3e33]: "- None -"
+          - button "My Workspace" [ref=f3e35] [cursor=pointer]
+          - generic [ref=f3e36]: Support
+      - generic "hafiz.a!i007 - hafiz.ali@northbaysolutions.net" [ref=f3e45] [cursor=pointer]: HA
+    - generic [ref=f3e46]:
+      - generic [ref=f3e47]:
+        - generic [ref=f3e48] [cursor=pointer]: Filters
+        - generic [ref=f3e11750]:
+          - generic [ref=f3e11751]:
+            - generic [ref=f3e11752]:
+              - generic [ref=f3e11753]: Accounting Analytics
+              - button "Search" [ref=f3e11760] [cursor=pointer]
+            - generic [ref=f3e11764]:
+              - button "Save Search" [ref=f3e11767] [cursor=pointer]
+              - button "Add Alert" [ref=f3e11773] [cursor=pointer]
+              - button "Clear Filters" [ref=f3e11779] [cursor=pointer]
+          - generic [ref=f3e11783]:
+            - generic [ref=f3e11784]:
+              - generic [ref=f3e11785]: Search Filters
+              - textbox "Type to find filters" [ref=f3e11788]
+            - generic [ref=f3e11794]:
+              - generic [ref=f3e11795]: Search for
+              - generic [ref=f3e11796]:
+                - generic [ref=f3e11797]: Filings
+                - generic [ref=f3e11806]: Exhibits to Filings
+            - generic [ref=f3e11815]:
+              - generic [ref=f3e11818]:
+                - generic [ref=f3e11819]:
+                  - generic [ref=f3e11820]: Company, List and Peers
+                  - generic "Contains" [ref=f3e11829] [cursor=pointer]
+                - generic [ref=f3e11833]:
+                  - textbox "Name, Ticker, CIK, or Saved List" [ref=f3e11839]
+                  - generic: Include former names
+              - generic [ref=f3e11858]:
+                - generic [ref=f3e11859]: Any role
+                - generic [ref=f3e11867]: Main filer
+            - generic [ref=f3e11874]:
+              - generic [ref=f3e11875]: Keywords
+              - textbox [ref=f3e11883]
+            - button "Expand Keywords" [disabled] [ref=f3e11891]
+            - generic [ref=f3e11896]:
+              - generic [ref=f3e11898]:
+                - generic [ref=f3e11899]: Date
+                - generic "Filed" [ref=f3e11904] [cursor=pointer]
+              - textbox [ref=f3e11914]
+            - generic [ref=f3e11922]:
+              - generic [ref=f3e11923]:
+                - generic [ref=f3e11924]: Filing Info
+                - generic [ref=f3e11925]: Less
+              - generic [ref=f3e11930]:
+                - generic [ref=f3e11931]: Comment Letters - 10-K items
+                - generic [ref=f3e11941]:
+                  - generic [ref=f3e11942]: Forms
+                  - generic [ref=f3e11950]:
+                    - generic "10-K - Annual report with comprehensive company overview" [ref=f3e11951] [cursor=pointer]: 10-K
+                    - generic "10-Q - Quarterly report with comprehensive company overview" [ref=f3e11956] [cursor=pointer]: 10-Q
+                    - textbox [ref=f3e11962]
+                - generic [ref=f3e11970]: Section
+                - generic [ref=f3e11983]:
+                  - generic [ref=f3e11984]: Keywords in Section Title
+                  - textbox [ref=f3e11992]
+                - generic [ref=f3e11999]:
+                  - generic [ref=f3e12000]: Table Type/Title
+                  - textbox [ref=f3e12010]
+                - generic [ref=f3e12019]:
+                  - generic [ref=f3e12020]: Search In Table
+                  - textbox [ref=f3e12030]
+                - generic [ref=f3e12038]:
+                  - generic [ref=f3e12039]: Financial Statement Year
+                  - generic [ref=f3e12043]:
+                    - textbox [ref=f3e12050]
+                    - textbox [ref=f3e12057]
+                - generic [ref=f3e12058]:
+                  - generic [ref=f3e12059]: Accession Number
+                  - textbox [ref=f3e12069]
+            - generic [ref=f3e12070]:
+              - generic [ref=f3e12071]:
+                - generic [ref=f3e12072]: Accounting Info
+                - generic [ref=f3e12073]: Less
+              - generic [ref=f3e12078]:
+                - generic [ref=f3e12080]:
+                  - generic [ref=f3e12081]:
+                    - generic [ref=f3e12082]: Non-GAAP Items
+                    - generic "Contains" [ref=f3e12087] [cursor=pointer]
+                  - textbox [ref=f3e12097]
+                - generic [ref=f3e12106]:
+                  - generic [ref=f3e12107]: Accounting Standards (ASCs in the document)
+                  - textbox [ref=f3e12117]
+                - generic [ref=f3e12126]:
+                  - generic [ref=f3e12127]: New Accounting Disclosures and Policies
+                  - generic [ref=f3e12131]:
+                    - generic [ref=f3e12135]:
+                      - generic "All ASU" [ref=f3e12136] [cursor=pointer]
+                      - textbox [ref=f3e12142]
+                    - generic [ref=f3e12150]:
+                      - generic [ref=f3e12151]: Early Adopted
+                      - generic [ref=f3e12159]: Was Adopted
+                      - generic [ref=f3e12164]: Will Be Adopted
+                      - generic [ref=f3e12169]: Disclosed, But No Decision On Adoption
+                - generic [ref=f3e12175]:
+                  - generic [ref=f3e12176]:
+                    - generic [ref=f3e12177]: Critical Audit Matters (CAMs)
+                    - generic "Contains" [ref=f3e12182] [cursor=pointer]
+                  - textbox [ref=f3e12192]
+                - generic [ref=f3e12201]:
+                  - generic [ref=f3e12202]:
+                    - generic [ref=f3e12203]: Significant Accounting Policies
+                    - generic "Contains" [ref=f3e12208] [cursor=pointer]
+                  - textbox [ref=f3e12218]
+                - generic [ref=f3e12227]:
+                  - generic [ref=f3e12228]:
+                    - generic [ref=f3e12229]: Critical Accounting Estimates
+                    - generic "Contains" [ref=f3e12234] [cursor=pointer]
+                  - textbox [ref=f3e12244]
+            - generic [ref=f3e12252]:
+              - generic [ref=f3e12253]:
+                - generic [ref=f3e12254]: Sarbanes-Oxley Disclosure Info
+                - generic [ref=f3e12255]: Less
+              - generic [ref=f3e12260]:
+                - generic [ref=f3e12263]:
+                  - generic [ref=f3e12264]: Material Weakness
+                  - textbox [ref=f3e12274]
+                - generic [ref=f3e12283]:
+                  - generic [ref=f3e12284]: Auditor Opinions of Internal Controls
+                  - textbox [ref=f3e12294]
+                - generic [ref=f3e12303]:
+                  - generic [ref=f3e12304]: Management Assessments of Internal Controls
+                  - textbox [ref=f3e12314]
+            - generic [ref=f3e12322]:
+              - generic [ref=f3e12323]:
+                - generic [ref=f3e12324]: Restatements
+                - generic [ref=f3e12325]: Less
+              - generic [ref=f3e12332]:
+                - generic [ref=f3e12333]:
+                  - generic [ref=f3e12334]: Restatement Reasons
+                  - generic "Contains" [ref=f3e12339] [cursor=pointer]
+                - textbox [ref=f3e12349]
+            - generic [ref=f3e12357]:
+              - generic [ref=f3e12358]:
+                - generic [ref=f3e12359]: Auditor Info
+                - generic [ref=f3e12360]: Less
+              - generic [ref=f3e12365]:
+                - generic [ref=f3e12367]:
+                  - generic [ref=f3e12368]: Accounting Firm
+                  - textbox [ref=f3e12378]
+                - generic [ref=f3e12387]:
+                  - generic [ref=f3e12388]: Auditor Location
+                  - textbox [ref=f3e12398]
+                - generic [ref=f3e12407]:
+                  - generic [ref=f3e12408]: Engagement Partner
+                  - textbox [ref=f3e12418]
+                - generic [ref=f3e12426]:
+                  - generic [ref=f3e12427]: Accounting Fees
+                  - textbox [ref=f3e12437]
+                - generic [ref=f3e12445]:
+                  - generic [ref=f3e12446]: Auditor Change
+                  - generic [ref=f3e12450]:
+                    - textbox [ref=f3e12460]
+                    - textbox [ref=f3e12478]
+                - generic [ref=f3e12487]:
+                  - generic [ref=f3e12488]: Reasons for Auditor Change
+                  - textbox [ref=f3e12498]
+                - generic [ref=f3e12507]:
+                  - generic [ref=f3e12508]: Financial Statement Opinion Category
+                  - textbox [ref=f3e12518]
+                - generic [ref=f3e12526]: Going Concern
+                - generic [ref=f3e12537]:
+                  - generic [ref=f3e12538]: Benefit plan Opinion Category
+                  - textbox [ref=f3e12548]
+            - generic [ref=f3e12556]:
+              - generic [ref=f3e12557]:
+                - generic [ref=f3e12558]: Late Filings
+                - generic [ref=f3e12559]: Less
+              - generic [ref=f3e12564]:
+                - generic [ref=f3e12566]:
+                  - generic [ref=f3e12567]:
+                    - generic [ref=f3e12568]: Non-timely Filing Forms
+                    - generic "Contains" [ref=f3e12573] [cursor=pointer]
+                  - textbox [ref=f3e12583]
+                - generic [ref=f3e12592]:
+                  - generic [ref=f3e12593]:
+                    - generic [ref=f3e12594]: Non-timely Filing Related Issues
+                    - generic "Contains" [ref=f3e12599] [cursor=pointer]
+                  - textbox [ref=f3e12609]
+            - generic [ref=f3e12617]:
+              - generic [ref=f3e12618]:
+                - generic [ref=f3e12619]: Public Company Info
+                - generic [ref=f3e12620]: Less
+              - generic [ref=f3e12625]:
+                - generic [ref=f3e12627]:
+                  - generic [ref=f3e12628]: Industry
+                  - textbox [ref=f3e12638]
+                - generic [ref=f3e12647]:
+                  - generic [ref=f3e12648]: Company Type/Status
+                  - textbox [ref=f3e12658]
+                - generic [ref=f3e12667]:
+                  - generic [ref=f3e12668]: Accelerated Status
+                  - textbox [ref=f3e12678]
+                - generic [ref=f3e12687]:
+                  - generic [ref=f3e12688]: Exchange
+                  - textbox [ref=f3e12698]
+                - generic [ref=f3e12706]:
+                  - generic [ref=f3e12707]: Market Cap
+                  - generic [ref=f3e12711]:
+                    - textbox [ref=f3e12718]
+                    - textbox [ref=f3e12732]
+                - generic [ref=f3e12740]:
+                  - generic [ref=f3e12741]: Revenue
+                  - generic [ref=f3e12745]:
+                    - textbox [ref=f3e12752]
+                    - textbox [ref=f3e12766]
+                - generic [ref=f3e12774]:
+                  - generic [ref=f3e12775]: Net Income
+                  - generic [ref=f3e12779]:
+                    - textbox [ref=f3e12786]
+                    - textbox [ref=f3e12800]
+            - generic [ref=f3e12808]:
+              - generic [ref=f3e12809]:
+                - generic [ref=f3e12810]: Intelligize
+                - generic [ref=f3e12811]: Less
+              - generic [ref=f3e12816]:
+                - generic [ref=f3e12818]:
+                  - generic [ref=f3e12819]: Intelligize ID
+                  - textbox [ref=f3e12830]
+                - generic [ref=f3e12840]:
+                  - generic [ref=f3e12841]: Alerts
+                  - generic [ref=f3e12842]: Alerts Documents
+                - generic [ref=f3e12850]:
+                  - generic [ref=f3e12851]: Saved Folder
+                  - textbox [ref=f3e12861]
+      - generic [ref=f3e1172]:
+        - generic [ref=f3e1175]:
+          - generic [ref=f3e1177]:
+            - generic [ref=f3e1178]:
+              - generic "Home" [ref=f3e1187] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab" [disabled]
+                  - menuitem "Close tab" [disabled]
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right" [disabled]
+                  - menuitem "Close tabs to the left" [disabled]
+                  - menuitem "Close all tabs" [disabled]
+            - generic [ref=f3e2372]:
+              - 'generic "Docs: 95" [ref=f3e2381] [cursor=pointer]'
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left" [disabled]
+                  - menuitem "Close all tabs"
+            - generic [ref=f3e3670]:
+              - generic "10-Q 07/28/2026" [ref=f3e3682] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+            - generic [ref=f3e5537]:
+              - generic "10-Q 07/28/2026" [ref=f3e5549] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+            - generic [ref=f3e10139]:
+              - 'generic "Docs: 11,835" [ref=f3e10328] [cursor=pointer]'
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+            - generic [ref=f3e10851]:
+              - generic "10-Q/A 07/29/2026" [ref=f3e10863] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right" [disabled]
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+          - button "Save Tabs" [ref=f3e1739] [cursor=pointer]
+        - generic [ref=f3e1193]:
+          - generic [ref=f3e1194]:
+            - generic [ref=f3e1196]:
+              - button "Configure Home" [ref=f3e1201] [cursor=pointer]
+              - generic [ref=f3e1206]:
+                - article [ref=f3e1207]:
+                  - heading "Audit Item Matrix" [level=1] [ref=f3e1211]
+                  - generic [ref=f3e1214]:
+                    - generic [ref=f3e1215]:
+                      - generic [ref=f3e1216]: A quick and easy way to compare audit items across companies. You can see audit items by rankings, word counts, and heat maps.
+                      - generic [ref=f3e1217] [cursor=pointer]: Request Training
+                    - generic [ref=f3e1222]:
+                      - generic [ref=f3e1223]:
+                        - generic [ref=f3e1224]: Select a Peer Group to make Quick Matrix
+                        - generic "Select Peer Group" [ref=f3e1227] [cursor=pointer]
+                      - generic [ref=f3e1231]:
+                        - generic [ref=f3e1232]: Create New Matrix
+                        - button "Create/Load New Matrix" [ref=f3e1233] [cursor=pointer]
+                - article [ref=f3e1235]:
+                  - generic [ref=f3e1236]:
+                    - generic [ref=f3e1237]: Comment Letters
+                    - generic [ref=f3e1242]:
+                      - button "Excel List" [ref=f3e1244] [cursor=pointer]
+                      - button "Unpin" [ref=f3e1249] [cursor=pointer]
+                      - generic [ref=f3e1254] [cursor=pointer]: View All
+                  - generic [ref=f3e1256]:
+                    - generic [ref=f3e1257]:
+                      - generic [ref=f3e1258]:
+                        - textbox "Type to filter" [ref=f3e1260]
+                        - generic [ref=f3e1261]:
+                          - generic [ref=f3e1262]: Peer Group
+                          - generic "My Company & Peers" [ref=f3e1265] [cursor=pointer]
+                          - button [disabled] [ref=f3e1269]
+                      - generic [ref=f3e1273]:
+                        - generic [ref=f3e1274] [cursor=pointer]: Non-GAAP
+                        - generic [ref=f3e1276] [cursor=pointer]: ASC
+                        - generic [ref=f3e1278] [cursor=pointer]: 10-K Items
+                    - paragraph [ref=f3e1282]: 0 Results
+                    - generic [ref=f3e1283]: "* Non-GAAP information is currently available for Large Accelerated Filers."
+                - article [ref=f3e1285]:
+                  - generic [ref=f3e1286]:
+                    - generic [ref=f3e1287]: Top Non-GAAP Metrics Disclosures
+                    - generic [ref=f3e1292]:
+                      - button "Excel List" [ref=f3e1294] [cursor=pointer]
+                      - button "Unpin" [ref=f3e1299] [cursor=pointer]
+                  - generic [ref=f3e1305]:
+                    - generic [ref=f3e1306]:
+                      - generic [ref=f3e1307]:
+                        - generic [ref=f3e1311]:
+                          - generic [ref=f3e1312]: Peer Group
+                          - generic "My Company & Peers" [ref=f3e1315] [cursor=pointer]
+                          - button [disabled] [ref=f3e1319]
+                        - generic [ref=f3e1324]:
+                          - button [ref=f3e1325] [cursor=pointer]
+                          - button [ref=f3e1329] [cursor=pointer]
+                      - generic [ref=f3e1334]:
+                        - generic [ref=f3e1636]:
+                          - generic [ref=f3e1637]:
+                            - textbox [ref=f3e1640]: 07/29/2023
+                            - textbox [ref=f3e1647]: 07/29/2026
+                          - generic [ref=f3e1652]:
+                            - generic [ref=f3e1653] [cursor=pointer]: 1M
+                            - generic [ref=f3e1654] [cursor=pointer]: 3M
+                            - generic [ref=f3e1655] [cursor=pointer]: 6M
+                            - generic [ref=f3e1656] [cursor=pointer]: YTD
+                            - generic [ref=f3e1657] [cursor=pointer]: 1Y
+                            - generic [ref=f3e1658] [cursor=pointer]: 3Y
+                            - generic [ref=f3e1659] [cursor=pointer]: 5Y
+                            - generic [ref=f3e1660] [cursor=pointer]: ALL
+                        - paragraph [ref=f3e1663]: 0 Results
+                    - generic [ref=f3e1338]: "* Non-GAAP information is currently available for Large Accelerated Filers."
+                - article [ref=f3e1340]:
+                  - generic [ref=f3e1341]:
+                    - generic [ref=f3e1342]: Critical Audit Matters (CAM) Topics
+                    - generic [ref=f3e1347]:
+                      - button "Excel List" [ref=f3e1349] [cursor=pointer]
+                      - button "Unpin" [ref=f3e1354] [cursor=pointer]
+                      - generic [ref=f3e1359] [cursor=pointer]: View All
+                  - generic [ref=f3e1361]:
+                    - generic [ref=f3e1362]:
+                      - generic [ref=f3e1363]:
+                        - textbox "Type to filter" [ref=f3e1365]
+                        - generic [ref=f3e1366]:
+                          - generic [ref=f3e1367]: Peer Group
+                          - generic "My Company & Peers" [ref=f3e1370] [cursor=pointer]
+                          - button [disabled] [ref=f3e1374]
+                      - generic [ref=f3e1378]:
+                        - generic [ref=f3e1379] [cursor=pointer]: By Year
+                        - generic [ref=f3e1381] [cursor=pointer]: By Company
+                    - paragraph [ref=f3e1385]: 0 Results
+                    - generic [ref=f3e1386]: "* CAMs information is currently available for Large Accelerated Filers."
+                - article [ref=f3e1388]:
+                  - generic [ref=f3e1389]:
+                    - generic [ref=f3e1390]: Auditor Information
+                    - generic [ref=f3e1395]:
+                      - button "Excel List" [ref=f3e1397] [cursor=pointer]
+                      - button "Unpin" [ref=f3e1402] [cursor=pointer]
+                  - generic [ref=f3e1408]:
+                    - generic [ref=f3e1409]:
+                      - generic [ref=f3e1411]:
+                        - generic [ref=f3e1412]: Peer Group
+                        - generic "My Company & Peers" [ref=f3e1415] [cursor=pointer]
+                        - button [disabled] [ref=f3e1419]
+                      - generic [ref=f3e1423]:
+                        - generic [ref=f3e1424] [cursor=pointer]: Audit Fees
+                        - generic [ref=f3e1426] [cursor=pointer]: Distribution
+                    - paragraph [ref=f3e1430]: 0 Results
+                    - generic [ref=f3e1431]: "* Auditor information is currently available for Large Accelerated Filers."
+                - article [ref=f3e1433]:
+                  - generic [ref=f3e1435]:
+                    - heading "Research Library" [level=1] [ref=f3e1437]
+                    - button "Unpin" [ref=f3e1440] [cursor=pointer]
+                  - generic [ref=f3e1446]:
+                    - generic [ref=f3e1447]:
+                      - generic "All Apps" [ref=f3e1451] [cursor=pointer]
+                      - textbox "What are you looking for?" [ref=f3e1457]
+                    - generic [ref=f3e1461]:
+                      - paragraph [ref=f3e1463]: Category
+                      - paragraph [ref=f3e1465]: App
+                    - grid "grid" [ref=f3e1467]:
+                      - rowgroup [ref=f3e1468]:
+                        - listitem [ref=f3e1470]:
+                          - paragraph [ref=f3e1475]:
+                            - generic [ref=f3e1479]: Recommended
+                        - listitem [ref=f3e1481]:
+                          - paragraph [ref=f3e1486]:
+                            - generic [ref=f3e1487]: COVID
+                        - listitem [ref=f3e1489]:
+                          - paragraph [ref=f3e1494]:
+                            - generic [ref=f3e1495]: Current Events
+                        - listitem [ref=f3e1497]:
+                          - paragraph [ref=f3e1502]:
+                            - generic [ref=f3e1503]: Cybersecurity
+                        - listitem [ref=f3e1505]:
+                          - paragraph [ref=f3e1510]:
+                            - generic [ref=f3e1511]: Enforcement
+                        - listitem [ref=f3e1513]:
+                          - paragraph [ref=f3e1518]:
+                            - generic [ref=f3e1519]: Finance & Accounting
+                        - listitem [ref=f3e1521]:
+                          - paragraph [ref=f3e1526]:
+                            - generic [ref=f3e1527]: Governance / ESG
+                        - listitem [ref=f3e1529]:
+                          - paragraph [ref=f3e1534]:
+                            - generic [ref=f3e1535]: MD&A
+                        - listitem [ref=f3e1537]:
+                          - paragraph [ref=f3e1542]:
+                            - generic [ref=f3e1543]: Regulatory
+                        - listitem [ref=f3e1545]:
+                          - paragraph [ref=f3e1550]:
+                            - generic [ref=f3e1551]: Risk Factors
+                        - listitem [ref=f3e1553]:
+                          - paragraph [ref=f3e1558]:
+                            - generic [ref=f3e1559]: Transactions
+            - contentinfo [ref=f3e1561]:
+              - link [ref=f3e1564] [cursor=pointer]:
+                - /url: https://www.lexisnexis.com/
+                - img "LexisNexis Logo" [ref=f3e1565]
+              - generic [ref=f3e1566]:
+                - list [ref=f3e1568]:
+                  - listitem [ref=f3e1569]:
+                    - link "About" [ref=f3e1570] [cursor=pointer]:
+                      - /url: https://www.intelligize.com/about/
+                  - listitem [ref=f3e1571]:
+                    - link "Privacy" [ref=f3e1572] [cursor=pointer]:
+                      - /url: http://www.lexisnexis.com/en-us/terms/privacy-policy.page
+                  - listitem [ref=f3e1573]:
+                    - link "Trust Center" [ref=f3e1574] [cursor=pointer]:
+                      - /url: https://trust.lexisnexis.com
+                  - listitem [ref=f3e1575]:
+                    - link "Cookie Policy" [ref=f3e1576] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=f3e1577]:
+                    - link "Terms & Conditions" [ref=f3e1578] [cursor=pointer]:
+                      - /url: https://www.intelligize.com/terms-of-service/
+                - list [ref=f3e1580]:
+                  - listitem [ref=f3e1581]:
+                    - text: "Call Support:"
+                    - strong [ref=f3e1582]: 1-888-925-8627
+                  - listitem [ref=f3e1583]:
+                    - text: "Email Support:"
+                    - link "support@intelligize.com" [ref=f3e1584] [cursor=pointer]:
+                      - /url: mailto:support@intelligize.com
+                  - listitem [ref=f3e1585]:
+                    - link "© 2026 LexisNexis®" [ref=f3e1586] [cursor=pointer]:
+                      - /url: https://www.lexisnexis.com/terms/copr/lngp/us/
+              - link [ref=f3e1589] [cursor=pointer]:
+                - /url: http://www.relxgroup.com/Pages/Home.aspx
+                - img "LexisNexis Logo" [ref=f3e1590]
+          - generic [ref=f3e10155]:
+            - generic [ref=f3e10157]:
+              - generic [ref=f3e10158]:
+                - generic [ref=f3e10160]:
+                  - button "Download" [ref=f3e10162] [cursor=pointer]
+                  - button "Email" [ref=f3e10168] [cursor=pointer]
+                  - button "Share Link" [ref=f3e10174] [cursor=pointer]
+                  - button "Excel List" [ref=f3e10180] [cursor=pointer]
+                  - generic [ref=f3e10185]:
+                    - button "More" [ref=f3e10186] [cursor=pointer]
+                    - generic:
+                      - button "Print" [ref=f3e10193] [cursor=pointer]
+                      - button "Save to Workspace" [ref=f3e10200] [cursor=pointer]
+                  - button "Extract Company List" [ref=f3e10209] [cursor=pointer]
+                - button [ref=f3e10215] [cursor=pointer]
+              - generic [ref=f3e10219]:
+                - generic [ref=f3e10220]:
+                  - generic [ref=f3e10221]: Exhibits
+                  - generic [ref=f3e10227]: Snippets
+                  - generic [ref=f3e10233]: Cross-Reference
+                  - generic [ref=f3e10241]: Filing Info
+                  - generic [ref=f3e10251]: Company Info
+                  - generic [ref=f3e10258]: Auditor Info
+                  - button "Settings" [ref=f3e10267] [cursor=pointer]
+                - generic [ref=f3e10271]:
+                  - generic [ref=f3e10272]: "Filters:"
+                  - generic [ref=f3e10273]:
+                    - 'generic "Search for: Filings; Exhibits to Filings" [ref=f3e10274]'
+                    - 'generic "Forms: 10-K; 10-Q" [ref=f3e10276]'
+                    - 'generic "New Accounting Disclosures and Policies: Accounting Standards Updates: All ASU Source Type (FASB & SEC)" [ref=f3e10278]'
+                    - 'generic "Amendments: Include" [ref=f3e10280]'
+                    - 'generic "Forms 3, 4, 5 & 144: Exclude" [ref=f3e10282]'
+                    - 'generic "iXBRL: Include" [ref=f3e10284]'
+            - generic [ref=f3e10286]:
+              - generic [ref=f3e10288]:
+                - generic [ref=f3e10294]: Audit Filing
+                - generic [ref=f3e10295] [cursor=pointer]: Company
+                - generic "View company information"
+                - generic [ref=f3e10300]: Auditor
+                - generic [ref=f3e10301] [cursor=pointer]: Filing Date
+              - grid "grid" [ref=f3e10308]:
+                - rowgroup [ref=f3e10329]:
+                  - generic [ref=f3e10331]:
+                    - generic [ref=f3e10332] [cursor=pointer]:
+                      - generic [ref=f3e12872]: "1"
+                      - button "View" [ref=f3e12873]
+                      - generic "View 10-Q/A (Q2 2026) filed on 07/29/2026" [ref=f3e12875]: 10-Q/A (Q2 2026)
+                      - button "Audit" [ref=f3e12876]
+                      - generic "0001664703" [ref=f3e12885]: BLOOM ENERGY CORP
+                      - button "Profile" [disabled] [ref=f3e12886]
+                      - generic "07/29/2026" [ref=f3e12888]
+                    - generic [ref=f3e10363]:
+                      - generic [ref=f3e10364]: Filing Info
+                      - generic [ref=f3e10367]:
+                        - generic [ref=f3e10368]: Intelligize ID
+                        - generic [ref=f3e10369]: "23628980"
+                  - generic [ref=f3e10371]:
+                    - generic [ref=f3e10372] [cursor=pointer]:
+                      - generic [ref=f3e12898]: "2"
+                      - button "View" [ref=f3e12899]
+                      - generic "View 10-Q (Q2 2026) filed on 07/29/2026" [ref=f3e12901]: 10-Q (Q2 2026)
+                      - button "Audit" [ref=f3e12902]
+                      - generic "0001650729" [ref=f3e12911]: SITEONE LANDSCAPE SUPPLY, INC.
+                      - button "Profile" [disabled] [ref=f3e12912]
+                      - generic "07/29/2026" [ref=f3e12914]
+                    - generic [ref=f3e10403]:
+                      - generic [ref=f3e10404]: Filing Info
+                      - generic [ref=f3e10407]:
+                        - generic [ref=f3e10408]: Intelligize ID
+                        - generic [ref=f3e10409]: "23628953"
+                  - generic [ref=f3e10411]:
+                    - generic [ref=f3e10412] [cursor=pointer]:
+                      - generic [ref=f3e12924]: "3"
+                      - button "View" [ref=f3e12925]
+                      - generic "View 10-Q (Q3 2026) filed on 07/29/2026" [ref=f3e12927]: 10-Q (Q3 2026)
+                      - button "Audit" [ref=f3e12928]
+                      - generic "0001403161" [ref=f3e12937]: VISA INC.
+                      - button "Profile" [disabled] [ref=f3e12938]
+                      - generic "07/29/2026" [ref=f3e12940]
+                    - generic [ref=f3e10443]:
+                      - generic [ref=f3e10444]: Filing Info
+                      - generic [ref=f3e10447]:
+                        - generic [ref=f3e10448]: Intelligize ID
+                        - generic [ref=f3e10449]: "23628650"
+                  - generic [ref=f3e10451]:
+                    - generic [ref=f3e10452] [cursor=pointer]:
+                      - generic [ref=f3e12950]: "4"
+                      - button "View" [ref=f3e12951]
+                      - generic "View 10-Q (Q2 2026) filed on 07/28/2026" [ref=f3e12953]: 10-Q (Q2 2026)
+                      - button "Audit" [ref=f3e12954]
+                      - generic "0001664703" [ref=f3e12963]: BLOOM ENERGY CORP
+                      - button "Profile" [disabled] [ref=f3e12964]
+                      - generic "07/28/2026" [ref=f3e12966]
+                    - generic [ref=f3e10483]:
+                      - generic [ref=f3e10484]: Filing Info
+                      - generic [ref=f3e10487]:
+                        - generic [ref=f3e10488]: Intelligize ID
+                        - generic [ref=f3e10489]: "23628403"
+                  - generic [ref=f3e10491]:
+                    - generic [ref=f3e10492] [cursor=pointer]:
+                      - generic [ref=f3e12976]: "5"
+                      - button "View" [ref=f3e12977]
+                      - generic "View 10-Q (Q2 2026) filed on 07/28/2026" [ref=f3e12979]: 10-Q (Q2 2026)
+                      - button "Audit" [ref=f3e12980]
+                      - generic "0000780571" [ref=f3e12989]: ITRON, INC.
+                      - button "Profile" [disabled] [ref=f3e12990]
+                      - generic "07/28/2026" [ref=f3e12992]
+                    - generic [ref=f3e10523]:
+                      - generic [ref=f3e10524]: Filing Info
+                      - generic [ref=f3e10527]:
+                        - generic [ref=f3e10528]: Intelligize ID
+                        - generic [ref=f3e10529]: "23626274"
+                  - generic [ref=f3e10531]:
+                    - generic [ref=f3e10532] [cursor=pointer]:
+                      - generic [ref=f3e13002]: "6"
+                      - button "View" [ref=f3e13003]
+                      - generic "View 10-Q (Q2 2026) filed on 07/28/2026" [ref=f3e13005]: 10-Q (Q2 2026)
+                      - button "Audit" [ref=f3e13006]
+                      - generic "0001364479" [ref=f3e13015]: HERC HOLDINGS INC
+                      - button "Profile" [disabled] [ref=f3e13016]
+                      - generic "07/28/2026" [ref=f3e13018]
+                    - generic [ref=f3e10563]:
+                      - generic [ref=f3e10564]: Filing Info
+                      - generic [ref=f3e10567]:
+                        - generic [ref=f3e10568]: Intelligize ID
+                        - generic [ref=f3e10569]: "23624797"
+                  - generic [ref=f3e10571]:
+                    - generic [ref=f3e10572] [cursor=pointer]:
+                      - generic [ref=f3e13028]: "7"
+                      - button "View" [ref=f3e13029]
+                      - generic "View 10-Q (Q1 2026) filed on 07/27/2026" [ref=f3e13031]: 10-Q (Q1 2026)
+                      - button "Audit" [ref=f3e13032]
+                      - generic "0000078749" [ref=f3e13041]: AGILYSYS INC
+                      - button "Profile" [disabled] [ref=f3e13042]
+                      - generic "07/27/2026" [ref=f3e13044]
+                    - generic [ref=f3e10603]:
+                      - generic [ref=f3e10604]: Filing Info
+                      - generic [ref=f3e10607]:
+                        - generic [ref=f3e10608]: Intelligize ID
+                        - generic [ref=f3e10609]: "23623510"
+                  - generic [ref=f3e10611]:
+                    - generic [ref=f3e10612] [cursor=pointer]:
+                      - generic [ref=f3e13054]: "8"
+                      - button "View" [ref=f3e13055]
+                      - generic "View 10-Q (Q2 2026) filed on 07/24/2026" [ref=f3e13057]: 10-Q (Q2 2026)
+                      - button "Audit" [ref=f3e13058]
+                      - generic "0001784970" [ref=f3e13067]: NEXT TECHNOLOGY HOLDING INC.
+                      - button "Profile" [disabled] [ref=f3e13068]
+                      - generic "07/24/2026" [ref=f3e13070]
+                    - generic [ref=f3e10643]:
+                      - generic [ref=f3e10644]: Filing Info
+                      - generic [ref=f3e10647]:
+                        - generic [ref=f3e10648]: Intelligize ID
+                        - generic [ref=f3e10649]: "23620895"
+            - generic [ref=f3e10650]:
+              - generic [ref=f3e10651]:
+                - generic [ref=f3e10652]: Items per page
+                - generic [ref=f3e10653]: "25"
+                - generic [ref=f3e10660]: filings per page
+              - generic [ref=f3e10662]:
+                - generic [ref=f3e10663]:
+                  - generic [ref=f3e10664]: Page
+                  - textbox [ref=f3e10666]: "1"
+                  - generic [ref=f3e10667]: of 474
+                - generic [ref=f3e10668]:
+                  - button "Go to first page" [disabled] [ref=f3e10669]
+                  - button "Previous Page" [disabled] [ref=f3e10673]
+                  - button "Next Page" [ref=f3e10677] [cursor=pointer]
+                  - button "Go to last page" [ref=f3e10681] [cursor=pointer]
+          - generic [ref=f3e3686]:
+            - generic [ref=f3e3687]:
+              - generic [ref=f3e3688]:
+                - generic [ref=f3e3689]:
+                  - generic [ref=f3e3690]:
+                    - button "Download" [ref=f3e3692] [cursor=pointer]
+                    - button "Email" [ref=f3e3697] [cursor=pointer]
+                    - button "Copy link to this document" [ref=f3e3702] [cursor=pointer]
+                    - generic [ref=f3e3706]:
+                      - button [ref=f3e3707] [cursor=pointer]
+                      - generic:
+                        - button "Print the selected items from the list below" [ref=f3e3713] [cursor=pointer]
+                        - button [ref=f3e3719] [cursor=pointer]
+                  - button "Notes & Highlights" [ref=f3e13078] [cursor=pointer]
+                - generic [ref=f3e3732]:
+                  - generic [ref=f3e3735]: "Search in Document:"
+                  - generic [ref=f3e3736]:
+                    - generic [ref=f3e3737]: Text
+                    - generic [ref=f3e3745]: iXBRL
+                  - textbox "Search" [ref=f3e3756]
+                - button [ref=f3e3760] [cursor=pointer]
+              - generic [ref=f3e3764]:
+                - generic [ref=f3e3765]: Cross-Reference
+                - generic [ref=f3e3773]: Highlight Accounting Items
+                - generic [ref=f3e3781]: Table Options
+            - generic [ref=f3e3790]:
+              - generic [ref=f3e3791]:
+                - generic "BLOOM ENERGY CORP" [ref=f3e3799] [cursor=pointer]
+                - generic [ref=f3e3800]: •
+                - generic [ref=f3e3801]: 10-Q (Q2 2026)
+                - generic [ref=f3e3803]: •
+                - generic [ref=f3e3804]: 07/28/2026
+              - generic [ref=f3e3806]:
+                - generic [ref=f3e3807]:
+                  - generic [ref=f3e3808]: "Zoom:"
+                  - generic [ref=f3e3809]: 100%
+                - generic [ref=f3e3822]:
+                  - button "Previous" [disabled] [ref=f3e3823]
+                  - button "Next" [ref=f3e3828] [cursor=pointer]
+            - generic [ref=f3e3839]:
+              - generic [ref=f3e3840]:
+                - button [ref=f3e3841] [cursor=pointer]
+                - generic [ref=f3e3846]:
+                  - button "1" [ref=f3e3847] [cursor=pointer]
+                  - button "2" [ref=f3e3848] [cursor=pointer]
+                  - button "3" [ref=f3e3849] [cursor=pointer]
+                  - button "4" [ref=f3e3850] [cursor=pointer]
+                  - button "5" [ref=f3e3851] [cursor=pointer]
+                  - button "6" [ref=f3e3852] [cursor=pointer]
+                  - button "7" [ref=f3e3853] [cursor=pointer]
+                  - button "8" [ref=f3e3854] [cursor=pointer]
+                  - button "9" [ref=f3e3855] [cursor=pointer]
+                  - button "10" [ref=f3e3856] [cursor=pointer]
+                  - button "11" [ref=f3e3857] [cursor=pointer]
+                  - button "12" [ref=f3e3858] [cursor=pointer]
+                  - button "13" [ref=f3e3859] [cursor=pointer]
+                  - button "14" [ref=f3e3860] [cursor=pointer]
+                  - button "15" [ref=f3e3861] [cursor=pointer]
+                  - button "16" [ref=f3e3862] [cursor=pointer]
+                  - button "17" [ref=f3e3863] [cursor=pointer]
+                  - button "18" [ref=f3e3864] [cursor=pointer]
+                  - button "19" [ref=f3e3865] [cursor=pointer]
+                  - button "20" [ref=f3e3866] [cursor=pointer]
+                  - button "21" [ref=f3e3867] [cursor=pointer]
+                  - button "22" [ref=f3e3868] [cursor=pointer]
+                  - button "23" [ref=f3e3869] [cursor=pointer]
+                  - button "24" [ref=f3e3870] [cursor=pointer]
+                  - button "25" [ref=f3e3871] [cursor=pointer]
+                  - button "26" [ref=f3e3872] [cursor=pointer]
+                  - button "27" [ref=f3e3873] [cursor=pointer]
+                  - button "28" [ref=f3e3874] [cursor=pointer]
+                  - button "29" [ref=f3e3875] [cursor=pointer]
+                  - button "30" [ref=f3e3876] [cursor=pointer]
+                  - button "31" [ref=f3e3877] [cursor=pointer]
+                  - button "32" [ref=f3e3878] [cursor=pointer]
+                  - button "33" [ref=f3e3879] [cursor=pointer]
+                  - button "34" [ref=f3e3880] [cursor=pointer]
+                  - button "35" [ref=f3e3881] [cursor=pointer]
+                  - button "36" [ref=f3e3882] [cursor=pointer]
+                  - button "37" [ref=f3e3883] [cursor=pointer]
+                  - button "38" [ref=f3e3884] [cursor=pointer]
+                  - button "39" [ref=f3e3885] [cursor=pointer]
+                  - button "40" [ref=f3e3886] [cursor=pointer]
+                  - button "41" [ref=f3e3887] [cursor=pointer]
+                  - button "42" [ref=f3e3888] [cursor=pointer]
+                  - button "43" [ref=f3e3889] [cursor=pointer]
+                  - button "44" [ref=f3e3890] [cursor=pointer]
+                  - button "45" [ref=f3e3891] [cursor=pointer]
+                  - button "46" [ref=f3e3892] [cursor=pointer]
+                  - button "47" [ref=f3e3893] [cursor=pointer]
+                  - button "48" [ref=f3e3894] [cursor=pointer]
+                  - button "49" [ref=f3e3895] [cursor=pointer]
+                  - button "50" [ref=f3e3896] [cursor=pointer]
+                  - button "51" [ref=f3e3897] [cursor=pointer]
+                  - button "52" [ref=f3e3898] [cursor=pointer]
+                  - button "53" [ref=f3e3899] [cursor=pointer]
+                  - button "54" [ref=f3e3900] [cursor=pointer]
+                  - button "55" [ref=f3e3901] [cursor=pointer]
+                  - button "56" [ref=f3e3902] [cursor=pointer]
+                  - button "57" [ref=f3e3903] [cursor=pointer]
+                  - button "58" [ref=f3e3904] [cursor=pointer]
+                - button [ref=f3e3905] [cursor=pointer]
+              - generic [ref=f3e3909]:
+                - generic [ref=f3e13084]: 
+                - generic [ref=f3e3911]:
+                  - generic [ref=f3e3912]: 58 pages
+                  - text: Html2MB
+          - generic [ref=f3e5566]:
+            - generic [ref=f3e5567]:
+              - generic [ref=f3e5568]:
+                - generic [ref=f3e5569]:
+                  - generic [ref=f3e5570]:
+                    - button "Download" [ref=f3e5572] [cursor=pointer]
+                    - button "Email" [ref=f3e5577] [cursor=pointer]
+                    - button "Copy link to this document" [ref=f3e5582] [cursor=pointer]
+                    - generic [ref=f3e5586]:
+                      - button [ref=f3e5587] [cursor=pointer]
+                      - generic:
+                        - button "Print the selected items from the list below" [ref=f3e5593] [cursor=pointer]
+                        - button [ref=f3e5599] [cursor=pointer]
+                  - button "Notes & Highlights" [ref=f3e13086] [cursor=pointer]
+                - generic [ref=f3e6402]:
+                  - generic [ref=f3e6405]: "Search in Document:"
+                  - generic [ref=f3e6406]:
+                    - generic [ref=f3e6407]: Text
+                    - generic [ref=f3e6415]: iXBRL
+                  - textbox "Search" [ref=f3e6426]
+                - button [ref=f3e5621] [cursor=pointer]
+              - generic [ref=f3e5625]:
+                - generic [ref=f3e5626]: Cross-Reference
+                - generic [ref=f3e5634]: Highlight Accounting Items
+                - generic [ref=f3e6430]: Table Options
+            - generic [ref=f3e5642]:
+              - generic [ref=f3e5643]:
+                - generic "EQUITY LIFESTYLE PROPERTIES INC" [ref=f3e6446] [cursor=pointer]
+                - generic [ref=f3e5644]: •
+                - generic [ref=f3e6447]: 10-Q (Q2 2026)
+                - generic [ref=f3e5645]: •
+                - generic [ref=f3e6449]: 07/28/2026
+              - generic [ref=f3e5646]:
+                - generic [ref=f3e5647]:
+                  - generic [ref=f3e5648]: "Zoom:"
+                  - generic [ref=f3e5649]: 100%
+                - generic [ref=f3e5662]:
+                  - button "Previous" [ref=f3e5663] [cursor=pointer]
+                  - button "Next" [ref=f3e5668] [cursor=pointer]
+            - generic [ref=f3e5679]:
+              - generic [ref=f3e5680]:
+                - button [ref=f3e5681] [cursor=pointer]
+                - generic [ref=f3e5686]:
+                  - button "C" [ref=f3e5687] [cursor=pointer]
+                  - button "2" [ref=f3e5688] [cursor=pointer]
+                  - button "3" [ref=f3e5689] [cursor=pointer]
+                  - button "4" [ref=f3e5690] [cursor=pointer]
+                  - button "5" [ref=f3e5691] [cursor=pointer]
+                  - button "6" [ref=f3e5692] [cursor=pointer]
+                  - button "7" [ref=f3e5693] [cursor=pointer]
+                  - button "8" [ref=f3e5694] [cursor=pointer]
+                  - button "9" [ref=f3e5695] [cursor=pointer]
+                  - button "10" [ref=f3e5696] [cursor=pointer]
+                  - button "11" [ref=f3e5697] [cursor=pointer]
+                  - button "12" [ref=f3e5698] [cursor=pointer]
+                  - button "13" [ref=f3e5699] [cursor=pointer]
+                  - button "14" [ref=f3e5700] [cursor=pointer]
+                  - button "15" [ref=f3e5701] [cursor=pointer]
+                  - button "16" [ref=f3e5702] [cursor=pointer]
+                  - button "17" [ref=f3e5703] [cursor=pointer]
+                  - button "18" [ref=f3e5704] [cursor=pointer]
+                  - button "19" [ref=f3e5705] [cursor=pointer]
+                  - button "20" [ref=f3e5706] [cursor=pointer]
+                  - button "21" [ref=f3e5707] [cursor=pointer]
+                  - button "22" [ref=f3e5708] [cursor=pointer]
+                  - button "23" [ref=f3e5709] [cursor=pointer]
+                  - button "24" [ref=f3e5710] [cursor=pointer]
+                  - button "25" [ref=f3e5711] [cursor=pointer]
+                  - button "26" [ref=f3e5712] [cursor=pointer]
+                  - button "27" [ref=f3e5713] [cursor=pointer]
+                  - button "28" [ref=f3e5714] [cursor=pointer]
+                  - button "29" [ref=f3e5715] [cursor=pointer]
+                  - button "30" [ref=f3e5716] [cursor=pointer]
+                  - button "31" [ref=f3e5717] [cursor=pointer]
+                  - button "32" [ref=f3e5718] [cursor=pointer]
+                  - button "33" [ref=f3e5719] [cursor=pointer]
+                  - button "34" [ref=f3e5720] [cursor=pointer]
+                  - button "35" [ref=f3e5721] [cursor=pointer]
+                  - button "36" [ref=f3e5722] [cursor=pointer]
+                  - button "37" [ref=f3e5723] [cursor=pointer]
+                  - button "38" [ref=f3e5724] [cursor=pointer]
+                  - button "39" [ref=f3e5725] [cursor=pointer]
+                  - button "40" [ref=f3e5726] [cursor=pointer]
+                - button [ref=f3e5727] [cursor=pointer]
+              - generic [ref=f3e5731]:
+                - generic [ref=f3e13092]: 
+                - generic [ref=f3e5733]:
+                  - generic [ref=f3e5734]: 40 pages
+                  - text: Html2MB
+          - generic [ref=f3e10893]:
+            - generic [ref=f3e10894]:
+              - generic [ref=f3e10895]:
+                - generic [ref=f3e10896]:
+                  - generic [ref=f3e10897]:
+                    - button "Download" [ref=f3e10899] [cursor=pointer]
+                    - button "Email" [ref=f3e10904] [cursor=pointer]
+                    - button "Copy link to this document" [ref=f3e10909] [cursor=pointer]
+                    - generic [ref=f3e10913]:
+                      - button [ref=f3e10914] [cursor=pointer]
+                      - generic:
+                        - button "Print the selected items from the list below" [ref=f3e10920] [cursor=pointer]
+                        - button [ref=f3e10926] [cursor=pointer]
+                  - button "Notes & Highlights" [ref=f3e13094] [cursor=pointer]
+                - generic [ref=f3e11700]:
+                  - generic [ref=f3e11703]: "Search in Document:"
+                  - generic [ref=f3e11704]:
+                    - generic [ref=f3e11705]: Text
+                    - generic [ref=f3e11713]: iXBRL
+                  - textbox "Search" [ref=f3e11724]
+                - button [ref=f3e10948] [cursor=pointer]
+              - generic [ref=f3e10952]:
+                - generic [ref=f3e10953]: Cross-Reference
+                - generic [ref=f3e10961]: Highlight Accounting Items
+                - generic [ref=f3e11728]: Table Options
+            - generic [ref=f3e10969]:
+              - generic [ref=f3e10970]:
+                - generic "BLOOM ENERGY CORP" [ref=f3e11744] [cursor=pointer]
+                - generic [ref=f3e10971]: •
+                - generic [ref=f3e11745]: 10-Q/A (Q2 2026)
+                - generic [ref=f3e10972]: •
+                - generic [ref=f3e11747]: 07/29/2026
+              - generic [ref=f3e10973]:
+                - generic [ref=f3e10974]:
+                  - generic [ref=f3e10975]: "Zoom:"
+                  - generic [ref=f3e10976]: 100%
+                - generic [ref=f3e10989]:
+                  - button "Previous" [disabled] [ref=f3e10990]
+                  - button "Next" [ref=f3e10995] [cursor=pointer]
+            - generic [ref=f3e11006]:
+              - generic [ref=f3e11007]:
+                - button [ref=f3e11008] [cursor=pointer]
+                - generic [ref=f3e11013]:
+                  - button "1" [ref=f3e11014] [cursor=pointer]
+                  - button "2" [ref=f3e11015] [cursor=pointer]
+                  - button "3" [ref=f3e11016] [cursor=pointer]
+                  - button "4" [ref=f3e11017] [cursor=pointer]
+                  - button "5" [ref=f3e11018] [cursor=pointer]
+                  - button "6" [ref=f3e11019] [cursor=pointer]
+                  - button "7" [ref=f3e11020] [cursor=pointer]
+                  - button "8" [ref=f3e11021] [cursor=pointer]
+                  - button "9" [ref=f3e11022] [cursor=pointer]
+                  - button "10" [ref=f3e11023] [cursor=pointer]
+                  - button "11" [ref=f3e11024] [cursor=pointer]
+                  - button "12" [ref=f3e11025] [cursor=pointer]
+                  - button "13" [ref=f3e11026] [cursor=pointer]
+                  - button "14" [ref=f3e11027] [cursor=pointer]
+                  - button "15" [ref=f3e11028] [cursor=pointer]
+                  - button "16" [ref=f3e11029] [cursor=pointer]
+                  - button "17" [ref=f3e11030] [cursor=pointer]
+                  - button "18" [ref=f3e11031] [cursor=pointer]
+                  - button "19" [ref=f3e11032] [cursor=pointer]
+                  - button "20" [ref=f3e11033] [cursor=pointer]
+                  - button "21" [ref=f3e11034] [cursor=pointer]
+                  - button "22" [ref=f3e11035] [cursor=pointer]
+                  - button "23" [ref=f3e11036] [cursor=pointer]
+                  - button "24" [ref=f3e11037] [cursor=pointer]
+                  - button "25" [ref=f3e11038] [cursor=pointer]
+                  - button "26" [ref=f3e11039] [cursor=pointer]
+                  - button "27" [ref=f3e11040] [cursor=pointer]
+                  - button "28" [ref=f3e11041] [cursor=pointer]
+                  - button "29" [ref=f3e11042] [cursor=pointer]
+                  - button "30" [ref=f3e11043] [cursor=pointer]
+                  - button "31" [ref=f3e11044] [cursor=pointer]
+                  - button "32" [ref=f3e11045] [cursor=pointer]
+                  - button "33" [ref=f3e11046] [cursor=pointer]
+                  - button "34" [ref=f3e11047] [cursor=pointer]
+                  - button "35" [ref=f3e11048] [cursor=pointer]
+                  - button "36" [ref=f3e11049] [cursor=pointer]
+                  - button "37" [ref=f3e11050] [cursor=pointer]
+                  - button "38" [ref=f3e11051] [cursor=pointer]
+                  - button "39" [ref=f3e11052] [cursor=pointer]
+                  - button "40" [ref=f3e11053] [cursor=pointer]
+                  - button "41" [ref=f3e11054] [cursor=pointer]
+                - button [ref=f3e11055] [cursor=pointer]
+              - generic [ref=f3e11059]:
+                - generic [ref=f3e13100]: 
+                - generic [ref=f3e11061]:
+                  - generic [ref=f3e11062]: 41 pages
+                  - text: Html2MB
+      - generic "Support Chat" [ref=f3e1591]:
+        - button "Live Person" [ref=f3e1593]
+  - generic:
+    - generic:
+      - iframe

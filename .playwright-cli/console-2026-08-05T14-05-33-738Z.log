@@ -1,0 +1,12 @@
+[  116554ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7064322
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:211683)
+    at wy (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9828342)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9835359
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861714
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861917) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[  116648ms] [LOG] Failed to initialize Sentry @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0

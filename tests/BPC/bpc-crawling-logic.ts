@@ -2,7 +2,9 @@ import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import {
   closeAllOpenTabs,
-  getTabText
+  getTabText,
+  getTargetDateString,
+  recoverFromAppCrash,
 } from "../utils/helpers";
 
 const IDENTIFIER = "bpc_crawling";
@@ -153,25 +155,7 @@ async function fetchSpansWithTitles(page: Page, logToFile: Function): Promise<st
   return resultsArray;
 }
 
-function getTargetDateString(): string {
-  const today = new Date();
-  const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-  let daysToSubtract = 1;
 
-  if (dayOfWeek === 1) {
-    // Today is Monday -> look back 3 days to Friday
-    daysToSubtract = 3;
-  } 
-
-  const targetDate = new Date(today);
-  targetDate.setDate(today.getDate() - daysToSubtract);
-
-  const mm = String(targetDate.getMonth() + 1).padStart(2, "0");
-  const dd = String(targetDate.getDate()).padStart(2, "0");
-  const yyyy = targetDate.getFullYear();
-
-  return `${mm}/${dd}/${yyyy}`;
-}
 
 export const runBpcCrawlingTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting BPC-Crawling Report ---");
@@ -182,30 +166,65 @@ export const runBpcCrawlingTest = async (page: Page, logToFile: Function) => {
 let resultsSummary: string[] = [];
   const targetDate = getTargetDateString();
 
+  // The BPC app crashes ("Oops!" — filterHasValue reading .isEmpty on an
+  // undefined filter value, a known app bug) if Search is clicked before
+  // its background filter-init API calls finish populating Redux defaults.
+  // Give it a moment to settle before submitting a blank/unfiltered search.
+  await searchBtn.waitFor({ state: "visible" });
+  await page.waitForTimeout(7000);
   await searchBtn.click();
-  await getTabText(page, 0, logToFile, false);
+
+  try {
+    await getTabText(page, 0, logToFile, false);
+  } catch (e: any) {
+    if (e?.kind === "crash") {
+      logToFile(`💥 Initial search: app crashed — ${e.message}`);
+      await recoverFromAppCrash(page, logToFile);
+    }
+    throw e; // nothing to collect without an initial search result
+  }
 
   // ── TAB 1: BOARD & COMPANY ───────────────────────────────────────────
   logToFile("\n📂 Processing Tab 1: Board & Company...");
   const boardTitles = await fetchSpansWithTitles(page, logToFile);
 
   // ── TAB 2: DIRECTORS ──────────────────────────────────────────────────
-  logToFile("\n📂 Navigating to Tab 2: Directors...");
-  const readyDirectorsTab = page.getByText(/^Directors \([\d,]+\)/).first();
-  await readyDirectorsTab.waitFor({ state: "visible", timeout: 30000 });
-  await readyDirectorsTab.click({ force: true });
-  
-  await getTabText(page, 0, logToFile, false);
-  const directorTitles = await fetchSpansWithTitles(page, logToFile);
+  let directorTitles: string[] = [];
+  try {
+    logToFile("\n📂 Navigating to Tab 2: Directors...");
+    const readyDirectorsTab = page.getByText(/^Directors \([\d,]+\)/).first();
+    await readyDirectorsTab.waitFor({ state: "visible", timeout: 30000 });
+    await readyDirectorsTab.click({ force: true });
+
+    await getTabText(page, 0, logToFile, false);
+    directorTitles = await fetchSpansWithTitles(page, logToFile);
+  } catch (e: any) {
+    if (e?.kind === "crash") {
+      logToFile(`💥 Directors tab: app crashed — ${e.message}`);
+      await recoverFromAppCrash(page, logToFile);
+      throw e;
+    }
+    logToFile(`⚠️ Directors tab skipped — ${e.message}`);
+  }
 
   // ── TAB 3: EXECUTIVES ─────────────────────────────────────────────────
-  logToFile("\n📂 Navigating to Tab 3: Executives...");
-  const readyExecutiveTab = page.getByText(/^Executives \([\d,]+\)/).first();
-  await readyExecutiveTab.waitFor({ state: "visible", timeout: 30000 });
-  await readyExecutiveTab.click({ force: true });
-  
-  await getTabText(page, 0, logToFile, false);
-  const executiveTitles = await fetchSpansWithTitles(page, logToFile);
+  let executiveTitles: string[] = [];
+  try {
+    logToFile("\n📂 Navigating to Tab 3: Executives...");
+    const readyExecutiveTab = page.getByText(/^Executives \([\d,]+\)/).first();
+    await readyExecutiveTab.waitFor({ state: "visible", timeout: 30000 });
+    await readyExecutiveTab.click({ force: true });
+
+    await getTabText(page, 0, logToFile, false);
+    executiveTitles = await fetchSpansWithTitles(page, logToFile);
+  } catch (e: any) {
+    if (e?.kind === "crash") {
+      logToFile(`💥 Executives tab: app crashed — ${e.message}`);
+      await recoverFromAppCrash(page, logToFile);
+      throw e;
+    }
+    logToFile(`⚠️ Executives tab skipped — ${e.message}`);
+  }
 
   // ── COMPILE SUMMARY FINDINGS ──────────────────────────────────────────
   const totalExtracted = boardTitles.length + directorTitles.length + executiveTitles.length;

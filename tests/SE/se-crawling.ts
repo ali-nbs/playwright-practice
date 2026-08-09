@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import * as fs from 'fs';
 import path from "path";
+import { getTargetDateString } from "../utils/helpers";
 
 test("SE-Crawling", async ({ page }) => {
 
@@ -36,7 +37,7 @@ test("SE-Crawling", async ({ page }) => {
     // await page.locator('text=Transactions').first().click();
     await page.locator('text=/SEC Enforcement/i').first().click();
 
-    let daySearch = 'Last 7 Days';
+    let daySearch = getTargetDateString();
 
     logToFile(`Status: Searching for '${daySearch}'...`);
     const dateInput = page.locator('//label[text()="Date"]/ancestor::div[5]//input');

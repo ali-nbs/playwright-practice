@@ -6,6 +6,7 @@ import {
   configureDisplayColumns,
   closeAllOpenTabs,
   parseCount,
+  getTargetDateString,
 } from "../utils/helpers";
 
 const IDENTIFIER = "src_crawling";
@@ -21,7 +22,7 @@ export const runSRCCrawlingTest = async (page: Page, logToFile: Function) => {
   const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
   const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
 
-  const testCases = [{ date: "Yesterday", count: 15 }];
+  const testCases = [{ date: getTargetDateString(), count: 15 }];
 
   let tabIndex = 0;
 

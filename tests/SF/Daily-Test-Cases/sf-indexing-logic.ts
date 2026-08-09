@@ -5,6 +5,7 @@ import {
   getTabText,
   parseCount,
   closeAllOpenTabs,
+  getTargetDateString,
 } from "../../utils/helpers";
 
 const IDENTIFIER = "sf_indexing";
@@ -23,7 +24,7 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
 
   const testCases = [
     {
-      date: "Yesterday",
+      date: getTargetDateString(),
       keyword: "is OR the OR a",
       NotKeyword: "NOT (is OR the OR a)",
     },

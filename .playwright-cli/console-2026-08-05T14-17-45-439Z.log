@@ -1,0 +1,5 @@
+[    3539ms] TypeError: Cannot read properties of null (reading 'style')
+    at HTMLDocument.<anonymous> (https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2FBoardProfilesAndCompensation&aci=igz:562:54)
+[    4755ms] [LOG] B2C is accessible @ https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2FBoardProfilesAndCompensation&aci=igz:802
+[    4772ms] [LOG] User ID input focused on window load @ https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2FBoardProfilesAndCompensation&aci=igz:1063
+[  197042ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0

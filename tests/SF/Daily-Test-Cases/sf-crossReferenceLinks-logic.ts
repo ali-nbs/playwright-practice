@@ -6,6 +6,7 @@ import {
   closeAllOpenTabs,
   configureDisplayColumns,
   fillAndEnter,
+  getTargetDateString,
 } from "../../utils/helpers";
 
 const IDENTIFIER = "sf_crossReferenceLinks";
@@ -30,7 +31,7 @@ export const runCrossReferenceLinksTest = async (
   await exhibitsCheckbox.click();
   await page.waitForTimeout(300);
   const dateInput = page.getByTestId("date-input");
-  await fillAndEnter(page, dateInput, "Yesterday");
+  await fillAndEnter(page, dateInput, getTargetDateString());
   await searchBtn.click();
 
   const searchResultTextOnly = await getTabText(page, tabIndex++, logToFile);

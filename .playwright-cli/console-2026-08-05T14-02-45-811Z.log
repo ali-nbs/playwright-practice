@@ -1,0 +1,34 @@
+[   43479ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7064322
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:211683)
+    at wy (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9828342)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9835359
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861714
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861917) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[   43838ms] [LOG] Failed to initialize Sentry @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[   54912ms] TypeError: Cannot read properties of undefined (reading 'type')
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3729
+    at dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:106:16228)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935098
+    at Array.forEach (<anonymous>)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935075
+    at bu (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:87769)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935054
+[   65636ms] [WARNING] Deprecation warning: value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are discouraged. Please refer to http://momentjs.com/guides/#/warnings/js-date/ for more info.
+Arguments: 
+[0] _isAMomentObject: true, _isUTC: true, _useUTC: true, _l: undefined, _i: 8/4/2026 12:00:00 AM, _f: undefined, _strict: undefined, _locale: [object Object]
+Error
+    at r.createFromInputFallback (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:79483)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99611
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99662
+    at jt (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99970)
+    at At (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:100231)
+    at r.p [as utc] (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:77273)
+    at date (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3062642)
+    at l.value (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:12440307)
+    at Xa (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:70685)
+    at Ka (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:70480) @ https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:78

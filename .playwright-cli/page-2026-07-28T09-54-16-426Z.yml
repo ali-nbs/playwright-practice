@@ -1,0 +1,634 @@
+- generic [active] [ref=f23e1]:
+  - generic [ref=f23e12]:
+    - navigation [ref=f23e13]:
+      - generic "Click here to return to main menu" [ref=f23e1187] [cursor=pointer]:
+        - img "Intelligize" [ref=f23e1188]
+      - generic [ref=f23e17]:
+        - generic [ref=f23e22]:
+          - textbox "Company Name, Ticker, CIK or List to search in Accounting Analytics" [ref=f23e2398]: 10-K
+          - button [ref=f23e30] [cursor=pointer]
+        - generic [ref=f23e34]:
+          - generic [ref=f23e1190] [cursor=pointer]:
+            - generic [ref=f23e1191]: "Client ID:"
+            - generic "None" [ref=f23e1192]: "- None -"
+          - button "My Workspace" [ref=f23e36] [cursor=pointer]
+          - generic [ref=f23e37]: Support
+      - generic "hafiz.a!i007 - hafiz.ali@northbaysolutions.net" [ref=f23e48] [cursor=pointer]: HA
+    - generic [ref=f23e49]:
+      - generic [ref=f23e50]:
+        - generic [ref=f23e51] [cursor=pointer]: Filters
+        - generic [ref=f23e56]:
+          - generic [ref=f23e57]:
+            - generic [ref=f23e58]:
+              - generic [ref=f23e59]: Accounting Analytics
+              - button "Search" [ref=f23e66] [cursor=pointer]
+            - generic [ref=f23e70]:
+              - button "Save Search" [ref=f23e73] [cursor=pointer]
+              - button "Add Alert" [ref=f23e79] [cursor=pointer]
+              - button "Clear Filters" [ref=f23e85] [cursor=pointer]
+          - generic [ref=f23e89]:
+            - generic [ref=f23e90]:
+              - generic [ref=f23e91]: Search Filters
+              - textbox "Type to find filters" [ref=f23e94]
+            - generic [ref=f23e100]:
+              - generic [ref=f23e101]: Search for
+              - generic [ref=f23e102]:
+                - generic [ref=f23e103]: Filings
+                - generic [ref=f23e112]: Exhibits to Filings
+            - generic [ref=f23e121]:
+              - generic [ref=f23e124]:
+                - generic [ref=f23e125]:
+                  - generic [ref=f23e126]: Company, List and Peers
+                  - generic "Contains" [ref=f23e135] [cursor=pointer]
+                - generic [ref=f23e139]:
+                  - textbox "Name, Ticker, CIK, or Saved List" [ref=f23e145]
+                  - generic: Include former names
+              - generic [ref=f23e164]:
+                - generic [ref=f23e165]: Any role
+                - generic [ref=f23e173]: Main filer
+            - generic [ref=f23e180]:
+              - generic [ref=f23e181]: Keywords
+              - textbox [ref=f23e189]
+            - button "Expand Keywords" [disabled] [ref=f23e197]
+            - generic [ref=f23e202]:
+              - generic [ref=f23e204]:
+                - generic [ref=f23e205]: Date
+                - generic "Filed" [ref=f23e210] [cursor=pointer]
+              - textbox [ref=f23e1693]
+            - generic [ref=f23e228]:
+              - generic [ref=f23e229]:
+                - generic [ref=f23e230]: Filing Info
+                - generic [ref=f23e231]: Less
+              - generic [ref=f23e236]:
+                - generic [ref=f23e238]:
+                  - generic [ref=f23e239]:
+                    - generic [ref=f23e240]: Comment Letters - 10-K items
+                    - generic "Contains" [ref=f23e245] [cursor=pointer]
+                  - textbox [ref=f23e3096]
+                - generic [ref=f23e264]:
+                  - generic [ref=f23e265]: Forms
+                  - textbox [ref=f23e1706]
+                - generic [ref=f23e284]:
+                  - generic [ref=f23e285]: Section
+                  - textbox [ref=f23e299]
+                - generic [ref=f23e307]:
+                  - generic [ref=f23e308]: Keywords in Section Title
+                  - textbox [ref=f23e316]
+                - generic [ref=f23e323]:
+                  - generic [ref=f23e324]: Table Type/Title
+                  - textbox [ref=f23e334]
+                - generic [ref=f23e343]:
+                  - generic [ref=f23e344]: Search In Table
+                  - textbox [ref=f23e3100]
+                - generic [ref=f23e362]:
+                  - generic [ref=f23e363]: Financial Statement Year
+                  - generic [ref=f23e367]:
+                    - textbox [ref=f23e374]
+                    - textbox [ref=f23e381]
+                - generic [ref=f23e382]:
+                  - generic [ref=f23e383]: Accession Number
+                  - textbox [ref=f23e393]
+            - generic [ref=f23e394]:
+              - generic [ref=f23e395]:
+                - generic [ref=f23e396]: Accounting Info
+                - generic [ref=f23e397]: Less
+              - generic [ref=f23e402]:
+                - generic [ref=f23e404]:
+                  - generic [ref=f23e405]:
+                    - generic [ref=f23e406]: Non-GAAP Items
+                    - generic "Contains" [ref=f23e411] [cursor=pointer]
+                  - textbox [ref=f23e3104]
+                - generic [ref=f23e430]:
+                  - generic [ref=f23e431]: Accounting Standards (ASCs in the document)
+                  - textbox [ref=f23e441]
+                - generic [ref=f23e450]:
+                  - generic [ref=f23e451]: New Accounting Disclosures and Policies
+                  - generic [ref=f23e455]:
+                    - textbox [ref=f23e461]
+                    - generic [ref=f23e469]:
+                      - generic [ref=f23e470]: Early Adopted
+                      - generic [ref=f23e478]: Was Adopted
+                      - generic [ref=f23e486]: Will Be Adopted
+                      - generic [ref=f23e494]: Disclosed, But No Decision On Adoption
+                - generic [ref=f23e503]:
+                  - generic [ref=f23e504]:
+                    - generic [ref=f23e505]: Critical Audit Matters (CAMs)
+                    - generic "Contains" [ref=f23e510] [cursor=pointer]
+                  - textbox [ref=f23e3108]
+                - generic [ref=f23e529]:
+                  - generic [ref=f23e530]:
+                    - generic [ref=f23e531]: Significant Accounting Policies
+                    - generic "Contains" [ref=f23e536] [cursor=pointer]
+                  - textbox [ref=f23e3112]
+                - generic [ref=f23e555]:
+                  - generic [ref=f23e556]:
+                    - generic [ref=f23e557]: Critical Accounting Estimates
+                    - generic "Contains" [ref=f23e562] [cursor=pointer]
+                  - textbox [ref=f23e3116]
+            - generic [ref=f23e580]:
+              - generic [ref=f23e581]:
+                - generic [ref=f23e582]: Sarbanes-Oxley Disclosure Info
+                - generic [ref=f23e583]: Less
+              - generic [ref=f23e588]:
+                - generic [ref=f23e591]:
+                  - generic [ref=f23e592]: Material Weakness
+                  - textbox [ref=f23e602]
+                - generic [ref=f23e611]:
+                  - generic [ref=f23e612]: Auditor Opinions of Internal Controls
+                  - textbox [ref=f23e1223]
+                - generic [ref=f23e620]:
+                  - generic [ref=f23e621]: Management Assessments of Internal Controls
+                  - textbox [ref=f23e1234]
+            - generic [ref=f23e628]:
+              - generic [ref=f23e629]:
+                - generic [ref=f23e630]: Restatements
+                - generic [ref=f23e631]: Less
+              - generic [ref=f23e638]:
+                - generic [ref=f23e639]:
+                  - generic [ref=f23e640]: Restatement Reasons
+                  - generic "Contains" [ref=f23e645] [cursor=pointer]
+                - textbox [ref=f23e3120]
+            - generic [ref=f23e663]:
+              - generic [ref=f23e664]:
+                - generic [ref=f23e665]: Auditor Info
+                - generic [ref=f23e666]: Less
+              - generic [ref=f23e671]:
+                - generic [ref=f23e673]:
+                  - generic [ref=f23e674]: Accounting Firm
+                  - textbox [ref=f23e684]
+                - generic [ref=f23e693]:
+                  - generic [ref=f23e694]: Auditor Location
+                  - textbox [ref=f23e704]
+                - generic [ref=f23e713]:
+                  - generic [ref=f23e714]: Engagement Partner
+                  - textbox [ref=f23e724]
+                - generic [ref=f23e732]:
+                  - generic [ref=f23e733]: Accounting Fees
+                  - textbox [ref=f23e743]
+                - generic [ref=f23e751]:
+                  - generic [ref=f23e752]: Auditor Change
+                  - generic [ref=f23e756]:
+                    - textbox [ref=f23e766]
+                    - textbox [ref=f23e784]
+                - generic [ref=f23e793]:
+                  - generic [ref=f23e794]: Reasons for Auditor Change
+                  - textbox [ref=f23e1249]
+                - generic [ref=f23e802]:
+                  - generic [ref=f23e803]: Financial Statement Opinion Category
+                  - textbox [ref=f23e1260]
+                - generic [ref=f23e810]: Going Concern
+                - generic [ref=f23e821]:
+                  - generic [ref=f23e822]: Benefit plan Opinion Category
+                  - textbox [ref=f23e1271]
+            - generic [ref=f23e829]:
+              - generic [ref=f23e830]:
+                - generic [ref=f23e831]: Late Filings
+                - generic [ref=f23e832]: Less
+              - generic [ref=f23e837]:
+                - generic [ref=f23e839]:
+                  - generic [ref=f23e840]:
+                    - generic [ref=f23e841]: Non-timely Filing Forms
+                    - generic "Contains" [ref=f23e846] [cursor=pointer]
+                  - textbox [ref=f23e1282]
+                - generic [ref=f23e854]:
+                  - generic [ref=f23e855]:
+                    - generic [ref=f23e856]: Non-timely Filing Related Issues
+                    - generic "Contains" [ref=f23e861] [cursor=pointer]
+                  - textbox [ref=f23e3124]
+            - generic [ref=f23e879]:
+              - generic [ref=f23e880]:
+                - generic [ref=f23e881]: Public Company Info
+                - generic [ref=f23e882]: Less
+              - generic [ref=f23e887]:
+                - generic [ref=f23e889]:
+                  - generic [ref=f23e890]: Industry
+                  - textbox [ref=f23e900]
+                - generic [ref=f23e909]:
+                  - generic [ref=f23e910]: Company Type/Status
+                  - textbox [ref=f23e920]
+                - generic [ref=f23e929]:
+                  - generic [ref=f23e930]: Accelerated Status
+                  - textbox [ref=f23e940]
+                - generic [ref=f23e949]:
+                  - generic [ref=f23e950]: Exchange
+                  - textbox [ref=f23e960]
+                - generic [ref=f23e968]:
+                  - generic [ref=f23e969]: Market Cap
+                  - generic [ref=f23e973]:
+                    - textbox [ref=f23e980]
+                    - textbox [ref=f23e994]
+                - generic [ref=f23e1002]:
+                  - generic [ref=f23e1003]: Revenue
+                  - generic [ref=f23e1007]:
+                    - textbox [ref=f23e1014]
+                    - textbox [ref=f23e1028]
+                - generic [ref=f23e1036]:
+                  - generic [ref=f23e1037]: Net Income
+                  - generic [ref=f23e1041]:
+                    - textbox [ref=f23e1048]
+                    - textbox [ref=f23e1062]
+            - generic [ref=f23e1070]:
+              - generic [ref=f23e1071]:
+                - generic [ref=f23e1072]: Intelligize
+                - generic [ref=f23e1073]: Less
+              - generic [ref=f23e1078]:
+                - generic [ref=f23e1080]:
+                  - generic [ref=f23e1081]: Intelligize ID
+                  - textbox [ref=f23e1092]
+                - generic [ref=f23e1102]:
+                  - generic [ref=f23e1103]: Alerts
+                  - generic [ref=f23e1104]: Alerts Documents
+                - generic [ref=f23e1112]:
+                  - generic [ref=f23e1113]: Saved Folder
+                  - textbox [ref=f23e1123]
+      - generic [ref=f23e1131]:
+        - generic [ref=f23e1134]:
+          - generic [ref=f23e1136]:
+            - generic [ref=f23e1137]:
+              - generic "Home" [ref=f23e1146] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab" [disabled]
+                  - menuitem "Close tab" [disabled]
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right" [disabled]
+                  - menuitem "Close tabs to the left" [disabled]
+                  - menuitem "Close all tabs" [disabled]
+            - generic [ref=f23e1735]:
+              - 'generic "Docs: 286" [ref=f23e1744] [cursor=pointer]'
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left" [disabled]
+                  - menuitem "Close all tabs"
+            - generic [ref=f23e2436]:
+              - 'generic "Docs: 1,485,727" [ref=f23e2612] [cursor=pointer]'
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right" [disabled]
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+          - button "Save Tabs" [ref=f23e1751] [cursor=pointer]
+        - generic [ref=f23e1147]:
+          - generic [ref=f23e1148]:
+            - generic [ref=f23e1299]:
+              - button "Configure Home" [ref=f23e1304] [cursor=pointer]
+              - generic [ref=f23e1309]:
+                - article [ref=f23e1310]:
+                  - heading "Audit Item Matrix" [level=1] [ref=f23e1314]
+                  - generic [ref=f23e1317]:
+                    - generic [ref=f23e1318]:
+                      - generic [ref=f23e1319]: A quick and easy way to compare audit items across companies. You can see audit items by rankings, word counts, and heat maps.
+                      - generic [ref=f23e1320] [cursor=pointer]: Request Training
+                    - generic [ref=f23e1325]:
+                      - generic [ref=f23e1326]:
+                        - generic [ref=f23e1327]: Select a Peer Group to make Quick Matrix
+                        - generic "Select Peer Group" [ref=f23e1330] [cursor=pointer]
+                      - generic [ref=f23e1334]:
+                        - generic [ref=f23e1335]: Create New Matrix
+                        - button "Create/Load New Matrix" [ref=f23e1336] [cursor=pointer]
+                - article [ref=f23e1338]:
+                  - generic [ref=f23e1339]:
+                    - generic [ref=f23e1340]: Comment Letters
+                    - generic [ref=f23e1345]:
+                      - button "Excel List" [ref=f23e1347] [cursor=pointer]
+                      - button "Unpin" [ref=f23e1352] [cursor=pointer]
+                      - generic [ref=f23e1357] [cursor=pointer]: View All
+                  - generic [ref=f23e1359]:
+                    - generic [ref=f23e1360]:
+                      - generic [ref=f23e1361]:
+                        - textbox "Type to filter" [ref=f23e1363]
+                        - generic [ref=f23e1364]:
+                          - generic [ref=f23e1365]: Peer Group
+                          - generic "My Company & Peers" [ref=f23e1368] [cursor=pointer]
+                          - button [disabled] [ref=f23e1372]
+                      - generic [ref=f23e1376]:
+                        - generic [ref=f23e1377] [cursor=pointer]: Non-GAAP
+                        - generic [ref=f23e1379] [cursor=pointer]: ASC
+                        - generic [ref=f23e1381] [cursor=pointer]: 10-K Items
+                    - paragraph [ref=f23e1385]: 0 Results
+                    - generic [ref=f23e1386]: "* Non-GAAP information is currently available for Large Accelerated Filers."
+                - article [ref=f23e1388]:
+                  - generic [ref=f23e1389]:
+                    - generic [ref=f23e1390]: Top Non-GAAP Metrics Disclosures
+                    - generic [ref=f23e1395]:
+                      - button "Excel List" [ref=f23e1397] [cursor=pointer]
+                      - button "Unpin" [ref=f23e1402] [cursor=pointer]
+                  - generic [ref=f23e1408]:
+                    - generic [ref=f23e1409]:
+                      - generic [ref=f23e1410]:
+                        - generic [ref=f23e1414]:
+                          - generic [ref=f23e1415]: Peer Group
+                          - generic "My Company & Peers" [ref=f23e1418] [cursor=pointer]
+                          - button [disabled] [ref=f23e1422]
+                        - generic [ref=f23e1427]:
+                          - button [ref=f23e1428] [cursor=pointer]
+                          - button [ref=f23e1432] [cursor=pointer]
+                      - generic [ref=f23e1437]:
+                        - generic [ref=f23e1438]:
+                          - generic [ref=f23e1439]:
+                            - textbox [ref=f23e1442]: 07/28/2023
+                            - textbox [ref=f23e1449]: 07/28/2026
+                          - generic [ref=f23e1454]:
+                            - generic [ref=f23e1455] [cursor=pointer]: 1M
+                            - generic [ref=f23e1456] [cursor=pointer]: 3M
+                            - generic [ref=f23e1457] [cursor=pointer]: 6M
+                            - generic [ref=f23e1458] [cursor=pointer]: YTD
+                            - generic [ref=f23e1459] [cursor=pointer]: 1Y
+                            - generic [ref=f23e1460] [cursor=pointer]: 3Y
+                            - generic [ref=f23e1461] [cursor=pointer]: 5Y
+                            - generic [ref=f23e1462] [cursor=pointer]: ALL
+                        - paragraph [ref=f23e1465]: 0 Results
+                    - generic [ref=f23e1466]: "* Non-GAAP information is currently available for Large Accelerated Filers."
+                - article [ref=f23e1468]:
+                  - generic [ref=f23e1469]:
+                    - generic [ref=f23e1470]: Critical Audit Matters (CAM) Topics
+                    - generic [ref=f23e1475]:
+                      - button "Excel List" [ref=f23e1477] [cursor=pointer]
+                      - button "Unpin" [ref=f23e1482] [cursor=pointer]
+                      - generic [ref=f23e1487] [cursor=pointer]: View All
+                  - generic [ref=f23e1489]:
+                    - generic [ref=f23e1490]:
+                      - generic [ref=f23e1491]:
+                        - textbox "Type to filter" [ref=f23e1493]
+                        - generic [ref=f23e1494]:
+                          - generic [ref=f23e1495]: Peer Group
+                          - generic "My Company & Peers" [ref=f23e1498] [cursor=pointer]
+                          - button [disabled] [ref=f23e1502]
+                      - generic [ref=f23e1506]:
+                        - generic [ref=f23e1507] [cursor=pointer]: By Year
+                        - generic [ref=f23e1509] [cursor=pointer]: By Company
+                    - paragraph [ref=f23e1513]: 0 Results
+                    - generic [ref=f23e1514]: "* CAMs information is currently available for Large Accelerated Filers."
+                - article [ref=f23e1516]:
+                  - generic [ref=f23e1517]:
+                    - generic [ref=f23e1518]: Auditor Information
+                    - generic [ref=f23e1523]:
+                      - button "Excel List" [ref=f23e1525] [cursor=pointer]
+                      - button "Unpin" [ref=f23e1530] [cursor=pointer]
+                  - generic [ref=f23e1536]:
+                    - generic [ref=f23e1537]:
+                      - generic [ref=f23e1539]:
+                        - generic [ref=f23e1540]: Peer Group
+                        - generic "My Company & Peers" [ref=f23e1543] [cursor=pointer]
+                        - button [disabled] [ref=f23e1547]
+                      - generic [ref=f23e1551]:
+                        - generic [ref=f23e1552] [cursor=pointer]: Audit Fees
+                        - generic [ref=f23e1554] [cursor=pointer]: Distribution
+                    - paragraph [ref=f23e1558]: 0 Results
+                    - generic [ref=f23e1559]: "* Auditor information is currently available for Large Accelerated Filers."
+                - article [ref=f23e1561]:
+                  - generic [ref=f23e1563]:
+                    - heading "Research Library" [level=1] [ref=f23e1565]
+                    - button "Unpin" [ref=f23e1568] [cursor=pointer]
+                  - generic [ref=f23e1574]:
+                    - generic [ref=f23e1575]:
+                      - generic "All Apps" [ref=f23e1579] [cursor=pointer]
+                      - textbox "What are you looking for?" [ref=f23e1585]
+                    - generic [ref=f23e1589]:
+                      - paragraph [ref=f23e1591]: Category
+                      - paragraph [ref=f23e1593]: App
+                    - grid "grid" [ref=f23e1595]:
+                      - rowgroup [ref=f23e1596]:
+                        - listitem [ref=f23e1598]:
+                          - paragraph [ref=f23e1603]:
+                            - generic [ref=f23e1607]: Recommended
+                        - listitem [ref=f23e1609]:
+                          - paragraph [ref=f23e1614]:
+                            - generic [ref=f23e1615]: COVID
+                        - listitem [ref=f23e1617]:
+                          - paragraph [ref=f23e1622]:
+                            - generic [ref=f23e1623]: Current Events
+                        - listitem [ref=f23e1625]:
+                          - paragraph [ref=f23e1630]:
+                            - generic [ref=f23e1631]: Cybersecurity
+                        - listitem [ref=f23e1633]:
+                          - paragraph [ref=f23e1638]:
+                            - generic [ref=f23e1639]: Enforcement
+                        - listitem [ref=f23e1641]:
+                          - paragraph [ref=f23e1646]:
+                            - generic [ref=f23e1647]: Finance & Accounting
+                        - listitem [ref=f23e1649]:
+                          - paragraph [ref=f23e1654]:
+                            - generic [ref=f23e1655]: Governance / ESG
+                        - listitem [ref=f23e1657]:
+                          - paragraph [ref=f23e1662]:
+                            - generic [ref=f23e1663]: MD&A
+                        - listitem [ref=f23e1665]:
+                          - paragraph [ref=f23e1670]:
+                            - generic [ref=f23e1671]: Regulatory
+                        - listitem [ref=f23e1673]:
+                          - paragraph [ref=f23e1678]:
+                            - generic [ref=f23e1679]: Risk Factors
+                        - listitem [ref=f23e1681]:
+                          - paragraph [ref=f23e1686]:
+                            - generic [ref=f23e1687]: Transactions
+            - contentinfo [ref=f23e1154]:
+              - link [ref=f23e1157] [cursor=pointer]:
+                - /url: https://www.lexisnexis.com/
+                - img "LexisNexis Logo" [ref=f23e1158]
+              - generic [ref=f23e1159]:
+                - list [ref=f23e1161]:
+                  - listitem [ref=f23e1162]:
+                    - link "About" [ref=f23e1163] [cursor=pointer]:
+                      - /url: https://www.intelligize.com/about/
+                  - listitem [ref=f23e1164]:
+                    - link "Privacy" [ref=f23e1165] [cursor=pointer]:
+                      - /url: http://www.lexisnexis.com/en-us/terms/privacy-policy.page
+                  - listitem [ref=f23e1166]:
+                    - link "Trust Center" [ref=f23e1167] [cursor=pointer]:
+                      - /url: https://trust.lexisnexis.com
+                  - listitem [ref=f23e1168]:
+                    - link "Cookie Policy" [ref=f23e1169] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=f23e1170]:
+                    - link "Terms & Conditions" [ref=f23e1171] [cursor=pointer]:
+                      - /url: https://www.intelligize.com/terms-of-service/
+                - list [ref=f23e1173]:
+                  - listitem [ref=f23e1688]:
+                    - text: "Call Support:"
+                    - strong [ref=f23e1689]: 1-888-925-8627
+                  - listitem [ref=f23e1690]:
+                    - text: "Email Support:"
+                    - link "support@intelligize.com" [ref=f23e1691] [cursor=pointer]:
+                      - /url: mailto:support@intelligize.com
+                  - listitem [ref=f23e1174]:
+                    - link "© 2026 LexisNexis®" [ref=f23e1175] [cursor=pointer]:
+                      - /url: https://www.lexisnexis.com/terms/copr/lngp/us/
+              - link [ref=f23e1178] [cursor=pointer]:
+                - /url: http://www.relxgroup.com/Pages/Home.aspx
+                - img "LexisNexis Logo" [ref=f23e1179]
+          - generic [ref=f23e2452]:
+            - generic [ref=f23e2454]:
+              - generic [ref=f23e2455]:
+                - generic [ref=f23e2457]:
+                  - button "Download" [ref=f23e2459] [cursor=pointer]
+                  - button "Email" [ref=f23e2465] [cursor=pointer]
+                  - button "Share Link" [ref=f23e2471] [cursor=pointer]
+                  - button "Excel List" [ref=f23e2477] [cursor=pointer]
+                  - generic [ref=f23e2482]:
+                    - button "More" [ref=f23e2483] [cursor=pointer]
+                    - generic:
+                      - button "Print" [ref=f23e2490] [cursor=pointer]
+                      - button "Save to Workspace" [ref=f23e2497] [cursor=pointer]
+                  - button "Extract Company List" [ref=f23e2506] [cursor=pointer]
+                - button [ref=f23e2512] [cursor=pointer]
+              - generic [ref=f23e2516]:
+                - generic [ref=f23e2517]:
+                  - generic [ref=f23e2518]: Exhibits
+                  - generic [ref=f23e2527]: Snippets
+                  - generic [ref=f23e2533]: Cross-Reference
+                  - generic [ref=f23e2541]: Filing Info
+                  - generic [ref=f23e2551]: Company Info
+                  - generic [ref=f23e2558]: Auditor Info
+                  - button "Settings" [ref=f23e2567] [cursor=pointer]
+                - generic [ref=f23e2571]:
+                  - generic [ref=f23e2572]: "Filters:"
+                  - generic [ref=f23e2573]:
+                    - 'generic "Search for: Filings; Exhibits to Filings" [ref=f23e2574]'
+                    - 'generic "Amendments: Include" [ref=f23e2576]'
+                    - 'generic "Forms 3, 4, 5 & 144: Exclude" [ref=f23e2578]'
+                    - 'generic "iXBRL: Include" [ref=f23e2580]'
+            - generic [ref=f23e2582]:
+              - generic [ref=f23e2584]:
+                - generic [ref=f23e2590]: Audit Filing
+                - generic [ref=f23e2591] [cursor=pointer]: Company
+                - generic "View company information"
+                - generic [ref=f23e2596]: Auditor
+                - generic [ref=f23e2597] [cursor=pointer]: Filing Date
+              - grid "grid" [ref=f23e2604]:
+                - rowgroup [ref=f23e2613]:
+                  - generic [ref=f23e2615]:
+                    - generic [ref=f23e2616] [cursor=pointer]:
+                      - generic [ref=f23e2620]: "1"
+                      - button "View" [ref=f23e2621]
+                      - generic "View X-17A-5 filed on 07/27/2026" [ref=f23e2623]: X-17A-5
+                      - button "Audit" [ref=f23e2624]
+                      - generic "0001136728" [ref=f23e2633]: DELOITTE CORPORATE FINANCE LLC
+                      - button "Profile" [ref=f23e2634]
+                      - generic [ref=f23e2635]: Plante & Moran
+                      - generic "07/27/2026" [ref=f23e2638]
+                    - generic [ref=f23e2645]:
+                      - generic [ref=f23e2649]:
+                        - generic [ref=f23e2650]: Filing Info
+                        - generic [ref=f23e2653]:
+                          - generic [ref=f23e2654]: Period End Date
+                          - generic [ref=f23e2655]: 05/31/2026
+                      - generic [ref=f23e2657]:
+                        - generic [ref=f23e2658]: FULL
+                        - generic [ref=f23e2673]: FULL
+                        - generic [ref=f23e2688]: FULL
+                        - generic [ref=f23e2703]: FULL
+                  - generic [ref=f23e2719]:
+                    - generic [ref=f23e2720] [cursor=pointer]:
+                      - generic [ref=f23e2724]: "2"
+                      - button "View" [ref=f23e2725]
+                      - 'generic "View 8-K/A (Items: 9.01) filed on 07/27/2026" [ref=f23e2727]': "8-K/A (Items: 9.01)"
+                      - button "Audit" [ref=f23e2728]
+                      - generic "0001419275" [ref=f23e2737]: RTB DIGITAL, INC.
+                      - button "Profile" [disabled] [ref=f23e2738]
+                      - generic "07/27/2026" [ref=f23e2740]
+                    - generic [ref=f23e2747]:
+                      - generic [ref=f23e2751]:
+                        - generic [ref=f23e2752]: Filing Info
+                        - generic [ref=f23e2755]:
+                          - generic [ref=f23e2756]: Period End Date
+                          - generic [ref=f23e2757]: 05/12/2026
+                      - generic [ref=f23e2759]:
+                        - generic [ref=f23e2766] [cursor=pointer]:
+                          - text: EX-23.1 CONSENT OF INDEPENDENT REGISTERED PUBLIC ACCOUNTING FIRM
+                          - generic [ref=f23e2769]: ●
+                          - text: Consent- Advisory and Professional
+                        - generic [ref=f23e2776]: EX-99.1 Asset-Backed - Report of Independent Registered Public Accounting Firm | Report of Independent Registered Public Accounting Firm
+                        - generic [ref=f23e2797] [cursor=pointer]:
+                          - text: EX-99.2 BALANCE SHEETS
+                          - generic [ref=f23e2800]: ●
+                          - text: Financial Statement
+                        - generic [ref=f23e2807]: EX-99.3 UNAUDITED PROFORMA CONDENSED COMBINED BALANCE SHEET AS OF MARCH 31, 2026
+                        - generic [ref=f23e2822]: EX-101 XBRL Document
+                  - generic [ref=f23e2835]:
+                    - generic [ref=f23e2836] [cursor=pointer]:
+                      - generic [ref=f23e2840]: "3"
+                      - button "View" [ref=f23e2841]
+                      - 'generic "View 8-K (Items: 5.02) filed on 07/27/2026" [ref=f23e2843]': "8-K (Items: 5.02)"
+                      - button "Audit" [ref=f23e2844]
+                      - generic "0001289848" [ref=f23e2853]: HURON CONSULTING GROUP INC.
+                      - button "Profile" [disabled] [ref=f23e2854]
+                      - generic "07/27/2026" [ref=f23e2856]
+                    - generic [ref=f23e2863]:
+                      - generic [ref=f23e2867]:
+                        - generic [ref=f23e2868]: Filing Info
+                        - generic [ref=f23e2871]:
+                          - generic [ref=f23e2872]: Period End Date
+                          - generic [ref=f23e2873]: 07/23/2026
+                      - generic [ref=f23e2874]: EX-101 XBRL Document
+                  - generic [ref=f23e2889]:
+                    - generic [ref=f23e2890] [cursor=pointer]:
+                      - generic [ref=f23e2894]: "4"
+                      - button "View" [ref=f23e2895]
+                      - 'generic "View 8-K (Items: 2.02, 7.01, 9.01) filed on 07/27/2026" [ref=f23e2897]': "8-K (Items: 2.02, 7.01, 9.01)"
+                      - button "Audit" [ref=f23e2898]
+                      - generic "0001895262" [ref=f23e2907]: NOBLE CORP PLC
+                      - button "Profile" [disabled] [ref=f23e2908]
+                      - generic "07/27/2026" [ref=f23e2910]
+                    - generic [ref=f23e2917]:
+                      - generic [ref=f23e2921]:
+                        - generic [ref=f23e2922]: Filing Info
+                        - generic [ref=f23e2925]:
+                          - generic [ref=f23e2926]: Period End Date
+                          - generic [ref=f23e2927]: 07/27/2026
+                      - generic [ref=f23e2929]:
+                        - generic [ref=f23e2936] [cursor=pointer]:
+                          - text: EX-99.1 NOBLE CORPORATION PLC ANNOUNCES SECOND QUARTER 2026 RESULTS
+                          - generic [ref=f23e2939]: ●
+                          - text: Financial Report - Press Release
+                        - generic [ref=f23e2946]: EX-99.2 Noble Corporation plc Second Quarter 2026 Earnings Conference Call July 28, 2026
+                        - generic [ref=f23e2961]: EX-101 XBRL Document
+                  - generic [ref=f23e2974]:
+                    - generic [ref=f23e2975] [cursor=pointer]:
+                      - generic [ref=f23e2979]: "5"
+                      - button "View" [ref=f23e2980]
+                      - 'generic "View 8-K (Items: 1.01, 9.01) filed on 07/27/2026" [ref=f23e2982]': "8-K (Items: 1.01, 9.01)"
+                      - button "Audit" [ref=f23e2983]
+                      - generic "0001378140" [ref=f23e2992]: OCEAN POWER TECHNOLOGIES, INC.
+                      - button "Profile" [disabled] [ref=f23e2993]
+                      - generic "07/27/2026" [ref=f23e2995]
+                    - generic [ref=f23e3002]:
+                      - generic [ref=f23e3006]:
+                        - generic [ref=f23e3007]: Filing Info
+                        - generic [ref=f23e3010]:
+                          - generic [ref=f23e3011]: Period End Date
+                          - generic [ref=f23e3012]: 07/27/2026
+                      - generic [ref=f23e3014]:
+                        - generic [ref=f23e3015]: EX-5.1 Opinion Of Counsel
+                        - generic [ref=f23e3036] [cursor=pointer]:
+                          - text: EX-10.1 At Market Issuance Sales Agreement
+                          - generic [ref=f23e3039]: ●
+                          - text: Sales/Purchase Agreement
+                        - generic [ref=f23e3046]: EX-101 XBRL Document
+            - generic [ref=f23e3058]:
+              - generic [ref=f23e3059]:
+                - generic [ref=f23e3060]: Items per page
+                - generic [ref=f23e3061]: "25"
+                - generic [ref=f23e3068]: filings per page
+              - generic [ref=f23e3070]:
+                - generic [ref=f23e3071]:
+                  - generic [ref=f23e3072]: Page
+                  - textbox [ref=f23e3074]: "1"
+                  - generic [ref=f23e3075]: of 59,430
+                - generic [ref=f23e3076]:
+                  - button "Go to first page" [disabled] [ref=f23e3077]
+                  - button "Previous Page" [disabled] [ref=f23e3081]
+                  - button "Next Page" [ref=f23e3085] [cursor=pointer]
+                  - button "Go to last page" [ref=f23e3089] [cursor=pointer]
+      - generic "Support Chat" [ref=f23e1180]:
+        - button "Live Person" [ref=f23e1182]
+  - generic:
+    - generic:
+      - iframe

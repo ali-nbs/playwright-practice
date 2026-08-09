@@ -1,0 +1,59 @@
+[  170300ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7064322
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:211683)
+    at wy (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9828342)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9835359
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861714
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861917) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[  170376ms] [LOG] Failed to initialize Sentry @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[  180332ms] [ERROR] TypeError: Failed to fetch @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[  200468ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7064322
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:211683)
+    at wy (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9828342)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9835359
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861714
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861917) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[  200512ms] [LOG] Failed to initialize Sentry @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[  218458ms] TypeError: Cannot read properties of undefined (reading 'type')
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3729
+    at dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:106:16228)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935098
+    at Array.forEach (<anonymous>)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935075
+    at bu (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:87769)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935054
+[  220817ms] [WARNING] Deprecation warning: value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are discouraged. Please refer to http://momentjs.com/guides/#/warnings/js-date/ for more info.
+Arguments: 
+[0] _isAMomentObject: true, _isUTC: false, _useUTC: false, _l: undefined, _i: L, _f: undefined, _strict: undefined, _locale: [object Object]
+Error
+    at r.createFromInputFallback (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:79483)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99611
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99662
+    at jt (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99970)
+    at At (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:100231)
+    at Pt (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:100313)
+    at r (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:76406)
+    at b (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:6172876)
+    at Object.y [as textToItem] (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:6173273)
+    at e.setFilterValue (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3428387) @ https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:78
+[  284151ms] TypeError: Cannot read properties of null (reading 'querySelector')
+    at https://apps.intelligize.com/chunk.audit.f33f2ce3aec580b101e5.js:1:1367597
+    at https://apps.intelligize.com/chunk.audit.f33f2ce3aec580b101e5.js:1:1367907
+    at b (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:72945)
+    at x (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:73168)
+    at w (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:73058)
+[  436111ms] TypeError: Cannot read properties of null (reading 'querySelector')
+    at https://apps.intelligize.com/chunk.audit.f33f2ce3aec580b101e5.js:1:1367597
+    at https://apps.intelligize.com/chunk.audit.f33f2ce3aec580b101e5.js:1:1367907
+    at b (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:72945)
+    at x (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:73168)
+    at w (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:73058)

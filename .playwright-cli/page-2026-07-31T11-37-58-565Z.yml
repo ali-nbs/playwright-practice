@@ -1,0 +1,1564 @@
+- generic [active] [ref=f14e1]:
+  - generic [ref=f14e12]:
+    - navigation [ref=f14e13]:
+      - generic "Click here to return to main menu" [ref=f14e17] [cursor=pointer]:
+        - img "Intelligize" [ref=f14e18]
+      - generic [ref=f14e19]:
+        - generic [ref=f14e24]:
+          - textbox "Company Name, Ticker, CIK or List to search in Accounting Analytics" [ref=f14e30]
+          - button [ref=f14e32] [cursor=pointer]
+        - generic [ref=f14e36]:
+          - generic [ref=f14e38] [cursor=pointer]:
+            - generic [ref=f14e39]: "Client ID:"
+            - generic "None" [ref=f14e40]: "- None -"
+          - button "My Workspace" [ref=f14e42] [cursor=pointer]
+          - generic [ref=f14e43]: Support
+      - generic "hafiz.a!i007 - hafiz.ali@northbaysolutions.net" [ref=f14e52] [cursor=pointer]: HA
+    - generic [ref=f14e53]:
+      - generic [ref=f14e54]:
+        - generic [ref=f14e55] [cursor=pointer]: Document Details
+        - generic [ref=f14e2419]:
+          - generic [ref=f14e2420]: Accounting Analytics
+          - generic [ref=f14e2428]:
+            - button [ref=f14e2429] [cursor=pointer]
+            - generic [ref=f14e2434]:
+              - generic [ref=f14e2435]:
+                - generic "Outline" [ref=f14e2438] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f14e2439]:
+                - generic "Exhibits" [ref=f14e2442] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f14e2443]:
+                - generic "iXBRL" [ref=f14e2711] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f14e2444]:
+                - generic "Info" [ref=f14e2447] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f14e2448]:
+                - generic:
+                  - generic:
+                    - generic "Results"
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f14e2449]:
+                - generic "Notes" [ref=f14e2452] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab" [disabled]
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right" [disabled]
+                    - menuitem "Close tabs to the left" [disabled]
+                    - menuitem "Close all tabs" [disabled]
+              - generic [ref=f14e2453]:
+                - generic "ACCT" [ref=f14e2456] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+            - button [disabled] [ref=f14e2457]
+          - generic [ref=f14e2461]:
+            - generic [ref=f14e2462]:
+              - button "Expand All" [ref=f14e2463] [cursor=pointer]
+              - button "Collapse All" [ref=f14e2467] [cursor=pointer]
+            - generic [ref=f14e2474]:
+              - generic [ref=f14e2475]: 11-K 2026-07-16
+              - generic [ref=f14e2487]:
+                - generic [ref=f14e2488]: Report of Independent Registered Public Accounting Firm
+                - generic [ref=f14e2502]:
+                  - generic [ref=f14e2503]: Opinion on the Financial Statements
+                  - generic [ref=f14e2518]:
+                    - generic [ref=f14e2519]: Unqualified
+                    - generic [ref=f14e2544] [cursor=pointer]:
+                      - generic [ref=f14e2545]: Benefit Plan Opinion Category -
+                      - generic [ref=f14e2549]: Unqualified
+      - generic [ref=f14e1179]:
+        - generic [ref=f14e1182]:
+          - generic [ref=f14e1184]:
+            - generic [ref=f14e1185]:
+              - generic "Home" [ref=f14e1194] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab" [disabled]
+                  - menuitem "Close tab" [disabled]
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right" [disabled]
+                  - menuitem "Close tabs to the left" [disabled]
+                  - menuitem "Close all tabs" [disabled]
+            - generic [ref=f14e1787]:
+              - 'generic "Docs: 7,611" [ref=f14e1796] [cursor=pointer]'
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left" [disabled]
+                  - menuitem "Close all tabs"
+            - generic [ref=f14e2552]:
+              - generic "11-K 07/16/2026" [ref=f14e2564] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right" [disabled]
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+          - button "Save Tabs" [ref=f14e1803] [cursor=pointer]
+        - generic [ref=f14e1200]:
+          - generic [ref=f14e1201]:
+            - generic [ref=f14e1203]:
+              - button "Configure Home" [ref=f14e1208] [cursor=pointer]
+              - generic [ref=f14e1213]:
+                - article [ref=f14e1214]:
+                  - heading "Audit Item Matrix" [level=1] [ref=f14e1218]
+                  - generic [ref=f14e1221]:
+                    - generic [ref=f14e1222]:
+                      - generic [ref=f14e1223]: A quick and easy way to compare audit items across companies. You can see audit items by rankings, word counts, and heat maps.
+                      - generic [ref=f14e1224] [cursor=pointer]: Request Training
+                    - generic [ref=f14e1229]:
+                      - generic [ref=f14e1230]:
+                        - generic [ref=f14e1231]: Select a Peer Group to make Quick Matrix
+                        - generic "Select Peer Group" [ref=f14e1234] [cursor=pointer]
+                      - generic [ref=f14e1238]:
+                        - generic [ref=f14e1239]: Create New Matrix
+                        - button "Create/Load New Matrix" [ref=f14e1240] [cursor=pointer]
+                - article [ref=f14e1242]:
+                  - generic [ref=f14e1243]:
+                    - generic [ref=f14e1244]: Comment Letters
+                    - generic [ref=f14e1249]:
+                      - button "Excel List" [ref=f14e1251] [cursor=pointer]
+                      - button "Unpin" [ref=f14e1256] [cursor=pointer]
+                      - generic [ref=f14e1261] [cursor=pointer]: View All
+                  - generic [ref=f14e1263]:
+                    - generic [ref=f14e1264]:
+                      - generic [ref=f14e1265]:
+                        - textbox "Type to filter" [ref=f14e1267]
+                        - generic [ref=f14e1268]:
+                          - generic [ref=f14e1269]: Peer Group
+                          - generic "My Company & Peers" [ref=f14e1272] [cursor=pointer]
+                          - button [disabled] [ref=f14e1276]
+                      - generic [ref=f14e1280]:
+                        - generic [ref=f14e1281] [cursor=pointer]: Non-GAAP
+                        - generic [ref=f14e1283] [cursor=pointer]: ASC
+                        - generic [ref=f14e1285] [cursor=pointer]: 10-K Items
+                    - paragraph [ref=f14e1661]: 0 Results
+                    - generic [ref=f14e1290]: "* Non-GAAP information is currently available for Large Accelerated Filers."
+                - article [ref=f14e1292]:
+                  - generic [ref=f14e1293]:
+                    - generic [ref=f14e1294]: Top Non-GAAP Metrics Disclosures
+                    - generic [ref=f14e1299]:
+                      - button "Excel List" [ref=f14e1301] [cursor=pointer]
+                      - button "Unpin" [ref=f14e1306] [cursor=pointer]
+                  - generic [ref=f14e1312]:
+                    - generic [ref=f14e1313]:
+                      - generic [ref=f14e1314]:
+                        - generic [ref=f14e1318]:
+                          - generic [ref=f14e1319]: Peer Group
+                          - generic "My Company & Peers" [ref=f14e1322] [cursor=pointer]
+                          - button [disabled] [ref=f14e1326]
+                        - generic [ref=f14e1331]:
+                          - button [ref=f14e1332] [cursor=pointer]
+                          - button [ref=f14e1336] [cursor=pointer]
+                      - generic [ref=f14e1341]:
+                        - generic [ref=f14e1678]:
+                          - generic [ref=f14e1679]:
+                            - textbox [ref=f14e1682]: 07/31/2023
+                            - textbox [ref=f14e1689]: 07/31/2026
+                          - generic [ref=f14e1694]:
+                            - generic [ref=f14e1695] [cursor=pointer]: 1M
+                            - generic [ref=f14e1696] [cursor=pointer]: 3M
+                            - generic [ref=f14e1697] [cursor=pointer]: 6M
+                            - generic [ref=f14e1698] [cursor=pointer]: YTD
+                            - generic [ref=f14e1699] [cursor=pointer]: 1Y
+                            - generic [ref=f14e1700] [cursor=pointer]: 3Y
+                            - generic [ref=f14e1701] [cursor=pointer]: 5Y
+                            - generic [ref=f14e1702] [cursor=pointer]: ALL
+                        - paragraph [ref=f14e1705]: 0 Results
+                    - generic [ref=f14e1345]: "* Non-GAAP information is currently available for Large Accelerated Filers."
+                - article [ref=f14e1347]:
+                  - generic [ref=f14e1348]:
+                    - generic [ref=f14e1349]: Critical Audit Matters (CAM) Topics
+                    - generic [ref=f14e1354]:
+                      - button "Excel List" [ref=f14e1356] [cursor=pointer]
+                      - button "Unpin" [ref=f14e1361] [cursor=pointer]
+                      - generic [ref=f14e1366] [cursor=pointer]: View All
+                  - generic [ref=f14e1368]:
+                    - generic [ref=f14e1369]:
+                      - generic [ref=f14e1370]:
+                        - textbox "Type to filter" [ref=f14e1372]
+                        - generic [ref=f14e1373]:
+                          - generic [ref=f14e1374]: Peer Group
+                          - generic "My Company & Peers" [ref=f14e1377] [cursor=pointer]
+                          - button [disabled] [ref=f14e1381]
+                      - generic [ref=f14e1385]:
+                        - generic [ref=f14e1386] [cursor=pointer]: By Year
+                        - generic [ref=f14e1388] [cursor=pointer]: By Company
+                    - paragraph [ref=f14e1664]: 0 Results
+                    - generic [ref=f14e1393]: "* CAMs information is currently available for Large Accelerated Filers."
+                - article [ref=f14e1395]:
+                  - generic [ref=f14e1396]:
+                    - generic [ref=f14e1397]: Auditor Information
+                    - generic [ref=f14e1402]:
+                      - button "Excel List" [ref=f14e1404] [cursor=pointer]
+                      - button "Unpin" [ref=f14e1409] [cursor=pointer]
+                  - generic [ref=f14e1415]:
+                    - generic [ref=f14e1416]:
+                      - generic [ref=f14e1418]:
+                        - generic [ref=f14e1419]: Peer Group
+                        - generic "My Company & Peers" [ref=f14e1422] [cursor=pointer]
+                        - button [disabled] [ref=f14e1426]
+                      - generic [ref=f14e1430]:
+                        - generic [ref=f14e1431] [cursor=pointer]: Audit Fees
+                        - generic [ref=f14e1433] [cursor=pointer]: Distribution
+                    - paragraph [ref=f14e1667]: 0 Results
+                    - generic [ref=f14e1438]: "* Auditor information is currently available for Large Accelerated Filers."
+                - article [ref=f14e1440]:
+                  - generic [ref=f14e1442]:
+                    - heading "Research Library" [level=1] [ref=f14e1444]
+                    - button "Unpin" [ref=f14e1447] [cursor=pointer]
+                  - generic [ref=f14e1453]:
+                    - generic [ref=f14e1454]:
+                      - generic "All Apps" [ref=f14e1458] [cursor=pointer]
+                      - textbox "What are you looking for?" [ref=f14e1464]
+                    - generic [ref=f14e1468]:
+                      - paragraph [ref=f14e1470]: Category
+                      - paragraph [ref=f14e1472]: App
+                    - grid "grid" [ref=f14e1474]:
+                      - rowgroup [ref=f14e1475]:
+                        - listitem [ref=f14e1477]:
+                          - paragraph [ref=f14e1482]:
+                            - generic [ref=f14e1486]: Recommended
+                        - listitem [ref=f14e1488]:
+                          - paragraph [ref=f14e1493]:
+                            - generic [ref=f14e1494]: COVID
+                        - listitem [ref=f14e1496]:
+                          - paragraph [ref=f14e1501]:
+                            - generic [ref=f14e1502]: Current Events
+                        - listitem [ref=f14e1504]:
+                          - paragraph [ref=f14e1509]:
+                            - generic [ref=f14e1510]: Cybersecurity
+                        - listitem [ref=f14e1512]:
+                          - paragraph [ref=f14e1517]:
+                            - generic [ref=f14e1518]: Enforcement
+                        - listitem [ref=f14e1520]:
+                          - paragraph [ref=f14e1525]:
+                            - generic [ref=f14e1526]: Finance & Accounting
+                        - listitem [ref=f14e1528]:
+                          - paragraph [ref=f14e1533]:
+                            - generic [ref=f14e1534]: Governance / ESG
+                        - listitem [ref=f14e1536]:
+                          - paragraph [ref=f14e1541]:
+                            - generic [ref=f14e1542]: MD&A
+                        - listitem [ref=f14e1544]:
+                          - paragraph [ref=f14e1549]:
+                            - generic [ref=f14e1550]: Regulatory
+                        - listitem [ref=f14e1552]:
+                          - paragraph [ref=f14e1557]:
+                            - generic [ref=f14e1558]: Risk Factors
+                        - listitem [ref=f14e1560]:
+                          - paragraph [ref=f14e1565]:
+                            - generic [ref=f14e1566]: Transactions
+            - contentinfo [ref=f14e1568]:
+              - link [ref=f14e1571] [cursor=pointer]:
+                - /url: https://www.lexisnexis.com/
+                - img "LexisNexis Logo" [ref=f14e1572]
+              - generic [ref=f14e1573]:
+                - list [ref=f14e1575]:
+                  - listitem [ref=f14e1576]:
+                    - link "About" [ref=f14e1577] [cursor=pointer]:
+                      - /url: https://www.intelligize.com/about/
+                  - listitem [ref=f14e1578]:
+                    - link "Privacy" [ref=f14e1579] [cursor=pointer]:
+                      - /url: http://www.lexisnexis.com/en-us/terms/privacy-policy.page
+                  - listitem [ref=f14e1580]:
+                    - link "Trust Center" [ref=f14e1581] [cursor=pointer]:
+                      - /url: https://trust.lexisnexis.com
+                  - listitem [ref=f14e1582]:
+                    - link "Cookie Policy" [ref=f14e1583] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=f14e1584]:
+                    - link "Terms & Conditions" [ref=f14e1585] [cursor=pointer]:
+                      - /url: https://www.intelligize.com/terms-of-service/
+                - list [ref=f14e1587]:
+                  - listitem [ref=f14e1588]:
+                    - text: "Call Support:"
+                    - strong [ref=f14e1589]: 1-888-925-8627
+                  - listitem [ref=f14e1590]:
+                    - text: "Email Support:"
+                    - link "support@intelligize.com" [ref=f14e1591] [cursor=pointer]:
+                      - /url: mailto:support@intelligize.com
+                  - listitem [ref=f14e1592]:
+                    - link "© 2026 LexisNexis®" [ref=f14e1593] [cursor=pointer]:
+                      - /url: https://www.lexisnexis.com/terms/copr/lngp/us/
+              - link [ref=f14e1596] [cursor=pointer]:
+                - /url: http://www.relxgroup.com/Pages/Home.aspx
+                - img "LexisNexis Logo" [ref=f14e1597]
+          - generic [ref=f14e2568]:
+            - generic [ref=f14e2569]:
+              - generic [ref=f14e2570]:
+                - generic [ref=f14e2571]:
+                  - generic [ref=f14e2572]:
+                    - button "Download" [ref=f14e2574] [cursor=pointer]
+                    - button "Email" [ref=f14e2579] [cursor=pointer]
+                    - button "Copy link to this document" [ref=f14e2584] [cursor=pointer]
+                    - generic [ref=f14e2588]:
+                      - button [ref=f14e2589] [cursor=pointer]
+                      - generic:
+                        - button "Print the selected items from the list below" [ref=f14e2595] [cursor=pointer]
+                        - button [ref=f14e2601] [cursor=pointer]
+                  - button "Notes & Highlights" [ref=f14e2608] [cursor=pointer]
+                - generic [ref=f14e2712]:
+                  - generic [ref=f14e2715]: "Search in Document:"
+                  - generic [ref=f14e2716]:
+                    - generic [ref=f14e2717]: Text
+                    - generic [ref=f14e2725]: iXBRL
+                  - textbox "Search" [ref=f14e2736]
+                - button [ref=f14e2623] [cursor=pointer]
+              - generic [ref=f14e2627]:
+                - generic [ref=f14e2628]: Cross-Reference
+                - generic [ref=f14e2636]: Highlight Accounting Items
+                - generic [ref=f14e2740]: Table Options
+            - generic [ref=f14e2644]:
+              - generic [ref=f14e2645]:
+                - generic "WALMART INC." [ref=f14e2756] [cursor=pointer]
+                - generic [ref=f14e2646]: •
+                - generic [ref=f14e2757]: 11-K
+                - generic [ref=f14e2647]: •
+                - generic [ref=f14e2759]: 07/16/2026
+              - generic [ref=f14e2648]:
+                - generic [ref=f14e2649]:
+                  - generic [ref=f14e2650]: "Zoom:"
+                  - generic [ref=f14e2651]: 100%
+                - generic [ref=f14e2664]:
+                  - button "Previous" [disabled] [ref=f14e2665]
+                  - button "Next" [ref=f14e2670] [cursor=pointer]
+            - generic [ref=f14e2677]:
+              - iframe [ref=f14e2680]:
+                - generic [ref=f19e1]:
+                  - generic [ref=f19e5]: UNITED STATES
+                  - generic [ref=f19e6]: SECURITIES AND EXCHANGE COMMISSION
+                  - generic [ref=f19e7]: Washington, D.C. 20549
+                  - generic [ref=f19e10]:
+                    - text: FORM
+                    - generic [ref=f19e11]: 11-K
+                  - generic [ref=f19e14]: (Mark One)
+                  - table [ref=f19e16]:
+                    - rowgroup [ref=f19e17]:
+                      - row [ref=f19e18]:
+                        - cell [ref=f19e19]
+                        - cell [ref=f19e20]
+                        - cell [ref=f19e21]
+                        - cell [ref=f19e22]
+                        - cell [ref=f19e23]
+                        - cell [ref=f19e24]
+                      - row [ref=f19e25]:
+                        - cell "☒" [ref=f19e26]
+                        - cell "Annual Report Pursuant to Section 15(d) of the Securities Exchange Act of 1934" [ref=f19e27]
+                  - generic [ref=f19e30]: For the fiscal year ended January 31, 2026
+                  - generic [ref=f19e31]: or
+                  - table [ref=f19e33]:
+                    - rowgroup [ref=f19e34]:
+                      - row [ref=f19e35]:
+                        - cell [ref=f19e36]
+                        - cell [ref=f19e37]
+                        - cell [ref=f19e38]
+                        - cell [ref=f19e39]
+                        - cell [ref=f19e40]
+                        - cell [ref=f19e41]
+                      - row [ref=f19e42]:
+                        - cell "☐" [ref=f19e43]
+                        - cell "Transaction Report Pursuant to Section 15(d) of the Securities Exchange Act of 1934" [ref=f19e44]
+                  - generic [ref=f19e47]: For the transition period from to .
+                  - generic [ref=f19e48]: Commission File Number 001-6991
+                  - table [ref=f19e52]:
+                    - rowgroup [ref=f19e53]:
+                      - row [ref=f19e54]:
+                        - cell [ref=f19e55]
+                        - cell [ref=f19e56]
+                        - cell [ref=f19e57]
+                        - cell [ref=f19e58]
+                        - cell [ref=f19e59]
+                        - cell [ref=f19e60]
+                      - row [ref=f19e61]:
+                        - cell "A." [ref=f19e62]
+                        - cell "Full title of the plan and the address of the plan, if different from that of the issuer named below:" [ref=f19e64]
+                  - generic [ref=f19e66]: WALMART PUERTO RICO 401(k) PLAN
+                  - table [ref=f19e68]:
+                    - rowgroup [ref=f19e69]:
+                      - row [ref=f19e70]:
+                        - cell [ref=f19e71]
+                        - cell [ref=f19e72]
+                        - cell [ref=f19e73]
+                        - cell [ref=f19e74]
+                        - cell [ref=f19e75]
+                        - cell [ref=f19e76]
+                      - row [ref=f19e77]:
+                        - cell "B." [ref=f19e78]
+                        - cell "Name of issuer of the securities held pursuant to the plan and the address of its principal executive office:" [ref=f19e80]
+                  - img "Screenshot 2026-05-15 125340.jpg" [ref=f19e83]
+                  - generic [ref=f19e85]: WALMART INC.
+                  - generic [ref=f19e88]: 1 Customer Drive
+                  - generic [ref=f19e89]: Bentonville, Arkansas 72716
+                  - separator [ref=f19e93]
+                  - generic [ref=f19e96]: Walmart Puerto Rico 401(k) Plan
+                  - generic [ref=f19e97]: Financial Statements and
+                  - generic [ref=f19e98]: Supplemental Schedule
+                  - generic [ref=f19e100]: As of January 31, 2026 and 2025, and for the year ended January 31, 2026
+                  - generic [ref=f19e103]: Table of Contents
+                  - table [ref=f19e106]:
+                    - rowgroup [ref=f19e107]:
+                      - row [ref=f19e108]:
+                        - cell [ref=f19e109]
+                        - cell [ref=f19e110]
+                        - cell [ref=f19e111]
+                        - cell [ref=f19e112]
+                        - cell [ref=f19e113]
+                        - cell [ref=f19e114]
+                      - row [ref=f19e115]:
+                        - cell [ref=f19e116]
+                        - cell "Page" [ref=f19e117]
+                      - row [ref=f19e119]:
+                        - cell [ref=f19e120]:
+                          - link "Report of Independent Registered Public Accounting Firm" [ref=f19e123] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_7"
+                        - cell [ref=f19e124]:
+                          - link "1" [ref=f19e127] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_7"
+                      - row [ref=f19e128]:
+                        - cell [ref=f19e129]:
+                          - link "Statements of Net Assets Available for Benefits" [ref=f19e132] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_10"
+                        - cell [ref=f19e133]:
+                          - link "2" [ref=f19e136] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_10"
+                      - row [ref=f19e137]:
+                        - cell [ref=f19e138]:
+                          - link "Statement of Changes in Net Assets Available for Benefits" [ref=f19e141] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_13"
+                        - cell [ref=f19e142]:
+                          - link "3" [ref=f19e145] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_13"
+                      - row [ref=f19e146]:
+                        - cell [ref=f19e147]:
+                          - link "Notes to Financial Statements" [ref=f19e150] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_16"
+                        - cell [ref=f19e151]:
+                          - link "4" [ref=f19e154] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_16"
+                      - row [ref=f19e155]:
+                        - cell [ref=f19e156]:
+                          - 'link "Supplemental Schedule: Schedule H, Line 4i - Schedule of Assets (Held at End of Year)" [ref=f19e159] [cursor=pointer]':
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_46"
+                        - cell [ref=f19e160]:
+                          - link "9" [ref=f19e163] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_46"
+                      - row [ref=f19e164]:
+                        - cell [ref=f19e165]:
+                          - link "Signatures" [ref=f19e168] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_49"
+                        - cell [ref=f19e169]:
+                          - link "10" [ref=f19e172] [cursor=pointer]:
+                            - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_49"
+                      - row [ref=f19e173]:
+                        - cell [ref=f19e174]:
+                          - link "Exhibit 23.1 - Consent of Independent Public Registered Accounting Firm" [ref=f19e177] [cursor=pointer]:
+                            - /url: exhibit231-1312026puertori.htm
+                        - cell [ref=f19e178]
+                  - separator [ref=f19e185]
+                  - link "Table of Contents" [ref=f19e189] [cursor=pointer]:
+                    - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_4"
+                  - generic [ref=f19e192]: Report of Independent Registered Public Accounting Firm
+                  - generic [ref=f19e194]: To the Plan Participants and the Plan Administrator of Walmart Puerto Rico 401(k) Plan
+                  - generic [ref=f19e196]: Opinion on the Financial Statements
+                  - generic [ref=f19e199]: We have audited the accompanying statements of net assets available for benefits of Walmart Puerto Rico 401(k) Plan (the Plan) as of January 31, 2026 and 2025, and the related statement of changes in net assets available for benefits for the year ended January 31, 2026, and the related notes (collectively referred to as the “financial statements”). In our opinion, the financial statements present fairly, in all material respects, the net assets available for benefits of the Plan at January 31, 2026 and 2025, and the changes in its net assets available for benefits for the year ended January 31, 2026, in conformity with U.S. generally accepted accounting principles.
+                  - generic [ref=f19e202]: Basis for Opinion
+                  - generic [ref=f19e204]: These financial statements are the responsibility of the Plan’s management. Our responsibility is to express an opinion on the Plan’s financial statements based on our audits. We are a public accounting firm registered with the Public Company Accounting Oversight Board (United States) (PCAOB) and are required to be independent with respect to the Plan in accordance with the U.S. federal securities laws and the applicable rules and regulations of the Securities and Exchange Commission and the PCAOB.
+                  - generic [ref=f19e206]: We conducted our audits in accordance with the standards of the PCAOB. Those standards require that we plan and perform the audit to obtain reasonable assurance about whether the financial statements are free of material misstatement, whether due to error or fraud. The Plan is not required to have, nor were we engaged to perform, an audit of its internal control over financial reporting. As part of our audits we are required to obtain an understanding of internal control over financial reporting but not for the purpose of expressing an opinion on the effectiveness of the Plan’s internal control over financial reporting. Accordingly, we express no such opinion.
+                  - generic [ref=f19e208]: Our audits included performing procedures to assess the risks of material misstatement of the financial statements, whether due to error or fraud, and performing procedures that respond to those risks. Such procedures included examining, on a test basis, evidence regarding the amounts and disclosures in the financial statements. Our audits also included evaluating the accounting principles used and significant estimates made by management, as well as evaluating the overall presentation of the financial statements. We believe that our audits provide a reasonable basis for our opinion.
+                  - generic [ref=f19e210]: Supplemental Schedule Required by ERISA
+                  - generic [ref=f19e212]: The accompanying supplemental schedule of assets (held at end of year) as of January 31, 2026 (referred to as the “supplemental schedule”), has been subjected to audit procedures performed in conjunction with the audit of the Plan’s financial statements. The information in the supplemental schedule is the responsibility of the Plan’s management. Our audit procedures included determining whether the information reconciles to the financial statements or the underlying accounting and other records, as applicable, and performing procedures to test the completeness and accuracy of the information presented in the supplemental schedule. In forming our opinion on the information, we evaluated whether such information, including its form and content, is presented in conformity with the Department of Labor’s Rules and Regulations for Reporting and Disclosure under the Employee Retirement Income Security Act of 1974. In our opinion, the information is fairly stated, in all material respects, in relation to the financial statements as a whole.
+                  - generic [ref=f19e215]: /s/ Ernst & Young LLP
+                  - generic [ref=f19e217]: We have served as the Plan’s auditor since 1998.
+                  - generic [ref=f19e219]: Rogers, Arkansas
+                  - generic [ref=f19e220]: July 16, 2026
+                  - generic [ref=f19e222]: "1"
+                  - separator [ref=f19e226]
+                  - link "Table of Contents" [ref=f19e230] [cursor=pointer]:
+                    - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_4"
+                  - generic [ref=f19e232]: Walmart Puerto Rico 401(k) Plan
+                  - generic [ref=f19e233]: Statements of Net Assets Available for Benefits
+                  - generic [ref=f19e237]:
+                    - generic [ref=f19e239]:
+                      - button "Share" [ref=f19e240] [cursor=pointer]
+                      - button "Compare" [ref=f19e241] [cursor=pointer]
+                      - generic [ref=f19e242]:
+                        - button "Download Excel" [ref=f19e243] [cursor=pointer]
+                        - generic [ref=f19e244] [cursor=pointer]: Include Similar Tables
+                    - table [ref=f19e248]:
+                      - rowgroup [ref=f19e249]:
+                        - row [ref=f19e250]:
+                          - cell [ref=f19e251]
+                          - cell [ref=f19e252]
+                          - cell [ref=f19e253]
+                          - cell [ref=f19e254]
+                          - cell [ref=f19e255]
+                          - cell [ref=f19e256]
+                          - cell [ref=f19e257]
+                          - cell [ref=f19e258]
+                          - cell [ref=f19e259]
+                          - cell [ref=f19e260]
+                          - cell [ref=f19e261]
+                          - cell [ref=f19e262]
+                          - cell [ref=f19e263]
+                          - cell [ref=f19e264]
+                          - cell [ref=f19e265]
+                        - row [ref=f19e266]:
+                          - cell [ref=f19e267]
+                          - cell [ref=f19e268]
+                          - cell "January 31," [ref=f19e269]
+                        - row [ref=f19e270]:
+                          - cell [ref=f19e271]
+                          - cell [ref=f19e272]
+                          - cell "2026" [ref=f19e273]
+                          - cell [ref=f19e274]
+                          - cell "2025" [ref=f19e275]
+                        - row [ref=f19e276]:
+                          - cell "Assets" [ref=f19e277]
+                          - cell [ref=f19e278]
+                          - cell [ref=f19e279]
+                          - cell [ref=f19e280]
+                          - cell [ref=f19e281]
+                        - row [ref=f19e282]:
+                          - cell "Investments, at fair value" [ref=f19e283]
+                          - cell [ref=f19e284]
+                          - cell "$" [ref=f19e285]
+                          - cell "211,353,868" [ref=f19e286]
+                          - cell [ref=f19e288]
+                          - cell [ref=f19e289]
+                          - cell "$" [ref=f19e290]
+                          - cell "171,519,699" [ref=f19e291]
+                          - cell [ref=f19e293]
+                        - row [ref=f19e294]:
+                          - cell [ref=f19e295]
+                          - cell [ref=f19e296]
+                          - cell [ref=f19e297]
+                          - cell [ref=f19e298]
+                          - cell [ref=f19e299]
+                        - row [ref=f19e300]:
+                          - cell "Receivables" [ref=f19e301]
+                          - cell [ref=f19e302]
+                          - cell [ref=f19e303]
+                          - cell [ref=f19e304]
+                          - cell [ref=f19e305]
+                        - row [ref=f19e306]:
+                          - cell "Notes receivable from participants" [ref=f19e307]
+                          - cell [ref=f19e308]
+                          - cell "10,645,049" [ref=f19e309]
+                          - cell [ref=f19e311]
+                          - cell [ref=f19e312]
+                          - cell "8,672,608" [ref=f19e313]
+                          - cell [ref=f19e315]
+                        - row [ref=f19e316]:
+                          - cell "Accrued investment income" [ref=f19e317]
+                          - cell [ref=f19e318]
+                          - cell "7,730" [ref=f19e319]
+                          - cell [ref=f19e321]
+                          - cell [ref=f19e322]
+                          - cell "5,024" [ref=f19e323]
+                          - cell [ref=f19e325]
+                        - row [ref=f19e326]:
+                          - cell "Total assets" [ref=f19e327]
+                          - cell [ref=f19e328]
+                          - cell "222,006,647" [ref=f19e329]
+                          - cell [ref=f19e331]
+                          - cell [ref=f19e332]
+                          - cell "180,197,331" [ref=f19e333]
+                          - cell [ref=f19e335]
+                        - row [ref=f19e336]:
+                          - cell [ref=f19e337]
+                          - cell [ref=f19e338]
+                          - cell [ref=f19e339]
+                          - cell [ref=f19e340]
+                          - cell [ref=f19e341]
+                        - row [ref=f19e342]:
+                          - cell "Net assets available for benefits" [ref=f19e343]
+                          - cell [ref=f19e344]
+                          - cell "$" [ref=f19e345]
+                          - cell "222,006,647" [ref=f19e346]
+                          - cell [ref=f19e348]
+                          - cell [ref=f19e349]
+                          - cell "$" [ref=f19e350]
+                          - cell "180,197,331" [ref=f19e351]
+                          - cell [ref=f19e353]
+                  - generic [ref=f19e354]: See accompanying notes to financial statements.
+                  - generic [ref=f19e360]: "2"
+                  - separator [ref=f19e363]
+                  - link "Table of Contents" [ref=f19e367] [cursor=pointer]:
+                    - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_4"
+                  - generic [ref=f19e369]: Walmart Puerto Rico 401(k) Plan
+                  - generic [ref=f19e370]: Statement of Changes in Net Assets Available for Benefits
+                  - generic [ref=f19e372]:
+                    - generic [ref=f19e374]:
+                      - button "Share" [ref=f19e375] [cursor=pointer]
+                      - button "Compare" [ref=f19e376] [cursor=pointer]
+                      - generic [ref=f19e377]:
+                        - button "Download Excel" [ref=f19e378] [cursor=pointer]
+                        - generic [ref=f19e379] [cursor=pointer]: Include Similar Tables
+                    - table [ref=f19e383]:
+                      - rowgroup [ref=f19e384]:
+                        - row [ref=f19e385]:
+                          - cell [ref=f19e386]
+                          - cell [ref=f19e387]
+                          - cell [ref=f19e388]
+                          - cell [ref=f19e389]
+                          - cell [ref=f19e390]
+                          - cell [ref=f19e391]
+                          - cell [ref=f19e392]
+                          - cell [ref=f19e393]
+                          - cell [ref=f19e394]
+                        - row [ref=f19e395]:
+                          - cell [ref=f19e396]
+                          - cell [ref=f19e397]
+                          - cell [ref=f19e398]
+                        - row [ref=f19e399]:
+                          - cell [ref=f19e400]
+                          - cell "Year ended" [ref=f19e401]
+                        - row [ref=f19e402]:
+                          - cell [ref=f19e403]
+                          - cell "January 31, 2026" [ref=f19e404]
+                        - row [ref=f19e405]:
+                          - cell "Additions" [ref=f19e406]
+                          - cell [ref=f19e407]
+                          - cell [ref=f19e408]
+                        - row [ref=f19e409]:
+                          - cell "Contributions:" [ref=f19e410]
+                          - cell [ref=f19e411]
+                          - cell [ref=f19e412]
+                        - row [ref=f19e413]:
+                          - cell "Company" [ref=f19e414]
+                          - cell [ref=f19e415]
+                          - cell "$" [ref=f19e416]
+                          - cell "9,659,789" [ref=f19e417]
+                          - cell [ref=f19e419]
+                        - row [ref=f19e420]:
+                          - cell "Participant" [ref=f19e421]
+                          - cell [ref=f19e422]
+                          - cell "10,838,208" [ref=f19e423]
+                        - row
+                        - row [ref=f19e425]:
+                          - cell "Total contributions" [ref=f19e426]
+                          - cell [ref=f19e427]
+                          - cell "20,497,997" [ref=f19e428]
+                        - row [ref=f19e430]:
+                          - cell [ref=f19e431]
+                          - cell [ref=f19e432]
+                          - cell [ref=f19e433]
+                        - row [ref=f19e434]:
+                          - cell "Investment income :" [ref=f19e435]
+                          - cell [ref=f19e436]
+                          - cell [ref=f19e437]
+                        - row [ref=f19e438]:
+                          - cell "Net appreciation in fair value of investments" [ref=f19e439]
+                          - cell [ref=f19e440]
+                          - cell "26,347,011" [ref=f19e441]
+                          - cell [ref=f19e443]
+                        - row [ref=f19e444]:
+                          - cell "Interest and dividends" [ref=f19e445]
+                          - cell [ref=f19e446]
+                          - cell "5,440,399" [ref=f19e447]
+                        - row [ref=f19e449]:
+                          - cell "Net investment income" [ref=f19e450]
+                          - cell [ref=f19e451]
+                          - cell "31,787,410" [ref=f19e452]
+                        - row [ref=f19e454]:
+                          - cell [ref=f19e455]
+                          - cell [ref=f19e456]
+                          - cell [ref=f19e457]
+                        - row [ref=f19e458]:
+                          - cell "Interest income on notes receivable from participants" [ref=f19e459]
+                          - cell [ref=f19e460]
+                          - cell "717,655" [ref=f19e461]
+                        - row [ref=f19e463]:
+                          - cell [ref=f19e464]
+                          - cell [ref=f19e465]
+                          - cell [ref=f19e466]
+                        - row [ref=f19e467]:
+                          - cell "Other, net" [ref=f19e468]
+                          - cell [ref=f19e469]
+                          - cell "13,759" [ref=f19e470]
+                        - row [ref=f19e472]:
+                          - cell [ref=f19e473]
+                          - cell [ref=f19e474]
+                          - cell [ref=f19e475]
+                        - row [ref=f19e476]:
+                          - cell "Total additions" [ref=f19e477]
+                          - cell [ref=f19e478]
+                          - cell "53,016,821" [ref=f19e479]
+                        - row [ref=f19e481]:
+                          - cell [ref=f19e482]
+                          - cell [ref=f19e483]
+                          - cell [ref=f19e484]
+                        - row [ref=f19e485]:
+                          - cell "Deductions" [ref=f19e486]
+                          - cell [ref=f19e487]
+                          - cell [ref=f19e488]
+                        - row [ref=f19e489]:
+                          - cell "Benefits paid to participants" [ref=f19e490]
+                          - cell [ref=f19e491]
+                          - cell "10,932,727" [ref=f19e492]
+                        - row [ref=f19e494]:
+                          - cell "Administrative expenses" [ref=f19e495]
+                          - cell [ref=f19e496]
+                          - cell "186,563" [ref=f19e497]
+                        - row [ref=f19e499]:
+                          - cell "Fees on notes receivable from participants" [ref=f19e500]
+                          - cell [ref=f19e501]
+                          - cell "88,215" [ref=f19e502]
+                        - row [ref=f19e504]:
+                          - cell "Total deductions" [ref=f19e505]
+                          - cell [ref=f19e506]
+                          - cell "11,207,505" [ref=f19e507]
+                        - row [ref=f19e509]:
+                          - cell [ref=f19e510]
+                          - cell [ref=f19e511]
+                          - cell [ref=f19e512]
+                        - row [ref=f19e513]:
+                          - cell "Net increase" [ref=f19e514]
+                          - cell [ref=f19e515]
+                          - cell "41,809,316" [ref=f19e516]
+                        - row [ref=f19e518]:
+                          - cell [ref=f19e519]
+                          - cell [ref=f19e520]
+                          - cell [ref=f19e521]
+                        - row [ref=f19e522]:
+                          - cell "Net assets available for benefits:" [ref=f19e523]
+                          - cell [ref=f19e524]
+                          - cell [ref=f19e525]
+                        - row [ref=f19e526]:
+                          - cell "Beginning of year" [ref=f19e527]
+                          - cell [ref=f19e528]
+                          - cell "$" [ref=f19e529]
+                          - cell "180,197,331" [ref=f19e530]
+                          - cell [ref=f19e532]
+                        - row [ref=f19e533]:
+                          - cell [ref=f19e534]
+                          - cell [ref=f19e535]
+                          - cell [ref=f19e536]
+                        - row [ref=f19e537]:
+                          - cell "End of year" [ref=f19e538]
+                          - cell [ref=f19e539]
+                          - cell "$" [ref=f19e540]
+                          - cell "222,006,647" [ref=f19e541]
+                          - cell [ref=f19e543]
+                  - generic [ref=f19e544]: See accompanying notes to financial statements.
+                  - generic [ref=f19e549]: "3"
+                  - separator [ref=f19e552]
+                  - generic [ref=f19e555]:
+                    - link:
+                      - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_4"
+                    - text: Table of Contents
+                  - generic [ref=f19e557]: Walmart Puerto Rico 401(k) Plan
+                  - generic [ref=f19e558]: Notes to Financial Statements
+                  - generic [ref=f19e559]: January 31, 2026
+                  - generic [ref=f19e560]: Note 1. Description of the Plan
+                  - generic [ref=f19e562]:
+                    - generic [ref=f19e563]: Walmart Inc., ("Walmart" or the "Company") sponsors the Walmart Puerto Rico 401(k) Plan (the "Plan"). The following description provides only general information. This document is not part of the Summary Plan Description and is not a document pursuant to which the Plan is maintained within the meaning of Section 402(a)(1) of the Employee Retirement Income Security Act of 1974, as amended (ERISA). Participants should refer to the Plan document for a complete description of the Plan's provisions. To the extent not specifically prohibited by statute or regulation, Walmart reserves the right to unilaterally amend, modify or terminate the Plan at any time; such changes may be applied to all Plan participants and their beneficiaries regardless of whether the participant is actively working or retired at the time of the change. The Plan may not be amended, however, to permit any part of the Plan's assets to be used for any purpose other than for the purpose of paying benefits to participants and their beneficiaries and paying Plan expenses.
+                    - generic [ref=f19e564]: General
+                    - generic [ref=f19e565]: The Plan is a defined contribution plan established by the Company on February 1, 1997. Each eligible employee who has completed at least 1,000 hours of service in a consecutive 12-month period commencing on date of hire (or during any subsequent Plan year) is eligible to participate in the Plan. Participation may begin on the first day of the month following eligibility. Effective February 1, 2025, long-term part-time employees, defined as employees with at least 500 hours of service for two sequentially consecutive 12-month periods, are eligible to participate in the Plan. The Plan is subject to the provisions of ERISA.
+                    - generic [ref=f19e567]: The responsibility for management of Plan assets and the investment policy is vested in the Plan's Benefits Investment Committee. Benefits Investment Committee members are appointed by the Company's Senior Vice President, Global Total Rewards (or individual from time to time performing such function). Responsibility for operation and administration of the Plan is vested in the Senior Vice President, Global Total Rewards (or individual from time to time performing such function).
+                    - generic [ref=f19e568]: Banco Popular de Puerto Rico ("Trustee") is the Plan's trustee. Bank of America, N.A. ("Custodian") was appointed as the custodian of the Plan and holds the Plan's assets. The Custodian is a subsidiary of Bank of America Corporation. The Trustee remits all contributions received from the Company to the Custodian who invests those contributions as directed by participants according to the policies established by the Benefits Investment Committee. Merrill Lynch, Pierce, Fenner & Smith, Inc., which is the record keeper for the Plan, is a subsidiary of Merrill Lynch & Company and ultimately a subsidiary of Bank of America Corporation.
+                    - generic [ref=f19e569]: Contributions
+                    - generic [ref=f19e570]: Eligible employees may elect to contribute up to 50% of their eligible wages but are not required to contribute to the Plan. Participants who have attained age 50 before the end of the calendar year are eligible to make catch-up contributions. Participants may also contribute amounts representing distributions from other eligible retirement plans (rollover contributions).
+                    - generic [ref=f19e573]: Each eligible employee who has elected to contribute to the Plan will receive a Company matching contribution. (Employees eligible to contribute to the Plan solely because of their classification as a long-term part-time employee are not eligible to receive Company matching contributions.) The Company match is 100% of deferrals up to 6% of each participant's eligible wages for the Plan year. Company matching contributions are contributed to the Plan each payroll period and are calculated based on each participant's cumulative compensation and cumulative elective and catch-up contributions through such payroll period. Rollover contributions into the Plan are not eligible for a Company matching contribution.
+                    - generic [ref=f19e575]: Additional types of contributions may be contributed by the Company to the Plan. No such additional types of contributions were made for the Plan year ended January 31, 2026, other than a qualified non-elective contribution to assist the Plan in satisfying nondiscrimination testing. All contributions are subject to certain limitations in accordance with provisions of the Puerto Rico Internal Revenue Code of 2011 ("Puerto Rico Code").
+                    - generic [ref=f19e576]: Participant Accounts
+                    - generic [ref=f19e577]: Each participant's account is adjusted for administrative expenses and earnings (losses). Adjustments are determined by the investments held in each participant's account, the participant's contributions, and an allocation of the Company's matching contributions to the Plan made on the participant's behalf. Forfeitures of non-vested contributions are used or allocated to restore account balances of rehired participants or participants whose distributions were previously unclaimed.
+                  - generic [ref=f19e578]: "4"
+                  - separator [ref=f19e581]
+                  - link "Table of Contents" [ref=f19e585] [cursor=pointer]:
+                    - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_4"
+                  - generic [ref=f19e587]:
+                    - generic [ref=f19e588]: Vesting
+                    - generic [ref=f19e589]: Participants are immediately vested in all elective, catch-up, rollover, Company matching and qualified non-elective contributions. A participant's profit sharing contribution account shall vest based on years of service at a rate of 20% per year from years two through six and may become fully vested upon participant retirement at age 65 or above, total and permanent disability, or death.
+                    - generic [ref=f19e591]: Notes Receivable from Participants
+                    - generic [ref=f19e592]:
+                      - generic [ref=f19e593]: Participants may borrow from their fund accounts a minimum of $1,000 up to the lesser of (a) $50,000 or (b) 50% of their vested account balance. The administrative loan origination fee of $50 per general loan and $95 per residential loan is paid by the participant and is deducted from the proceeds of the loan. Participants may only have
+                      - generic [ref=f19e594]: one
+                      - text: general purpose loan and
+                      - generic [ref=f19e595]: one
+                      - text: residential loan outstanding at any time. Loan terms range from
+                      - generic [ref=f19e596]: one
+                      - text: to
+                      - generic [ref=f19e597]: five years
+                      - text: for general purpose loans and
+                      - generic [ref=f19e598]: one
+                      - text: to
+                      - generic [ref=f19e599]: 15 years
+                      - generic [ref=f19e600]: for residential loans. The loans are secured by the balance in the participant's account and bear fixed interest at the prime rate on the last day of the month preceding the month in which the loan is processed for payment, plus 1%. Generally, payments of principal and interest on the loan will be deducted from an employee's regular pay in equal amounts each pay period beginning with the first pay period following the date of the loan.
+                    - generic [ref=f19e601]: Payment of Benefits and Withdrawals
+                    - generic [ref=f19e602]: Generally, payment upon a participant's separation from the Company (and its controlled group members) is a lump-sum payment in cash for the balance of the participant's vested account. However, participants may elect to receive a single lump-sum payment of their profit sharing contributions in whole shares of Walmart equity securities, with partial or fractional shares paid in cash, even if such contributions are not invested in Walmart equity securities. To the extent the participant's profit sharing contributions are not invested in Walmart equity securities, the contributions will automatically be distributed in cash, unless directed otherwise by the participant. Participants may also elect to receive a single lump-sum payment of the remainder of their accounts in whole shares of Walmart equity securities, with partial or fractional shares paid in cash, but only to the extent such contributions are invested in Walmart equity securities as of the date distributions are processed. Participants may also elect to rollover their account balance into a different tax-qualified retirement plan or individual retirement account upon separation from the Company (and its controlled group members).
+                    - generic [ref=f19e603]: The Plan permits withdrawals of active participants' elective deferrals, and rollover contributions in amounts necessary to satisfy financial hardship as defined by the Commonwealth of Puerto Rico's Department of Treasury ("Treasury"). In-service withdrawal of vested balances may be elected by participants who have reached 59 1/2 years of age. Rollovers may be distributed at any time.
+                    - generic [ref=f19e604]: Investment Options
+                    - generic [ref=f19e605]: A participant may direct the Custodian to invest any portion of his or her account in available investment options. Available investment options may change at any time. Participant investment options at January 31, 2026, include a variety of mutual funds. Participants may change their elections at any time.
+                    - generic [ref=f19e606]: A participant may direct the Custodian to invest any portion of his or her profit sharing contributions in available investment options, including Walmart equity securities, or any of the investment options for other contributions described previously.
+                    - generic [ref=f19e607]: To the extent not directed by the participant, participant accounts are invested as determined by the Benefits Investment Committee.
+                  - generic [ref=f19e608]: Note 2. Summary of Significant Accounting Policies
+                  - generic [ref=f19e610]:
+                    - generic [ref=f19e611]: Basis of Accounting
+                    - generic [ref=f19e613]: The accompanying financial statements of the Plan are prepared on the accrual basis of accounting in accordance with U.S. generally accepted accounting principles (GAAP). Contributions from Plan participants and the company matching contributions are recorded in the year in which the employee contributions are withheld from compensation.
+                    - generic [ref=f19e615]:
+                      - generic [ref=f19e616]: Use of Estimates
+                      - generic [ref=f19e617]: The preparation of the financial statements in accordance with GAAP requires Plan management to make estimates and assumptions that affect the reported amounts of assets and liabilities and changes therein, and disclosure of contingent assets and liabilities. Actual results could differ from these estimates.
+                    - generic [ref=f19e618]:
+                      - generic [ref=f19e619]: Investment Valuation and Income Recognition
+                      - generic [ref=f19e620]:
+                        - text: Investments are reported at fair value. Fair value is the price that would be received to sell an asset or paid to transfer a liability in an orderly transaction between market participants at the measurement date. The Benefits Investment Committee determines the Plan's valuation policies utilizing information provided by the Custodian. See
+                        - link "Note 3" [ref=f19e622] [cursor=pointer]:
+                          - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_25"
+                        - text: for discussion of fair value measurements.
+                  - generic [ref=f19e623]: "5"
+                  - separator [ref=f19e626]
+                  - link "Table of Contents" [ref=f19e630] [cursor=pointer]:
+                    - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_4"
+                  - generic [ref=f19e632]:
+                    - generic [ref=f19e633]: Purchases and sales of securities are recorded on a trade-date basis. Interest income is recorded on the accrual basis. Dividends are recorded on the ex-dividend date. Net appreciation in fair value of investments includes the gains and losses on investments bought and sold, as well as held during the year.
+                    - generic [ref=f19e635]:
+                      - generic [ref=f19e636]: Notes Receivable from Participants
+                      - generic [ref=f19e637]: Notes receivable from participants are recorded at their unpaid principal balance plus any accrued but unpaid interest. Interest income is recorded on the accrual basis. Principal and interest from the repayment of loans are allocated to participants' investment accounts in accordance with each participant's investment election in effect at the repayment date. Delinquent notes receivable from participants are recorded as a distribution based upon the terms of the Plan document.
+                    - generic [ref=f19e638]: Benefit Payments
+                    - generic [ref=f19e640]: Benefit payments are recorded when paid. As of January 31, 2026 and 2025, there were benefits in the amount of $907,467 and $556,543 respectively, requested before year-end, that were paid after year-end.
+                    - generic [ref=f19e642]:
+                      - generic [ref=f19e643]: Expenses
+                      - generic [ref=f19e644]: The Plan allows certain administrative expenses to be paid from Plan assets, unless otherwise paid by the Company. Expenses that are paid by the Company are excluded from these financial statements. The Plan does not reimburse for these expenses. Fees related to the administration of notes receivable from participants are charged directly to the participant's account and are recorded as fees on notes receivable from participants. Investment related expenses that are indirect are included in net appreciation of fair value of investments and direct expenses are included in administrative expenses.
+                  - generic [ref=f19e645]: Note 3. Fair Value Measurements
+                  - generic [ref=f19e647]:
+                    - generic [ref=f19e648]: "Accounting guidance provides a framework for measuring fair value and provides a fair value hierarchy that prioritizes the inputs to valuation techniques used to measure fair value. The hierarchy gives the highest priority to unadjusted quoted prices in active markets for identical assets or liabilities (Level 1 measurements) and the lowest priority to unobservable inputs (Level 3 measurements). The three levels of the fair value hierarchy are described as follows:"
+                    - table [ref=f19e652]:
+                      - rowgroup [ref=f19e653]:
+                        - row [ref=f19e654]:
+                          - cell [ref=f19e655]
+                          - cell [ref=f19e656]
+                          - cell [ref=f19e657]
+                          - cell [ref=f19e658]
+                          - cell [ref=f19e659]
+                          - cell [ref=f19e660]
+                        - row [ref=f19e661]:
+                          - cell "Level 1" [ref=f19e662]
+                          - cell "Unadjusted quoted prices for identical, unrestricted assets or liabilities in active markets that a plan has the ability to access." [ref=f19e664]
+                        - row [ref=f19e666]:
+                          - cell "Level 2" [ref=f19e667]
+                          - cell "Quoted prices for similar assets or liabilities in active markets; quoted prices for identical or similar assets or liabilities in inactive markets; inputs other than quoted prices that are observable for the asset or liability; and inputs that are derived principally from or corroborated by observable market data by correlation or other means for substantially the full term of the assets or liabilities." [ref=f19e669]
+                        - row [ref=f19e671]:
+                          - cell "Level 3" [ref=f19e672]
+                          - cell "Significant unobservable inputs." [ref=f19e674]
+                    - generic [ref=f19e676]: The asset or liability's fair value measurement level within the fair value hierarchy is based on the lowest level of any input that is significant to the fair value measurement. Valuation techniques used need to maximize the use of relevant observable inputs and minimize the use of unobservable inputs. There have been no changes in the methodologies used at January 31, 2026 and 2025. During the year ended January 31, 2026, there were no transfers of financial instruments into or out of Level 3.
+                    - generic [ref=f19e677]: "Following is a description of the valuation methodologies used for assets measured at fair value:"
+                    - generic [ref=f19e678]: Walmart Inc. equity securities - Valued at exchange quoted market prices on the last business day of the Plan year.
+                    - generic [ref=f19e679]: Cash equivalent - Valued at amortized cost, which approximates fair value.
+                    - generic [ref=f19e680]: Mutual funds - Valued at quoted market prices on the last business day of the Plan year.
+                    - generic [ref=f19e681]: The preceding methods described may produce a fair value calculation that may not be indicative of net realizable value or reflective of future fair values. Furthermore, although the Plan believes its valuation methods are appropriate and consistent with other market participants, the use of different methodologies or assumptions to determine the fair value of certain financial instruments could result in a different fair value measurement at the reporting date.
+                  - generic [ref=f19e688]: "6"
+                  - separator [ref=f19e691]
+                  - link "Table of Contents" [ref=f19e695] [cursor=pointer]:
+                    - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_4"
+                  - generic [ref=f19e699]:
+                    - generic [ref=f19e700]: "Investments measured at fair value on a recurring basis consisted of the following types of instruments:"
+                    - generic [ref=f19e701]:
+                      - generic [ref=f19e703]:
+                        - button "Share" [ref=f19e704] [cursor=pointer]
+                        - button "Compare" [ref=f19e705] [cursor=pointer]
+                        - generic [ref=f19e706]:
+                          - button "Download Excel" [ref=f19e707] [cursor=pointer]
+                          - generic [ref=f19e708] [cursor=pointer]: Include Similar Tables
+                      - table [ref=f19e712]:
+                        - rowgroup [ref=f19e713]:
+                          - row [ref=f19e714]:
+                            - cell [ref=f19e715]
+                            - cell [ref=f19e716]
+                            - cell [ref=f19e717]
+                            - cell [ref=f19e718]
+                            - cell [ref=f19e719]
+                            - cell [ref=f19e720]
+                            - cell [ref=f19e721]
+                            - cell [ref=f19e722]
+                            - cell [ref=f19e723]
+                            - cell [ref=f19e724]
+                            - cell [ref=f19e725]
+                            - cell [ref=f19e726]
+                            - cell [ref=f19e727]
+                            - cell [ref=f19e728]
+                            - cell [ref=f19e729]
+                          - row [ref=f19e730]:
+                            - cell [ref=f19e731]
+                            - cell [ref=f19e732]
+                            - cell "Fair Value Measurements as of January 31, 2026" [ref=f19e733]:
+                              - generic [ref=f19e734]: Fair Value Measurements as of
+                              - generic [ref=f19e735]: January 31, 2026
+                          - row [ref=f19e736]:
+                            - cell [ref=f19e737]
+                            - cell [ref=f19e738]
+                            - cell "Level 1" [ref=f19e739]
+                            - cell [ref=f19e740]
+                            - cell "Total" [ref=f19e741]
+                          - row [ref=f19e742]:
+                            - cell "Walmart Inc. equity securities" [ref=f19e743]
+                            - cell [ref=f19e744]
+                            - cell "$" [ref=f19e745]
+                            - cell "24,235,146" [ref=f19e746]
+                            - cell [ref=f19e748]
+                            - cell [ref=f19e749]
+                            - cell "$" [ref=f19e750]
+                            - cell "24,235,146" [ref=f19e751]
+                            - cell [ref=f19e753]
+                          - row [ref=f19e754]:
+                            - cell "Cash equivalent" [ref=f19e755]
+                            - cell [ref=f19e756]
+                            - cell "1,075,935" [ref=f19e757]
+                            - cell [ref=f19e759]
+                            - cell [ref=f19e760]
+                            - cell "1,075,935" [ref=f19e761]
+                            - cell [ref=f19e763]
+                          - row [ref=f19e764]:
+                            - cell "Mutual funds" [ref=f19e765]
+                            - cell [ref=f19e766]
+                            - cell "186,042,787" [ref=f19e767]
+                            - cell [ref=f19e769]
+                            - cell [ref=f19e770]
+                            - cell "186,042,787" [ref=f19e771]
+                            - cell [ref=f19e773]
+                          - row [ref=f19e774]:
+                            - cell "Total investments at fair value" [ref=f19e775]
+                            - cell [ref=f19e776]
+                            - cell [ref=f19e777]
+                            - cell [ref=f19e778]
+                            - cell "$" [ref=f19e779]
+                            - cell "211,353,868" [ref=f19e780]
+                            - cell [ref=f19e782]
+                    - generic [ref=f19e783]:
+                      - generic [ref=f19e785]:
+                        - button "Share" [ref=f19e786] [cursor=pointer]
+                        - button "Compare" [ref=f19e787] [cursor=pointer]
+                        - generic [ref=f19e788]:
+                          - button "Download Excel" [ref=f19e789] [cursor=pointer]
+                          - generic [ref=f19e790] [cursor=pointer]: Include Similar Tables
+                      - table [ref=f19e794]:
+                        - rowgroup [ref=f19e795]:
+                          - row [ref=f19e796]:
+                            - cell [ref=f19e797]
+                            - cell [ref=f19e798]
+                            - cell [ref=f19e799]
+                            - cell [ref=f19e800]
+                            - cell [ref=f19e801]
+                            - cell [ref=f19e802]
+                            - cell [ref=f19e803]
+                            - cell [ref=f19e804]
+                            - cell [ref=f19e805]
+                            - cell [ref=f19e806]
+                            - cell [ref=f19e807]
+                            - cell [ref=f19e808]
+                            - cell [ref=f19e809]
+                            - cell [ref=f19e810]
+                            - cell [ref=f19e811]
+                          - row [ref=f19e812]:
+                            - cell [ref=f19e813]
+                            - cell [ref=f19e814]
+                            - cell "Fair Value Measurements as of January 31, 2025" [ref=f19e815]:
+                              - generic [ref=f19e816]: Fair Value Measurements as of
+                              - generic [ref=f19e817]: January 31, 2025
+                          - row [ref=f19e818]:
+                            - cell [ref=f19e819]
+                            - cell [ref=f19e820]
+                            - cell "Level 1" [ref=f19e821]
+                            - cell [ref=f19e822]
+                            - cell "Total" [ref=f19e823]
+                          - row [ref=f19e824]:
+                            - cell "Walmart Inc. equity securities" [ref=f19e825]
+                            - cell [ref=f19e826]
+                            - cell "$" [ref=f19e827]
+                            - cell "20,761,449" [ref=f19e828]
+                            - cell [ref=f19e830]
+                            - cell [ref=f19e831]
+                            - cell "$" [ref=f19e832]
+                            - cell "20,761,449" [ref=f19e833]
+                            - cell [ref=f19e835]
+                          - row [ref=f19e836]:
+                            - cell "Cash equivalent" [ref=f19e837]
+                            - cell [ref=f19e838]
+                            - cell "683,595" [ref=f19e839]
+                            - cell [ref=f19e841]
+                            - cell [ref=f19e842]
+                            - cell "683,595" [ref=f19e843]
+                            - cell [ref=f19e845]
+                          - row [ref=f19e846]:
+                            - cell "Mutual funds" [ref=f19e847]
+                            - cell [ref=f19e848]
+                            - cell "150,074,655" [ref=f19e849]
+                            - cell [ref=f19e851]
+                            - cell [ref=f19e852]
+                            - cell "150,074,655" [ref=f19e853]
+                            - cell [ref=f19e855]
+                          - row [ref=f19e856]:
+                            - cell "Total investments at fair value" [ref=f19e857]
+                            - cell [ref=f19e858]
+                            - cell [ref=f19e859]
+                            - cell [ref=f19e860]
+                            - cell "$" [ref=f19e861]
+                            - cell "171,519,699" [ref=f19e862]
+                            - cell [ref=f19e864]
+                  - generic [ref=f19e866]: Note 4. Related Party and Party-In-Interest Transactions
+                  - generic [ref=f19e868]:
+                    - generic [ref=f19e869]: Certain Plan investments are managed by Bank of America, N.A. and Merrill Lynch & Company, who provide investment management services to the Plan. The Plan also holds notes receivable from participants. Such transactions, while considered party-in-interest transactions under ERISA regulations, are permitted under the provisions of the Plan and are specifically exempt from the prohibition of party-in-interest transactions under ERISA.
+                    - generic [ref=f19e870]: A portion of the Plan's assets are invested in common stock of the Company. While the holding and acquisition of employer securities is generally prohibited by ERISA, the Plan meets the exception in ERISA section 407(b), which permits the acquisition and holding of employer securities by eligible individual account plans.
+                  - generic [ref=f19e871]: Note 5. Plan Termination
+                  - generic [ref=f19e873]: While there is no intention to do so, the Company may terminate the Plan and discontinue its contributions at any time subject to the provisions of the Puerto Rico Code and ERISA. In the event of complete or partial Plan termination, any unvested amounts in participants' accounts shall become fully vested. The Plan shall remain in effect and the assets shall be administered in the manner provided by the terms of the trust agreement and distributed as soon as administratively feasible.
+                  - generic [ref=f19e875]: Note 6. Tax Status
+                  - generic [ref=f19e877]: The Plan has received a determination letter from the Puerto Rico Department of Treasury (the Treasury) dated July 22, 2020, stating that the Plan is qualified under Section 1081.01 of the Puerto Rico Internal Revenue Code of 2011. Once qualified, the Plan is required to operate in conformity with the Puerto Rico Code to maintain its qualified status. Processes are in place to prevent operational failures, but when they occur, the Administrator takes corrective action to preserve the tax qualification of the Plan. Specifically, the Administrator has corrected, and will continue to correct, operational failures in a manner permitted under the Treasury in order to preserve the Plan's tax favored qualification. Although the Plan has been amended since receiving the determination letter, the Administrator and the Plan's tax counsel believe that the Plan is designed, and is currently being operated, in compliance with the applicable requirements of the Puerto Rico Code and, therefore, believe that the Plan is qualified, and the related trust is tax-exempt.
+                  - generic [ref=f19e879]: Note 7. Risks and Uncertainties
+                  - generic [ref=f19e881]: The Custodian holds the Plan's investments and executes all investment transactions. The Plan invests in various investment securities. Investment securities are exposed to various risks, such as interest rate, market volatility and credit risks. The Plan attempts to limit these risks by authorizing and offering participants a broad range of investment options that are invested in high quality securities or are offered and administered by reputable and known investment companies. Due to the level of risk associated with certain investment securities, it is at least reasonably possible that changes in the values of investment securities will occur in the near term and that such changes could materially affect participants' account balances and the amounts reported on the Statements of Net Assets Available for Benefits. The Plan's exposure to a concentration of risk is limited by the diversification of investments across multiple investment fund options. Additionally, the investments within each investment fund option are further diversified into varied financial instruments.
+                  - generic [ref=f19e883]: "7"
+                  - separator [ref=f19e886]
+                  - link "Table of Contents" [ref=f19e890] [cursor=pointer]:
+                    - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_4"
+                  - generic [ref=f19e892]: Note 8. Reconciliation of Financial Statements to Form 5500
+                  - generic [ref=f19e894]:
+                    - generic [ref=f19e895]:
+                      - generic [ref=f19e896]: "The following is a reconciliation of net assets available for benefits per the financial statements to the Form 5500:"
+                      - generic [ref=f19e897]:
+                        - generic [ref=f19e899]:
+                          - button "Share" [ref=f19e900] [cursor=pointer]
+                          - button "Compare" [ref=f19e901] [cursor=pointer]
+                          - generic [ref=f19e902]:
+                            - button "Download Excel" [ref=f19e903] [cursor=pointer]
+                            - generic [ref=f19e904] [cursor=pointer]: Include Similar Tables
+                        - table [ref=f19e908]:
+                          - rowgroup [ref=f19e909]:
+                            - row [ref=f19e910]:
+                              - cell [ref=f19e911]
+                              - cell [ref=f19e912]
+                              - cell [ref=f19e913]
+                              - cell [ref=f19e914]
+                              - cell [ref=f19e915]
+                              - cell [ref=f19e916]
+                              - cell [ref=f19e917]
+                              - cell [ref=f19e918]
+                              - cell [ref=f19e919]
+                              - cell [ref=f19e920]
+                              - cell [ref=f19e921]
+                              - cell [ref=f19e922]
+                              - cell [ref=f19e923]
+                              - cell [ref=f19e924]
+                              - cell [ref=f19e925]
+                            - row [ref=f19e926]:
+                              - cell [ref=f19e927]
+                              - cell [ref=f19e928]
+                              - cell "January 31," [ref=f19e929]
+                            - row [ref=f19e930]:
+                              - cell [ref=f19e931]
+                              - cell [ref=f19e932]
+                              - cell "2026" [ref=f19e933]
+                              - cell [ref=f19e934]
+                              - cell "2025" [ref=f19e935]
+                            - row [ref=f19e936]:
+                              - cell "Net assets available for benefits per the financial statements" [ref=f19e937]
+                              - cell [ref=f19e938]
+                              - cell "$" [ref=f19e939]
+                              - cell "222,006,647" [ref=f19e940]
+                              - cell [ref=f19e942]
+                              - cell [ref=f19e943]
+                              - cell "$" [ref=f19e944]
+                              - cell "180,197,331" [ref=f19e945]
+                              - cell [ref=f19e947]
+                            - row [ref=f19e948]:
+                              - 'cell "Less: Benefits payable per the Form 5500" [ref=f19e949]'
+                              - cell [ref=f19e950]
+                              - cell "(907,467)" [ref=f19e951]
+                              - cell [ref=f19e953]
+                              - cell [ref=f19e954]
+                              - cell "(556,543)" [ref=f19e955]
+                              - cell [ref=f19e957]
+                            - row [ref=f19e958]:
+                              - cell "Net assets available for benefits per the Form 5500" [ref=f19e959]
+                              - cell [ref=f19e960]
+                              - cell "$" [ref=f19e961]
+                              - cell "221,099,180" [ref=f19e962]
+                              - cell [ref=f19e964]
+                              - cell [ref=f19e965]
+                              - cell "$" [ref=f19e966]
+                              - cell "179,640,788" [ref=f19e967]
+                              - cell [ref=f19e969]
+                      - generic [ref=f19e970]: "The following is a reconciliation of the change in net assets available for benefits per the financial statements to the Form 5500 for the Plan year ended January 31, 2026:"
+                      - generic [ref=f19e971]:
+                        - generic [ref=f19e973]:
+                          - button "Share" [ref=f19e974] [cursor=pointer]
+                          - button "Compare" [ref=f19e975] [cursor=pointer]
+                          - generic [ref=f19e976]:
+                            - button "Download Excel" [ref=f19e977] [cursor=pointer]
+                            - generic [ref=f19e978] [cursor=pointer]: Include Similar Tables
+                        - table [ref=f19e982]:
+                          - rowgroup [ref=f19e983]:
+                            - row [ref=f19e984]:
+                              - cell [ref=f19e985]
+                              - cell [ref=f19e986]
+                              - cell [ref=f19e987]
+                              - cell [ref=f19e988]
+                              - cell [ref=f19e989]
+                              - cell [ref=f19e990]
+                            - row [ref=f19e991]:
+                              - cell "Net increase in net assets available for benefits per the financial statements" [ref=f19e992]
+                              - cell "$" [ref=f19e994]
+                              - cell "41,809,316" [ref=f19e995]
+                              - cell [ref=f19e997]
+                            - row [ref=f19e998]:
+                              - 'cell "Less: Benefits payable per the Form 5500 at January 31, 2026" [ref=f19e999]'
+                              - cell "(907,467)" [ref=f19e1000]
+                              - cell [ref=f19e1002]
+                            - row [ref=f19e1003]:
+                              - 'cell "Add: Benefits payable per the Form 5500 at January 31, 2025" [ref=f19e1004]'
+                              - cell "556,543" [ref=f19e1005]
+                              - cell [ref=f19e1007]
+                            - row [ref=f19e1008]:
+                              - cell "Net gain per the Form 5500" [ref=f19e1009]
+                              - cell "$" [ref=f19e1011]
+                              - cell "41,458,392" [ref=f19e1012]
+                              - cell [ref=f19e1014]
+                    - generic [ref=f19e1015]: Benefits payable are recorded in the Form 5500 for benefit payments that have been processed and approved for payment prior to January 31, but not paid as of that date.
+                  - generic [ref=f19e1016]: "8"
+                  - separator [ref=f19e1019]
+                  - link "Table of Contents" [ref=f19e1023] [cursor=pointer]:
+                    - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_4"
+                  - generic [ref=f19e1024]:
+                    - generic [ref=f19e1025]: Supplemental Schedule
+                    - generic [ref=f19e1026]: Walmart Puerto Rico 401(k) Plan
+                    - generic [ref=f19e1027]:
+                      - text: "EIN #"
+                      - generic [ref=f19e1028]: 71-0415188
+                      - generic [ref=f19e1029]: ", Plan #004"
+                    - generic [ref=f19e1031]:
+                      - button "Share" [ref=f19e1032] [cursor=pointer]
+                      - button "Compare" [ref=f19e1033] [cursor=pointer]
+                      - generic [ref=f19e1034]:
+                        - button "Download Excel" [ref=f19e1035] [cursor=pointer]
+                        - generic [ref=f19e1036] [cursor=pointer]: Include Similar Tables
+                    - generic [ref=f19e1040]: Schedule H, Line 4i - Schedule of Assets (Held at End of Year)
+                    - generic [ref=f19e1041]: January 31, 2026
+                    - table [ref=f19e1043]:
+                      - rowgroup [ref=f19e1044]:
+                        - row [ref=f19e1045]:
+                          - cell [ref=f19e1046]
+                          - cell [ref=f19e1047]
+                          - cell [ref=f19e1048]
+                          - cell [ref=f19e1049]
+                          - cell [ref=f19e1050]
+                          - cell [ref=f19e1051]
+                          - cell [ref=f19e1052]
+                          - cell [ref=f19e1053]
+                          - cell [ref=f19e1054]
+                          - cell [ref=f19e1055]
+                          - cell [ref=f19e1056]
+                          - cell [ref=f19e1057]
+                          - cell [ref=f19e1058]
+                          - cell [ref=f19e1059]
+                          - cell [ref=f19e1060]
+                          - cell [ref=f19e1061]
+                          - cell [ref=f19e1062]
+                          - cell [ref=f19e1063]
+                          - cell [ref=f19e1064]
+                          - cell [ref=f19e1065]
+                          - cell [ref=f19e1066]
+                          - cell [ref=f19e1067]
+                          - cell [ref=f19e1068]
+                          - cell [ref=f19e1069]
+                          - cell [ref=f19e1070]
+                          - cell [ref=f19e1071]
+                          - cell [ref=f19e1072]
+                        - row [ref=f19e1073]:
+                          - cell "(a)" [ref=f19e1074]
+                          - cell [ref=f19e1075]
+                          - cell [ref=f19e1076]:
+                            - generic [ref=f19e1077]: (b)Identity of issue, borrower, lessor or similar party
+                          - cell [ref=f19e1078]
+                          - cell [ref=f19e1079]:
+                            - generic [ref=f19e1080]: (c)Description of investment including maturity date, rate of interest, collateral, par or maturity value
+                          - cell [ref=f19e1081]
+                          - cell [ref=f19e1082]:
+                            - generic [ref=f19e1083]: (d)Cost
+                          - cell [ref=f19e1084]
+                          - cell [ref=f19e1085]:
+                            - generic [ref=f19e1086]: (e)Current value
+                        - row [ref=f19e1087]:
+                          - cell [ref=f19e1088]
+                          - cell [ref=f19e1089]
+                          - cell "Investments" [ref=f19e1090]
+                          - cell [ref=f19e1091]
+                          - cell [ref=f19e1092]
+                          - cell [ref=f19e1093]
+                          - cell [ref=f19e1094]
+                          - cell [ref=f19e1095]
+                          - cell [ref=f19e1096]
+                        - row [ref=f19e1097]:
+                          - cell "*" [ref=f19e1098]
+                          - cell [ref=f19e1099]
+                          - cell "Walmart Inc. Equity Securities" [ref=f19e1100]
+                          - cell [ref=f19e1101]
+                          - cell "Common Stock" [ref=f19e1102]
+                          - cell [ref=f19e1103]
+                          - cell "**" [ref=f19e1104]
+                          - cell [ref=f19e1105]
+                          - cell "$" [ref=f19e1106]
+                          - cell "24,235,146" [ref=f19e1107]
+                          - cell [ref=f19e1109]
+                        - row [ref=f19e1110]:
+                          - cell [ref=f19e1111]
+                          - cell [ref=f19e1112]
+                          - cell [ref=f19e1113]
+                          - cell [ref=f19e1114]
+                          - cell [ref=f19e1115]
+                          - cell [ref=f19e1116]
+                          - cell [ref=f19e1117]
+                          - cell [ref=f19e1118]
+                          - cell [ref=f19e1119]
+                        - row [ref=f19e1120]:
+                          - cell [ref=f19e1121]
+                          - cell [ref=f19e1122]
+                          - cell "Cash Equivalent" [ref=f19e1123]
+                          - cell [ref=f19e1124]
+                          - cell [ref=f19e1125]
+                          - cell [ref=f19e1126]
+                          - cell [ref=f19e1127]
+                          - cell [ref=f19e1128]
+                          - cell [ref=f19e1129]
+                        - row [ref=f19e1130]:
+                          - cell "*" [ref=f19e1131]
+                          - cell [ref=f19e1132]
+                          - cell "Bank of America N.A. Merrill Lynch Bank Deposit" [ref=f19e1133]
+                          - cell [ref=f19e1134]
+                          - cell "Cash Equivalent, 3.15%" [ref=f19e1135]
+                          - cell [ref=f19e1138]
+                          - cell "**" [ref=f19e1139]
+                          - cell [ref=f19e1140]
+                          - cell "1,075,935" [ref=f19e1141]
+                          - cell [ref=f19e1143]
+                        - row [ref=f19e1144]:
+                          - cell [ref=f19e1145]
+                          - cell [ref=f19e1146]
+                          - cell [ref=f19e1147]
+                          - cell [ref=f19e1148]
+                          - cell [ref=f19e1149]
+                          - cell [ref=f19e1150]
+                          - cell [ref=f19e1151]
+                          - cell [ref=f19e1152]
+                          - cell [ref=f19e1153]
+                        - row [ref=f19e1154]:
+                          - cell [ref=f19e1155]
+                          - cell [ref=f19e1156]
+                          - cell "Mutual Funds" [ref=f19e1157]
+                          - cell [ref=f19e1158]
+                          - cell [ref=f19e1159]
+                          - cell [ref=f19e1160]
+                          - cell [ref=f19e1161]
+                          - cell [ref=f19e1162]
+                          - cell [ref=f19e1163]
+                        - row [ref=f19e1164]:
+                          - cell [ref=f19e1165]
+                          - cell [ref=f19e1166]
+                          - cell "BlackRock Institutional Trust Company, N.A." [ref=f19e1167]
+                          - cell [ref=f19e1169]
+                          - cell "LifePath Index 2030 Fund" [ref=f19e1170]
+                          - cell [ref=f19e1171]
+                          - cell "**" [ref=f19e1172]
+                          - cell [ref=f19e1173]
+                          - cell "20,506,989" [ref=f19e1174]
+                        - row [ref=f19e1176]:
+                          - cell [ref=f19e1177]
+                          - cell [ref=f19e1178]
+                          - cell "BlackRock Institutional Trust Company, N.A." [ref=f19e1179]
+                          - cell [ref=f19e1181]
+                          - cell "LifePath Index 2035 Fund" [ref=f19e1182]
+                          - cell [ref=f19e1183]
+                          - cell "**" [ref=f19e1184]
+                          - cell [ref=f19e1185]
+                          - cell "31,633,340" [ref=f19e1186]
+                          - cell [ref=f19e1188]
+                        - row [ref=f19e1189]:
+                          - cell [ref=f19e1190]
+                          - cell [ref=f19e1191]
+                          - cell "BlackRock Institutional Trust Company, N.A." [ref=f19e1192]
+                          - cell [ref=f19e1194]
+                          - cell "LifePath Index 2040 Fund" [ref=f19e1195]
+                          - cell [ref=f19e1196]
+                          - cell "**" [ref=f19e1197]
+                          - cell [ref=f19e1198]
+                          - cell "38,724,716" [ref=f19e1199]
+                        - row [ref=f19e1201]:
+                          - cell [ref=f19e1202]
+                          - cell [ref=f19e1203]
+                          - cell "BlackRock Institutional Trust Company, N.A." [ref=f19e1204]
+                          - cell [ref=f19e1206]
+                          - cell "LifePath Index 2045 Fund" [ref=f19e1207]
+                          - cell [ref=f19e1208]
+                          - cell "**" [ref=f19e1209]
+                          - cell [ref=f19e1210]
+                          - cell "33,392,334" [ref=f19e1211]
+                          - cell [ref=f19e1213]
+                        - row [ref=f19e1214]:
+                          - cell [ref=f19e1215]
+                          - cell [ref=f19e1216]
+                          - cell "BlackRock Institutional Trust Company, N.A." [ref=f19e1217]
+                          - cell [ref=f19e1219]
+                          - cell "LifePath Index 2050 Fund" [ref=f19e1220]
+                          - cell [ref=f19e1221]
+                          - cell "**" [ref=f19e1222]
+                          - cell [ref=f19e1223]
+                          - cell "21,298,095" [ref=f19e1224]
+                        - row [ref=f19e1226]:
+                          - cell [ref=f19e1227]
+                          - cell [ref=f19e1228]
+                          - cell "BlackRock Institutional Trust Company, N.A." [ref=f19e1229]
+                          - cell [ref=f19e1231]
+                          - cell "LifePath Index 2055 Fund" [ref=f19e1232]
+                          - cell [ref=f19e1233]
+                          - cell "**" [ref=f19e1234]
+                          - cell [ref=f19e1235]
+                          - cell "13,424,774" [ref=f19e1236]
+                          - cell [ref=f19e1238]
+                        - row [ref=f19e1239]:
+                          - cell [ref=f19e1240]
+                          - cell [ref=f19e1241]
+                          - cell "BlackRock Institutional Trust Company, N.A." [ref=f19e1242]
+                          - cell [ref=f19e1244]
+                          - cell "LifePath Index 2060 Fund" [ref=f19e1245]
+                          - cell [ref=f19e1246]
+                          - cell "**" [ref=f19e1247]
+                          - cell [ref=f19e1248]
+                          - cell "8,144,474" [ref=f19e1249]
+                        - row [ref=f19e1251]:
+                          - cell [ref=f19e1252]
+                          - cell [ref=f19e1253]
+                          - cell "BlackRock Institutional Trust Company, N.A." [ref=f19e1254]
+                          - cell [ref=f19e1256]
+                          - cell "LifePath Index 2065 Fund" [ref=f19e1257]
+                          - cell [ref=f19e1258]
+                          - cell "**" [ref=f19e1259]
+                          - cell [ref=f19e1260]
+                          - cell "3,347,930" [ref=f19e1261]
+                          - cell [ref=f19e1263]
+                        - row [ref=f19e1264]:
+                          - cell [ref=f19e1265]
+                          - cell [ref=f19e1266]
+                          - cell "BlackRock Institutional Trust Company, N.A." [ref=f19e1267]
+                          - cell [ref=f19e1269]
+                          - cell "LifePath Index 2070 Fund" [ref=f19e1270]
+                          - cell [ref=f19e1271]
+                          - cell "**" [ref=f19e1272]
+                          - cell [ref=f19e1273]
+                          - cell "498,519" [ref=f19e1274]
+                        - row [ref=f19e1276]:
+                          - cell [ref=f19e1277]
+                          - cell [ref=f19e1278]
+                          - cell "BlackRock Institutional Trust Company, N.A." [ref=f19e1279]
+                          - cell [ref=f19e1281]
+                          - cell "LifePath Index Retirement Fund" [ref=f19e1282]
+                          - cell [ref=f19e1283]
+                          - cell "**" [ref=f19e1284]
+                          - cell [ref=f19e1285]
+                          - cell "11,804,960" [ref=f19e1286]
+                          - cell [ref=f19e1288]
+                        - row [ref=f19e1289]:
+                          - cell [ref=f19e1290]
+                          - cell [ref=f19e1291]
+                          - cell "The Vanguard Group, Inc." [ref=f19e1292]
+                          - cell [ref=f19e1294]
+                          - cell "Federal Money Market Fund" [ref=f19e1295]
+                          - cell [ref=f19e1296]
+                          - cell "**" [ref=f19e1297]
+                          - cell [ref=f19e1298]
+                          - cell "978,499" [ref=f19e1299]
+                        - row [ref=f19e1301]:
+                          - cell [ref=f19e1302]
+                          - cell [ref=f19e1303]
+                          - cell "The Vanguard Group, Inc." [ref=f19e1304]
+                          - cell [ref=f19e1306]
+                          - cell "Total Bond Market Index Fund" [ref=f19e1307]
+                          - cell [ref=f19e1308]
+                          - cell "**" [ref=f19e1309]
+                          - cell [ref=f19e1310]
+                          - cell "142,295" [ref=f19e1311]
+                          - cell [ref=f19e1313]
+                        - row [ref=f19e1314]:
+                          - cell [ref=f19e1315]
+                          - cell [ref=f19e1316]
+                          - cell "The Vanguard Group, Inc." [ref=f19e1317]
+                          - cell [ref=f19e1319]
+                          - cell "Total International Stock Index Fund" [ref=f19e1320]
+                          - cell [ref=f19e1321]
+                          - cell "**" [ref=f19e1322]
+                          - cell [ref=f19e1323]
+                          - cell "514,167" [ref=f19e1324]
+                        - row [ref=f19e1326]:
+                          - cell [ref=f19e1327]
+                          - cell [ref=f19e1328]
+                          - cell "The Vanguard Group, Inc." [ref=f19e1329]
+                          - cell [ref=f19e1331]
+                          - cell "Total Stock Market Index Fund" [ref=f19e1332]
+                          - cell [ref=f19e1333]
+                          - cell "**" [ref=f19e1334]
+                          - cell [ref=f19e1335]
+                          - cell "1,631,695" [ref=f19e1336]
+                          - cell [ref=f19e1338]
+                        - row [ref=f19e1339]:
+                          - cell [ref=f19e1340]
+                          - cell [ref=f19e1341]
+                          - cell "Total Mutual Funds" [ref=f19e1342]
+                          - cell [ref=f19e1343]
+                          - cell [ref=f19e1344]
+                          - cell [ref=f19e1345]
+                          - cell [ref=f19e1346]
+                          - cell [ref=f19e1347]
+                          - cell "186,042,787" [ref=f19e1348]
+                        - row [ref=f19e1350]:
+                          - cell [ref=f19e1351]
+                          - cell [ref=f19e1352]
+                          - cell [ref=f19e1353]
+                          - cell [ref=f19e1354]
+                          - cell [ref=f19e1355]
+                          - cell [ref=f19e1356]
+                          - cell [ref=f19e1357]
+                          - cell [ref=f19e1358]
+                          - cell [ref=f19e1359]
+                        - row [ref=f19e1360]:
+                          - cell [ref=f19e1361]
+                          - cell [ref=f19e1362]
+                          - cell "Total Investments" [ref=f19e1363]
+                          - cell [ref=f19e1364]
+                          - cell [ref=f19e1365]
+                          - cell [ref=f19e1366]
+                          - cell [ref=f19e1367]
+                          - cell [ref=f19e1368]
+                          - cell "$" [ref=f19e1369]
+                          - cell "211,353,868" [ref=f19e1370]
+                          - cell [ref=f19e1372]
+                        - row [ref=f19e1373]:
+                          - cell [ref=f19e1374]
+                          - cell [ref=f19e1375]
+                          - cell [ref=f19e1376]
+                          - cell [ref=f19e1377]
+                          - cell [ref=f19e1378]
+                          - cell [ref=f19e1379]
+                          - cell [ref=f19e1380]
+                          - cell [ref=f19e1381]
+                          - cell [ref=f19e1382]
+                        - row [ref=f19e1383]:
+                          - cell "*" [ref=f19e1384]
+                          - cell [ref=f19e1385]
+                          - cell "Notes Receivable from Participants" [ref=f19e1386]
+                          - cell [ref=f19e1387]
+                          - cell "Loans to participants, interest rates ranging from 4.25% to 9.50% with various maturities" [ref=f19e1388]
+                          - cell [ref=f19e1391]
+                          - cell [ref=f19e1392]
+                          - cell [ref=f19e1393]
+                          - cell "$" [ref=f19e1394]
+                          - cell "10,645,049" [ref=f19e1395]
+                          - cell [ref=f19e1397]
+                    - generic [ref=f19e1398]: "* Represents a party-in-interest."
+                    - generic [ref=f19e1399]: "** Column (d) cost information not required as accounts are participant directed."
+                  - generic [ref=f19e1400]: "9"
+                  - separator [ref=f19e1404]
+                  - link "Table of Contents" [ref=f19e1408] [cursor=pointer]:
+                    - /url: "#i8e135824d6a54019ad7e8eca6ea38b03_4"
+                  - generic [ref=f19e1409]: SIGNATURES
+                  - generic [ref=f19e1410]: Pursuant to the requirements of the Securities Exchange Act of 1934, the trustees (or other persons who administer the employee benefit plan) have duly caused this annual report to be signed on its behalf by the undersigned hereunto duly authorized.
+                  - generic [ref=f19e1412]: Walmart Puerto Rico 401(k) Plan
+                  - table [ref=f19e1414]:
+                    - rowgroup [ref=f19e1415]:
+                      - row [ref=f19e1416]:
+                        - cell [ref=f19e1417]
+                        - cell [ref=f19e1418]
+                        - cell [ref=f19e1419]
+                        - cell [ref=f19e1420]
+                        - cell [ref=f19e1421]
+                        - cell [ref=f19e1422]
+                        - cell [ref=f19e1423]
+                        - cell [ref=f19e1424]
+                        - cell [ref=f19e1425]
+                        - cell [ref=f19e1426]
+                        - cell [ref=f19e1427]
+                        - cell [ref=f19e1428]
+                      - row [ref=f19e1429]:
+                        - cell "July 16, 2026" [ref=f19e1430]
+                        - cell "By:" [ref=f19e1432]
+                        - cell [ref=f19e1434]
+                        - cell "/s/ Michael Horne" [ref=f19e1435]
+                      - row [ref=f19e1437]:
+                        - cell [ref=f19e1438]
+                        - cell [ref=f19e1439]
+                        - cell [ref=f19e1440]
+                        - cell "Michael Horne SVP, Global Total Rewards Walmart Inc." [ref=f19e1441]:
+                          - generic [ref=f19e1442]: Michael Horne
+                          - generic [ref=f19e1443]: SVP, Global Total Rewards
+                          - generic [ref=f19e1444]: Walmart Inc.
+                  - generic [ref=f19e1447]: "10"
+              - generic [ref=f14e2681]:
+                - generic [ref=f14e2682]:
+                  - button [ref=f14e2683] [cursor=pointer]
+                  - generic [ref=f14e2688]:
+                    - button "C" [ref=f14e2689] [cursor=pointer]
+                    - button "T" [ref=f14e2690] [cursor=pointer]
+                    - button "1" [ref=f14e2691] [cursor=pointer]
+                    - button "2" [ref=f14e2692] [cursor=pointer]
+                    - button "3" [ref=f14e2693] [cursor=pointer]
+                    - button "4" [ref=f14e2694] [cursor=pointer]
+                    - button "5" [ref=f14e2695] [cursor=pointer]
+                    - button "6" [ref=f14e2696] [cursor=pointer]
+                    - button "7" [ref=f14e2697] [cursor=pointer]
+                    - button "8" [ref=f14e2698] [cursor=pointer]
+                    - button "9" [ref=f14e2699] [cursor=pointer]
+                    - button "10" [ref=f14e2700] [cursor=pointer]
+                  - button [ref=f14e2701] [cursor=pointer]
+                - generic [ref=f14e2707]:
+                  - generic [ref=f14e2708]: 12 pages
+                  - text: Html198KB
+      - generic "Support Chat" [ref=f14e1598]:
+        - button "Live Person" [ref=f14e1600]
+  - generic:
+    - generic:
+      - iframe

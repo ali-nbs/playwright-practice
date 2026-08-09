@@ -1,0 +1,101 @@
+[   23319ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7064322
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:211683)
+    at wy (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9828342)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9835359
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861714
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861917) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[   23418ms] [LOG] Failed to initialize Sentry @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[   27499ms] [ERROR] Sentry captured error: TypeError: Failed to fetch
+    at e.value (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:127856)
+    at e.doGet (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:126699)
+    at getLastUsedEmail (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:703367)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:44593
+    at D (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:44694)
+    at M (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:42563)
+    at g (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:42230)
+    at N (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:46296)
+    at D (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:44942)
+    at M (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:42563) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[   27523ms] [ERROR] Sentry captured error: TypeError: Failed to fetch
+    at e.value (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:127856)
+    at e.doGet (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:126699)
+    at getAllTags (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:6880403)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:44593
+    at D (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:44694)
+    at M (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:42563)
+    at y (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:43365)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:44097
+    at i (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:176:545583)
+    at c (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:176:545733) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[   27524ms] [ERROR] TypeError: Failed to fetch
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7014623
+    at l (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:163:123531)
+    at Generator._invoke (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:163:123319)
+    at e.<computed> [as next] (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:163:123953)
+    at r (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7013302)
+    at c (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7014926)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7014985
+    at new Promise (<anonymous>)
+    at f (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7014867)
+    at p (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7014430) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[   29547ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7064322
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:211683)
+    at wy (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9828342)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9835359
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861714
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861917) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[   29597ms] [LOG] Failed to initialize Sentry @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[   37225ms] TypeError: Cannot read properties of undefined (reading 'type')
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3729
+    at dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:106:16228)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935098
+    at Array.forEach (<anonymous>)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935075
+    at bu (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:87769)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935054
+[   37971ms] TypeError: Cannot read properties of undefined (reading 'Children')
+    at W (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9008426)
+    at t.removeItem [as onRemoveItem] (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9015739)
+    at onKeyDown (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3420357)
+    at Object.<anonymous> (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:1128)
+    at _ (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:1166)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:1312
+    at k (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:1398)
+    at T (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:1847)
+    at E (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:1659)
+    at j (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:2007)
+[   46284ms] [WARNING] Deprecation warning: value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are discouraged. Please refer to http://momentjs.com/guides/#/warnings/js-date/ for more info.
+Arguments: 
+[0] _isAMomentObject: true, _isUTC: false, _useUTC: false, _l: undefined, _i: 08/05/2026, _f: undefined, _strict: undefined, _locale: [object Object]
+Error
+    at r.createFromInputFallback (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:79483)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99611
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99662
+    at jt (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99970)
+    at At (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:100231)
+    at Pt (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:100313)
+    at r (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:76406)
+    at ln (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:6654757)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:44593
+    at D (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:44694) @ https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:78
+[   52689ms] TypeError: Cannot read properties of undefined (reading 'set')
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2345324
+    at e (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:1:14347)
+    at e (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:1:14436)
+    at Be.updateIn (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:1:14500)
+    at Be.update (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:1:14198)
+    at Rgt (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2345286)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:523:43984
+    at Array.forEach (<anonymous>)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:523:43950
+    at Be.withMutations (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:1:15518)

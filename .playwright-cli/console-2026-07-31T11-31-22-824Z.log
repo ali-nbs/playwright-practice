@@ -1,0 +1,192 @@
+[    3546ms] TypeError: Cannot read properties of null (reading 'style')
+    at HTMLDocument.<anonymous> (https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2F&aci=igz:562:54)
+[    4460ms] [LOG] User ID input focused on window load @ https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2F&aci=igz:1063
+[    4655ms] [LOG] B2C is accessible @ https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2F&aci=igz:802
+[   35306ms] [ERROR] ERROR Error: The selector "app-root" did not match any elements
+    at Au.selectRootElement (<anonymous>:1:108327)
+    at e0.selectRootElement (<anonymous>:1:217803)
+    at iw (<anonymous>:1:69559)
+    at Xr.create (<anonymous>:1:69601)
+    at t.bootstrap (<anonymous>:1:98957)
+    at <anonymous>:1:95844
+    at Array.forEach (<anonymous>)
+    at t._moduleDoBootstrap (<anonymous>:1:95829)
+    at <anonymous>:1:95493
+    at v.invoke (<anonymous>:1:7556) @ :0
+[   35308ms] [ERROR] ERROR Error: Uncaught (in promise): Error: The selector "app-root" did not match any elements
+Error: The selector "app-root" did not match any elements
+    at Au.selectRootElement (<anonymous>:1:108327)
+    at e0.selectRootElement (<anonymous>:1:217803)
+    at iw (<anonymous>:1:69559)
+    at Xr.create (<anonymous>:1:69601)
+    at t.bootstrap (<anonymous>:1:98957)
+    at <anonymous>:1:95844
+    at Array.forEach (<anonymous>)
+    at t._moduleDoBootstrap (<anonymous>:1:95829)
+    at <anonymous>:1:95493
+    at v.invoke (<anonymous>:1:7556)
+    at Au.selectRootElement (<anonymous>:1:108327)
+    at e0.selectRootElement (<anonymous>:1:217803)
+    at iw (<anonymous>:1:69559)
+    at Xr.create (<anonymous>:1:69601)
+    at t.bootstrap (<anonymous>:1:98957)
+    at <anonymous>:1:95844
+    at Array.forEach (<anonymous>)
+    at t._moduleDoBootstrap (<anonymous>:1:95829)
+    at <anonymous>:1:95493
+    at v.invoke (<anonymous>:1:7556)
+    at z (<anonymous>:1:18720)
+    at <anonymous>:1:19766
+    at v.invokeTask (<anonymous>:1:8238)
+    at Object.onInvokeTask (<anonymous>:1:87781)
+    at v.invokeTask (<anonymous>:1:8152)
+    at L.runTask (<anonymous>:1:2925)
+    at _ (<anonymous>:1:10603) @ :0
+[   35309ms] [ERROR] Error: The selector "app-root" did not match any elements
+    at Au.selectRootElement (<anonymous>:1:108327)
+    at e0.selectRootElement (<anonymous>:1:217803)
+    at iw (<anonymous>:1:69559)
+    at Xr.create (<anonymous>:1:69601)
+    at t.bootstrap (<anonymous>:1:98957)
+    at <anonymous>:1:95844
+    at Array.forEach (<anonymous>)
+    at t._moduleDoBootstrap (<anonymous>:1:95829)
+    at <anonymous>:1:95493
+    at v.invoke (<anonymous>:1:7556) @ :0
+[   35327ms] [LOG] Setting up custom UI modifications @ :2939
+[   35329ms] [LOG] State parameter: https://apps.intelligize.com:443/&guid=67a81a59-893f-458d-9013-9645af4bebd2&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&logintype=OIDC&isUserActive=true&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&aci=igz&userid=aGFmaXouYSFpMDA3 @ :1156
+[   35329ms] [LOG] ui_locales: en-US @ :1172
+[   35329ms] [LOG] og_locale (from state):  @ :1173
+[   35329ms] [LOG] b2c locale input field: null @ :1174
+[   35330ms] [LOG] locale before: en-US @ :1175
+[   35330ms] [LOG] locale after: en-US @ :1181
+[   35330ms] [LOG] Footer: [ln-footer-content.ln-footer-content] @ :1195
+[   35330ms] [LOG] Footer elements: [a.ln-link.ln-link-secondary, a.ln-link.ln-link-secondary, a.ln-link.ln-link-secondary, a.ln-link.ln-link-secondary, a.ln-link.ln-link-secondary, a.ln-footer-logo.ln-footer-relx-logo, a.ln-link.ln-link-secondary.ln-footer-copyright] @ :1199
+[   35345ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "username"): (More info: https://goo.gl/9p2vKq) %o @ https://authn-us.lexisnexis.com/910560ca-03e9-4f3e-8201-ea810b6638d4/b2c_1a_hrdlocal/oauth2/v2.0/authorize?aci=igz&hierarchyCode=1523145&response_type=code&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&nonce=smXkFu3pwWILsx7TmJndNP8NTXFDMEiLhK9BxzmPOdQ&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&client_id=b1999aa4-d529-485b-b1e4-ae028de06e5e&login_hint=hafiz.a%21i007&ui_locales=en-US&smp=true&scope=openid+offline_access+b1999aa4-d529-485b-b1e4-ae028de06e5e&redirect_uri=https%3A%2F%2Fsignin.lexisnexis.com%2Flnaccess%2Fapp%2Fsignin&state=https%3A%2F%2Fapps.intelligize.com%3A443%2F%26guid%3D67a81a59-893f-458d-9013-9645af4bebd2%26transactionId%3D6e5ca730-8cd3-11f1-b37b-c29f7a6d0045%26logintype%3DOIDC%26isUserActive%3Dtrue%26sessionId%3Dc3e7b19b-3cdb-444b-9461-3790d3af3432%26aci%3Digz%26userid%3DaGFmaXouYSFpMDA3:0
+[   35347ms] [LOG] State parameter: https://apps.intelligize.com:443/&guid=67a81a59-893f-458d-9013-9645af4bebd2&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&logintype=OIDC&isUserActive=true&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&aci=igz&userid=aGFmaXouYSFpMDA3 @ :1156
+[   35348ms] [LOG] ui_locales: en-US @ :1172
+[   35348ms] [LOG] og_locale (from state):  @ :1173
+[   35348ms] [LOG] b2c locale input field: null @ :1174
+[   35348ms] [LOG] locale before: en-US @ :1175
+[   35348ms] [LOG] locale after: en-US @ :1181
+[   35348ms] [LOG] Realigning label and tooltip and toggle button finished. @ :1311
+[   35348ms] [LOG] Realigning label and tooltip and toggle button finished. @ :1311
+[   35348ms] [LOG] Realigning label and tooltip and toggle button finished. @ :1311
+[   35348ms] [LOG] Realigning label and tooltip and toggle button finished. @ :1311
+[   35349ms] [LOG] Realigning label and tooltip and toggle button finished. @ :1311
+[   35349ms] [LOG] State parameter: https://apps.intelligize.com:443/&guid=67a81a59-893f-458d-9013-9645af4bebd2&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&logintype=OIDC&isUserActive=true&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&aci=igz&userid=aGFmaXouYSFpMDA3 @ :1156
+[   35349ms] [LOG] ui_locales: en-US @ :1172
+[   35349ms] [LOG] og_locale (from state):  @ :1173
+[   35349ms] [LOG] b2c locale input field: null @ :1174
+[   35349ms] [LOG] locale before: en-US @ :1175
+[   35349ms] [LOG] locale after: en-US @ :1181
+[   35350ms] [LOG] setObserver @ :1832
+[   35350ms] [LOG] verificationClaimnull @ :1837
+[   35350ms] [LOG] passwordelem undefined @ :1843
+[   35350ms] [LOG] footerElem @ :1860
+[   35350ms] [LOG] fooelem [object HTMLElement] @ :1863
+[   35351ms] [LOG] #api has been populated @ :2942
+[   35351ms] [LOG] State parameter: https://apps.intelligize.com:443/&guid=67a81a59-893f-458d-9013-9645af4bebd2&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&logintype=OIDC&isUserActive=true&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&aci=igz&userid=aGFmaXouYSFpMDA3 @ :1156
+[   35351ms] [LOG] ui_locales: en-US @ :1172
+[   35351ms] [LOG] og_locale (from state):  @ :1173
+[   35351ms] [LOG] b2c locale input field: null @ :1174
+[   35351ms] [LOG] locale before: en-US @ :1175
+[   35351ms] [LOG] locale after: en-US @ :1181
+[   35352ms] [LOG] State parameter: https://apps.intelligize.com:443/&guid=67a81a59-893f-458d-9013-9645af4bebd2&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&logintype=OIDC&isUserActive=true&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&aci=igz&userid=aGFmaXouYSFpMDA3 @ :1156
+[   35352ms] [LOG] ui_locales: en-US @ :1172
+[   35352ms] [LOG] og_locale (from state):  @ :1173
+[   35352ms] [LOG] b2c locale input field: null @ :1174
+[   35352ms] [LOG] locale before: en-US @ :1175
+[   35352ms] [LOG] locale after: en-US @ :1181
+[   35353ms] [LOG] Error Paragraphs [p, p, p] @ :1927
+[   35353ms] [LOG] Error Paragraph JSHandle@node @ :1930
+[   35353ms] [LOG] Original Text undefined @ :1932
+[   35353ms] [LOG] Error Paragraph JSHandle@node @ :1930
+[   35353ms] [LOG] Original Text undefined @ :1932
+[   35353ms] [LOG] Error Paragraph JSHandle@node @ :1930
+[   35353ms] [LOG] Original Text undefined @ :1932
+[   35353ms] [LOG] State parameter: https://apps.intelligize.com:443/&guid=67a81a59-893f-458d-9013-9645af4bebd2&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&logintype=OIDC&isUserActive=true&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&aci=igz&userid=aGFmaXouYSFpMDA3 @ :1156
+[   35353ms] [LOG] ui_locales: en-US @ :1172
+[   35353ms] [LOG] og_locale (from state):  @ :1173
+[   35353ms] [LOG] b2c locale input field: null @ :1174
+[   35354ms] [LOG] locale before: en-US @ :1175
+[   35354ms] [LOG] locale after: en-US @ :1181
+[   35354ms] [LOG] Error Paragraphs [p, p, p] @ :1927
+[   35354ms] [LOG] Error Paragraph JSHandle@node @ :1930
+[   35354ms] [LOG] Original Text undefined @ :1932
+[   35354ms] [LOG] Error Paragraph JSHandle@node @ :1930
+[   35354ms] [LOG] Original Text undefined @ :1932
+[   35354ms] [LOG] Error Paragraph JSHandle@node @ :1930
+[   35354ms] [LOG] Original Text undefined @ :1932
+[   35516ms] [LOG] State parameter: https://apps.intelligize.com:443/&guid=67a81a59-893f-458d-9013-9645af4bebd2&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&logintype=OIDC&isUserActive=true&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&aci=igz&userid=aGFmaXouYSFpMDA3 @ :1156
+[   35516ms] [LOG] ui_locales: en-US @ :1172
+[   35516ms] [LOG] og_locale (from state):  @ :1173
+[   35516ms] [LOG] b2c locale input field: null @ :1174
+[   35516ms] [LOG] locale before: en-US @ :1175
+[   35516ms] [LOG] locale after: en-US @ :1181
+[   35516ms] [LOG] Error Paragraphs [p, p, p] @ :1927
+[   35517ms] [LOG] Error Paragraph JSHandle@node @ :1930
+[   35517ms] [LOG] Original Text undefined @ :1932
+[   35517ms] [LOG] Error Paragraph JSHandle@node @ :1930
+[   35517ms] [LOG] Original Text undefined @ :1932
+[   35517ms] [LOG] Error Paragraph JSHandle@node @ :1930
+[   35517ms] [LOG] Original Text undefined @ :1932
+[   36151ms] [ERROR] Access to fetch at 'https://pdc1c-useridentity.route53.lexis.com/users/hafiz.a!i007/ismfarequired' from origin 'https://authn-us.lexisnexis.com' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status. @ https://authn-us.lexisnexis.com/910560ca-03e9-4f3e-8201-ea810b6638d4/b2c_1a_hrdlocal/oauth2/v2.0/authorize?aci=igz&hierarchyCode=1523145&response_type=code&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&nonce=smXkFu3pwWILsx7TmJndNP8NTXFDMEiLhK9BxzmPOdQ&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&client_id=b1999aa4-d529-485b-b1e4-ae028de06e5e&login_hint=hafiz.a%21i007&ui_locales=en-US&smp=true&scope=openid+offline_access+b1999aa4-d529-485b-b1e4-ae028de06e5e&redirect_uri=https%3A%2F%2Fsignin.lexisnexis.com%2Flnaccess%2Fapp%2Fsignin&state=https%3A%2F%2Fapps.intelligize.com%3A443%2F%26guid%3D67a81a59-893f-458d-9013-9645af4bebd2%26transactionId%3D6e5ca730-8cd3-11f1-b37b-c29f7a6d0045%26logintype%3DOIDC%26isUserActive%3Dtrue%26sessionId%3Dc3e7b19b-3cdb-444b-9461-3790d3af3432%26aci%3Digz%26userid%3DaGFmaXouYSFpMDA3:0
+[   36152ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://pdc1c-useridentity.route53.lexis.com/users/hafiz.a!i007/ismfarequired:0
+[   36152ms] [ERROR] API call failed: TypeError: Failed to fetch
+    at <anonymous>:1:22842
+    at o.<computed> (<anonymous>:1:15702)
+    at conditionallyShowRememberMe (<anonymous>:1978:40)
+    at HTMLDocument.<anonymous> (<anonymous>:2951:13)
+    at l (https://authn-us.lexisnexis.com/910560ca-03e9-4f3e-8201-ea810b6638d4/b2c_1a_hrdlocal/oauth2/v2.0/authorize?aci=igz&hierarchyCode=1523145&response_type=code&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&nonce=smXkFu3pwWILsx7TmJndNP8NTXFDMEiLhK9BxzmPOdQ&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&client_id=b1999aa4-d529-485b-b1e4-ae028de06e5e&login_hint=hafiz.a%21i007&ui_locales=en-US&smp=true&scope=openid+offline_access+b1999aa4-d529-485b-b1e4-ae028de06e5e&redirect_uri=https%3A%2F%2Fsignin.lexisnexis.com%2Flnaccess%2Fapp%2Fsignin&state=https%3A%2F%2Fapps.intelligize.com%3A443%2F%26guid%3D67a81a59-893f-458d-9013-9645af4bebd2%26transactionId%3D6e5ca730-8cd3-11f1-b37b-c29f7a6d0045%26logintype%3DOIDC%26isUserActive%3Dtrue%26sessionId%3Dc3e7b19b-3cdb-444b-9461-3790d3af3432%26aci%3Digz%26userid%3DaGFmaXouYSFpMDA3:17:40301)
+    at a (https://authn-us.lexisnexis.com/910560ca-03e9-4f3e-8201-ea810b6638d4/b2c_1a_hrdlocal/oauth2/v2.0/authorize?aci=igz&hierarchyCode=1523145&response_type=code&sessionId=c3e7b19b-3cdb-444b-9461-3790d3af3432&nonce=smXkFu3pwWILsx7TmJndNP8NTXFDMEiLhK9BxzmPOdQ&transactionId=6e5ca730-8cd3-11f1-b37b-c29f7a6d0045&client_id=b1999aa4-d529-485b-b1e4-ae028de06e5e&login_hint=hafiz.a%21i007&ui_locales=en-US&smp=true&scope=openid+offline_access+b1999aa4-d529-485b-b1e4-ae028de06e5e&redirect_uri=https%3A%2F%2Fsignin.lexisnexis.com%2Flnaccess%2Fapp%2Fsignin&state=https%3A%2F%2Fapps.intelligize.com%3A443%2F%26guid%3D67a81a59-893f-458d-9013-9645af4bebd2%26transactionId%3D6e5ca730-8cd3-11f1-b37b-c29f7a6d0045%26logintype%3DOIDC%26isUserActive%3Dtrue%26sessionId%3Dc3e7b19b-3cdb-444b-9461-3790d3af3432%26aci%3Digz%26userid%3DaGFmaXouYSFpMDA3:17:40609)
+    at M.<computed> (<anonymous>:1:33506)
+    at v.invokeTask (<anonymous>:1:8238)
+    at L.runTask (<anonymous>:1:2925)
+    at invokeTask (<anonymous>:1:9461) @ :1986
+[   87643ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7064322
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:211683)
+    at wy (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9828342)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9835359
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861714
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861917) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[   87723ms] [LOG] Failed to initialize Sentry @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[  187083ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:7064322
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:211683)
+    at wy (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9828342)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:9835359
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861714
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:2861917) @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[  187149ms] [LOG] Failed to initialize Sentry @ https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:0
+[  199121ms] TypeError: Cannot read properties of undefined (reading 'type')
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:409:3729
+    at dispatch (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:106:16228)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935098
+    at Array.forEach (<anonymous>)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935075
+    at bu (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:385:87769)
+    at https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:3935054
+[  296417ms] [WARNING] Deprecation warning: value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are discouraged. Please refer to http://momentjs.com/guides/#/warnings/js-date/ for more info.
+Arguments: 
+[0] _isAMomentObject: true, _isUTC: false, _useUTC: false, _l: undefined, _i: 07/16/2026, _f: undefined, _strict: undefined, _locale: [object Object]
+Error
+    at r.createFromInputFallback (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:79483)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99611
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99662
+    at jt (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:99970)
+    at At (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:100231)
+    at Pt (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:100313)
+    at r (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:79:76406)
+    at ln (https://apps.intelligize.com/bundle.app.2d952cacf2a5f5d2b46d.js:1:6654757)
+    at https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:44593
+    at D (https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:81:44694) @ https://apps.intelligize.com/chunk.vendor.87813407ff40b86161d8.js:78

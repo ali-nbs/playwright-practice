@@ -1,0 +1,4 @@
+[    3647ms] TypeError: Cannot read properties of null (reading 'style')
+    at HTMLDocument.<anonymous> (https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2F&aci=igz:562:54)
+[    4726ms] [LOG] User ID input focused on window load @ https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2F&aci=igz:1063
+[    5121ms] [LOG] B2C is accessible @ https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2F&aci=igz:802

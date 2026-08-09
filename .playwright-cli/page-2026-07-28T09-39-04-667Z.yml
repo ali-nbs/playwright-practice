@@ -1,0 +1,656 @@
+- generic [active] [ref=f9e1]:
+  - generic [ref=f9e12]:
+    - navigation [ref=f9e13]:
+      - generic "Click here to return to main menu" [ref=f9e17] [cursor=pointer]:
+        - img "Intelligize" [ref=f9e18]
+      - generic [ref=f9e19]:
+        - generic [ref=f9e24]:
+          - textbox "Company Name, Ticker, CIK or List to search in Accounting Analytics" [ref=f9e30]
+          - button [ref=f9e32] [cursor=pointer]
+        - generic [ref=f9e36]:
+          - generic [ref=f9e38] [cursor=pointer]:
+            - generic [ref=f9e39]: "Client ID:"
+            - generic "None" [ref=f9e40]: "- None -"
+          - button "My Workspace" [ref=f9e42] [cursor=pointer]
+          - generic [ref=f9e43]: Support
+      - generic "hafiz.a!i007 - hafiz.ali@northbaysolutions.net" [ref=f9e52] [cursor=pointer]: HA
+    - generic [ref=f9e53]:
+      - generic [ref=f9e54]:
+        - generic [ref=f9e55] [cursor=pointer]: Document Details
+        - generic [ref=f9e2175]:
+          - generic [ref=f9e2176]: Accounting Analytics
+          - generic [ref=f9e2184]:
+            - button [ref=f9e2185] [cursor=pointer]
+            - generic [ref=f9e2190]:
+              - generic [ref=f9e2191]:
+                - generic "Outline" [ref=f9e2194] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f9e2195]:
+                - generic "Exhibits" [ref=f9e2198] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f9e2199]:
+                - generic "iXBRL" [ref=f9e2202] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f9e2203]:
+                - generic "Info" [ref=f9e2206] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f9e2207]:
+                - generic:
+                  - generic:
+                    - generic "Results"
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+              - generic [ref=f9e2208]:
+                - generic "Notes" [ref=f9e2211] [cursor=pointer]
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab" [disabled]
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right" [disabled]
+                    - menuitem "Close tabs to the left" [disabled]
+                    - menuitem "Close all tabs" [disabled]
+              - generic [ref=f9e2212]:
+                - generic:
+                  - generic:
+                    - generic "ACCT"
+                - menu:
+                  - generic:
+                    - menuitem "Switch to home tab"
+                    - menuitem "Close tab"
+                    - menuitem "Close other tabs"
+                    - menuitem "Close tabs to the right"
+                    - menuitem "Close tabs to the left"
+                    - menuitem "Close all tabs"
+            - button [disabled] [ref=f9e2213]
+          - generic [ref=f9e2218]:
+            - generic [ref=f9e2219]:
+              - generic [ref=f9e2221]:
+                - button "Expand All" [ref=f9e2222] [cursor=pointer]
+                - button "Collapse All" [ref=f9e2226] [cursor=pointer]
+              - textbox "Search Outline" [ref=f9e2231]
+            - generic [ref=f9e2235]:
+              - generic "8-K/A 07/27/2026" [ref=f9e2237]
+              - generic [ref=f9e2247]:
+                - generic "COVER PAGE" [ref=f9e2251]
+                - generic [ref=f9e2262]:
+                  - generic "Item 9.01. Financial Statements and Exhibits." [ref=f9e2264]
+                  - generic "(d) Exhibits" [ref=f9e2278]
+                - generic "SIGNATURES" [ref=f9e2291]
+      - generic [ref=f9e1201]:
+        - generic [ref=f9e1204]:
+          - generic [ref=f9e1206]:
+            - generic [ref=f9e1207]:
+              - generic "Home" [ref=f9e1216] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab" [disabled]
+                  - menuitem "Close tab" [disabled]
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right" [disabled]
+                  - menuitem "Close tabs to the left" [disabled]
+                  - menuitem "Close all tabs" [disabled]
+            - generic [ref=f9e1697]:
+              - 'generic "Docs: 286" [ref=f9e1706] [cursor=pointer]'
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right"
+                  - menuitem "Close tabs to the left" [disabled]
+                  - menuitem "Close all tabs"
+            - generic [ref=f9e2302]:
+              - generic "8-K/A 07/27/2026" [ref=f9e2314] [cursor=pointer]
+              - menu:
+                - generic:
+                  - menuitem "Switch to home tab"
+                  - menuitem "Close tab"
+                  - menuitem "Close other tabs"
+                  - menuitem "Close tabs to the right" [disabled]
+                  - menuitem "Close tabs to the left"
+                  - menuitem "Close all tabs"
+          - button "Save Tabs" [ref=f9e1713] [cursor=pointer]
+        - generic [ref=f9e1222]:
+          - generic [ref=f9e1223]:
+            - generic [ref=f9e1225]:
+              - button "Configure Home" [ref=f9e1230] [cursor=pointer]
+              - generic [ref=f9e1235]:
+                - article [ref=f9e1236]:
+                  - heading "Audit Item Matrix" [level=1] [ref=f9e1240]
+                  - generic [ref=f9e1243]:
+                    - generic [ref=f9e1244]:
+                      - generic [ref=f9e1245]: A quick and easy way to compare audit items across companies. You can see audit items by rankings, word counts, and heat maps.
+                      - generic [ref=f9e1246] [cursor=pointer]: Request Training
+                    - generic [ref=f9e1251]:
+                      - generic [ref=f9e1252]:
+                        - generic [ref=f9e1253]: Select a Peer Group to make Quick Matrix
+                        - generic "Select Peer Group" [ref=f9e1256] [cursor=pointer]
+                      - generic [ref=f9e1260]:
+                        - generic [ref=f9e1261]: Create New Matrix
+                        - button "Create/Load New Matrix" [ref=f9e1262] [cursor=pointer]
+                - article [ref=f9e1264]:
+                  - generic [ref=f9e1265]:
+                    - generic [ref=f9e1266]: Comment Letters
+                    - generic [ref=f9e1271]:
+                      - button "Excel List" [ref=f9e1273] [cursor=pointer]
+                      - button "Unpin" [ref=f9e1278] [cursor=pointer]
+                      - generic [ref=f9e1283] [cursor=pointer]: View All
+                  - generic [ref=f9e1285]:
+                    - generic [ref=f9e1286]:
+                      - generic [ref=f9e1287]:
+                        - textbox "Type to filter" [ref=f9e1289]
+                        - generic [ref=f9e1290]:
+                          - generic [ref=f9e1291]: Peer Group
+                          - generic "My Company & Peers" [ref=f9e1294] [cursor=pointer]
+                          - button [disabled] [ref=f9e1298]
+                      - generic [ref=f9e1302]:
+                        - generic [ref=f9e1303] [cursor=pointer]: Non-GAAP
+                        - generic [ref=f9e1305] [cursor=pointer]: ASC
+                        - generic [ref=f9e1307] [cursor=pointer]: 10-K Items
+                    - paragraph [ref=f9e1311]: 0 Results
+                    - generic [ref=f9e1312]: "* Non-GAAP information is currently available for Large Accelerated Filers."
+                - article [ref=f9e1314]:
+                  - generic [ref=f9e1315]:
+                    - generic [ref=f9e1316]: Top Non-GAAP Metrics Disclosures
+                    - generic [ref=f9e1321]:
+                      - button "Excel List" [ref=f9e1323] [cursor=pointer]
+                      - button "Unpin" [ref=f9e1328] [cursor=pointer]
+                  - generic [ref=f9e1334]:
+                    - generic [ref=f9e1335]:
+                      - generic [ref=f9e1336]:
+                        - generic [ref=f9e1340]:
+                          - generic [ref=f9e1341]: Peer Group
+                          - generic "My Company & Peers" [ref=f9e1344] [cursor=pointer]
+                          - button [disabled] [ref=f9e1348]
+                        - generic [ref=f9e1353]:
+                          - button [ref=f9e1354] [cursor=pointer]
+                          - button [ref=f9e1358] [cursor=pointer]
+                      - generic [ref=f9e1363]:
+                        - generic [ref=f9e1364]:
+                          - generic [ref=f9e1365]:
+                            - textbox [ref=f9e1368]: 07/28/2023
+                            - textbox [ref=f9e1375]: 07/28/2026
+                          - generic [ref=f9e1380]:
+                            - generic [ref=f9e1381] [cursor=pointer]: 1M
+                            - generic [ref=f9e1382] [cursor=pointer]: 3M
+                            - generic [ref=f9e1383] [cursor=pointer]: 6M
+                            - generic [ref=f9e1384] [cursor=pointer]: YTD
+                            - generic [ref=f9e1385] [cursor=pointer]: 1Y
+                            - generic [ref=f9e1386] [cursor=pointer]: 3Y
+                            - generic [ref=f9e1387] [cursor=pointer]: 5Y
+                            - generic [ref=f9e1388] [cursor=pointer]: ALL
+                        - paragraph [ref=f9e1391]: 0 Results
+                    - generic [ref=f9e1392]: "* Non-GAAP information is currently available for Large Accelerated Filers."
+                - article [ref=f9e1394]:
+                  - generic [ref=f9e1395]:
+                    - generic [ref=f9e1396]: Critical Audit Matters (CAM) Topics
+                    - generic [ref=f9e1401]:
+                      - button "Excel List" [ref=f9e1403] [cursor=pointer]
+                      - button "Unpin" [ref=f9e1408] [cursor=pointer]
+                      - generic [ref=f9e1413] [cursor=pointer]: View All
+                  - generic [ref=f9e1415]:
+                    - generic [ref=f9e1416]:
+                      - generic [ref=f9e1417]:
+                        - textbox "Type to filter" [ref=f9e1419]
+                        - generic [ref=f9e1420]:
+                          - generic [ref=f9e1421]: Peer Group
+                          - generic "My Company & Peers" [ref=f9e1424] [cursor=pointer]
+                          - button [disabled] [ref=f9e1428]
+                      - generic [ref=f9e1432]:
+                        - generic [ref=f9e1433] [cursor=pointer]: By Year
+                        - generic [ref=f9e1435] [cursor=pointer]: By Company
+                    - paragraph [ref=f9e1439]: 0 Results
+                    - generic [ref=f9e1440]: "* CAMs information is currently available for Large Accelerated Filers."
+                - article [ref=f9e1442]:
+                  - generic [ref=f9e1443]:
+                    - generic [ref=f9e1444]: Auditor Information
+                    - generic [ref=f9e1449]:
+                      - button "Excel List" [ref=f9e1451] [cursor=pointer]
+                      - button "Unpin" [ref=f9e1456] [cursor=pointer]
+                  - generic [ref=f9e1462]:
+                    - generic [ref=f9e1463]:
+                      - generic [ref=f9e1465]:
+                        - generic [ref=f9e1466]: Peer Group
+                        - generic "My Company & Peers" [ref=f9e1469] [cursor=pointer]
+                        - button [disabled] [ref=f9e1473]
+                      - generic [ref=f9e1477]:
+                        - generic [ref=f9e1478] [cursor=pointer]: Audit Fees
+                        - generic [ref=f9e1480] [cursor=pointer]: Distribution
+                    - paragraph [ref=f9e1484]: 0 Results
+                    - generic [ref=f9e1485]: "* Auditor information is currently available for Large Accelerated Filers."
+                - article [ref=f9e1487]:
+                  - generic [ref=f9e1489]:
+                    - heading "Research Library" [level=1] [ref=f9e1491]
+                    - button "Unpin" [ref=f9e1494] [cursor=pointer]
+                  - generic [ref=f9e1500]:
+                    - generic [ref=f9e1501]:
+                      - generic "All Apps" [ref=f9e1505] [cursor=pointer]
+                      - textbox "What are you looking for?" [ref=f9e1511]
+                    - generic [ref=f9e1515]:
+                      - paragraph [ref=f9e1517]: Category
+                      - paragraph [ref=f9e1519]: App
+                    - grid "grid" [ref=f9e1521]:
+                      - rowgroup [ref=f9e1522]:
+                        - listitem [ref=f9e1524]:
+                          - paragraph [ref=f9e1529]:
+                            - generic [ref=f9e1533]: Recommended
+                        - listitem [ref=f9e1535]:
+                          - paragraph [ref=f9e1540]:
+                            - generic [ref=f9e1541]: COVID
+                        - listitem [ref=f9e1543]:
+                          - paragraph [ref=f9e1548]:
+                            - generic [ref=f9e1549]: Current Events
+                        - listitem [ref=f9e1551]:
+                          - paragraph [ref=f9e1556]:
+                            - generic [ref=f9e1557]: Cybersecurity
+                        - listitem [ref=f9e1559]:
+                          - paragraph [ref=f9e1564]:
+                            - generic [ref=f9e1565]: Enforcement
+                        - listitem [ref=f9e1567]:
+                          - paragraph [ref=f9e1572]:
+                            - generic [ref=f9e1573]: Finance & Accounting
+                        - listitem [ref=f9e1575]:
+                          - paragraph [ref=f9e1580]:
+                            - generic [ref=f9e1581]: Governance / ESG
+                        - listitem [ref=f9e1583]:
+                          - paragraph [ref=f9e1588]:
+                            - generic [ref=f9e1589]: MD&A
+                        - listitem [ref=f9e1591]:
+                          - paragraph [ref=f9e1596]:
+                            - generic [ref=f9e1597]: Regulatory
+                        - listitem [ref=f9e1599]:
+                          - paragraph [ref=f9e1604]:
+                            - generic [ref=f9e1605]: Risk Factors
+                        - listitem [ref=f9e1607]:
+                          - paragraph [ref=f9e1612]:
+                            - generic [ref=f9e1613]: Transactions
+            - contentinfo [ref=f9e1615]:
+              - link [ref=f9e1618] [cursor=pointer]:
+                - /url: https://www.lexisnexis.com/
+                - img "LexisNexis Logo" [ref=f9e1619]
+              - generic [ref=f9e1620]:
+                - list [ref=f9e1622]:
+                  - listitem [ref=f9e1623]:
+                    - link "About" [ref=f9e1624] [cursor=pointer]:
+                      - /url: https://www.intelligize.com/about/
+                  - listitem [ref=f9e1625]:
+                    - link "Privacy" [ref=f9e1626] [cursor=pointer]:
+                      - /url: http://www.lexisnexis.com/en-us/terms/privacy-policy.page
+                  - listitem [ref=f9e1627]:
+                    - link "Trust Center" [ref=f9e1628] [cursor=pointer]:
+                      - /url: https://trust.lexisnexis.com
+                  - listitem [ref=f9e1629]:
+                    - link "Cookie Policy" [ref=f9e1630] [cursor=pointer]:
+                      - /url: "#"
+                  - listitem [ref=f9e1631]:
+                    - link "Terms & Conditions" [ref=f9e1632] [cursor=pointer]:
+                      - /url: https://www.intelligize.com/terms-of-service/
+                - list [ref=f9e1634]:
+                  - listitem [ref=f9e1635]:
+                    - link "© 2026 LexisNexis®" [ref=f9e1636] [cursor=pointer]:
+                      - /url: https://www.lexisnexis.com/terms/copr/lngp/us/
+              - link [ref=f9e1639] [cursor=pointer]:
+                - /url: http://www.relxgroup.com/Pages/Home.aspx
+                - img "LexisNexis Logo" [ref=f9e1640]
+          - generic [ref=f9e2318]:
+            - generic [ref=f9e2319]:
+              - generic [ref=f9e2320]:
+                - generic [ref=f9e2321]:
+                  - generic [ref=f9e2322]:
+                    - button "Download" [ref=f9e2324] [cursor=pointer]
+                    - button "Email" [ref=f9e2329] [cursor=pointer]
+                    - button "Copy link to this document" [ref=f9e2334] [cursor=pointer]
+                    - generic [ref=f9e2338]:
+                      - button [ref=f9e2339] [cursor=pointer]
+                      - generic:
+                        - button "Print the selected items from the list below" [ref=f9e2345] [cursor=pointer]
+                        - button [ref=f9e2351] [cursor=pointer]
+                  - button "Notes & Highlights" [ref=f9e2358] [cursor=pointer]
+                - generic [ref=f9e2364]:
+                  - generic [ref=f9e2367]: "Search in Document:"
+                  - generic [ref=f9e2368]:
+                    - generic [ref=f9e2369]: Text
+                    - generic [ref=f9e2377]: iXBRL
+                  - textbox "Search" [ref=f9e2388]
+                - button [ref=f9e2392] [cursor=pointer]
+              - generic [ref=f9e2396]:
+                - generic [ref=f9e2397]: Cross-Reference
+                - generic [ref=f9e2405]: Highlight Accounting Items
+            - generic [ref=f9e2413]:
+              - generic [ref=f9e2414]:
+                - generic "RTB DIGITAL, INC." [ref=f9e2422] [cursor=pointer]
+                - generic [ref=f9e2423]: •
+                - generic [ref=f9e2424]: "8-K/A (Items: 9.01)"
+                - generic [ref=f9e2426]: •
+                - generic [ref=f9e2427]: 07/27/2026
+              - generic [ref=f9e2429]:
+                - generic [ref=f9e2430]:
+                  - generic [ref=f9e2431]: "Zoom:"
+                  - generic [ref=f9e2432]: 100%
+                - generic [ref=f9e2445]:
+                  - button "Previous" [ref=f9e2446] [cursor=pointer]
+                  - button "Next" [ref=f9e2451] [cursor=pointer]
+            - generic [ref=f9e2458]:
+              - iframe [ref=f9e2461]:
+                - generic [ref=f14e2]:
+                  - paragraph
+                  - paragraph [ref=f14e5]
+                  - paragraph [ref=f14e6]:
+                    - generic [ref=f14e7]: UNITED STATES
+                  - paragraph [ref=f14e8]:
+                    - generic [ref=f14e9]: SECURITIES AND EXCHANGE COMMISSION
+                  - paragraph [ref=f14e10]:
+                    - generic [ref=f14e11]: Washington, D.C. 20549
+                  - paragraph [ref=f14e12]
+                  - paragraph
+                  - paragraph [ref=f14e15]
+                  - paragraph [ref=f14e16]:
+                    - generic [ref=f14e17]: FORM 8-K/A
+                  - paragraph [ref=f14e19]:
+                    - generic [ref=f14e20]: Amendment No. 2
+                  - paragraph [ref=f14e21]
+                  - paragraph
+                  - paragraph [ref=f14e24]
+                  - paragraph [ref=f14e26]:
+                    - generic [ref=f14e27]: Current Report Pursuant to Section 13 or 15(d) of the Securities Exchange Act of 1934
+                  - paragraph [ref=f14e28]
+                  - paragraph [ref=f14e29]:
+                    - generic [ref=f14e30]: "Date of Report (Date of earliest event reported): May 12, 2026"
+                  - paragraph [ref=f14e32]
+                  - paragraph [ref=f14e33]:
+                    - generic [ref=f14e34]: RTB Digital, Inc.
+                  - paragraph [ref=f14e36]: (Exact name of registrant as specified in its charter)
+                  - paragraph [ref=f14e37]
+                  - table [ref=f14e38]:
+                    - rowgroup [ref=f14e39]:
+                      - row [ref=f14e40]:
+                        - cell "Nevada" [ref=f14e41]
+                        - cell [ref=f14e44]
+                        - cell "001-34294" [ref=f14e45]
+                        - cell [ref=f14e48]
+                        - cell "22-3962936" [ref=f14e49]
+                      - row [ref=f14e52]:
+                        - cell [ref=f14e53]
+                        - cell [ref=f14e55]
+                        - cell "(Commission File Number)" [ref=f14e56]
+                        - cell [ref=f14e57]
+                        - cell [ref=f14e58]
+                  - paragraph [ref=f14e60]
+                  - paragraph [ref=f14e61]:
+                    - generic [ref=f14e62]: 4300 University Way NE, Suite C Seattle, WA 98105
+                  - paragraph [ref=f14e64]: (Address of principal executive offices and zip code)
+                  - paragraph [ref=f14e65]
+                  - paragraph [ref=f14e66]:
+                    - generic [ref=f14e67]: "Registrant’s telephone number, including area code: (855) 201-1613"
+                  - paragraph [ref=f14e68]
+                  - paragraph [ref=f14e69]: "Check the appropriate box below if the Form 8-K is intended to simultaneously satisfy the filing obligation of the registrant under any of the following provisions:"
+                  - paragraph [ref=f14e70]
+                  - table [ref=f14e71]:
+                    - rowgroup [ref=f14e72]:
+                      - row [ref=f14e73]:
+                        - cell "☐" [ref=f14e74]
+                        - cell "Written communications pursuant to Rule 425 under the Securities Act (17 CFR 230.425)" [ref=f14e76]
+                      - row [ref=f14e78]:
+                        - cell [ref=f14e79]
+                        - cell [ref=f14e80]
+                      - row [ref=f14e81]:
+                        - cell "☐" [ref=f14e82]
+                        - cell "Soliciting material pursuant to Rule 14a-12 under the Exchange Act (17 CFR 240.14a-12)" [ref=f14e84]
+                      - row [ref=f14e86]:
+                        - cell [ref=f14e87]
+                        - cell [ref=f14e88]
+                      - row [ref=f14e89]:
+                        - cell "☐" [ref=f14e90]
+                        - cell "Pre-commencement communications pursuant to Rule 14d-2(b) under the Exchange Act (17 CFR 240.14d-2(b))" [ref=f14e92]
+                      - row [ref=f14e94]:
+                        - cell [ref=f14e95]
+                        - cell [ref=f14e96]
+                      - row [ref=f14e97]:
+                        - cell "☐" [ref=f14e98]
+                        - cell "Pre-commencement communications pursuant to Rule 13e-4(c) under the Exchange Act (17 CFR 240.13e-4(c))" [ref=f14e100]
+                  - paragraph [ref=f14e102]
+                  - paragraph [ref=f14e103]:
+                    - generic [ref=f14e104]: "Securities registered pursuant to Section 12(b) of the Exchange Act:"
+                  - paragraph [ref=f14e105]
+                  - table [ref=f14e106]:
+                    - rowgroup [ref=f14e107]:
+                      - row [ref=f14e108]:
+                        - cell "Title of each class" [ref=f14e109]
+                        - cell [ref=f14e111]
+                        - cell "Trading Symbol(s)" [ref=f14e112]
+                        - cell [ref=f14e114]
+                        - cell "Name of each exchange on which registered" [ref=f14e115]
+                      - row [ref=f14e117]:
+                        - cell "Common Stock, par value $0.001 per share" [ref=f14e118]
+                        - cell [ref=f14e120]
+                        - cell "RTB" [ref=f14e121]
+                        - cell [ref=f14e123]
+                        - cell [ref=f14e124]
+                  - paragraph [ref=f14e126]
+                  - paragraph [ref=f14e127]:
+                    - generic [ref=f14e128]: Indicate by check mark whether the registrant is an emerging growth company as defined in Rule 405 of the Securities Act of 1933 (§230.405 of this chapter) or Rule 12b-2 of the Securities Exchange Act of 1934 (§240.12b-2 of this chapter).
+                  - paragraph [ref=f14e129]
+                  - paragraph [ref=f14e130]:
+                    - generic [ref=f14e131]: Emerging growth company ☐
+                  - paragraph [ref=f14e132]
+                  - paragraph [ref=f14e133]:
+                    - generic [ref=f14e134]: If an emerging growth company, indicate by check mark if the registrant has elected not to use the extended transition period for complying with any new or revised financial accounting standards provided pursuant to Section 13(a) of the Exchange Act. ☐
+                  - paragraph [ref=f14e135]
+                  - paragraph
+                  - paragraph [ref=f14e138]
+                  - paragraph
+                  - generic [ref=f14e139]:
+                    - paragraph
+                  - generic:
+                    - paragraph
+                  - paragraph [ref=f14e140]
+                  - paragraph [ref=f14e142]:
+                    - generic [ref=f14e143]: EXPLANATORY NOTE
+                  - paragraph [ref=f14e144]
+                  - paragraph [ref=f14e146]: On May 13, 2026, RTB Digital, Inc. (the “Company”) filed a Current Report on Form 8-K to report the acquisition by its wholly owned subsidiary, RYVYL Merger Sub Inc. (“RYVYL Sub”), of RTB Digital, Inc., a Delaware corporation (“RTB”), (the “Original Company Report”), which merger was completed on May 12, 2026. Also on May 13, 2026, the Company filed Amendment No. 1 to the Original Company Report to file the Certificate of Merger between RYVYL Sub and RTB, which was filed on May 12, 2026, as Exhibit 3.2 thereto.
+                  - paragraph [ref=f14e147]
+                  - paragraph [ref=f14e149]: The Company is filing this Amendment No. 2 on Form 8-K/A (this “Amendment”) to (i) update the information in Item 9.01(a) of the Original Company Report to include (x) the audited financial statements as of and for the years ended December 31, 2025 and 2024, and (y) the unaudited condensed financial statements as of and for the three months ended March 31, 2026 and 2025 for RTB; and (ii) update the information in Item 9.01(b) of the Original Company Report to include the unaudited pro forma condensed combined financial information of the Company reflecting the acquisition of RTB as of and for the year ended December 31, 2025 and the period ended March 31, 2026.
+                  - paragraph [ref=f14e150]
+                  - paragraph [ref=f14e152]: This Amendment No. 2 does not amend any other item of the Original Company Report or purport to provide an update or a discussion of any developments at the Company subsequent to the filing date of the Original Company Report. Capitalized terms used but not defined herein have the meanings given to them in the Original Company Report.
+                  - paragraph [ref=f14e153]
+                  - paragraph [ref=f14e155]:
+                    - generic [ref=f14e156]: In accordance with Rule 12b-15 of the Securities Exchange Act of 1934, as amended, the complete text of Item 9.01 (as amended) is included herein.
+                  - paragraph [ref=f14e157]
+                  - paragraph
+                  - paragraph [ref=f14e159]: "1"
+                  - generic:
+                    - paragraph
+                  - paragraph [ref=f14e160]
+                  - paragraph [ref=f14e161]:
+                    - generic [ref=f14e162]: Item 9.01. Financial Statements and Exhibits.
+                  - paragraph [ref=f14e164]
+                  - table [ref=f14e165]:
+                    - rowgroup [ref=f14e166]:
+                      - row [ref=f14e167]:
+                        - cell
+                        - cell "(a)" [ref=f14e168]
+                        - cell "Financial Statements of Businesses Acquired." [ref=f14e169]
+                  - paragraph [ref=f14e170]
+                  - table [ref=f14e171]:
+                    - rowgroup [ref=f14e172]:
+                      - row [ref=f14e173]:
+                        - cell [ref=f14e174]
+                        - cell "(i)" [ref=f14e175]
+                        - cell [ref=f14e176]:
+                          - paragraph [ref=f14e177]: The audited financial statements of RTB as of and for the years ended December 31, 2025 and December 31, 2024, the related notes thereto, and the related report of RBSM LLP, independent registered public accounting firm are filed as Exhibit 99.1 hereto.
+                          - paragraph [ref=f14e178]
+                          - paragraph [ref=f14e179]: The financial statements of RTB for the three months ended March 31, 2026 (unaudited), are filed herewith as Exhibit 99.2
+                  - paragraph [ref=f14e180]
+                  - table [ref=f14e181]:
+                    - rowgroup [ref=f14e182]:
+                      - row [ref=f14e183]:
+                        - cell
+                        - cell "(b)" [ref=f14e184]
+                        - cell "Pro Forma Financial Information." [ref=f14e185]
+                  - paragraph [ref=f14e186]
+                  - table [ref=f14e187]:
+                    - rowgroup [ref=f14e188]:
+                      - row [ref=f14e189]:
+                        - cell [ref=f14e190]
+                        - cell "(i)" [ref=f14e191]
+                        - cell "The unaudited pro forma condensed combined financial statements of the Company, giving effect to the acquisition of RTB, which includes the unaudited pro forma condensed consolidated balance sheet as of March 31, 2026, the unaudited pro forma condensed combined statements of operations for the year ended December 31, 2025, and the three months ended March 31, 2026, and the related notes, are incorporated herein by reference as Exhibit 99.3 hereto." [ref=f14e192]
+                  - paragraph [ref=f14e193]
+                  - table [ref=f14e194]:
+                    - rowgroup [ref=f14e195]:
+                      - row [ref=f14e196]:
+                        - cell
+                        - cell "(d)" [ref=f14e197]
+                        - cell "Exhibits" [ref=f14e199]
+                  - paragraph [ref=f14e201]
+                  - table [ref=f14e202]:
+                    - rowgroup [ref=f14e203]:
+                      - row [ref=f14e204]:
+                        - cell "Exhibit No." [ref=f14e205]
+                        - cell [ref=f14e207]
+                        - cell "Name of Exhibit" [ref=f14e208]
+                      - row [ref=f14e210]:
+                        - cell "23.1*" [ref=f14e211]
+                        - cell [ref=f14e212]
+                        - cell [ref=f14e213]:
+                          - link "Consent of RBSM LLP, independent registered public accounting firm." [ref=f14e214] [cursor=pointer]:
+                            - /url: http://www.sec.gov/Archives/edgar/data/1419275/000118518526003142/rtbex23-1.htm
+                      - row [ref=f14e215]:
+                        - cell [ref=f14e216]
+                        - cell [ref=f14e217]
+                        - cell [ref=f14e218]
+                      - row [ref=f14e219]:
+                        - cell "99.1*" [ref=f14e220]
+                        - cell [ref=f14e221]
+                        - cell [ref=f14e222]:
+                          - link "Audited financial statements of RTB as of and for the years ended December 31, 2025 and December 31, 2024, the related notes, and the related report of the independent registered public accounting firm thereon" [ref=f14e223] [cursor=pointer]:
+                            - /url: http://www.sec.gov/Archives/edgar/data/1419275/000118518526003142/rtbex99-1.htm
+                      - row [ref=f14e224]:
+                        - cell [ref=f14e225]
+                        - cell [ref=f14e226]
+                        - cell [ref=f14e227]
+                      - row [ref=f14e228]:
+                        - cell "99.2*" [ref=f14e229]
+                        - cell [ref=f14e230]
+                        - cell [ref=f14e231]:
+                          - link "Unaudited condensed financial statements of RTB as of March 31, 2026, and for the three months ended March 31, 2026 and 2025." [ref=f14e232] [cursor=pointer]:
+                            - /url: http://www.sec.gov/Archives/edgar/data/1419275/000118518526003142/rtbex99-2.htm
+                      - row [ref=f14e233]:
+                        - cell [ref=f14e234]
+                        - cell [ref=f14e235]
+                        - cell [ref=f14e236]
+                      - row [ref=f14e237]:
+                        - cell "99.3*" [ref=f14e238]
+                        - cell [ref=f14e239]
+                        - cell [ref=f14e240]:
+                          - link "Unaudited pro forma condensed combined financial statements of the Company, giving effect to the acquisition of RTB, which includes the unaudited pro forma condensed consolidated balance sheet as of March 31, 2026, the unaudited pro forma condensed combined statements of operations for the year ended December 31, 2025, and the three months ended March 31, 2026, and the related notes." [ref=f14e241] [cursor=pointer]:
+                            - /url: http://www.sec.gov/Archives/edgar/data/1419275/000118518526003142/rtbex99-3.htm
+                      - row [ref=f14e242]:
+                        - cell [ref=f14e243]
+                        - cell [ref=f14e244]
+                        - cell [ref=f14e245]
+                      - row [ref=f14e246]:
+                        - cell "104" [ref=f14e247]
+                        - cell [ref=f14e248]
+                        - cell "Cover Page Interactive Data File (embedded within the Inline XBRL document)." [ref=f14e249]
+                  - paragraph [ref=f14e250]
+                  - paragraph
+                  - paragraph
+                  - table [ref=f14e253]:
+                    - rowgroup [ref=f14e254]:
+                      - row [ref=f14e255]:
+                        - cell
+                        - cell "*" [ref=f14e256]
+                        - cell "Filed or furnished herewith" [ref=f14e257]
+                  - paragraph [ref=f14e258]
+                  - paragraph
+                  - paragraph [ref=f14e260]: "2"
+                  - generic:
+                    - paragraph
+                  - paragraph [ref=f14e261]
+                  - paragraph [ref=f14e262]:
+                    - generic [ref=f14e263]: SIGNATURES
+                  - paragraph [ref=f14e264]
+                  - paragraph [ref=f14e265]:
+                    - generic [ref=f14e266]: Pursuant to the requirements of the Securities Exchange Act of 1934, as amended, the Registrant has duly caused this report to be signed on its behalf by the undersigned hereunto duly authorized.
+                  - paragraph [ref=f14e267]
+                  - table [ref=f14e268]:
+                    - rowgroup [ref=f14e269]:
+                      - row [ref=f14e270]:
+                        - cell [ref=f14e271]
+                        - cell "RTB Digital, Inc." [ref=f14e272]
+                      - row [ref=f14e274]:
+                        - cell [ref=f14e275]
+                        - cell [ref=f14e276]
+                        - cell [ref=f14e277]
+                      - row [ref=f14e278]:
+                        - cell [ref=f14e279]
+                        - cell "By:" [ref=f14e280]
+                        - cell "/s/ James Heckman" [ref=f14e281]
+                      - row [ref=f14e282]:
+                        - cell [ref=f14e283]
+                        - cell [ref=f14e284]
+                        - cell "Name:" [ref=f14e285]
+                        - cell "James Heckman" [ref=f14e286]
+                      - row [ref=f14e287]:
+                        - cell [ref=f14e288]
+                        - cell [ref=f14e289]
+                        - cell "Title:" [ref=f14e290]
+                        - cell "Chief Executive Officer" [ref=f14e291]
+                  - paragraph [ref=f14e292]
+                  - paragraph [ref=f14e293]: "Dated: July 27, 2026"
+                  - paragraph [ref=f14e294]
+                  - paragraph
+                  - paragraph [ref=f14e296]: "3"
+                  - paragraph
+              - generic [ref=f9e2462]:
+                - generic [ref=f9e2463]:
+                  - button [ref=f9e2464] [cursor=pointer]
+                  - generic [ref=f9e2469]:
+                    - button "C" [ref=f9e2470] [cursor=pointer]
+                    - button "1" [ref=f9e2471] [cursor=pointer]
+                    - button "2" [ref=f9e2472] [cursor=pointer]
+                    - button "3" [ref=f9e2473] [cursor=pointer]
+                  - button [ref=f9e2474] [cursor=pointer]
+                - generic [ref=f9e2480]:
+                  - generic [ref=f9e2481]: 4 pages
+                  - text: Html48KB
+      - generic "Support Chat" [ref=f9e1641]:
+        - button "Live Person" [ref=f9e1643]
+  - generic:
+    - generic:
+      - iframe

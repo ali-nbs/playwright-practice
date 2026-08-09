@@ -1,0 +1,71 @@
+[  260245ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:7062098
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:211582)
+    at wy (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9825185)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9832202
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861297
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861459) @ https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:0
+[  266222ms] [WARNING] [.WebGL-0x671c07b51e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels @ https://apps.intelligize.com/:0
+[  266223ms] [WARNING] No available adapters. @ https://apps.intelligize.com/:0
+[  266223ms] [WARNING] No available adapters. @ https://apps.intelligize.com/:0
+[  266312ms] [WARNING] [.WebGL-0x671c001bfe00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels @ https://apps.intelligize.com/:0
+[  266312ms] [WARNING] No available adapters. @ https://apps.intelligize.com/:0
+[  266312ms] [WARNING] No available adapters. @ https://apps.intelligize.com/:0
+[  326395ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:7062098
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:211582)
+    at wy (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9825185)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9832202
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861297
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861459) @ https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:0
+[  348353ms] TypeError: Cannot read properties of undefined (reading 'type')
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3729
+    at dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:106:16228)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934419
+    at Array.forEach (<anonymous>)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934396
+    at bu (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:385:87769)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934375
+[41963196ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ https://apps.intelligize.com/Account/GetToken:0
+[41963200ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ https://usage.intelligize.com/api/Periods/UpdateEndTime?periodID=66349717:0
+[41963275ms] TypeError: Failed to fetch
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:628:576125
+    at e.value (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:127755)
+    at e.doGet (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:126598)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:5875054
+    at l (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:163:123531)
+    at Generator._invoke (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:163:123319)
+    at e.<computed> [as next] (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:163:123953)
+    at s (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:5874564)
+    at i (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:5875362)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:5875421
+    at new Promise (<anonymous>)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:5875303
+    at Object.getToken (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:5875434)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:5875536
+    at r (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:628:683965)
+[42024553ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://usage.intelligize.com/api/Periods/UpdateEndTime?periodID=66349717:0
+[42034466ms] TypeError: Cannot read properties of null (reading 'style')
+    at HTMLDocument.<anonymous> (https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2F&aci=igz:562:54)
+[42035827ms] [LOG] B2C is accessible @ https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2F&aci=igz:802
+[42036071ms] [ERROR] Refused to display 'https://auth.lexisnexis.com/' in a frame because it set 'X-Frame-Options' to 'sameorigin'. @ chrome-error://chromewebdata/:0
+[42059215ms] [ERROR] ERROR $t: NG04002: 'dev-portal/logout'
+    at nV.noMatchError (https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:1:193560)
+    at https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:1:194361
+    at https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:1:156314
+    at Ni._error (https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:1:10310)
+    at Ni.error (https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:1:4937)
+    at Ni._error (https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:1:5176)
+    at Ni.error (https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:1:4937)
+    at Ni._error (https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:1:5176)
+    at Ni.error (https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:1:4937)
+    at Ni._error (https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:1:5176) @ https://dev.lexisnexis.com/main.7e005b0ee207c49f.js:0
+[42059490ms] [LOG] User ID input focused on window load @ https://signin.lexisnexis.com/lnaccess/app/signin?back=https%3A%2F%2Fapps.intelligize.com%3A443%2F&aci=igz:1070

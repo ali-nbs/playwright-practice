@@ -1,0 +1,24 @@
+[  143200ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:7062098
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:211582)
+    at wy (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9825185)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9832202
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861297
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861459) @ https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:0
+[  160917ms] TypeError: Cannot read properties of undefined (reading 'type')
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3729
+    at dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:106:16228)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934419
+    at Array.forEach (<anonymous>)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934396
+    at bu (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:385:87769)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934375
+[44706606ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ https://gc.kes.v2.scr.kaspersky-labs.com/F78E27D6-AEFD-4007-9D4E-74809A38FE8F/61274940-1EEF-4898-BAB3-48DE80F888C2/longpooling?get&nocache=1d2a4&tm=2026-07-29T17%3A06%3A43.243Z:0
+[44706624ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ https://gc.kes.v2.scr.kaspersky-labs.com/F78E27D6-AEFD-4007-9D4E-74809A38FE8F/DC8730F9-374D-4E21-8AE9-26428C921363/longpooling?get&nocache=17908&tm=2026-07-29T17%3A06%3A41.255Z:0
+[44706823ms] [ERROR] Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED @ https://gc.kes.v2.scr.kaspersky-labs.com/F78E27D6-AEFD-4007-9D4E-74809A38FE8F/E5B7ADE2-415E-497C-A0FC-2F09FC5E4FDC/longpooling?get&nocache=1a816&tm=2026-07-29T17%3A06%3A38.353Z:0
+[44708881ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://usage.intelligize.com/api/Periods/UpdateEndTime?periodID=66350362:0
+[45378783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_RESET @ https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:0

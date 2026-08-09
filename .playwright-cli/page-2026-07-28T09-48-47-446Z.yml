@@ -1,0 +1,149 @@
+- generic [active] [ref=f13e1]:
+  - generic [ref=f13e2]:
+    - generic [ref=f13e12]:
+      - navigation [ref=f13e13]:
+        - generic [ref=f13e21]:
+          - textbox "Company Name, Ticker, CIK or List to search in SEC Filings" [ref=f13e27]:
+            - /placeholder: "Company Name, Ticker, CIK or List to search in SEC Filings\n    "
+          - button [ref=f13e29] [cursor=pointer]
+        - generic [ref=f13e33]:
+          - button "My Workspace" [ref=f13e35] [cursor=pointer]
+          - generic [ref=f13e36] [cursor=pointer]: Support
+          - generic "hafiz.a!i007 - hafiz.ali@northbaysolutions.net" [ref=f13e41] [cursor=pointer]: HA
+          - button "Protégé TM" [ref=f13e44]:
+            - generic [ref=f13e58]: Protégé
+            - generic [ref=f13e59]: TM
+      - generic [ref=f13e60]:
+        - generic [ref=f13e61]:
+          - generic [ref=f13e62]:
+            - generic [ref=f13e262]:
+              - generic [ref=f13e263]:
+                - generic [ref=f13e279]:
+                  - text: Protégé
+                  - generic [ref=f13e280]: TM
+                - generic [ref=f13e282]: The next evolution of AI is now available in SEC Filings and Agreements & Other Exhibits
+              - generic [ref=f13e283]:
+                - button "Try it Now" [ref=f13e284] [cursor=pointer]
+                - button [ref=f13e288] [cursor=pointer]
+            - generic [ref=f13e66]:
+              - generic [ref=f13e67]:
+                - generic [ref=f13e68]: Reporting & Benchmarking
+                - generic [ref=f13e69]:
+                  - generic [ref=f13e70]: SEC Filings
+                  - generic [ref=f13e75] [cursor=pointer]:
+                    - text: Disclosure Benchmarking
+                    - generic [ref=f13e76]: "With Matrices: Entire Document, Section & Topic"
+                  - generic [ref=f13e77]: Environmental, Social & Governance
+                  - generic [ref=f13e80]: Board Profiles & Compensation
+                  - generic [ref=f13e83]: Insiders
+              - generic [ref=f13e86]:
+                - generic [ref=f13e87]: Business Intelligence, News & Guidance
+                - generic [ref=f13e88]:
+                  - generic [ref=f13e91] [cursor=pointer]:
+                    - text: Accounting Standards & Guidance
+                    - generic [ref=f13e92]: with GAAP Checklists and Handbooks
+                  - generic [ref=f13e93]: Accounting Analytics
+                  - generic [ref=f13e96]: Earnings & Event Transcripts
+                  - generic [ref=f13e101] [cursor=pointer]:
+                    - text: Firm Memos
+                    - generic [ref=f13e102]: from Accounting, Law and Consulting Firms
+                  - generic [ref=f13e103]: Newsletters
+              - generic [ref=f13e106]:
+                - generic [ref=f13e107]: Regulation & Compliance
+                - generic [ref=f13e108]:
+                  - generic [ref=f13e109]: Securities Regulation & Compliance
+                  - generic [ref=f13e112]: Comment Letters
+                  - generic [ref=f13e115]: No-Action Letters
+                  - generic [ref=f13e118]: SEC Enforcement
+              - generic [ref=f13e121]:
+                - generic [ref=f13e122]: Transactions
+                - generic [ref=f13e123]:
+                  - generic [ref=f13e124]: Agreements & Other Exhibits
+                  - generic [ref=f13e127]: Mergers & Acquisitions
+                  - generic [ref=f13e130]: Registered Offerings
+                  - generic [ref=f13e133]: Exempt Offerings
+            - generic [ref=f13e137]:
+              - generic [ref=f13e138]: The next evolution of Protégé is available now in SEC Filings and Agreements & Other Exhibits
+              - generic [ref=f13e139]: Protégé™ powers the AI experience within Intelligize+ AI™. In SEC Filings and Agreement & Other Exhibits, it now supports a multi-turn conversational workflow designed for research, analysis and drafting—so you can refine questions as you go, analyze results and see the sources and logic behind every answer or draft language generated.
+              - list [ref=f13e141]:
+                - listitem [ref=f13e142]: •Search, analyze, draft and refine without restarting
+                - listitem [ref=f13e143]: •Work directly with authoritative SEC filings
+                - listitem [ref=f13e144]: •Get visible, verifiable results you can trust
+              - button "Try it Now" [ref=f13e146] [cursor=pointer]
+          - contentinfo [ref=f13e165]:
+            - generic [ref=f13e166]:
+              - generic [ref=f13e167]:
+                - link [ref=f13e169] [cursor=pointer]:
+                  - /url: https://www.lexisnexis.com/
+                  - img "LexisNexis Logo" [ref=f13e170]
+                - generic [ref=f13e171]:
+                  - list [ref=f13e172]:
+                    - listitem [ref=f13e173]:
+                      - link "About" [ref=f13e174] [cursor=pointer]:
+                        - /url: https://www.intelligize.com/about/
+                    - listitem [ref=f13e175]:
+                      - link "Privacy Policy" [ref=f13e176] [cursor=pointer]:
+                        - /url: http://www.lexisnexis.com/en-us/terms/privacy-policy.page
+                    - listitem [ref=f13e177]:
+                      - link "Trust Center" [ref=f13e178] [cursor=pointer]:
+                        - /url: https://trust.lexisnexis.com
+                  - list [ref=f13e179]:
+                    - listitem [ref=f13e180]:
+                      - link "Cookie Policy" [ref=f13e181] [cursor=pointer]:
+                        - /url: "#"
+                    - listitem [ref=f13e182]:
+                      - link "Terms & Conditions" [ref=f13e183] [cursor=pointer]:
+                        - /url: https://www.intelligize.com/terms-of-service/
+              - generic [ref=f13e184]:
+                - generic [ref=f13e185]:
+                  - generic [ref=f13e186]:
+                    - generic [ref=f13e187]:
+                      - text: "Call Support:"
+                      - strong [ref=f13e188]: 1-888-925-8627
+                    - generic [ref=f13e189]:
+                      - strong [ref=f13e190]: 8 AM - 10 PM ET
+                      - text: Monday - Friday
+                  - generic [ref=f13e191]:
+                    - generic [ref=f13e192]:
+                      - text: "Email Support:"
+                      - link "support@intelligize.com" [ref=f13e193] [cursor=pointer]:
+                        - /url: mailto:support@intelligize.com
+                    - generic [ref=f13e194]:
+                      - strong [ref=f13e195]: 8 AM - 8 PM ET
+                      - text: including weekends and holidays
+                - generic [ref=f13e196]: Request Training
+              - generic [ref=f13e199]:
+                - link [ref=f13e201] [cursor=pointer]:
+                  - /url: http://www.relxgroup.com/Pages/Home.aspx
+                  - img "LexisNexis Logo" [ref=f13e202]
+                - link "Copyright © 2026 LexisNexis®" [ref=f13e203] [cursor=pointer]:
+                  - /url: https://www.lexisnexis.com/terms/copr/lngp/us/
+        - generic [ref=f13e204]:
+          - generic [ref=f13e206]:
+            - button "Help" [ref=f13e207] [cursor=pointer]
+            - button [ref=f13e211] [cursor=pointer]
+          - generic [ref=f13e216]:
+            - generic [ref=f13e218]:
+              - generic [ref=f13e219]: Welcome to
+              - generic [ref=f13e234]:
+                - text: Protégé
+                - generic [ref=f13e235]: TM
+              - generic [ref=f13e236]:
+                - generic [ref=f13e237]: Ask AI something new.
+                - generic [ref=f13e238]: The next evolution of Protégé is here.
+            - generic [ref=f13e240]:
+              - generic [ref=f13e241]: "Chat with Protégé in:"
+              - list [ref=f13e242]:
+                - listitem [ref=f13e243]:
+                  - generic [ref=f13e244] [cursor=pointer]: SEC Filings
+                - listitem [ref=f13e245]:
+                  - generic [ref=f13e246] [cursor=pointer]: Agreements & Other Exhibits
+            - generic [ref=f13e249] [cursor=pointer]:
+              - text: See how
+              - generic [ref=f13e250]: Protégé TM
+              - text: can help you
+    - generic "Support Chat" [ref=f13e255]:
+      - button "Live Person" [ref=f13e257]
+  - generic:
+    - generic:
+      - iframe

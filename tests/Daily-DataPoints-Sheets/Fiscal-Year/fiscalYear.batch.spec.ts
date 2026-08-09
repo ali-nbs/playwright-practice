@@ -77,12 +77,12 @@ const SHEET_NAMES = [
   // "3/26",
   // "3/27",
   // "3/30",
-  "7/20"
+  "8/6",
 ];
 const KEY_FILE = path.resolve(process.cwd(), "credentials.json");
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
-const PROCESS_ALL_ROWS = true;
+const PROCESS_ALL_ROWS = false;
 
 // export const runFiscalYearBatch = async (page: Page) => {
 test.describe("Batch Fiscal-Year Processor", () => {
@@ -512,7 +512,7 @@ test.describe("Batch Fiscal-Year Processor", () => {
 // }
 
 
-function calculateDynamicFiscal(periodStr: string, yearEndStr: string, leverageDays: number = 30) {
+export function calculateDynamicFiscal(periodStr: string, yearEndStr: string, leverageDays: number = 30) {
   const periodDate = new Date(periodStr);
   let pMonth = periodDate.getMonth() + 1;
   let pYear = periodDate.getFullYear();

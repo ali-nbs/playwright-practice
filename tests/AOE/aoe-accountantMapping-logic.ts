@@ -8,6 +8,7 @@ import {
   closeAllOpenTabs,
   configureDisplayColumns,
   closeTabsToTheRight,
+  getTargetDateString,
 } from "../utils/helpers";
 
 const IDENTIFIER = "aoe_accountantMapping";
@@ -22,7 +23,7 @@ export const runAccountantMappingTest = async (
     {
       id: 1,
       lawFirm: "Dykema Gossett",
-      date: "Yesterday",
+      date: getTargetDateString(),
       resultGridVerificationCount: 25,
       docViewerVerificationCount: 3,
       searchThroughPopup: false,
@@ -31,7 +32,7 @@ export const runAccountantMappingTest = async (
     {
       id: 2,
       lawFirm: "Field Law Firm",
-      date: "Yesterday",
+      date: getTargetDateString(),
       resultGridVerificationCount: 25,
       docViewerVerificationCount: 3,
       searchThroughPopup: true,
@@ -40,7 +41,7 @@ export const runAccountantMappingTest = async (
     {
       id: 3,
       lawFirm: "ArentFox Schiff",
-      date: "Yesterday",
+      date: getTargetDateString(),
       resultGridVerificationCount: 25,
       docViewerVerificationCount: 3,
       searchThroughPopup: true,

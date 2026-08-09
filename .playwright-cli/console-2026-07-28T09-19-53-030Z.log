@@ -1,0 +1,49 @@
+[   65430ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:7062098
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:211582)
+    at wy (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9825185)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9832202
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861297
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861459) @ https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:0
+[  298463ms] [WARNING] There was a problem logging the event. Action Type: undefined TypeError: Cannot read properties of null (reading 'get')
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:7062098
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74850
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:74294
+    at c (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:75055)
+    at b (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:211582)
+    at wy (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9825185)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:9832202
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861297
+    at Object.dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3765)
+    at Module.<anonymous> (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:2861459) @ https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:0
+[  306858ms] TypeError: Cannot read properties of undefined (reading 'type')
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:409:3729
+    at dispatch (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:106:16228)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934419
+    at Array.forEach (<anonymous>)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934396
+    at bu (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:385:87769)
+    at https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3934375
+[  912129ms] [WARNING] Deprecation warning: value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are discouraged. Please refer to http://momentjs.com/guides/#/warnings/js-date/ for more info.
+Arguments: 
+[0] _isAMomentObject: true, _isUTC: false, _useUTC: false, _l: undefined, _i: Invalid date, _f: undefined, _strict: undefined, _locale: [object Object]
+Error
+    at r.createFromInputFallback (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:79483)
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:99611
+    at https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:99662
+    at jt (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:99970)
+    at At (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:100231)
+    at Pt (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:100313)
+    at r (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:79:76406)
+    at m (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:6170905)
+    at Object.y [as textToItem] (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:6171294)
+    at e.setFilterValue (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3427842)
+    at e.clearFilterValue (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3430822)
+    at e.handleClickOutside (https://apps.intelligize.com/bundle.app.241dce8c0114e81c3ed6.js:1:3430192)
+    at m.__outsideClickHandler (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:106:28689)
+    at l.<computed> (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:106:29602)
+    at HTMLDocument.r (https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:628:683965) @ https://apps.intelligize.com/chunk.vendor.5e32163dc9f2df9a1d23.js:627

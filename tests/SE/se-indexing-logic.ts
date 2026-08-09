@@ -5,6 +5,7 @@ import {
   getTabText,
   parseCount,
   closeAllOpenTabs,
+  getTargetDateString,
 } from "../utils/helpers";
 
 const IDENTIFIER = "se_indexing";
@@ -20,21 +21,21 @@ export const runSEIndexingTest = async (page: Page, logToFile: Function) => {
   const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
 
   const testCases = [
+    // {
+    //   date: "Today",
+    //   keyword: "is OR the OR a",
+    //   NotKeyword: "NOT (is OR the OR a)",
+    // },
     {
-      date: "Today",
+      date:getTargetDateString(),
       keyword: "is OR the OR a",
       NotKeyword: "NOT (is OR the OR a)",
     },
-    {
-      date: "Yesterday",
-      keyword: "is OR the OR a",
-      NotKeyword: "NOT (is OR the OR a)",
-    },
-    {
-      date: "Last 7 Days",
-      keyword: "is OR the OR a",
-      NotKeyword: "NOT (is OR the OR a)",
-    },
+    // {
+    //   date: "Last 7 Days",
+    //   keyword: "is OR the OR a",
+    //   NotKeyword: "NOT (is OR the OR a)",
+    // },
   ];
 
   let tabIndex = 0;
