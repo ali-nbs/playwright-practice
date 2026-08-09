@@ -59,6 +59,77 @@ export class BasePage {
     return texts.map((t) => t.trim()).filter((t) => t.length > 0);
   }
 
+  /**
+   * Reads a labelled value out of a row, e.g. labelledValue(row, "File #").
+   * Returns null when the row doesn't have that label.
+   */
+  async labelledValue(row: Locator, label: string): Promise<string | null> {
+    const value = row
+      .locator("div")
+      .filter({ hasText: label })
+      .locator("span")
+      .last();
+
+    if (await value.count()) {
+      return value.innerText();
+    }
+    return null;
+  }
+
+  /**
+   * Walks the result grid and runs `handleRow` for each row, scrolling to
+   * load more rows until `targetCount` rows have been processed.
+   *
+   * This loop (virtualized grid + processedIds + scroll to load more) was
+   * copy-pasted in every scraping test. Now it lives here once and each test
+   * only writes the part that is actually different: what to do with a row.
+   *
+   * Rows that throw are logged and skipped, exactly as before.
+   */
+  async forEachResultRow(
+    targetCount: number,
+    handleRow: (row: Locator, rowId: string) => Promise<void>,
+  ) {
+    let resultsFound = 0;
+    const processedIds = new Set<string>();
+
+    while (resultsFound < targetCount) {
+      const rows = this.rows;
+      const visibleRowCount = await rows.count();
+
+      if (visibleRowCount === 0) {
+        await this.page.waitForTimeout(500);
+        continue;
+      }
+
+      for (let i = 0; i < visibleRowCount; i++) {
+        const row = rows.nth(i);
+        const rowId = await row.getAttribute("id");
+        console.log("row id ", rowId);
+
+        if (rowId && !processedIds.has(rowId)) {
+          try {
+            await handleRow(row, rowId);
+            processedIds.add(rowId);
+            await this.page.waitForTimeout(500);
+            resultsFound++;
+          } catch (e) {
+            console.log("err :", e);
+            continue;
+          }
+        }
+        if (resultsFound >= targetCount) break;
+      }
+
+      if (resultsFound < targetCount) {
+        await rows
+          .last()
+          .evaluate((el) => el.scrollIntoView({ block: "start" }));
+        await this.page.waitForTimeout(500);
+      }
+    }
+  }
+
   // ---------------------------------------------------------------
   // Result tabs
   // ---------------------------------------------------------------
@@ -90,6 +161,24 @@ export class BasePage {
    */
   async openDocCount(): Promise<number> {
     return this.page.locator('div[id="DocViewContainer"]').count();
+  }
+
+  /**
+   * Clicks a row's "View" button and waits for that document to load.
+   *
+   * Handles the count-before / click / wait-after sequence so tests don't
+   * repeat it. Throws if the document doesn't load, so the caller can record
+   * a failure for that row.
+   */
+  async openDocument(row: Locator, timeout = 30000) {
+    const viewBtn = this.viewButton(row);
+    await expect(viewBtn).toBeVisible({ timeout: 5000 });
+
+    // Count open docs BEFORE clicking, so waitForDocLoaded knows which
+    // viewer is the new one.
+    const docsBefore = await this.openDocCount();
+    await viewBtn.click();
+    await this.waitForDocLoaded(docsBefore, timeout);
   }
 
   /**

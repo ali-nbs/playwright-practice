@@ -55,6 +55,12 @@ export class SrcPage extends BasePage {
     return this.page.locator('div[id="outline"]').first();
   }
 
+  /** True when the document has no outline, so the tab can't be opened. */
+  async isOutlineDisabled(): Promise<boolean> {
+    const tabClass = (await this.outlineTab.getAttribute("class")) || "";
+    return tabClass.includes("disabled");
+  }
+
   async clickLastOutlineItem() {
     await this.page
       .locator(".styles__item___6rcBX")
