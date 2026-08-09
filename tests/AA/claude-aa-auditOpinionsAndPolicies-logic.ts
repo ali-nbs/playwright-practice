@@ -1,5 +1,6 @@
 import { expect, Page, Locator } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { AaPage } from "../pages/AaPage";
 import {
   closeAllOpenTabs,
   configureDisplayColumns,
@@ -394,8 +395,9 @@ export const runAAAuditOpinionsAndPoliciesTest = async (
 ) => {
   logToFile("--- Starting AA-AuditOpinionsAndPolicies Report ---");
 
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
+  const aa = new AaPage(page);
+  const clearBtn = aa.clearFiltersBtn;
+  const searchBtn = aa.searchBtn;
 
   
   const resultsSummary: string[] = [];

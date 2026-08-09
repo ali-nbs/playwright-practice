@@ -1,5 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { DbmPage } from "../pages/DbmPage";
 import {
   fillAndEnter,
   getTabText,
@@ -22,19 +23,16 @@ export const runPastRedlineVersionTest = async (
   let actualTarget = 0;
   let allScenarioResults: string[] = [];
 
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
-  const searchBtn = page.getByRole("button", { name: /^Search$/i });
-
-  const dateInput = page.getByTestId("date-input");
+  const dbm = new DbmPage(page);
   const searchDate = "Today";
 
-  await clearBtn.click();
+  await dbm.clearFilters();
   await page.waitForTimeout(1000);
   let findings = { text: "No Results Found", isValid: true };
 
-  // await fillAndEnter(page, dateInput, searchDate, 200);
+  // await fillAndEnter(page, dbm.dateInput, searchDate, 200);
 
-  await searchBtn.click();
+  await dbm.search();
 
   const searchResultTextOnly = await getTabText(page, 0, logToFile);
   logToFile(`Baseline ${searchDate}: ${searchResultTextOnly}`);
@@ -69,7 +67,7 @@ export const runPastRedlineVersionTest = async (
 
     allScenarioResults.push(scenarioBlock);
 
-    await clearBtn.click();
+    await dbm.clearFilters();
   }
 
   const finalDump = allScenarioResults.join(
@@ -93,14 +91,14 @@ const scrapeResults = async (
   page: Page,
   logToFile: Function,
 ) => {
+  const dbm = new DbmPage(page);
   let resultsFound = 0;
   const processedIds = new Set<string>();
   let rowsData: string[] = [];
   let isScenarioValid = true;
 
   while (resultsFound < targetCount) {
-    const scroller = page.locator(".ReactVirtualized__Grid").last();
-    const rows = scroller.locator('div[data-test="resultRow"]');
+    const rows = dbm.rows;
     const visibleRowCount = await rows.count();
 
     if (visibleRowCount === 0) {

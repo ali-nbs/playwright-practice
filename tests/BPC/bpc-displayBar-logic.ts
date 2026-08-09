@@ -1,5 +1,6 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { BpcPage } from "../pages/BpcPage";
 import { closeAllOpenTabs, getTabText } from "../utils/helpers";
 
 const IDENTIFIER = "bpc_displayBar";
@@ -109,7 +110,8 @@ async function fetchNames(page: Page, logToFile: Function, tabName: string): Pro
 export const runBpcDisplayBarTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting BPC First Page Names Collection Report ---");
 
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
+  const bpc = new BpcPage(page);
+  const searchBtn = bpc.searchBtn;
   let resultsSummary: string[] = [];
 
   // The BPC app crashes ("Oops!" — filterHasValue reading .isEmpty on an

@@ -1,5 +1,6 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { BpcPage } from "../pages/BpcPage";
 import {
   closeAllOpenTabs,
   getTabText,
@@ -160,8 +161,9 @@ async function fetchSpansWithTitles(page: Page, logToFile: Function): Promise<st
 export const runBpcCrawlingTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting BPC-Crawling Report ---");
 
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const bpc = new BpcPage(page);
+  const searchBtn = bpc.searchBtn;
+  const clearBtn = bpc.clearFiltersBtn;
 
 let resultsSummary: string[] = [];
   const targetDate = getTargetDateString();

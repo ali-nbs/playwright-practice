@@ -1,5 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { AoePage } from "../pages/AoePage";
 import {
   ensureLoggedIn,
   fillAndEnter,
@@ -53,13 +54,10 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
   let actualTarget = 0;
   let allScenarioResults: string[] = [];
 
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
-  const searchBtn = page.getByRole("button", { name: /^Search$/i });
-
-  const docTypeInput = page.getByTestId("documentType-input");
+  const aoe = new AoePage(page);
 
   for (const scenario of testCases) {
-    await clearBtn.click();
+    await aoe.clearFilters();
     await page.waitForTimeout(1000);
     let findings = { text: "No Results Found", isValid: true };
 
@@ -70,7 +68,7 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
 
     await fillAndEnter(
       page,
-      docTypeInput,
+      aoe.docTypeInput,
       searchInput.slice(0, -2), // Remove the trailing "; "
       200,
     );
@@ -137,7 +135,7 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
 
     await page.getByRole("button", { name: /^OK$/i }).click();
 
-    await searchBtn.click();
+    await aoe.search();
 
     const searchResultTextOnly = await getTabText(page, 0, logToFile);
     logToFile(`Baseline (${scenario.id}): ${searchResultTextOnly}`);
@@ -166,7 +164,7 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
     ].join("\n");
 
     allScenarioResults.push(scenarioBlock);
-    await clearBtn.click();
+    await aoe.clearFilters();
   }
 
   const finalDump = allScenarioResults.join(

@@ -1,5 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { AoePage } from "../pages/AoePage";
 import {
   ensureLoggedIn,
   fillAndEnter,
@@ -54,10 +55,7 @@ export const runAccountantMappingTest = async (
   let actualTarget = 0;
   let allScenarioResults: string[] = [];
 
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
-  const searchBtn = page.getByRole("button", { name: /^Search$/i });
-
-  const lawFirmInput = page.getByTestId("lawFirm-input");
+  const aoe = new AoePage(page);
   const lawFirmFilterBlock = page
     .locator("div.styles__focusContainer___13rFy")
     .filter({
@@ -72,7 +70,7 @@ export const runAccountantMappingTest = async (
   const lawFirmSearchInput = lawFirmModal.locator("input").first();
 
   for (const scenario of testCases) {
-    await clearBtn.click();
+    await aoe.clearFilters();
     await page.waitForTimeout(1000);
     let findings = { text: "No Results Found", isValid: true };
 
@@ -104,12 +102,12 @@ export const runAccountantMappingTest = async (
       await lawFirmModal.locator('button:has-text("OK")').click();
     } else {
       await page.waitForTimeout(500);
-      await fillAndEnter(page, lawFirmInput, scenario.lawFirm, 200);
+      await fillAndEnter(page, aoe.lawFirmInput, scenario.lawFirm, 200);
     }
 
     // continue;
 
-    await searchBtn.click();
+    await aoe.search();
 
     const searchResultTextOnly = await getTabText(page, 0, logToFile);
     logToFile(`Baseline (${scenario.id}): ${searchResultTextOnly}`);
@@ -152,7 +150,7 @@ export const runAccountantMappingTest = async (
     ].join("\n");
 
     allScenarioResults.push(scenarioBlock);
-    await clearBtn.click();
+    await aoe.clearFilters();
   }
 
   const finalDump = allScenarioResults.join(

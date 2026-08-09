@@ -1,5 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { AaPage } from "../pages/AaPage";
 import {
   closeAllOpenTabs,
   findResultRowByIndex,
@@ -344,8 +345,9 @@ export const runAAAccountingDisclosuresAndPoliciesTest = async (
 ) => {
   logToFile("--- Starting AA-AccountingDisclosuresAndPolicies Report ---");
 
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
+  const aa = new AaPage(page);
+  const clearBtn = aa.clearFiltersBtn;
+  const searchBtn = aa.searchBtn;
 
   await clearBtn.click();
   await page.waitForTimeout(500);

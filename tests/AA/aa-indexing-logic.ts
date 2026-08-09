@@ -51,7 +51,7 @@
 //   logToFile: Function,
 // ) => {
 
-//   const resultsTab = page.locator("#results").first();
+//   const resultsTab = new AaPage(page).resultsTab;
 //   await expect(resultsTab).toBeVisible({ timeout: 10000 });
 
 //   await expect(resultsTab).not.toHaveClass(/disabled/);
@@ -399,6 +399,7 @@
 import { expect, Page } from "@playwright/test";
 import * as fs from "fs";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { AaPage } from "../pages/AaPage";
 import {
   closeAllOpenTabs,
   fillAndEnter,
@@ -449,7 +450,7 @@ const verifyDocViewResultsTab = async (
   logToFile: Function,
 ) => {
 
-  const resultsTab = page.locator("#results").first();
+  const resultsTab = new AaPage(page).resultsTab;
   await expect(resultsTab).toBeVisible({ timeout: 10000 });
 
   // The Results tab is briefly rendered with a "disabled" class right after
@@ -663,8 +664,9 @@ export const runAAIndexingAndDocViewTest = async (
   const keywordsInput = page.locator(
     '//label[text()="Keywords"]/following::textarea[1]',
   );
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const aa = new AaPage(page);
+  const searchBtn = aa.searchBtn;
+  const clearBtn = aa.clearFiltersBtn;
 
   const testCases = [
     {

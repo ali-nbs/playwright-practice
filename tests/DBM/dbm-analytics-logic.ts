@@ -7,6 +7,7 @@ import {
   recoverFromAppCrash,
   getTargetDateString,
 } from "../utils/helpers";
+import { DbmPage } from "../pages/DbmPage";
 import path from "path";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 
@@ -39,32 +40,29 @@ const scenarios: SearchScenario[] = [
 export const runDBMAnalyticsTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting DBM Analytics Report ---");
 
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
-  const searchBtn = page.getByRole("button", { name: /^Search$/i });
-  const dateInput = page.getByTestId("date-input");
-  const sectionTypeInput = page.getByTestId("sectionType-input");
+  const dbm = new DbmPage(page);
 
   let allScenarioResults: string[] = [];
 
-  await clearBtn.click();
+  await dbm.clearFilters();
   await page.waitForTimeout(1000);
   for (const scenario of scenarios) {
     logToFile(`\nRunning Scenario: ${scenario.name}`);
 
     if (!scenario.isBlankSearch) {
       if (scenario.date) {
-        await fillAndEnter(page, dateInput, scenario.date, 200);
+        await fillAndEnter(page, dbm.dateInput, scenario.date, 200);
       }
 
       if (scenario.sections) {
         for (const section of scenario.sections) {
-          await fillAndEnter(page, sectionTypeInput, section, 20);
+          await fillAndEnter(page, dbm.sectionTypeInput, section, 20);
           await page.locator("body").click();
         }
       }
     }
 
-    await searchBtn.click();
+    await dbm.search();
 
     const searchResultTextOnly = await getTabText(page, 0, logToFile);
     logToFile(`${scenario.name} Result: ${searchResultTextOnly}`);

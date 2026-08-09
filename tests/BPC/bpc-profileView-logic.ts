@@ -7,7 +7,8 @@
 // export const runBpcProfileViewTest = async (page: Page, logToFile: Function) => {
 //   logToFile("--- Starting BPC-Profile View Report ---");
 
-//   const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
+//   const bpc = new BpcPage(page);
+//   const searchBtn = bpc.searchBtn;
 //   let resultsSummary: string[] = [];
 
 //   let totalApisFired = 0;
@@ -53,7 +54,7 @@
 //   await companyPlsBtn.click();
 
 //   await page.locator("span").filter({ hasText: "Batch Add" }).click();
-//   const textArea = page.getByTestId("company-popup-batch-add-textarea");
+//   const textArea = bpc.companyBatchAddTextarea;
   
 //   await fillAndEnter(page, textArea, "AAPL", 20);
 //   await fillAndEnter(page, textArea, "MSFT", 20);
@@ -63,7 +64,7 @@
 //   await fillAndEnter(page, textArea, "META", 20);
 //   await page.locator(".PopupFooter__popup__footer___20Bi-").getByRole("button", { name: "OK" }).first().click({ force: true });
 //   await page.waitForTimeout(4000);
-//   await page.getByTestId("company-popup-footer-ok").click();
+//   await bpc.companyPopupOkBtn.click();
   
 //   await searchBtn.click();
 //   //await page.waitForLoadState("networkidle");
@@ -223,6 +224,7 @@
 
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { BpcPage } from "../pages/BpcPage";
 import { closeAllOpenTabs, fillAndEnter, getTabText } from "../utils/helpers";
 
 const IDENTIFIER = "bpc_view";
@@ -239,7 +241,8 @@ type IssueRecord = {
 export const runBpcProfileViewTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting BPC-Profile View Report ---");
 
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
+  const bpc = new BpcPage(page);
+  const searchBtn = bpc.searchBtn;
   let resultsSummary: string[] = [];
   let detailedIssues: IssueRecord[] = [];
 
@@ -315,7 +318,7 @@ export const runBpcProfileViewTest = async (page: Page, logToFile: Function) => 
   await companyPlsBtn.click();
 
   await page.locator("span").filter({ hasText: "Batch Add" }).click();
-  const textArea = page.getByTestId("company-popup-batch-add-textarea");
+  const textArea = bpc.companyBatchAddTextarea;
   
   await fillAndEnter(page, textArea, "AAPL", 20);
   await fillAndEnter(page, textArea, "MSFT", 20);
@@ -325,7 +328,7 @@ export const runBpcProfileViewTest = async (page: Page, logToFile: Function) => 
   await fillAndEnter(page, textArea, "META", 20);
   await page.locator(".PopupFooter__popup__footer___20Bi-").getByRole("button", { name: "OK" }).first().click({ force: true });
   await page.waitForTimeout(4000);
-  await page.getByTestId("company-popup-footer-ok").click();
+  await bpc.companyPopupOkBtn.click();
   
   await searchBtn.click();
   //await page.waitForLoadState("networkidle");
