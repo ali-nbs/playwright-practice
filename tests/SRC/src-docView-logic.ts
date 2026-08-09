@@ -6,9 +6,8 @@ import {
   configureDisplayColumns,
   closeAllOpenTabs,
   parseCount,
-  countDocViewContainers,
-  waitForDocViewLoaded,
 } from "../utils/helpers";
+import { SrcPage } from "../pages/SrcPage";
 
 const IDENTIFIER = "src_docView";
 
@@ -16,22 +15,14 @@ export const runSRCDocViewTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SRC-DOC View Report ---");
   let allScenarioResults: string[] = [];
 
-  const lawsAndRegsInput = page.locator("#LawsAndRegs").locator("input");
-  const lawsAndRegsPlsBtn = page.locator("#LawsAndRegs").locator("._icon_1jkal_249").first();
-  const searchBtn = page.getByRole("button", { name: /^Search$/i }).first();
-  const clearBtn = page.getByRole("button", { name: /^Clear Filters$/i });
+  const src = new SrcPage(page);
 
   let tabIndex = 0;
 
-  await lawsAndRegsPlsBtn.click();
-  await page
-    .locator("div.styles__tabHeader___2qy2T")
-    .filter({ hasText: "Select All" })
-    .locator("label").check();
-  await page.getByRole("button", { name: "OK" }).click();
+  await src.selectAllLawsAndRegs();
 
-  // await fillAndEnter(page, lawsAndRegsInput, "Securities Laws");
-  await searchBtn.click();
+  // await fillAndEnter(page, src.lawsAndRegsInput, "Securities Laws");
+  await src.search();
 
   const searchResult = await getTabText(page, tabIndex++, logToFile);
   let findings = { text: "No Results Found", isValid: true };
@@ -42,7 +33,7 @@ export const runSRCDocViewTest = async (page: Page, logToFile: Function) => {
     //   });
     docCount = parseCount(searchResult);
     await page.waitForTimeout(300);
-    findings = await scrapeCrawlingResults(docCount, page);
+    findings = await scrapeCrawlingResults(docCount, page, src);
   }
 
   const scenarioBlock = [
@@ -66,15 +57,18 @@ export const runSRCDocViewTest = async (page: Page, logToFile: Function) => {
   await closeAllOpenTabs(page);
 };
 
-const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
+const scrapeCrawlingResults = async (
+  targetCount: number,
+  page: Page,
+  src: SrcPage,
+) => {
   let resultsFound = 0;
   const processedIds = new Set<string>();
   let rowsData: string[] = [];
   let isScenarioValid = true;
 
   while (resultsFound < targetCount) {
-    const scroller = page.locator(".ReactVirtualized__Grid").last();
-    const rows = scroller.locator('div[data-test="resultRow"]');
+    const rows = src.rows;
     const visibleRowCount = await rows.count();
 
     if (visibleRowCount === 0) {
@@ -89,11 +83,7 @@ const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
 
       if (rowId && !processedIds.has(rowId)) {
         try {
-          const texts = await row.locator("span").allInnerTexts();
-
-          const cleanContent = texts
-            .map((t) => t.trim())
-            .filter((t) => t.length > 0);
+          const cleanContent = await src.rowTexts(row);
 
           console.log("------------------------------------------------------");
           //   for (const [index, content] of cleanContent.entries()) {
@@ -124,21 +114,18 @@ const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
           console.log("```````````````````````````````````````");
           await page.waitForTimeout(300);
 
-          const viewBtn = row.getByRole("button", { name: /View/i });
+          const viewBtn = src.viewButton(row);
 
           await expect(viewBtn).toBeVisible({ timeout: 5000 });
 
-          // Snapshot how many document viewers are already mounted BEFORE
-          // clicking. The app appends a new viewer per opened document and
-          // never unmounts the old ones, so this baseline is what lets the
-          // wait below tell "the document I just opened" apart from the
-          // stale viewers left behind by previous rows.
-          const containersBefore = await countDocViewContainers(page);
+          // Count open docs BEFORE clicking, so waitForDocLoaded knows which
+          // viewer is the new one. See BasePage.waitForDocLoaded.
+          const docsBefore = await src.openDocCount();
 
           await viewBtn.click();
 
           try {
-            await waitForDocViewLoaded(page, containersBefore, 30000);
+            await src.waitForDocLoaded(docsBefore, 30000);
           } catch (error) {
             console.log("error :", error);
             isScenarioValid = false;
@@ -147,14 +134,9 @@ const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
             );
           }
 
-          const resultsTab = page.locator('span[title^="Docs:"]').first();
-          console.log("results visible:", await resultsTab.isVisible());
-
-          console.log("results enabled:", await resultsTab.isEnabled());
-          // if (await resultsTab.isVisible()) {
-          //await resultsTab.click({ force: true });
-          await resultsTab.evaluate((el) => (el as HTMLElement).click());
-          //}
+          console.log("results visible:", await src.docsTab.isVisible());
+          console.log("results enabled:", await src.docsTab.isEnabled());
+          await src.backToResults();
           processedIds.add(rowId);
           await page.waitForTimeout(500);
           resultsFound++;
