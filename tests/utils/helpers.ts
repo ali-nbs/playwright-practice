@@ -2,7 +2,7 @@ import { test, expect, Page, Locator } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
 import { updateGoogleSheet } from "./dumpDataOnGoogleSheet";
-import { ShellPage, ConfigureOptions } from "../pages/ShellPage";
+import { BasePage, ConfigureOptions } from "../pages/BasePage";
 
 export const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
 
@@ -218,7 +218,7 @@ export const typeValue = async (
   value: string,
   delay: number = 0,
 ) => {
-  await new ShellPage(page).typeValue(locator, value, delay);
+  await new BasePage(page).typeValue(locator, value, delay);
 };
 
 export const fillAndEnter = async (
@@ -227,7 +227,7 @@ export const fillAndEnter = async (
   value: string,
   delay: number = 0,
 ) => {
-  await new ShellPage(page).fillAndEnter(locator, value, delay);
+  await new BasePage(page).fillAndEnter(locator, value, delay);
 };
 
 // getTabText throws a plain Error tagged with `.kind` when the result grid
@@ -274,7 +274,7 @@ export const getTabText = async (
   logToFile: Function,
   isNeedLoadMoreResults: boolean = false,
 ) =>
-  new ShellPage(page).getTabText(expectedIndex, logToFile, isNeedLoadMoreResults);
+  new BasePage(page).getTabText(expectedIndex, logToFile, isNeedLoadMoreResults);
 
 export const parseCount = (text: string): number => {
   const digits = text.replace(/[^0-9]/g, "");
@@ -296,7 +296,7 @@ export const configureDisplayColumns = async (
   page: Page,
   selections: Record<string, string[]>,
   options: ConfigureOptions = {},
-) => new ShellPage(page).configureDisplayColumns(selections, options);
+) => new BasePage(page).configureDisplayColumns(selections, options);
 
 // ---------------------------------------------------------------------
 // Doc View "document is loaded" wait.
@@ -449,12 +449,12 @@ export const getRandomIndices = (maxRange: number, count: number): number[] => {
 };
 
 export const closeAllOpenTabs = async (page: Page) =>
-  new ShellPage(page).closeAllOpenTabs();
+  new BasePage(page).closeAllOpenTabs();
 
 
 
 export const closeTabsToTheRight = async (page: Page) =>
-  new ShellPage(page).closeTabsToTheRight();
+  new BasePage(page).closeTabsToTheRight();
 
 export function getTargetDateString(): string {
   const today = new Date();
