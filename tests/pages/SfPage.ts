@@ -77,6 +77,25 @@ export class SfPage extends BasePage {
     return this.popupBody.getByTestId("forms-searchInput");
   }
 
+  /** A form-type option label inside the Forms picker popup. */
+  formsModalOption(formType: string): Locator {
+    return this.popupBody
+      .locator("label")
+      .filter({ hasText: new RegExp(`^${formType}`, "i") })
+      .first();
+  }
+
+  /**
+   * The form-type cell inside a result row, e.g. "6-K (description)".
+   * Used to assert the parenthesised sub-form description is present.
+   */
+  rowFormTypeCell(row: Locator, formType: string): Locator {
+    return row
+      .locator("span")
+      .filter({ hasText: new RegExp(`^${formType}`, "i") })
+      .last();
+  }
+
   // ---------------------------------------------------------------
   // Keyword search (boolean / conceptual)
   // ---------------------------------------------------------------

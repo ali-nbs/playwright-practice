@@ -1,5 +1,24 @@
 import { Page, Locator, expect } from "@playwright/test";
 
+export type ConfigureOptions = {
+  enableSnippets?: boolean;
+  enableCrossReferenceLinks?: boolean;
+  enableRedlinePastVersion?: boolean;
+};
+
+/**
+ * getTabText throws a plain Error tagged with `.kind` when the result grid
+ * shows an error state instead of a count, or when the app's crash screen
+ * ("Oops! Something went wrong.") appears instead of the app entirely.
+ * Callers check `error.kind` ("error" | "crash") to decide whether to skip
+ * to the next scenario or recover + abort.
+ */
+const throwGridStateError = (kind: "error" | "crash", message: string) => {
+  const err: any = new Error(message);
+  err.kind = kind;
+  throw err;
+};
+
 /**
  * BasePage - the parts of the UI that every app shares.
  *
@@ -34,6 +53,292 @@ export class BasePage {
 
   async clearFilters() {
     await this.clearFiltersBtn.click();
+  }
+
+  // ---------------------------------------------------------------
+  // Typing into filters
+  // ---------------------------------------------------------------
+
+  /**
+   * Focuses a filter and types into it via the keyboard.
+   *
+   * Moved verbatim from helpers.typeValue, including the commented-out
+   * fill("")/pressSequentially lines that were tried and rejected.
+   */
+  async typeValue(locator: Locator, value: string, delay: number = 0) {
+    await locator.focus();
+    // await locator.fill("");
+    //await locator.pressSequentially(value, { delay });
+    await this.page.keyboard.type(value, { delay });
+  }
+
+  /** Types into a filter and presses Enter. Moved from helpers.fillAndEnter. */
+  async fillAndEnter(locator: Locator, value: string, delay: number = 0) {
+    await this.typeValue(locator, value, delay);
+    await this.page.keyboard.press("Enter");
+  }
+
+  /**
+   * Clears a filter by clicking it, emptying it, then typing character by
+   * character. This is NOT the same as fillAndEnter: it uses fill("") plus
+   * pressSequentially and does not press Enter, which is what the 6-K flow
+   * needs to make the date picker commit.
+   */
+  async clearAndType(locator: Locator, value: string, delay: number = 100) {
+    await locator.click({ force: true });
+    await locator.fill("");
+    await locator.pressSequentially(value, { delay });
+  }
+
+  // ---------------------------------------------------------------
+  // Result tabs / counts
+  // ---------------------------------------------------------------
+
+  /**
+   * The results-tab label locator. Matches "Docs: N", "Results: N",
+   * "Offerings: N", "No Results Found", or an error state in any casing.
+   */
+  get tabLabels(): Locator {
+    return this.page.locator(
+      '//span[contains(text(), "Docs:") or contains(text(), "Results:") or contains(text(), "Offerings:") or contains(text(), "No Results Found") or contains(translate(text(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "error")]',
+    );
+  }
+
+  /** The narrower "Docs:" / "No Results Found" status tab. */
+  get statusTabLabels(): Locator {
+    return this.page.locator(
+      '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
+    );
+  }
+
+  /** The app's React crash boundary ("Oops! Something went wrong"). */
+  get crashScreen(): Locator {
+    return this.page.getByText("Oops!", { exact: false }).first();
+  }
+
+  /** The "Load more results" link shown on a "Docs: 2,000+" tab. */
+  get loadMoreResultsLink(): Locator {
+    return this.page.locator('a:has-text("Load more results")');
+  }
+
+  /**
+   * Reads the text of the results tab at `expectedIndex`.
+   *
+   * Moved verbatim from helpers.getTabText, including the crash-screen race
+   * and the `.kind`-tagged errors that callers switch on.
+   */
+  async getTabText(
+    expectedIndex: number,
+    logToFile: Function,
+    isNeedLoadMoreResults: boolean = false,
+  ) {
+    console.log("expected index ", expectedIndex);
+    const target = this.tabLabels.nth(expectedIndex);
+    const crashLocator = this.crashScreen;
+
+    // Race the normal tab text against the crash screen so a crash is caught
+    // within seconds instead of burning the full 240s timeout.
+    await Promise.race([
+      expect(target).toBeVisible({ timeout: 240000 }).catch(() => {}),
+      expect(crashLocator).toBeVisible({ timeout: 240000 }).catch(() => {}),
+    ]);
+
+    if (await crashLocator.isVisible().catch(() => false)) {
+      throwGridStateError(
+        "crash",
+        `App crash screen ("Oops! Something went wrong") appeared instead of the results tab (index ${expectedIndex}).`,
+      );
+    }
+
+    if (!(await target.isVisible().catch(() => false))) {
+      throwGridStateError(
+        "error",
+        `Timed out waiting for results tab (index ${expectedIndex}): neither a results count nor a crash screen appeared within 240s.`,
+      );
+    }
+
+    let text = await target.innerText();
+
+    if (/error/i.test(text)) {
+      throwGridStateError(
+        "error",
+        `Result grid returned an error state instead of a count: "${text}"`,
+      );
+    }
+
+    if (text.includes("Docs: 2,000+") && isNeedLoadMoreResults) {
+      await this.loadMoreResultsLink.last().click({ force: true });
+      text = await this.tabLabels.nth(expectedIndex).innerText();
+    }
+
+    return text;
+  }
+
+  /** Waits for the results status tab to appear after a search. */
+  async waitForResults(timeout = 60000) {
+    await expect(this.statusTabLabels.first()).toBeVisible({ timeout });
+  }
+
+  // ---------------------------------------------------------------
+  // Tab management
+  // ---------------------------------------------------------------
+
+  /**
+   * Closes every open result tab via the right-click context menu.
+   * Moved verbatim from helpers.closeAllOpenTabs.
+   */
+  async closeAllOpenTabs() {
+    const activeTab = this.page.locator(
+      '//span[contains(text(), "Docs:") or contains(text(), "Results:") or contains(text(), "No Results Found")]',
+    );
+    if ((await activeTab.count()) > 0) {
+      try {
+        await activeTab.first().click({
+          button: "right",
+          timeout: 10000,
+          noWaitAfter: true,
+        });
+        const closeAllBtn = this.page
+          .locator(".react-contextmenu--visible")
+          .getByRole("menuitem", { name: /Close all tabs/i });
+        if (!expect(closeAllBtn.isVisible({ timeout: 10000 }))) {
+          console.log("close all tabs option not available or see");
+        }
+        await closeAllBtn.click({ noWaitAfter: true, timeout: 10000 });
+        await expect(activeTab).toHaveCount(0, { timeout: 15000 });
+      } catch (cleanupError) {
+        console.error("Error during cleanup (closing tabs):", cleanupError);
+        await this.page.reload();
+      }
+    }
+  }
+
+  /**
+   * Closes result tabs to the right of the first one.
+   * Moved verbatim from helpers.closeTabsToTheRight. NOTE: this uses a
+   * NARROWER tab locator than closeAllOpenTabs (no "Results:"), and a 5s
+   * right-click timeout rather than 10s. Both differences are preserved.
+   */
+  async closeTabsToTheRight() {
+    const activeTab = this.page.locator(
+      '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
+    );
+    if ((await activeTab.count()) > 0) {
+      try {
+        await activeTab.first().click({ button: "right", timeout: 5000 });
+        const closeTabsToTheRightBtn = this.page
+          .locator(".react-contextmenu--visible")
+          .getByRole("menuitem", { name: /Close tabs to the right/i });
+        await this.page.waitForTimeout(1000);
+        await closeTabsToTheRightBtn.click();
+        await this.page.waitForTimeout(1000);
+        await expect(activeTab).toHaveCount(1, { timeout: 15000 });
+      } catch (cleanupError) {
+        console.error("Error during cleanup (closing tabs):", cleanupError);
+        await this.page.reload();
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------
+  // Display columns
+  // ---------------------------------------------------------------
+  /**
+   * Configures the display-columns popup.
+   * Moved verbatim from helpers.configureDisplayColumns.
+   */
+  async configureDisplayColumns(
+    selections: Record<string, string[]>,
+    options: ConfigureOptions = {},
+  ) {
+    const page = this.page;
+
+    for (const [category, items] of Object.entries(selections)) {
+      console.log(`Configuring category: ${category}`);
+
+      const categoryTrigger = page
+        .locator(".styles__popupContainer___36f60")
+        .filter({ hasText: category })
+        .locator("._checkbox__icon_1xotg_257");
+
+      await categoryTrigger.click();
+
+      const popupBody = page.locator(".PopupBody__popup__body___1J_d3");
+      await popupBody.waitFor({ state: "visible" });
+
+      const selectAllCheckbox = popupBody
+        .locator("div")
+        .filter({ hasText: new RegExp(`^${category}$`) })
+        .locator("._checkbox__icon_1xotg_257");
+
+      const isMasterChecked = await selectAllCheckbox.evaluate((el) => {
+        const nativeInput = el.querySelector(
+          'input[type="checkbox"]',
+        ) as HTMLInputElement;
+        return nativeInput ? nativeInput.checked : false;
+      });
+
+      if (isMasterChecked) {
+        await selectAllCheckbox.click();
+      } else {
+        await selectAllCheckbox.click();
+        await page.waitForTimeout(300);
+        await selectAllCheckbox.click();
+      }
+      await page.waitForTimeout(300);
+
+      for (const item of items) {
+        console.log(`Selecting item: ${item}`);
+        const itemCheckbox = popupBody
+          .locator("div")
+          .filter({ hasText: new RegExp(`^${item}$`) })
+          .locator("._checkbox__icon_1xotg_257")
+          .last();
+
+        await itemCheckbox.scrollIntoViewIfNeeded();
+        await itemCheckbox.click();
+        await page.waitForTimeout(200);
+      }
+      await this.applyBtn.click();
+      await page.waitForTimeout(500);
+    }
+
+    const {
+      enableSnippets = false,
+      enableCrossReferenceLinks = false,
+      enableRedlinePastVersion = false,
+    } = options;
+
+    if (enableSnippets) {
+      const snippetsToggle = page
+        .locator("._checkbox_1xotg_249")
+        .filter({ hasText: "Snippets" })
+        .locator("label")
+        .first();
+      await snippetsToggle.click();
+    }
+    if (enableCrossReferenceLinks) {
+      const crossReferenceLinksToggle = page
+        .locator("._checkbox_1xotg_249")
+        .filter({ hasText: "Cross-Reference" })
+        .locator("label")
+        .first();
+      await crossReferenceLinksToggle.click();
+      await page
+        .locator('a[href*="/SecuritiesRegulationAndCompliance?"]')
+        .waitFor({ timeout: 15000 })
+        .catch(() =>
+          console.log("Toggle clicked but links didn't appear in results yet."),
+        );
+    }
+    if (enableRedlinePastVersion) {
+      const redlinePastVersionToggle = page
+        .locator("._checkbox_1xotg_249")
+        .filter({ hasText: "Redline Past Version" })
+        .locator("label")
+        .first();
+      await redlinePastVersionToggle.click();
+    }
   }
 
   // ---------------------------------------------------------------

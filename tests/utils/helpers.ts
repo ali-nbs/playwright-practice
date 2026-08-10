@@ -2,6 +2,7 @@ import { test, expect, Page, Locator } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
 import { updateGoogleSheet } from "./dumpDataOnGoogleSheet";
+import { ShellPage, ConfigureOptions } from "../pages/ShellPage";
 
 export const AUTH_PATH = path.resolve(__dirname, "..", "state", "auth.json");
 
@@ -208,16 +209,16 @@ export const ensureLoggedIn = async (
   }
 };
 
+// These now delegate to BasePage so there is ONE implementation. The
+// signatures are unchanged so existing (page, locator, value) call sites keep
+// working while flows are migrated to `app.fillAndEnter(locator, value)`.
 export const typeValue = async (
   page: Page,
   locator: Locator,
   value: string,
   delay: number = 0,
 ) => {
-  await locator.focus();
-  // await locator.fill("");
-  //await locator.pressSequentially(value, { delay });
-  await page.keyboard.type(value, { delay });
+  await new ShellPage(page).typeValue(locator, value, delay);
 };
 
 export const fillAndEnter = async (
@@ -226,8 +227,7 @@ export const fillAndEnter = async (
   value: string,
   delay: number = 0,
 ) => {
-  await typeValue(page, locator, value, delay);
-  await page.keyboard.press("Enter");
+  await new ShellPage(page).fillAndEnter(locator, value, delay);
 };
 
 // getTabText throws a plain Error tagged with `.kind` when the result grid
@@ -273,57 +273,8 @@ export const getTabText = async (
   expectedIndex: number,
   logToFile: Function,
   isNeedLoadMoreResults: boolean = false,
-) => {
-  console.log("expected index ", expectedIndex);
-  // Widened to also match an error state in any casing ("Error", "error!",
-  // "ERROR:", ...) rendered in the same tab-label span as "Docs:"/"Results:".
-  const tabLocator = page.locator(
-    '//span[contains(text(), "Docs:") or contains(text(), "Results:") or contains(text(), "Offerings:") or contains(text(), "No Results Found") or contains(translate(text(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "error")]',
-  );
-  const target = tabLocator.nth(expectedIndex);
-  const crashLocator = getCrashScreenLocator(page);
-
-  // Race the normal tab text against the crash screen so a crash is caught
-  // within seconds instead of burning the full 240s timeout.
-  await Promise.race([
-    expect(target).toBeVisible({ timeout: 240000 }).catch(() => {}),
-    expect(crashLocator).toBeVisible({ timeout: 240000 }).catch(() => {}),
-  ]);
-
-  if (await crashLocator.isVisible().catch(() => false)) {
-    throwGridStateError(
-      "crash",
-      `App crash screen ("Oops! Something went wrong") appeared instead of the results tab (index ${expectedIndex}).`,
-    );
-  }
-
-  if (!(await target.isVisible().catch(() => false))) {
-    throwGridStateError(
-      "error",
-      `Timed out waiting for results tab (index ${expectedIndex}): neither a results count nor a crash screen appeared within 240s.`,
-    );
-  }
-
-  let text = await target.innerText();
-
-  if (/error/i.test(text)) {
-    throwGridStateError(
-      "error",
-      `Result grid returned an error state instead of a count: "${text}"`,
-    );
-  }
-
-  if (text.includes("Docs: 2,000+") && isNeedLoadMoreResults) {
-    await page
-      .locator('a:has-text("Load more results")')
-      .last()
-      .click({ force: true });
-
-    text = await tabLocator.nth(expectedIndex).innerText();
-  }
-
-  return text;
-};
+) =>
+  new ShellPage(page).getTabText(expectedIndex, logToFile, isNeedLoadMoreResults);
 
 export const parseCount = (text: string): number => {
   const digits = text.replace(/[^0-9]/g, "");
@@ -341,110 +292,11 @@ export const parseCurrency = (value: string): number => {
   return num;
 };
 
-type ConfigureOptions = {
-  enableSnippets?: boolean;
-  enableCrossReferenceLinks?: boolean;
-  enableRedlinePastVersion?: boolean;
-};
-
 export const configureDisplayColumns = async (
   page: Page,
   selections: Record<string, string[]>,
-  // enableSnippets: boolean = false,
-  // enableCrossReferenceLinks: boolean = false,
-  // enableRedlinePastVersion: boolean = false,
   options: ConfigureOptions = {},
-) => {
-  for (const [category, items] of Object.entries(selections)) {
-    console.log(`Configuring category: ${category}`);
-
-    const categoryTrigger = page
-      .locator(".styles__popupContainer___36f60")
-      .filter({ hasText: category })
-      .locator("._checkbox__icon_1xotg_257");
-
-    await categoryTrigger.click();
-
-    const popupBody = page.locator(".PopupBody__popup__body___1J_d3");
-    await popupBody.waitFor({ state: "visible" });
-
-    const selectAllCheckbox = popupBody
-      .locator("div")
-      .filter({ hasText: new RegExp(`^${category}$`) })
-      .locator("._checkbox__icon_1xotg_257");
-
-    // await selectAllCheckbox.click();
-    // // await page.waitForTimeout(300);
-    // await selectAllCheckbox.click();
-    const isMasterChecked = await selectAllCheckbox.evaluate((el) => {
-      const nativeInput = el.querySelector(
-        'input[type="checkbox"]',
-      ) as HTMLInputElement;
-      return nativeInput ? nativeInput.checked : false;
-    });
-
-    if (isMasterChecked) {
-      await selectAllCheckbox.click();
-    } else {
-      await selectAllCheckbox.click();
-      await page.waitForTimeout(300);
-      await selectAllCheckbox.click();
-    }
-    await page.waitForTimeout(300);
-
-    for (const item of items) {
-      console.log(`Selecting item: ${item}`);
-      const itemCheckbox = popupBody
-        .locator("div")
-        .filter({ hasText: new RegExp(`^${item}$`) })
-        .locator("._checkbox__icon_1xotg_257")
-        .last();
-
-      await itemCheckbox.scrollIntoViewIfNeeded();
-      await itemCheckbox.click();
-      await page.waitForTimeout(200);
-    }
-    await page.getByRole("button", { name: "Apply" }).click();
-    await page.waitForTimeout(500);
-  }
-
-  const {
-    enableSnippets = false,
-    enableCrossReferenceLinks = false,
-    enableRedlinePastVersion = false,
-  } = options;
-
-  if (enableSnippets) {
-    const snippetsToggle = page
-      .locator("._checkbox_1xotg_249")
-      .filter({ hasText: "Snippets" })
-      .locator("label")
-      .first();
-    await snippetsToggle.click();
-  }
-  if (enableCrossReferenceLinks) {
-    const crossReferenceLinksToggle = page
-      .locator("._checkbox_1xotg_249")
-      .filter({ hasText: "Cross-Reference" })
-      .locator("label")
-      .first();
-    await crossReferenceLinksToggle.click();
-    await page
-      .locator('a[href*="/SecuritiesRegulationAndCompliance?"]')
-      .waitFor({ timeout: 15000 })
-      .catch(() =>
-        console.log("Toggle clicked but links didn't appear in results yet."),
-      );
-  }
-  if (enableRedlinePastVersion) {
-    const redlinePastVersionToggle = page
-      .locator("._checkbox_1xotg_249")
-      .filter({ hasText: "Redline Past Version" })
-      .locator("label")
-      .first();
-    await redlinePastVersionToggle.click();
-  }
-};
+) => new ShellPage(page).configureDisplayColumns(selections, options);
 
 // ---------------------------------------------------------------------
 // Doc View "document is loaded" wait.
@@ -596,50 +448,13 @@ export const getRandomIndices = (maxRange: number, count: number): number[] => {
   return arr.sort(() => 0.5 - Math.random()).slice(0, count);
 };
 
-export const closeAllOpenTabs = async (page: Page) => {
-  const activeTab = page.locator(
-    '//span[contains(text(), "Docs:") or contains(text(), "Results:") or contains(text(), "No Results Found")]',
-  );
-  if ((await activeTab.count()) > 0) {
-    try {
-      await activeTab.first().click({ button: "right", timeout: 10000, noWaitAfter: true, });
-      const closeAllBtn = page
-        .locator(".react-contextmenu--visible")
-        .getByRole("menuitem", { name: /Close all tabs/i });
-      if(!expect(closeAllBtn.isVisible({timeout: 10000}))){
-        console.log("close all tabs option not available or see");
-      }
-      await closeAllBtn.click({ noWaitAfter: true, timeout: 10000 });
-      await expect(activeTab).toHaveCount(0, { timeout: 15000 });
-    } catch (cleanupError) {
-      console.error("Error during cleanup (closing tabs):", cleanupError);
-      await page.reload();
-    }
-  }
-};
+export const closeAllOpenTabs = async (page: Page) =>
+  new ShellPage(page).closeAllOpenTabs();
 
 
 
-export const closeTabsToTheRight = async (page: Page) => {
-  const activeTab = page.locator(
-    '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-  );
-  if ((await activeTab.count()) > 0) {
-    try {
-      await activeTab.first().click({ button: "right", timeout: 5000 });
-      const closeTabsToTheRightBtn = page
-        .locator(".react-contextmenu--visible")
-        .getByRole("menuitem", { name: /Close tabs to the right/i });
-      await page.waitForTimeout(1000);
-      await closeTabsToTheRightBtn.click();
-      await page.waitForTimeout(1000);
-      await expect(activeTab).toHaveCount(1, { timeout: 15000 });
-    } catch (cleanupError) {
-      console.error("Error during cleanup (closing tabs):", cleanupError);
-      await page.reload();
-    }
-  }
-};
+export const closeTabsToTheRight = async (page: Page) =>
+  new ShellPage(page).closeTabsToTheRight();
 
 export function getTargetDateString(): string {
   const today = new Date();
