@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { DbmPage } from "../pages/DbmPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToDisclosureBenchmarking,
 } from "../utils/helpers";
 import { runDBMAnalyticsTest } from "./dbm-analytics-logic";
 
@@ -16,7 +16,7 @@ test.describe("DBM - Analytics Automation - Isolated Mode", () => {
   test("DBM - Analytics Test", async ({ page }) => {
     const logToFile = setupLogger("dbm-analytics", "DBM");
     await ensureLoggedIn(page, logToFile);
-    await navigateToDisclosureBenchmarking(page);
+    await new DbmPage(page).goto();
     await runDBMAnalyticsTest(page, logToFile);
   });
 });

@@ -6,7 +6,7 @@ import { BasePage } from "./BasePage";
  */
 export class DbmPage extends BasePage {
   async goto() {
-    await this.page.locator("text=/Disclosure Benchmarking/i").first().click();
+    await this.openApp("Disclosure Benchmarking");
   }
 
   // ---------------------------------------------------------------

@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { BpcPage } from "../pages/BpcPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToBoardProfilesAndCompensation,
 } from "../utils/helpers";
 import { runBpcProfileViewTest } from "./bpc-profileView-logic";
 import { runBpcCrawlingTest } from "./bpc-crawling-logic";
@@ -19,7 +19,7 @@ test.describe("BPC-master suite Automation - Isolated Mode", () => {
   test("BPC-Profile View", async ({ page }) => {
     const logToFile = setupLogger("BPC-master", "BPC");
     await ensureLoggedIn(page, logToFile);
-    await navigateToBoardProfilesAndCompensation(page);
+    await new BpcPage(page).goto();
     await runBpcCrawlingTest(page, logToFile);
     await runBpcDisplayBarTest(page, logToFile);
     await runBpcProfileViewTest(page, logToFile);

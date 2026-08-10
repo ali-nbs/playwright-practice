@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
+import { SfPage } from "../../pages/SfPage";
 import { BasePage } from "../../pages/BasePage";
 import { google } from "googleapis";
 import {
   ensureLoggedIn,
-  navigateToSECFilings,
 } from "../../utils/helpers";
 import path from "path";
 
@@ -31,7 +31,7 @@ test("Cross-Reference Links Google Sheets Processor", async ({ page }) => {
 
   const rows = getResponse.data.values || [];
   await ensureLoggedIn(page);
-  await navigateToSECFilings(page);
+  await new SfPage(page).goto();
   for (let i = 0; i < rows.length; i++) {
     const accNum = rows[i][0];
     const existingValueJ = rows[i][8] ? parseInt(rows[i][8]) : 0;

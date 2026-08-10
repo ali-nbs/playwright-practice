@@ -2,7 +2,6 @@ import { expect, Page, Locator } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { AaPage } from "../pages/AaPage";
 import {
-  findResultRowByIndex,
   formatScenarioReport,
   parseCount,
   RowFinding,
@@ -429,7 +428,7 @@ export const runAAAuditOpinionsAndPoliciesTest = async (
       // correct whether or not "Exhibits to Filings" is checked. See the
       // note above openAcctTabExpanded for why the old id-based lookup
       // broke rows 2+.
-      const row = await findResultRowByIndex(page, rowIndex, logToFile);
+      const row = await new AaPage(page).findResultRowByIndex(rowIndex, logToFile);
       let rowLabel = `Row ${rowIndex}`;
       
 

@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { SrcPage } from "../pages/SrcPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToSecuritiesRegulationAndCompliance,
 } from "../utils/helpers";
 
 import { runSRCOutlineTest } from "./src-outline-logic";
@@ -17,7 +17,7 @@ test.describe("SF-Outline Automation - Isolated Mode", () => {
   test("SF-Outline", async ({ page }) => {
     const logToFile = setupLogger("src-outline", "SRC");
     await ensureLoggedIn(page, logToFile);
-    await navigateToSecuritiesRegulationAndCompliance(page);
+    await new SrcPage(page).goto();
     await runSRCOutlineTest(page, logToFile);
   });
 });

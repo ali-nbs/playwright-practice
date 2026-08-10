@@ -430,6 +430,45 @@ export class BasePage {
     return this.page.locator('button[title*="Download"]');
   }
 
+  // ---------------------------------------------------------------
+  // Left-nav
+  // ---------------------------------------------------------------
+
+  /**
+   * Opens an app from the left navigation by its link text.
+   *
+   * Each app page class has its own `goto()` that calls this, so flows should
+   * prefer `new SfPage(page).goto()` over calling this directly.
+   */
+  async openApp(linkText: string) {
+    await this.page.locator(`text=/${linkText}/i`).first().click();
+  }
+
+  /**
+   * Hops from one app to another via the left-nav, making sure the result
+   * opens in the SAME window rather than a new browser tab.
+   *
+   * Moved verbatim from helpers.navigateToSourceToTargetApp, including the
+   * force:true clicks and the 200ms settle wait.
+   */
+  async navigateFromTo(sourcePage: String, targetPage: String) {
+    await this.page
+      .locator(`text=/${sourcePage}/i`)
+      .first()
+      .click({ force: true });
+    const isChecked = await this.page.locator("input#sameWindow").isChecked();
+
+    // 2. If it is checked, click the visible text label to cleanly turn it off
+    if (isChecked) {
+      await this.page.getByText("Open in a New Browser Tab").click();
+      await this.page.waitForTimeout(200); // Small buffer for framework state to complete
+    }
+    await this.page
+      .locator(`text=/${targetPage}/i`)
+      .first()
+      .click({ force: true });
+  }
+
   /** Excel List export button. */
   get excelListBtn(): Locator {
     return this.page.locator('button:has-text("Excel List")');

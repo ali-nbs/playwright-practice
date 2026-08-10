@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { SfPage } from "../../pages/SfPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToSECFilings,
 } from "../../utils/helpers";
 import { runCompanyType_SRC_Shell_WKSI_EGC_Test } from "./sf-companyType-SRC-Shell-WKSI-EGC-logic";
 
@@ -21,7 +21,7 @@ test.describe("SF-CompanyType Automation - Isolated Mode", () => {
       "SF/Daily-Test-Cases",
     );
     await ensureLoggedIn(page, logToFile);
-    await navigateToSECFilings(page);
+    await new SfPage(page).goto();
     await runCompanyType_SRC_Shell_WKSI_EGC_Test(page, logToFile);
   });
 });

@@ -9,10 +9,7 @@ import { BasePage } from "./BasePage";
  */
 export class SrcPage extends BasePage {
   async goto() {
-    await this.page
-      .locator("text=/Securities Regulation & Compliance/i")
-      .first()
-      .click();
+    await this.openApp("Securities Regulation & Compliance");
   }
 
   // ---------------------------------------------------------------

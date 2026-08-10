@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { BasePage } from "./pages/BasePage";
+import { SfPage } from "./pages/SfPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   ensureLoggedIn,
-  navigateToSECFilings,
-  navigateToSourceToTargetApp,
   recoverFromAppCrash,
   setupLogger,
 } from "./utils/helpers";
@@ -92,7 +92,7 @@ test.describe("Daily Test Cases - Master Suite", () => {
           firstStepReached = true;
           if (appName !== "SEC Filings") {
             logToFile(`🎯 Resuming suite: Jumping directly from SEC Filings to app: ${appName}`);
-            await navigateToSourceToTargetApp(page, "SEC Filings", appName);
+            await new BasePage(page).navigateFromTo("SEC Filings", appName);
           }
         }
 
@@ -127,7 +127,7 @@ test.describe("Daily Test Cases - Master Suite", () => {
 
       try {
         logToFile(`\n🔄 Navigating: [${actualCurrentApp}] ➡️ [${targetApp}]`);
-        await navigateToSourceToTargetApp(page, actualCurrentApp, targetApp);
+        await new BasePage(page).navigateFromTo(actualCurrentApp, targetApp);
       } catch (error: any) {
         logToFile(
           `⚠️ Navigation Failed from ${currentApp} to ${targetApp}: ${error.message}`
@@ -137,7 +137,7 @@ test.describe("Daily Test Cases - Master Suite", () => {
 
     try {
       logToFile("Navigating to SEC Filings...");
-      await navigateToSECFilings(page);
+      await new SfPage(page).goto();
     } catch (e: any) {
       logToFile(`Initial load failed: ${e.message}`);
     }

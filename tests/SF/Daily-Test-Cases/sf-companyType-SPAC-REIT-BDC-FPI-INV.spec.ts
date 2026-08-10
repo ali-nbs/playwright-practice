@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { SfPage } from "../../pages/SfPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToSECFilings,
 } from "../../utils/helpers";
 import { runCompanyType_SPAC_REIT_BDC_FPI_INV_Test } from "./sf-companyType-SPAC-REIT-BDC-FPI-INV-logic";
 
@@ -22,7 +22,7 @@ test.describe("SF-CompanyType Extended Automation", () => {
     );
 
     await ensureLoggedIn(page, logToFile);
-    await navigateToSECFilings(page);
+    await new SfPage(page).goto();
 
     // Execute the grouped category logic
     await runCompanyType_SPAC_REIT_BDC_FPI_INV_Test(page, logToFile);

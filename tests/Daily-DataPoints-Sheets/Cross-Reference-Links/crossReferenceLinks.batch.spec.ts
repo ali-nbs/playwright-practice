@@ -1,4 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
+import { SfPage } from "../../pages/SfPage";
 import { BasePage } from "../../pages/BasePage";
 import { google } from "googleapis";
 import path from "path";
@@ -6,7 +7,6 @@ import fs from "fs";
 import {
   AUTH_PATH,
   ensureLoggedIn,
-  navigateToSECFilings,
 } from "../..//utils/helpers";
 
 const SPREADSHEET_ID = "1kl5H-9-6c7KrJN_h-CuDONR8e04Q558sgZkUfVTYXf4";
@@ -47,7 +47,7 @@ test.describe("Batch Fiscal-Year Processor", () => {
   test("Process all sheets in a single session", async ({ page }) => {
     // 1. Initial Navigation (Only happens ONCE)
     await ensureLoggedIn(page);
-    await navigateToSECFilings(page);
+    await new SfPage(page).goto();
 
     for (const sheetName of SHEET_NAMES) {
       // await page.goto("/");

@@ -6,10 +6,7 @@ import { BasePage } from "./BasePage";
  */
 export class AoePage extends BasePage {
   async goto() {
-    await this.page
-      .locator("text=/Agreements & Other Exhibits/i")
-      .first()
-      .click();
+    await this.openApp("Agreements & Other Exhibits");
   }
 
   // ---------------------------------------------------------------

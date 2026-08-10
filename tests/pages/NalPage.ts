@@ -6,7 +6,7 @@ import { BasePage } from "./BasePage";
  */
 export class NalPage extends BasePage {
   async goto() {
-    await this.page.locator("text=/No-Action Letters/i").first().click();
+    await this.openApp("No-Action Letters");
   }
 
   // ---------------------------------------------------------------

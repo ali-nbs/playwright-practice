@@ -1,9 +1,9 @@
 import { test } from "@playwright/test";
+import { SfPage } from "../pages/SfPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   ensureLoggedIn,
-  navigateToSECFilings,
   setupLogger,
 } from "../utils/helpers";
 import { runIndexingTest } from "./Daily-Test-Cases/sf-indexing-logic";
@@ -32,7 +32,7 @@ test.describe("SF Daily Test Cases - Master Suite", () => {
     await ensureLoggedIn(page, logToFile);
 
     logToFile("🚀 Navigating to SEC Filings for the first and only time...");
-    await navigateToSECFilings(page);
+    await new SfPage(page).goto();
 
     await test.step("Test Case: SF Indexing", async () => {
       await runIndexingTest(page, logToFile);

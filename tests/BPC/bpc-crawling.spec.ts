@@ -1,11 +1,11 @@
 import { test } from "@playwright/test";
+import { BpcPage } from "../pages/BpcPage";
 import * as fs from "fs";
 
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToBoardProfilesAndCompensation,
 } from "../utils/helpers";
 import { runBpcCrawlingTest } from "./bpc-crawling-logic";
 
@@ -18,7 +18,7 @@ test.describe("BPC-Crawler Automation - Isolated Mode", () => {
   test("BPC-Crawler", async ({ page }) => {
     const logToFile = setupLogger("BPC-Crawler", "BPC");
     await ensureLoggedIn(page, logToFile);
-    await navigateToBoardProfilesAndCompensation(page);
+    await new BpcPage(page).goto();
     await runBpcCrawlingTest(page, logToFile);
   });
 });

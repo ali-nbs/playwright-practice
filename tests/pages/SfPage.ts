@@ -14,7 +14,7 @@ import { BasePage } from "./BasePage";
  */
 export class SfPage extends BasePage {
   async goto() {
-    await this.page.locator("text=/SEC Filings/i").first().click();
+    await this.openApp("SEC Filings");
   }
 
   // ---------------------------------------------------------------

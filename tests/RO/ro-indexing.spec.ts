@@ -1,11 +1,11 @@
 import { test } from "@playwright/test";
+import { RoPage } from "../pages/RoPage";
 import * as fs from "fs";
 
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToRegisteredOfferings,
 } from "../utils/helpers";
 import { runRoIndexingTest } from "./ro-indexing-logic";
 
@@ -17,7 +17,7 @@ test.describe("RO-Indexing Automation - Isolated Mode", () => {
   test("RO-Indexing", async ({ page }) => {
     const logToFile = setupLogger("ro-indexing", "RO");
     await ensureLoggedIn(page, logToFile);
-    await navigateToRegisteredOfferings(page);
+    await new RoPage(page).goto();
     await runRoIndexingTest(page, logToFile);
   });
 });

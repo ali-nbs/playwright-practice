@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { SfPage } from "../../pages/SfPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToSECFilings,
 } from "../../utils/helpers";
 import { runAuditorTest } from "./sf-auditor-logic";
 
@@ -18,7 +18,7 @@ test.describe("SF-Auditor Automation - Isolated Mode", () => {
 
     await ensureLoggedIn(page, logToFile);
 
-    await navigateToSECFilings(page);
+    await new SfPage(page).goto();
 
     await runAuditorTest(page, logToFile);
   });

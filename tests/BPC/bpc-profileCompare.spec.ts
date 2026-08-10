@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { BpcPage } from "../pages/BpcPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToBoardProfilesAndCompensation,
 } from "../utils/helpers";
 import { runBpcCompareTest } from "./bpc-profileCompare-logic";
 
@@ -17,7 +17,7 @@ test.describe("BPC-Profile Compare Automation - Isolated Mode", () => {
   test("BPC-Profile Compare", async ({ page }) => {
     const logToFile = setupLogger("BPC-Profile Compare", "BPC");
     await ensureLoggedIn(page, logToFile);
-    await navigateToBoardProfilesAndCompensation(page);
+    await new BpcPage(page).goto();
     await runBpcCompareTest(page, logToFile);
   });
 });

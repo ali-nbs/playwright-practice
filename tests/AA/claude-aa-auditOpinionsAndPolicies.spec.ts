@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { AaPage } from "../pages/AaPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToAccountingAnalytics,
 } from "../utils/helpers";
 import { runAAAuditOpinionsAndPoliciesTest } from "./claude-aa-auditOpinionsAndPolicies-logic";
 
@@ -16,7 +16,7 @@ test.describe("AA-AuditOpinionsAndPolicies Automation - Isolated Mode", () => {
   test("AA-AuditOpinionsAndPolicies Test", async ({ page }) => {
     const logToFile = setupLogger("aa-auditOpinionsAndPolicies", "AA");
     await ensureLoggedIn(page, logToFile);
-    await navigateToAccountingAnalytics(page);
+    await new AaPage(page).goto();
     await runAAAuditOpinionsAndPoliciesTest(page, logToFile);
   });
 });

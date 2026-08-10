@@ -8,7 +8,7 @@ import { BasePage } from "./BasePage";
  */
 export class SePage extends BasePage {
   async goto() {
-    await this.page.locator("text=/SEC Enforcement/i").first().click();
+    await this.openApp("SEC Enforcement");
   }
 
   // ---------------------------------------------------------------

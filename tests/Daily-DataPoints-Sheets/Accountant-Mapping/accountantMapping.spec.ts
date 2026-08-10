@@ -1,11 +1,11 @@
 import { test, expect, Page } from "@playwright/test";
+import { AoePage } from "../../pages/AoePage";
 import { BasePage } from "../../pages/BasePage";
 import { google } from "googleapis";
 import * as fs from "fs";
 import {
   ensureLoggedIn,
   AUTH_PATH,
-  navigateToAgreementsAndOtherExhibits,
 } from "../../utils/helpers";
 import path from "path";
 
@@ -38,7 +38,7 @@ test("Accountant Mapping Google Sheets Processor", async ({ page }) => {
 
   const rows = getResponse.data.values || [];
   await ensureLoggedIn(page);
-  await navigateToAgreementsAndOtherExhibits(page);
+  await new AoePage(page).goto();
 
   let isFirstSearch = true;
 

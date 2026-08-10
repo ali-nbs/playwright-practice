@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { AaPage } from "../pages/AaPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToAccountingAnalytics,
 } from "../utils/helpers";
 import { runAAIndexingAndDocViewTest } from "./aa-indexing-logic";
 
@@ -16,7 +16,7 @@ test.describe("AA-Indexing Automation - Isolated Mode", () => {
   test("AA-Indexing Test", async ({ page }) => {
     const logToFile = setupLogger("aa-indexing", "AA");
     await ensureLoggedIn(page, logToFile);
-    await navigateToAccountingAnalytics(page);
+    await new AaPage(page).goto();
     await runAAIndexingAndDocViewTest(page, logToFile);
   });
 });

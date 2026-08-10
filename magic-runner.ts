@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import { BasePage } from "./tests/pages/BasePage";
 import { test } from "@playwright/test";
 import { run6kFormTypeTest } from "./tests/SF/Daily-Test-Cases/sf-6kFormType-logic";
 import { runAccountantTest } from "./tests/SF/Daily-Test-Cases/sf-accountant-logic";
@@ -24,12 +25,7 @@ import { runSRCDocViewTest } from "./tests/SRC/src-docView-logic";
 import { runSRCOutlineTest } from "./tests/SRC/src-outline-logic";
 import { runNalIndexingTest } from "./tests/NAL/nal-indexing-logic";
 import { runRoIndexingTest } from "./tests/RO/ro-indexing-logic";
-import {
-  navigateToRegisteredOfferings,
-  navigateToSECFilings,
-  navigateToSourceToTargetApp,
-  setupLogger,
-} from "./tests/utils/helpers";
+import { setupLogger } from "./tests/utils/helpers";
 import { runSEIndexingTest } from "./tests/SE/se-indexing-logic";
 import { runCompanyType_SRC_Shell_WKSI_EGC_Test } from "./tests/SF/Daily-Test-Cases/sf-companyType-SRC-Shell-WKSI-EGC-logic";
 import { runBpcCrawlingTest } from "./tests/BPC/bpc-crawling-logic";
@@ -78,7 +74,7 @@ async function devSandbox() {
     const liveLog = (msg: string) => console.log(`[LIVE] ${msg}`);
 
     //await runMatrixTest(page, liveLog);
-   // await navigateToSourceToTargetApp(page, "SEC Filings" ,"Board Profiles & Compensation");
+   // await new BasePage(page).navigateFromTo("SEC Filings" ,"Board Profiles & Compensation");
    // await runAAAccountingDisclosuresAndPoliciesTest(page, liveLog);
      //await runSRCDocViewTest(page, logToFile);
     // await runBpcDisplayBarTest(page, logToFile);

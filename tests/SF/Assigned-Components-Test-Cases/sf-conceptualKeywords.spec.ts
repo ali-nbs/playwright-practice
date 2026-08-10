@@ -2,10 +2,10 @@ import { test } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
 import { AUTH_PATH } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 import {
   setupLogger,
   ensureLoggedIn,
-  navigateToSECFilings,
 } from "../../utils/helpers";
 import { runConceptualSearchTest } from "./sf-conceptualKeywords-logic";
 
@@ -19,7 +19,7 @@ test.describe("SF-Conceptual Keywords Automation - Isolated Mode", () => {
 
     await ensureLoggedIn(page, logToFile);
 
-    await navigateToSECFilings(page);
+    await new SfPage(page).goto();
 
     await runConceptualSearchTest(page, logToFile);
   });

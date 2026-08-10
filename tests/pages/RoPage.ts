@@ -6,7 +6,7 @@ import { BasePage } from "./BasePage";
  */
 export class RoPage extends BasePage {
   async goto() {
-    await this.page.locator("text=/Registered Offerings/i").first().click();
+    await this.openApp("Registered Offerings");
   }
 
   // ---------------------------------------------------------------

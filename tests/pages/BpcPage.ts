@@ -12,10 +12,7 @@ import { BasePage } from "./BasePage";
  */
 export class BpcPage extends BasePage {
   async goto() {
-    await this.page
-      .locator("text=/Board Profiles & Compensation/i")
-      .first()
-      .click();
+    await this.openApp("Board Profiles & Compensation");
   }
 
   // ---------------------------------------------------------------

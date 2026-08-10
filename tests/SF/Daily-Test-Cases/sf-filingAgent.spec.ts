@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
+import { SfPage } from "../../pages/SfPage";
 import * as fs from "fs";
 import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToSECFilings,
 } from "../../utils/helpers";
 import { runFilingAgentTest } from "./sf-filingAgent-logic";
 
@@ -16,7 +16,7 @@ test.describe("SF-FilingAgent Automation - Isolated Mode", () => {
   test("SF-FilingAgent", async ({ page }) => {
     const logToFile = setupLogger("sf-filingAgent", "SF/Daily-Test-Cases");
     await ensureLoggedIn(page, logToFile);
-    await navigateToSECFilings(page);
+    await new SfPage(page).goto();
     await runFilingAgentTest(page, logToFile);
   });
 });

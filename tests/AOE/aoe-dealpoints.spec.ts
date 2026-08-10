@@ -11,8 +11,8 @@ import {
   AUTH_PATH,
   setupLogger,
   ensureLoggedIn,
-  navigateToAgreementsAndOtherExhibits,
 } from "../utils/helpers";
+import { AoePage } from "../pages/AoePage";
 import { runDealPointsTest } from "./aoe-dealpoints-logic";
 
 test.describe("AOE-Deal Points Automation - Isolated Mode", () => {
@@ -23,7 +23,7 @@ test.describe("AOE-Deal Points Automation - Isolated Mode", () => {
   test("AOE-Deal Points Test", async ({ page }) => {
     const logToFile = setupLogger("aoe-dealpoints", "AOE");
     await ensureLoggedIn(page, logToFile);
-    await navigateToAgreementsAndOtherExhibits(page);
+    await new AoePage(page).goto();
     await runDealPointsTest(page, logToFile);
   });
 });
