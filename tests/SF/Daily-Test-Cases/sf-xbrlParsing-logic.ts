@@ -20,7 +20,7 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
 
   const exhibtsToFilingsCheckBox = await sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckBox.click({ force: true });
-  await page.getByRole("button", { name: /^Search$/i }).click();
+  await sf.searchBtn.click();
 
   const searchResult = await getTabText(page, 0, logToFile, false);
 
@@ -75,10 +75,10 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
         if (await viewBtn.isVisible({ timeout: 5000 })) {
           await viewBtn.click();
 
-          const ixbrlBtn = page.locator("text=/^iXBRL$/i").first();
+          const ixbrlBtn = sf.ixbrlTabByText;
           if (await ixbrlBtn.isVisible({ timeout: 8000 })) {
             await ixbrlBtn.click();
-            const ex101Link = page.locator("text=/^EX-101$/i").first();
+            const ex101Link = sf.ex101Tab;
             if (await ex101Link.isVisible()) {
               await ex101Link.click();
             } else {

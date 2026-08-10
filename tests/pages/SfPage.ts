@@ -56,4 +56,95 @@ export class SfPage extends BasePage {
   get exhibitsToFilingsLabel(): Locator {
     return this.page.locator('label[for="-ExhibitsToFilings"]');
   }
+
+  /** Amendment Filings "exclude" radio. */
+  get amendmentFilingsExcludeRadio(): Locator {
+    return this.page.getByTestId("amendmentFilings-radio-EXC");
+  }
+
+  /** Ownership Forms "include" radio. */
+  get ownershipFormsIncludeRadio(): Locator {
+    return this.page.getByTestId("ownershipForms-radio-INC");
+  }
+
+  /** Filing Agent & Software filter. */
+  get filingAgentInput(): Locator {
+    return this.page.getByTestId("filingAgentAndSoftware-input");
+  }
+
+  /** The Forms search box INSIDE the Forms picker popup (not #Forms). */
+  get formsModalSearchInput(): Locator {
+    return this.popupBody.getByTestId("forms-searchInput");
+  }
+
+  // ---------------------------------------------------------------
+  // Keyword search (boolean / conceptual)
+  // ---------------------------------------------------------------
+
+  get keywordPlusBtn(): Locator {
+    return this.page.getByTestId("keywords-round-btn");
+  }
+
+  get keywordModalSearch(): Locator {
+    return this.popupContainer.getByTestId("keywords-search");
+  }
+
+  get keywordModalClearBtn(): Locator {
+    return this.popupContainer.getByRole("button", { name: "Clear" });
+  }
+
+  get keywordModalOkBtn(): Locator {
+    return this.popupContainer.getByRole("button", { name: "OK" });
+  }
+
+  get booleanTabBtn(): Locator {
+    return this.page.getByRole("button", { name: /Boolean/i });
+  }
+
+  get conceptualTabBtn(): Locator {
+    return this.page.getByRole("button", { name: /^Conceptual$/i });
+  }
+
+  get expandKeywordsBtn(): Locator {
+    return this.page.getByRole("button", { name: /Expand Keywords/i });
+  }
+
+  /** The applied-filters breadcrumb strip. */
+  get filterBar(): Locator {
+    return this.page.locator(".styles__bread-crumb__wrapper___1Io7c").first();
+  }
+
+  /** Section/result outline panel in the document viewer. */
+  get sectionResultOutline(): Locator {
+    return this.page.locator(".styles__root___17wXu").first();
+  }
+
+  // ---------------------------------------------------------------
+  // Document viewer tabs
+  // ---------------------------------------------------------------
+
+  /** The iXBRL tab by id. Used to read its disabled state. */
+  get ixbrlTabById(): Locator {
+    return this.page.locator("#ixbrl");
+  }
+
+  /** The iXBRL tab by visible text. */
+  get ixbrlTabByText(): Locator {
+    return this.page.locator("text=/^iXBRL$/i").first();
+  }
+
+  /** The EX-101 tab. */
+  get ex101Tab(): Locator {
+    return this.page.locator("text=/^EX-101$/i").first();
+  }
+
+  /** The "Docs: N" tab, matched by the SF flows' own xpath. */
+  get backToDocsTab(): Locator {
+    return this.page.locator('//span[contains(text(), "Docs:")]');
+  }
+
+  /** Result tab wrapper used by the fiscal-year flow. */
+  get contextMenuWrapper(): Locator {
+    return this.page.locator("div.react-contextmenu-wrapper");
+  }
 }

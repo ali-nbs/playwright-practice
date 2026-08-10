@@ -25,14 +25,14 @@ export const runCrossReferenceLinksTest = async (
   let allScenarioResults: string[] = [];
   let findings = { text: "No Results Found", isValid: true };
 
-  const searchBtn = page.getByRole("button", { name: /^Search$/i });
+  const searchBtn = sf.searchBtn;
 
   await sf.clearFilters();
   await page.waitForTimeout(500);
   let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
   await exhibitsCheckbox.click();
   await page.waitForTimeout(300);
-  const dateInput = page.getByTestId("date-input");
+  const dateInput = sf.dateInputByTestId;
   await fillAndEnter(page, sf.dateInput, getTargetDateString());
   await sf.search();
 
@@ -118,7 +118,7 @@ const scrapeResults = async (
       if (rowId && !processedIds.has(rowId)) {
         let AccessionNumber = "N/A";
         try {
-          const allSpantexts = await row.locator("span").allInnerTexts();
+          const allSpantexts = await sf.rowSpanTexts(row);
           const allpTags = await row.locator("p");
           const cleanContent = allSpantexts
             .map((t) => t.trim())
@@ -170,7 +170,7 @@ const scrapeResults = async (
               await viewBtn.click();
               await page.waitForTimeout(1000);
 
-              const docFrame = page.frameLocator("iframe").first();
+              const docFrame = sf.documentFrame;
               await docFrame
                 .locator("body")
                 .waitFor({ state: "visible", timeout: 15000 });

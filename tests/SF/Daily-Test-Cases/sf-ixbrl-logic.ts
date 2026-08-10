@@ -15,7 +15,7 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
 
   const sf = new SfPage(page);
 
-  const clearBtn = await page.getByRole("button", { name: /^Clear Filters$/i });
+  const clearBtn = sf.clearFiltersBtn;
   await sf.clearFiltersBtn.click({ force: true });
   await page.waitForTimeout(300);
 
@@ -24,7 +24,7 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
   const exhibtsToFilingsCheckbox =  sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckbox.uncheck({ force: true });
   await page.waitForTimeout(300);
-  await page.getByRole("button", { name: /^Search$/i }).click();
+  await sf.searchBtn.click();
 
   const searchResult = await getTabText(page, 0, logToFile, false);
   const totalToProcess = 4;
@@ -73,14 +73,14 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
         if (await viewBtn.isVisible({ timeout: 5000 })) {
           await viewBtn.click();
 
-          const ixbrlTab = page.locator("#ixbrl");
+          const ixbrlTab = sf.ixbrlTabById;
           await ixbrlTab.waitFor({ state: "attached", timeout: 10000 });
 
           const className = (await ixbrlTab.getAttribute("class")) || "";
           const isGreyedOut = className.includes("styles__disabled");
 
           if (!hasiXBRLLabel) {
-            await expect(page.locator("#ixbrl")).toHaveClass(/disabled/, {
+            await expect(sf.ixbrlTabById).toHaveClass(/disabled/, {
               timeout: 60000,
             });
             if (isGreyedOut) {
@@ -97,7 +97,7 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
               );
             }
           } else {
-            await expect(page.locator("#ixbrl")).not.toHaveClass(/disabled/, {
+            await expect(sf.ixbrlTabById).not.toHaveClass(/disabled/, {
               timeout: 60000,
             });
             console.log(
@@ -111,7 +111,7 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
               console.log(`SCENARIO: Label WAS on grid -> Section is active.`);
 
               await ixbrlTab.click();
-              const ex101Link = page.locator("text=/^EX-101$/i").first();
+              const ex101Link = sf.ex101Tab;
               if (!(await ex101Link.isVisible({ timeout: 5000 }))) {
                 isFailed = true;
                 failureLogs.push(

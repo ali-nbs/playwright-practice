@@ -50,11 +50,7 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
     await page.waitForTimeout(2000);
 
     // 1. Handle the Modal Filter for Company Type
-    const companyTypeFilterBlock = page
-      .locator("div.styles__focusContainer___13rFy")
-      .filter({
-        has: page.locator("label", { hasText: /^Company Type\/Status$/ }),
-      });
+    const companyTypeFilterBlock = sf.filterBlock(/^Company Type\/Status$/);
 
     const sectionPlusBtn = companyTypeFilterBlock
       .locator("span._icon_1jkal_249.Add")
@@ -117,11 +113,12 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
 };
 
 async function validateRows(page: Page, category: any, logToFile: Function) {
+  const sf = new SfPage(page);
   let resultsFound = 0;
   let failureLogs: string[] = [];
 
   while (resultsFound < TARGET_ROW_COUNT) {
-    const scroller = page.locator(".ReactVirtualized__Grid").last();
+    const scroller = sf.scroller;
     const resultsContainer = scroller.locator('> div[role="rowgroup"]');
 
     const currentRow = resultsContainer

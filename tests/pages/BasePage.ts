@@ -37,6 +37,65 @@ export class BasePage {
   }
 
   // ---------------------------------------------------------------
+  // Filter popups (shared: the same popup chrome is used by AOE, DBM,
+  // SF, SRC and BPC, even though each app's filters differ)
+  // ---------------------------------------------------------------
+
+  /** The filter popup body. */
+  get popupBody(): Locator {
+    return this.page.locator("div.PopupBody__popup__body___1J_d3");
+  }
+
+  /** The other popup wrapper, used by the keyword popups. */
+  get popupContainer(): Locator {
+    return this.page.locator("div.PopupContainer__container___1-tgp").first();
+  }
+
+  /** Popup confirm button. */
+  get okBtn(): Locator {
+    return this.page.getByRole("button", { name: /^OK$/ });
+  }
+
+  /** Display-columns popup apply button. */
+  get applyBtn(): Locator {
+    return this.page.getByRole("button", { name: "Apply" });
+  }
+
+  /**
+   * A filter block in the filter bar, found by its label text.
+   *
+   * e.g. filterBlock(/^Forms$/), filterBlock(/^Company Type\/Status$/)
+   */
+  filterBlock(labelText: RegExp): Locator {
+    return this.page
+      .locator("div.styles__focusContainer___13rFy")
+      .filter({ has: this.page.locator("label", { hasText: labelText }) });
+  }
+
+  /** The "+" icon that opens a filter block's picker. */
+  filterAddIcon(labelText: RegExp): Locator {
+    return this.filterBlock(labelText).locator("span._icon_1jkal_249.Add").first();
+  }
+
+  // ---------------------------------------------------------------
+  // Document iframe
+  // ---------------------------------------------------------------
+
+  /** The document iframe (AA, AOE and SF all read the doc body this way). */
+  get documentFrame() {
+    return this.page.frameLocator("iframe").first();
+  }
+
+  // ---------------------------------------------------------------
+  // Toolbar
+  // ---------------------------------------------------------------
+
+  /** Download button in the results toolbar. Used by DBM, RO, SE and SF. */
+  get downloadBtn(): Locator {
+    return this.page.locator('button[title*="Download"]');
+  }
+
+  // ---------------------------------------------------------------
   // Result grid
   // ---------------------------------------------------------------
 
@@ -101,6 +160,26 @@ export class BasePage {
   async rowTexts(row: Locator): Promise<string[]> {
     const texts = await row.locator("span").allInnerTexts();
     return texts.map((t) => t.trim()).filter((t) => t.length > 0);
+  }
+
+  /** Raw (untrimmed) span texts of a row. */
+  async rowSpanTexts(row: Locator): Promise<string[]> {
+    return row.locator("span").allInnerTexts();
+  }
+
+  /** A row's <p> texts. */
+  async rowParagraphTexts(row: Locator): Promise<string[]> {
+    return row.locator("p").allInnerTexts();
+  }
+
+  /** A row's keyword-highlight texts (<em> inside <p>). */
+  async rowHighlightTexts(row: Locator): Promise<string[]> {
+    return row.locator("p em").allInnerTexts();
+  }
+
+  /** A row's link texts. */
+  async rowLinkTexts(row: Locator): Promise<string[]> {
+    return row.locator("a").allInnerTexts();
   }
 
   /**

@@ -6,37 +6,39 @@ import {
   closeAllOpenTabs,
   configureDisplayColumns,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 // ============================================================================
 // 1. LOCATOR FACTORIES (Pure functions returning locators)
 // ============================================================================
 const getUIElements = (page: Page) => {
-  const modal = page.locator("div.PopupContainer__container___1-tgp").first();
+  const sf = new SfPage(page);
   return {
-    keywordInput: page.getByTestId("keywords-input"),
-    keywordPlsBtn: page.getByTestId("keywords-round-btn"),
-    modal,
-    modalInnerSearch: modal.getByTestId("keywords-search"),
-    modalClearBtn: modal.getByRole("button", { name: "Clear" }),
-    modalOkBtn: modal.getByRole("button", { name: "OK" }),
-    exhibitsToFilingsLabel: page.locator('label[for="-ExhibitsToFilings"]'),
+    keywordInput: sf.keywordsInput,
+    keywordPlsBtn: sf.keywordPlusBtn,
+    modal: sf.popupContainer,
+    modalInnerSearch: sf.keywordModalSearch,
+    modalClearBtn: sf.keywordModalClearBtn,
+    modalOkBtn: sf.keywordModalOkBtn,
+    exhibitsToFilingsLabel: sf.exhibitsToFilingsLabel,
   };
 };
 
-const getSearchElements = (page: Page) => ({
-  keywordInput: page.getByTestId("keywords-input"),
-  booleanTabBtn: page.getByRole("button", { name: /Boolean/i }),
-  searchBtn: page.getByRole("button", { name: /^Search$/i }).first(),
-  clearBtn: page.getByRole("button", { name: /^Clear Filters$/i }),
-  filterBar: page
-    .locator(".styles__bread-crumb__wrapper___1Io7c")
-    .first()
-    .locator("span"),
-  gridContainer: page.locator(".ReactVirtualized__Grid").last(),
-});
+const getSearchElements = (page: Page) => {
+  const sf = new SfPage(page);
+  return {
+    keywordInput: sf.keywordsInput,
+    booleanTabBtn: sf.booleanTabBtn,
+    searchBtn: sf.searchBtn,
+    clearBtn: sf.clearFiltersBtn,
+    filterBar: sf.filterBar.locator("span"),
+    gridContainer: sf.scroller,
+  };
+};
 
 const getDocumentElements = (page: Page) => {
-  const sectionResultOutline = page.locator(".styles__root___17wXu").first();
+  const sf = new SfPage(page);
+  const sectionResultOutline = sf.sectionResultOutline;
   return {
     row: page
       .locator(".ReactVirtualized__Grid")
@@ -67,6 +69,7 @@ const scrapeVirtualizedGrid = async (
   page: Page,
   targetCount = 20,
 ): Promise<RowData[]> => {
+  const sf = new SfPage(page);
   const extractedRows: RowData[] = [];
   let processedCount = 0;
   let emptyAttempts = 0;
@@ -85,18 +88,18 @@ const scrapeVirtualizedGrid = async (
       await page.waitForTimeout(400);
 
       // Extract full text (for proximity & NOT rules)
-      const pTexts = await currentRow.locator("p").allInnerTexts();
+      const pTexts = await sf.rowParagraphTexts(currentRow);
       const fullText = pTexts.join(" ").replace(/\n/g, " ").trim();
 
       // Extract ONLY highlighted words (for AND/OR rules)
-      const emTextsArray = await currentRow.locator("p em").allInnerTexts();
+      const emTextsArray = await sf.rowHighlightTexts(currentRow);
       const highlights = emTextsArray.join(" ").replace(/\n/g, " ").trim();
 
       // Check if this row hides some snippets behind a button
       const hasViewAllHits =
         (await currentRow.getByText(/View All Hits|View More/i).count()) > 0;
 
-      const texts = await currentRow.locator("span").allInnerTexts();
+      const texts = await sf.rowSpanTexts(currentRow);
       const cleanContent = texts
         .map((t) => t.trim())
         .filter((t) => t.length > 0);
@@ -135,6 +138,7 @@ const validateRandomDocuments = async (
   docsToTest: number,
   gridTabIndex: number,
 ) => {
+  const sf = new SfPage(page);
   logToFile(
     `\n--- PHASE 3: Testing ${docsToTest} Random Documents for "${sampleQuery}" ---`,
   );
@@ -167,7 +171,7 @@ const validateRandomDocuments = async (
         );
         await page.waitForTimeout(500);
 
-        const texts = await currentRow.locator("span").allInnerTexts();
+        const texts = await sf.rowSpanTexts(currentRow);
         const cleanContent = texts
           .map((t) => t.trim())
           .filter((t) => t.length > 0);

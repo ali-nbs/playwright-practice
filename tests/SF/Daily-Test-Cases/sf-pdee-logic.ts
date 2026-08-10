@@ -16,13 +16,13 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
 
   const sf = new SfPage(page);
 
-  const clearBtn = await page.getByRole("button", { name: /^Clear Filters$/i });
+  const clearBtn = sf.clearFiltersBtn;
   await sf.clearFiltersBtn.click({ force: true });
   const exhibtsToFilingsCheckbox = sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckbox.click({ force: true });
 
   await fillAndEnter(page, sf.dateInput, "Last 7 Days", 20);
-  await page.getByRole("button", { name: /^Search$/i }).click();
+  await sf.searchBtn.click();
 
   const statusText = await getTabText(page, 0, logToFile);
   logToFile(`Search Result: ${statusText}`);
@@ -62,7 +62,7 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
   const formats = ["PDF", "DOCX", "HTML"];
   for (let i = 0; i < formats.length; i++) {
     logToFile(`Action: Downloading ${formats[i]}...`);
-    const downloadBtn = page.locator('button[title*="Download"]');
+    const downloadBtn = sf.downloadBtn;
     await downloadBtn.click();
     await page.locator('label[for="coverPage"]').click({ force: true });
     await page.locator('div[name="formats"]').nth(i).click({ force: true });

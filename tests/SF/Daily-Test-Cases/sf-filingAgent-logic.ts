@@ -55,13 +55,13 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
     await page.waitForTimeout(300);
     let findings = { text: "No Results Found", isValid: true };
 
-    await page.getByTestId("amendmentFilings-radio-EXC").click();
-    await page.getByTestId("ownershipForms-radio-INC").click();
+    await sf.amendmentFilingsExcludeRadio.click();
+    await sf.ownershipFormsIncludeRadio.click();
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
     await fillAndEnter(page, sf.dateInput, scenario.date, 50);
 
-    let filingAgentInput = page.getByTestId("filingAgentAndSoftware-input");
+    let filingAgentInput = sf.filingAgentInput;
     await fillAndEnter(page, filingAgentInput, scenario.agent, 50);
 
     let exhibitsCheckbox = sf.exhibitsToFilingsLabel;

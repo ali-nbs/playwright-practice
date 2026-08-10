@@ -228,9 +228,9 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
       allScenarioResults.push(scenarioBlock);
 
       if (
-        await page.getByRole("button", { name: /Clear Filters/i }).isVisible()
+        await sf.clearFiltersBtn.isVisible()
       ) {
-        await page.getByRole("button", { name: /Clear Filters/i }).click();
+        await sf.clearFiltersBtn.click();
       }
     } catch (error: any) {
       console.error(`Error processing ${combo}: ${error.message}`);

@@ -42,9 +42,8 @@ async function selectFormTypeAndSearch(
   formType: string,
   dateValue: string,
 ) {
-  const sectionFilterBlock = page
-    .locator("div.styles__focusContainer___13rFy")
-    .filter({ has: page.locator("label", { hasText: /^Forms$/ }) });
+  const sf = new SfPage(page);
+  const sectionFilterBlock = sf.filterBlock(/^Forms$/);
 
   const sectionPlusBtn = sectionFilterBlock
     .locator("span._icon_1jkal_249.Add")
@@ -56,7 +55,7 @@ async function selectFormTypeAndSearch(
     await page.waitForTimeout(500);
   }
 
-  const formsInput = modal.getByTestId("forms-searchInput");
+  const formsInput = sf.formsModalSearchInput;
   await formsInput.last().fill(formType);
 
   const targetLabel = modal
@@ -67,14 +66,12 @@ async function selectFormTypeAndSearch(
   await page.getByRole("button", { name: /^OK$/ }).click();
 
   // Execute search
-  const dateInput = page.locator(
-    '//label[text()="Date"]/ancestor::div[5]//input',
-  );
+  const dateInput = sf.dateInput;
   await dateInput.click({ force: true });
   await dateInput.fill("");
   await dateInput.pressSequentially(dateValue, { delay: 100 });
 
-  await page.getByRole("button", { name: /^Search$/i }).click();
+  await sf.searchBtn.click();
   await expect(
     page
       .locator(
@@ -89,6 +86,7 @@ async function scrapeResults(
   targetCount: number,
   formType: string,
 ) {
+  const sf = new SfPage(page);
   let resultsFound = 0;
   let isTestCaseFailed = false;
   let failurelogs: string[] = [];
@@ -112,7 +110,7 @@ async function scrapeResults(
       await formTypeCell.waitFor({ state: "attached", timeout: 3000 });
       const rowText = await formTypeCell.innerText();
 
-      const texts = await currentRow.locator("span").allInnerTexts();
+      const texts = await sf.rowSpanTexts(currentRow);
       const cleanContent = texts
         .map((t) => t.trim())
         .filter((t) => t.length > 0);

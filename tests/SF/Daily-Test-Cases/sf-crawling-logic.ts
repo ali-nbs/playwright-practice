@@ -26,8 +26,8 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
   for (const scenario of testCases) {
     const exhibitstoFilingsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitstoFilingsCheckbox.uncheck({ force: true });
-    await page.getByTestId("amendmentFilings-radio-EXC").click();
-    await page.getByTestId("ownershipForms-radio-INC").click();
+    await sf.amendmentFilingsExcludeRadio.click();
+    await sf.ownershipFormsIncludeRadio.click();
 
     await fillAndEnter(page, sf.dateInput, scenario.date);
     await sf.search();

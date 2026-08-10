@@ -21,8 +21,8 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
   await sf.clearFiltersBtn.click({ force: true });
   await page.waitForTimeout(2000);
 
-  await page.getByTestId("amendmentFilings-radio-EXC").click();
-  await page.getByTestId("ownershipForms-radio-INC").click();
+  await sf.amendmentFilingsExcludeRadio.click();
+  await sf.ownershipFormsIncludeRadio.click();
 
   logToFile(`Testing Scenario: Yesterday`);
   await fillAndEnter(page, sf.dateInput, getTargetDateString());
@@ -74,7 +74,7 @@ const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
   let resultsFound = 0;
   const processedIds = new Set<string>();
   let failureCompanies: string[] = [];
-  const activeTab = page.locator("div.react-contextmenu-wrapper");
+  const activeTab = sf.contextMenuWrapper;
 
   while (resultsFound < targetCount) {
     const scroller = sf.scroller;
@@ -91,7 +91,7 @@ const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
 
       if (rowId && !processedIds.has(rowId)) {
         try {
-          const anchorLinks = await row.locator("a").allInnerTexts();
+          const anchorLinks = await sf.rowLinkTexts(row);
           await row.locator("a").first().click();
           await page.waitForTimeout(500);
 
@@ -119,6 +119,7 @@ const validateFiscalYear = async (
   page: Page,
   activeTab: Locator,
 ): Promise<{ status: boolean; reason: string }> => {
+  const sf = new SfPage(page);
   const fiscalYearRow = page
     .locator("div.CompanyInfoSummary__company-info__row___3nnEE")
     .filter({ hasText: "Fiscal Year End" });
@@ -167,8 +168,8 @@ const validateFiscalYear = async (
   await link.click();
 
   try {
-    await page.locator("text=/^iXBRL$/i").first().click();
-    await page.locator("text=/^EX-101$/i").first().click();
+    await sf.ixbrlTabByText.click();
+    await sf.ex101Tab.click();
 
     const xbrlFrame = page.frameLocator(
       "div.HtmlViewer__viewer___ZSwJe iframe",
@@ -241,6 +242,7 @@ const validateFiscalYear = async (
   }
 };
 const configureFiscalYearColumns = async (page: Page) => {
+  const sf = new SfPage(page);
   const sections = ["Filing Info", "Company Info"];
   for (const section of sections) {
     await page
@@ -266,6 +268,6 @@ const configureFiscalYearColumns = async (page: Page) => {
         .locator("._checkbox__icon_1xotg_257")
         .click();
     }
-    await page.getByRole("button", { name: "Apply" }).click();
+    await sf.applyBtn.click();
   }
 };

@@ -57,11 +57,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
     });
     await clearBtn.click({ force: true });
 
-    const companyTypeFilterBlock = page
-      .locator("div.styles__focusContainer___13rFy")
-      .filter({
-        has: page.locator("label", { hasText: /^Company Type\/Status$/ }),
-      });
+    const companyTypeFilterBlock = sf.filterBlock(/^Company Type\/Status$/);
 
     const sectionPlusBtn = companyTypeFilterBlock
       .locator("span._icon_1jkal_249.Add")
@@ -151,11 +147,12 @@ async function validateExtendedRows(
   category: any,
   logToFile: Function,
 ) {
+  const sf = new SfPage(page);
   let resultsFound = 0;
   let failureLogs: string[] = [];
 
   while (resultsFound < TARGET_ROW_COUNT) {
-    const scroller = page.locator(".ReactVirtualized__Grid").last();
+    const scroller = sf.scroller;
     const currentRow = scroller
       .locator(`div[data-test="resultRow"][id="${resultsFound}"]`)
       .first();

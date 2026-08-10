@@ -6,25 +6,29 @@ import {
   closeAllOpenTabs,
   configureDisplayColumns,
 } from "../../utils/helpers";
+import { SfPage } from "../../pages/SfPage";
 
 // ============================================================================
 // 1. LOCATOR FACTORIES
 // ============================================================================
 const getUIElements = (page: Page) => {
-  const modal = page.locator("div.PopupContainer__container___1-tgp").first();
+  const sf = new SfPage(page);
   return {
-    keywordInput: page.getByTestId("keywords-input"),
-    exhibitsToFilingsLabel: page.locator('label[for="-ExhibitsToFilings"]'),
-    modal,
+    keywordInput: sf.keywordsInput,
+    exhibitsToFilingsLabel: sf.exhibitsToFilingsLabel,
+    modal: sf.popupContainer,
   };
 };
 
-const getSearchElements = (page: Page) => ({
-  keywordInput: page.getByTestId("keywords-input"),
-  searchBtn: page.getByRole("button", { name: /^Search$/i }).first(),
-  clearBtn: page.getByRole("button", { name: /^Clear Filters$/i }),
-  gridContainer: page.locator(".ReactVirtualized__Grid").last(),
-});
+const getSearchElements = (page: Page) => {
+  const sf = new SfPage(page);
+  return {
+    keywordInput: sf.keywordsInput,
+    searchBtn: sf.searchBtn,
+    clearBtn: sf.clearFiltersBtn,
+    gridContainer: sf.scroller,
+  };
+};
 
 const getConceptualElements = (page: Page) => ({
   booleanTabBtn: page.getByRole("button", { name: /^Boolean$/i }),
@@ -40,7 +44,8 @@ const getConceptualElements = (page: Page) => ({
 });
 
 const getDocumentElements = (page: Page) => {
-  const sectionResultOutline = page.locator(".styles__root___17wXu").first();
+  const sf = new SfPage(page);
+  const sectionResultOutline = sf.sectionResultOutline;
   return {
     row: page
       .locator(".ReactVirtualized__Grid")
@@ -67,6 +72,7 @@ const scrapeVirtualizedGrid = async (
   page: Page,
   targetCount = 20,
 ): Promise<RowData[]> => {
+  const sf = new SfPage(page);
   const extractedRows: RowData[] = [];
   let processedCount = 0;
   let emptyAttempts = 0;
@@ -84,16 +90,16 @@ const scrapeVirtualizedGrid = async (
       await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
       await page.waitForTimeout(200);
 
-      const pTexts = await currentRow.locator("p").allInnerTexts();
+      const pTexts = await sf.rowParagraphTexts(currentRow);
       const fullText = pTexts.join(" ").replace(/\n/g, " ").trim();
 
-      const emTextsArray = await currentRow.locator("p em").allInnerTexts();
+      const emTextsArray = await sf.rowHighlightTexts(currentRow);
       const highlights = emTextsArray.join(" ").replace(/\n/g, " ").trim();
 
       const hasViewAllHits =
         (await currentRow.getByText(/View All Hits|View More/i).count()) > 0;
 
-      const texts = await currentRow.locator("span").allInnerTexts();
+      const texts = await sf.rowSpanTexts(currentRow);
       const cleanContent = texts
         .map((t) => t.trim())
         .filter((t) => t.length > 0);
