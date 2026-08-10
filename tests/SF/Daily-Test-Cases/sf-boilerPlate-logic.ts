@@ -156,14 +156,12 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
         }
 
         const cleanContent = await sf.rowTexts(currentRow);
-        const fillingInforesultLabel = currentRow.locator("span", {
-          hasText: "Accession #",
-        });
+        const fillingInforesultLabel = sf.rowLabelledSpan(currentRow, "Accession #");
         const accessionNo = await fillingInforesultLabel
           .locator("xpath=following-sibling::span")
           .innerText();
 
-        const allContent = currentRow.locator("a, p");
+        const allContent = sf.rowLinksAndParagraphs(currentRow);
         const totalItems = await allContent.count();
         let rowMatchedAnyExclude = false;
         const lastAnchorText = (
@@ -250,13 +248,10 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
 };
 
 async function selectSectionFilters(page: Page, combo: any) {
-  const sectionFilterBlock = page
-    .locator("div.styles__focusContainer___13rFy")
-    .filter({ has: page.locator("label", { hasText: /^Section$/ }) });
-  const sectionPlusBtn = sectionFilterBlock
-    .locator("span._icon_1jkal_249.Add")
-    .first();
-  const modal = page.locator("div.PopupBody__popup__body___1J_d3");
+  const sf = new SfPage(page);
+  const sectionFilterBlock = sf.filterBlock(/^Section$/);
+  const sectionPlusBtn = sf.filterAddIcon(/^Section$/);
+  const modal = sf.popupBody;
 
   while (!(await modal.isVisible())) {
     await sectionPlusBtn.click({ force: true }).catch(() => {});
@@ -265,7 +260,7 @@ async function selectSectionFilters(page: Page, combo: any) {
 
   for (const formEntry of combo.forms) {
     console.log(`Selecting Form: ${formEntry.type}`);
-    const formTypeItem = modal.locator("li.styles__item-list___17b6k").filter({
+    const formTypeItem = sf.sectionItems.filter({
       has: page.locator("span", {
         hasText: new RegExp(`^${formEntry.type}$`, "i"),
       }),
@@ -274,7 +269,7 @@ async function selectSectionFilters(page: Page, combo: any) {
     await page.waitForTimeout(800);
 
     for (const sectionName of formEntry.sections) {
-      const checkbox = page.locator(`input[name="${sectionName}"]`);
+      const checkbox = sf.sectionCheckbox(sectionName);
       await checkbox.evaluate((node: HTMLInputElement) => {
         node.checked = true;
         node.dispatchEvent(new Event("click", { bubbles: true }));
@@ -287,9 +282,7 @@ async function selectSectionFilters(page: Page, combo: any) {
     .filter({ hasText: /^Only$/ })
     .last()
     .click();
-  const popupBody = page.locator(
-    "div.PopupBody__popup__body___1J_d3.styles__tabs-container___1kNEn",
-  );
+  const popupBody = sf.tabbedPopupBody;
   const nonMaterialRow = popupBody.locator("div").filter({
     has: page.locator("span", { hasText: /^Non-Material Sections$/ }),
   });
@@ -299,10 +292,8 @@ async function selectSectionFilters(page: Page, combo: any) {
     .click({ force: true });
 
   for (const excludeName of combo.exclude) {
-    const row = page
-      .locator("li.styles__check-list-item__container___233d9")
-      .filter({ hasText: new RegExp(excludeName) });
-    await row.locator("label._checkbox__icon_1xotg_257").click({ force: true });
+    const row = sf.checkListItem(new RegExp(excludeName));
+    await sf.pickerRowCheckboxIcon(row).click({ force: true });
   }
 
   await popupBody.getByRole("button", { name: /^OK$/ }).click();

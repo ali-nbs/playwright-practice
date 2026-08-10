@@ -39,13 +39,9 @@ export const runAccountantTest = async (page: Page, logToFile: Function) => {
     await page.waitForTimeout(1000);
     let findings = { text: "No Results Found", isValid: true };
 
-    const sectionFilterBlock = page
-      .locator("div.styles__focusContainer___13rFy")
-      .filter({ has: page.locator("label", { hasText: /^Accountant$/ }) });
-    const sectionPlusBtn = sectionFilterBlock
-      .locator("span._icon_1jkal_249.Add")
-      .first();
-    const modal = page.locator("div.PopupBody__popup__body___1J_d3");
+    const sectionFilterBlock = sf.filterBlock(/^Accountant$/);
+    const sectionPlusBtn = sf.filterAddIcon(/^Accountant$/);
+    const modal = sf.popupBody;
 
     while (!(await modal.isVisible())) {
       await sectionPlusBtn.click({ force: true }).catch(() => {});
@@ -63,7 +59,7 @@ export const runAccountantTest = async (page: Page, logToFile: Function) => {
       .click();
 
     //  await page.pause();
-    await page.getByRole("button", { name: /^OK$/ }).click();
+    await sf.okBtn.click();
 
     logToFile(`\nTesting Form Type: ${scenario.formType}`);
     await fillAndEnter(page, sf.formsInput, scenario.formType, 200);

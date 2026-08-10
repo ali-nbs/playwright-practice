@@ -52,9 +52,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
   for (const category of Categories) {
     logToFile(`\n--- Starting Category: ${category.name} ---`);
 
-    const clearBtn = await page.getByRole("button", {
-      name: /^Clear Filters$/i,
-    });
+    const clearBtn = sf.clearFiltersBtn;
     await clearBtn.click({ force: true });
 
     const companyTypeFilterBlock = sf.filterBlock(/^Company Type\/Status$/);
@@ -62,7 +60,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
     const sectionPlusBtn = companyTypeFilterBlock
       .locator("span._icon_1jkal_249.Add")
       .first();
-    const modal = page.locator("div.PopupBody__popup__body___1J_d3");
+    const modal = sf.popupBody;
 
     // Open Modal
     let attempts = 0;
@@ -72,8 +70,8 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
       attempts++;
     }
 
-    await modal.locator(`label[for="${category.id}"]`).click();
-    await page.getByRole("button", { name: /^OK$/ }).click();
+    await sf.companyTypeOption(category.id).click();
+    await sf.okBtn.click();
 
     const exhibitsTofilingsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsTofilingsCheckbox.uncheck({ force: true });
@@ -83,9 +81,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
       .click();
 
     // 2. Verify Results Exist
-    const statusLocator = page.locator(
-      '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-    );
+    const statusLocator = sf.statusTab;
     await expect(statusLocator.first()).toBeVisible({ timeout: 60000 });
 
     if (

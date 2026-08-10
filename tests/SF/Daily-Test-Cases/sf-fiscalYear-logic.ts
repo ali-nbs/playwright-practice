@@ -92,7 +92,7 @@ const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
       if (rowId && !processedIds.has(rowId)) {
         try {
           const anchorLinks = await sf.rowLinkTexts(row);
-          await row.locator("a").first().click();
+          await sf.rowFirstLink(row).click();
           await page.waitForTimeout(500);
 
           const isValid = await validateFiscalYear(page, activeTab);
@@ -139,7 +139,7 @@ const validateFiscalYear = async (
 
   const companyTabIndex = (await activeTab.count()) - 1;
 
-  const rows = page.locator("tr.periodicFilingsContent__tableRow___trkDv");
+  const rows = sf.periodicFilingRows;
 
   if ((await rows.count()) === 0) {
     return {
@@ -171,30 +171,18 @@ const validateFiscalYear = async (
     await sf.ixbrlTabByText.click();
     await sf.ex101Tab.click();
 
-    const xbrlFrame = page.frameLocator(
-      "div.HtmlViewer__viewer___ZSwJe iframe",
-    );
-
-    await xbrlFrame
-      .locator(".HtmlViewer-styles__xbrl-report-table-attribs___2OtRf")
-      .first()
-      .waitFor({
-        state: "visible",
-        timeout: 40000,
-      });
+    await sf.xbrlReportTable.waitFor({
+      state: "visible",
+      timeout: 40000,
+    });
 
     const getValue = async (labels: string[]): Promise<string> => {
       for (const label of labels) {
-        const row = xbrlFrame
-          .locator("tr")
-          .filter({
-            has: xbrlFrame.locator(`td.pl >> text=/^${label}$/i`),
-          })
-          .first();
+        const row = sf.xbrlRowByLabel(label);
 
         if ((await row.count()) === 0) continue;
 
-        const cells = row.locator("td.text");
+        const cells = sf.periodicFilingCells(row);
 
         for (let i = 0; i < (await cells.count()); i++) {
           const text = (await cells.nth(i).textContent())?.trim() ?? "";

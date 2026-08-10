@@ -95,6 +95,33 @@ export class BasePage {
     return this.page.locator('button[title*="Download"]');
   }
 
+  /** Excel List export button. */
+  get excelListBtn(): Locator {
+    return this.page.locator('button:has-text("Excel List")');
+  }
+
+  /** Email export button. */
+  get emailBtn(): Locator {
+    return this.page.locator(
+      'span[title="Email the selected items from the list below"]',
+    );
+  }
+
+  /** The lowercase "ok" confirm button used by the export dialogs. */
+  get okBtnLoose(): Locator {
+    return this.page.getByRole("button", { name: /ok/i });
+  }
+
+  /** A checkbox label in an export dialog, e.g. "coverPage". */
+  dialogCheckboxLabel(forAttr: string): Locator {
+    return this.page.locator(`label[for="${forAttr}"]`);
+  }
+
+  /** A download-format option in the export dialog. */
+  get downloadFormatOptions(): Locator {
+    return this.page.locator('div[name="formats"]');
+  }
+
   // ---------------------------------------------------------------
   // Result grid
   // ---------------------------------------------------------------
@@ -180,6 +207,39 @@ export class BasePage {
   /** A row's link texts. */
   async rowLinkTexts(row: Locator): Promise<string[]> {
     return row.locator("a").allInnerTexts();
+  }
+
+  /** A row's first link. */
+  rowFirstLink(row: Locator): Locator {
+    return row.locator("a").first();
+  }
+
+  /** A row's anchors and paragraphs, in document order. */
+  rowLinksAndParagraphs(row: Locator): Locator {
+    return row.locator("a, p");
+  }
+
+  /** A row's paragraphs as a locator (not their text). */
+  rowParagraphs(row: Locator): Locator {
+    return row.locator("p");
+  }
+
+  /** A row's select checkbox label. */
+  rowCheckboxLabel(row: Locator): Locator {
+    return row.locator("label").first();
+  }
+
+  /** The "View All Hits" / "View More" affordance inside a row. */
+  rowViewAllHits(row: Locator): Locator {
+    return row.getByText(/View All Hits|View More/i);
+  }
+
+  /**
+   * A labelled cell inside a row, e.g. rowLabelledSpan(row, "Accession #").
+   * Returns the <span> carrying the label itself.
+   */
+  rowLabelledSpan(row: Locator, label: string): Locator {
+    return row.locator("span", { hasText: label });
   }
 
   /**

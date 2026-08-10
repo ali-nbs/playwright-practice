@@ -54,7 +54,7 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
     if ((await currentRow.count()) > 0) {
       await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
       await page.waitForTimeout(500);
-      await currentRow.locator("label").first().check({ force: true });
+      await sf.rowCheckboxLabel(currentRow).check({ force: true });
       logToFile(`Selected Row Index: ${index}`);
     }
   }
@@ -64,12 +64,12 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
     logToFile(`Action: Downloading ${formats[i]}...`);
     const downloadBtn = sf.downloadBtn;
     await downloadBtn.click();
-    await page.locator('label[for="coverPage"]').click({ force: true });
-    await page.locator('div[name="formats"]').nth(i).click({ force: true });
+    await sf.dialogCheckboxLabel("coverPage").click({ force: true });
+    await sf.downloadFormatOptions.nth(i).click({ force: true });
 
     const [download] = await Promise.all([
       page.waitForEvent("download"),
-      page.getByRole("button", { name: /ok/i }).click(),
+      sf.okBtnLoose.click(),
     ]);
     const filePath = path.join("./downloads", download.suggestedFilename());
     await download.saveAs(filePath);
@@ -77,18 +77,18 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
   }
 
   logToFile("Action: Downloading Excel List...");
-  await page.locator('button:has-text("Excel List")').click();
-  await page.locator('label[for="includeTextSnippets"]').click({ force: true });
+  await sf.excelListBtn.click();
+  await sf.dialogCheckboxLabel("includeTextSnippets").click({ force: true });
   const [excelDownload] = await Promise.all([
     page.waitForEvent("download"),
-    page.getByRole("button", { name: /ok/i }).click(),
+    sf.okBtnLoose.click(),
   ]);
   await excelDownload.saveAs(
     path.join("./downloads", excelDownload.suggestedFilename()),
   );
 
- await page.locator('span[title="Email the selected items from the list below"]').click();
- page.getByRole("button", { name: /ok/i }).click();
+ await sf.emailBtn.click();
+ sf.okBtnLoose.click();
 
 
   const summary = [

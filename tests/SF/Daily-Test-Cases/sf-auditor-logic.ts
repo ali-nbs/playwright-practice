@@ -30,14 +30,10 @@ export const runAuditorTest = async (page: Page, logToFile: Function) => {
     await page.waitForTimeout(5000);
     let findings = { text: "No Results Found", isValid: true };
 
-    let amendmentFillingsRadioButton = page.getByTestId(
-      "amendmentFilings-radio-EXC",
-    );
+    let amendmentFillingsRadioButton = sf.amendmentFilingsExcludeRadio;
     // await amendmentFillingsRadioButton.click();
 
-    let ownershipFormsRadioButton = page.getByTestId(
-      "ownershipForms-radio-INC",
-    );
+    let ownershipFormsRadioButton = sf.ownershipFormsIncludeRadio;
     await ownershipFormsRadioButton.click();
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);

@@ -48,7 +48,7 @@ async function selectFormTypeAndSearch(
   const sectionPlusBtn = sectionFilterBlock
     .locator("span._icon_1jkal_249.Add")
     .first();
-  const modal = page.locator("div.PopupBody__popup__body___1J_d3");
+  const modal = sf.popupBody;
 
   while (!(await modal.isVisible())) {
     await sectionPlusBtn.click({ force: true }).catch(() => {});
@@ -63,7 +63,7 @@ async function selectFormTypeAndSearch(
     .filter({ hasText: new RegExp(`^${formType}`, "i") })
     .first();
   await targetLabel.click();
-  await page.getByRole("button", { name: /^OK$/ }).click();
+  await sf.okBtn.click();
 
   // Execute search
   const dateInput = sf.dateInput;
@@ -92,9 +92,7 @@ async function scrapeResults(
   let failurelogs: string[] = [];
 
   while (resultsFound < targetCount) {
-    const currentRow = page.locator(
-      `div[data-test="resultRow"][id="${resultsFound}"]`,
-    );
+    const currentRow = sf.rowByIdFlat(resultsFound);
 
     if ((await currentRow.count()) === 0) {
       await currentRow.last().scrollIntoViewIfNeeded();

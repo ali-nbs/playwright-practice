@@ -37,9 +37,7 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
     await exhibitsCheckbox.uncheck({ force: true });
     await page.waitForTimeout(300);
 
-    let ownershipFormsRadioButton = page.getByTestId(
-      "ownershipForms-radio-INC",
-    );
+    let ownershipFormsRadioButton = sf.ownershipFormsIncludeRadio;
     await ownershipFormsRadioButton.click();
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);

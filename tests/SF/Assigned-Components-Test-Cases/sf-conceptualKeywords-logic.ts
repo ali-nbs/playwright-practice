@@ -30,18 +30,17 @@ const getSearchElements = (page: Page) => {
   };
 };
 
-const getConceptualElements = (page: Page) => ({
-  booleanTabBtn: page.getByRole("button", { name: /^Boolean$/i }),
-  conceptualTabBtn: page.getByRole("button", { name: /^Conceptual$/i }),
-  expandKeywordsBtn: page.getByRole("button", { name: /Expand Keywords/i }),
-  booleanWarning: page.getByText(
-    /Boolean operators are not supported for conceptual search/i,
-  ),
-  relevanceColumnHeader: page.locator(
-    'span[title*="semantically similar and relevant"]',
-  ),
-  filterBar: page.locator(".styles__bread-crumb__wrapper___1Io7c").first(),
-});
+const getConceptualElements = (page: Page) => {
+  const sf = new SfPage(page);
+  return {
+    booleanTabBtn: sf.booleanTabBtn,
+    conceptualTabBtn: sf.conceptualTabBtn,
+    expandKeywordsBtn: sf.expandKeywordsBtn,
+    booleanWarning: sf.booleanWarning,
+    relevanceColumnHeader: sf.relevanceColumnHeader,
+    filterBar: sf.filterBar,
+  };
+};
 
 const getDocumentElements = (page: Page) => {
   const sf = new SfPage(page);
@@ -97,7 +96,7 @@ const scrapeVirtualizedGrid = async (
       const highlights = emTextsArray.join(" ").replace(/\n/g, " ").trim();
 
       const hasViewAllHits =
-        (await currentRow.getByText(/View All Hits|View More/i).count()) > 0;
+        (await sf.rowViewAllHits(currentRow).count()) > 0;
 
       const texts = await sf.rowSpanTexts(currentRow);
       const cleanContent = texts
@@ -137,6 +136,7 @@ const validateRandomConceptualDocs = async (
   docsToTest: number,
   gridTabIndex: number,
 ) => {
+  const sf = new SfPage(page);
   logToFile(
     `\n--- PHASE 3: Testing ${docsToTest} Random Documents for "${sampleQuery}" ---`,
   );
@@ -216,8 +216,7 @@ const validateRandomConceptualDocs = async (
     }
 
     // IN CONCEPTUAL MODE: We just verify that semantic highlights rendered (em tags exist), we don't regex match specific terms.
-    const documentFrame = page.frameLocator("iframe").first();
-    const highlights = documentFrame.locator("em");
+    const highlights = sf.documentHighlights;
 
     const isHighlightVisible = await highlights
       .first()
@@ -260,6 +259,7 @@ export const runConceptualSearchTest = async (
   logToFile: Function,
 ) => {
   logToFile("--- Starting SF-Conceptual Search Report ---");
+  const sf = new SfPage(page);
   const search = getSearchElements(page);
   const conceptualUI = getConceptualElements(page);
   let index = 0;

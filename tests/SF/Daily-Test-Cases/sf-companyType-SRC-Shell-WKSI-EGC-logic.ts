@@ -55,7 +55,7 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
     const sectionPlusBtn = companyTypeFilterBlock
       .locator("span._icon_1jkal_249.Add")
       .first();
-    const modal = page.locator("div.PopupBody__popup__body___1J_d3");
+    const modal = sf.popupBody;
 
     // Click plus until modal is visible
     let attempts = 0;
@@ -65,8 +65,8 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
       attempts++;
     }
 
-    await modal.locator(`label[for="${category.id}"]`).click();
-    await page.getByRole("button", { name: /^OK$/ }).click();
+    await sf.companyTypeOption(category.id).click();
+    await sf.okBtn.click();
 
     // 2. Set Form 10-K and Exclude Exhibits
       await sf.formsInput.click();
@@ -82,9 +82,7 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
       .click();
 
     // 3. Verify Results
-    const statusLocator = page.locator(
-      '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-    );
+    const statusLocator = sf.statusTab;
     await expect(statusLocator.first()).toBeVisible({ timeout: 60000 });
 
     if (
@@ -119,7 +117,7 @@ async function validateRows(page: Page, category: any, logToFile: Function) {
 
   while (resultsFound < TARGET_ROW_COUNT) {
     const scroller = sf.scroller;
-    const resultsContainer = scroller.locator('> div[role="rowgroup"]');
+    const resultsContainer = sf.resultsContainer;
 
     const currentRow = resultsContainer
       .locator(`> div > div[data-test="resultRow"][id="${resultsFound}"]`)
@@ -133,14 +131,12 @@ async function validateRows(page: Page, category: any, logToFile: Function) {
     await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
 
     // Get Accession #
-    const accLabel = currentRow.locator("span", { hasText: "Accession #" });
+    const accLabel = sf.rowLabelledSpan(currentRow, "Accession #");
     const accValues = await accLabel.locator("span").allInnerTexts();
     const accessionNo = accValues.find((t) => t.includes("-"))?.trim() || "N/A";
 
     // Check UI Status
-    const uiLabel = currentRow.locator("span", {
-      hasText: "Company Type/Status",
-    });
+    const uiLabel = sf.rowLabelledSpan(currentRow, "Company Type/Status");
     const uiValues = await uiLabel.locator("p").allInnerTexts();
     const uiMatchFound = uiValues.some(
       (val) =>
@@ -148,18 +144,18 @@ async function validateRows(page: Page, category: any, logToFile: Function) {
         val.toLowerCase().includes(category.label.toLowerCase()),
     );
 
-    const viewBtn = currentRow.getByRole("button", { name: /View/i }).last();
+    const viewBtn = sf.viewButton(currentRow).last();
     if (await viewBtn.isVisible()) {
       try {
         await viewBtn.click();
 
-        const ixbrlTab = page.locator("text=/^iXBRL$/i").first();
+        const ixbrlTab = sf.ixbrlTabByText;
         await ixbrlTab
           .waitFor({ state: "visible", timeout: 10000 })
           .catch(() => {});
         await ixbrlTab.click();
 
-        const ex101Tab = page.locator("text=/^EX-101$/i").first();
+        const ex101Tab = sf.ex101Tab;
         await ex101Tab
           .waitFor({ state: "visible", timeout: 20000 })
           .catch(() => {});
@@ -225,7 +221,7 @@ async function validateRows(page: Page, category: any, logToFile: Function) {
       } catch (e) {
         logToFile(`⚠️ XBRL content not found for row ${resultsFound}`);
       } finally {
-        const backToDocs = page.locator('//span[contains(text(), "Docs:")]');
+        const backToDocs = sf.backToDocsTab;
         if (await backToDocs.first().isVisible())
           await backToDocs.first().click();
         await page.waitForTimeout(1000);

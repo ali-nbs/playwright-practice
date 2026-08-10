@@ -147,4 +147,125 @@ export class SfPage extends BasePage {
   get contextMenuWrapper(): Locator {
     return this.page.locator("div.react-contextmenu-wrapper");
   }
+
+  // ---------------------------------------------------------------
+  // Keyword suggestion popup (boolean / conceptual)
+  // ---------------------------------------------------------------
+
+  get keywordOkBtn(): Locator {
+    return this.page.getByRole("button", { name: /^OK$/i });
+  }
+
+  get applyChangesBtn(): Locator {
+    return this.page.getByRole("button", { name: /Accept Changes/i });
+  }
+
+  get noSuggestionsMsg(): Locator {
+    return this.page.getByText(
+      /It looks like we don't have any suggestions/i,
+    );
+  }
+
+  get booleanWarning(): Locator {
+    return this.page.getByText(
+      /Boolean operators are not supported for conceptual search/i,
+    );
+  }
+
+  get relevanceColumnHeader(): Locator {
+    return this.page.locator('span[title*="semantically similar and relevant"]');
+  }
+
+  /** Keyword highlights (<em>) inside the opened document. */
+  get documentHighlights(): Locator {
+    return this.documentFrame.locator("em");
+  }
+
+  // ---------------------------------------------------------------
+  // Company Type / Status
+  // ---------------------------------------------------------------
+
+  /** A company-type option inside the Company Type/Status picker. */
+  companyTypeOption(categoryId: string): Locator {
+    return this.popupBody.locator(`label[for="${categoryId}"]`);
+  }
+
+  // ---------------------------------------------------------------
+  // Section picker (boilerplate flow)
+  // ---------------------------------------------------------------
+
+  /** An item in the Section picker list. */
+  get sectionItems(): Locator {
+    return this.popupBody.locator("li.styles__item-list___17b6k");
+  }
+
+  /** A section checkbox by its input name. */
+  sectionCheckbox(sectionName: string): Locator {
+    return this.page.locator(`input[name="${sectionName}"]`);
+  }
+
+  /** The checkbox icon inside a picker row. */
+  pickerRowCheckboxIcon(row: Locator): Locator {
+    return row.locator("label._checkbox__icon_1xotg_257");
+  }
+
+  // ---------------------------------------------------------------
+  // Fiscal year (company summary popup)
+  // ---------------------------------------------------------------
+
+  /** Rows of the periodic-filings table in the company summary. */
+  get periodicFilingRows(): Locator {
+    return this.page.locator("tr.periodicFilingsContent__tableRow___trkDv");
+  }
+
+  /** The results-status tab used by the company-type flows. */
+  get statusTab(): Locator {
+    return this.page.locator(
+      '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
+    );
+  }
+
+  /** A result row looked up directly by id (no rowgroup scoping). */
+  rowByIdFlat(id: number | string): Locator {
+    return this.page.locator(`div[data-test="resultRow"][id="${id}"]`);
+  }
+
+  /** The tabbed variant of the popup body, used by the Section picker. */
+  get tabbedPopupBody(): Locator {
+    return this.page.locator(
+      "div.PopupBody__popup__body___1J_d3.styles__tabs-container___1kNEn",
+    );
+  }
+
+  /** A row inside the Section picker's check-list. */
+  checkListItem(text: RegExp): Locator {
+    return this.page
+      .locator("li.styles__check-list-item__container___233d9")
+      .filter({ hasText: text });
+  }
+
+  /** The XBRL viewer iframe (a different iframe from documentFrame). */
+  get xbrlFrame() {
+    return this.page.frameLocator("div.HtmlViewer__viewer___ZSwJe iframe");
+  }
+
+  /** The XBRL report table, used to wait for the viewer to render. */
+  get xbrlReportTable(): Locator {
+    return this.xbrlFrame
+      .locator(".HtmlViewer-styles__xbrl-report-table-attribs___2OtRf")
+      .first();
+  }
+
+  /** An XBRL table row whose label cell matches `label`. */
+  xbrlRowByLabel(label: string): Locator {
+    return this.xbrlFrame
+      .locator("tr")
+      .filter({ has: this.xbrlFrame.locator(`td.pl >> text=/^${label}$/i`) })
+      .first();
+  }
+
+  /** Text cells of a periodic-filings row. */
+  periodicFilingCells(row: Locator): Locator {
+    return row.locator("td.text");
+  }
 }

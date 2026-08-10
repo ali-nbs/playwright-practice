@@ -97,7 +97,7 @@ const scrapeVirtualizedGrid = async (
 
       // Check if this row hides some snippets behind a button
       const hasViewAllHits =
-        (await currentRow.getByText(/View All Hits|View More/i).count()) > 0;
+        (await sf.rowViewAllHits(currentRow).count()) > 0;
 
       const texts = await sf.rowSpanTexts(currentRow);
       const cleanContent = texts
@@ -229,8 +229,7 @@ const validateRandomDocuments = async (
         .click();
     }
 
-    const documentFrame = page.frameLocator("iframe").first();
-    const highlights = documentFrame.locator("em");
+    const highlights = sf.documentHighlights;
 
     const isHighlightVisible = await highlights
       .first()
@@ -279,6 +278,7 @@ export const runBooleanKeywordsTest = async (
   page: Page,
   logToFile: Function,
 ) => {
+  const sf = new SfPage(page);
   logToFile("--- Starting SF-Boolean Keywords Report ---");
   let index = 0;
   // --- PHASE 1: UI VALIDATION ---
@@ -308,9 +308,7 @@ export const runBooleanKeywordsTest = async (
     await ui.modalOkBtn.click();
     logToFile("✅ Modal Clear button clears input.");
 
-    const expandKeywordsBtn = page.getByRole("button", {
-      name: /Expand Keywords/i,
-    });
+    const expandKeywordsBtn = sf.expandKeywordsBtn;
 
     if (await expandKeywordsBtn.isVisible({ timeout: 15000 })) {
       await expandKeywordsBtn.click();
@@ -318,13 +316,9 @@ export const runBooleanKeywordsTest = async (
       logToFile("Clicked 'Expand Keywords' button.");
 
       // Locators for the potential outcomes
-      const noSuggestionsMsg = page.getByText(
-        /It looks like we don't have any suggestions/i,
-      );
-      const okBtn = page.getByRole("button", { name: /^OK$/i });
-      const applyChangesBtn = page.getByRole("button", {
-        name: /Accept Changes/i,
-      });
+      const noSuggestionsMsg = sf.noSuggestionsMsg;
+      const okBtn = sf.keywordOkBtn;
+      const applyChangesBtn = sf.applyChangesBtn;
 
       // Check which UI state appears
       try {
