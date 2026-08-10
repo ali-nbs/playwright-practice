@@ -1,8 +1,5 @@
 # POM Architecture Proposal
 
-> **Status:** proposal / discussion document. **No code has been changed.**
-> Nothing here is implemented until you approve it.
-
 ---
 
 ## Ground rules for this refactor

@@ -2,12 +2,6 @@ import { Page, Locator } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
-import {
-  fillAndEnter,
-  getTabText,
-  configureDisplayColumns,
-  closeAllOpenTabs,
-} from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_crawling";
@@ -29,14 +23,14 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
     await sf.amendmentFilingsExcludeRadio.click();
     await sf.ownershipFormsIncludeRadio.click();
 
-    await fillAndEnter(page, sf.dateInput, scenario.date);
+    await sf.fillAndEnter(sf.dateInput, scenario.date);
     await sf.search();
 
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile);
+    const textDateOnly = await sf.getTabText(tabIndex++, logToFile);
     let findings = { text: "No Results Found", isValid: true };
 
     if (textDateOnly.includes("Docs")) {
-      await configureDisplayColumns(page, {
+      await sf.configureDisplayColumns({
         "Filing Info": ["Accession #"],
         "Company Info": [],
       });
@@ -70,7 +64,7 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
   }
   logToFile("\n--- End of Report ---");
 
-  await closeAllOpenTabs(page);
+  await sf.closeAllOpenTabs();
 };
 
 const scrapeCrawlingResults = async (targetCount: number, page: Page) => {

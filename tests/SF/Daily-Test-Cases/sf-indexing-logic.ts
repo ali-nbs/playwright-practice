@@ -1,10 +1,7 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import {
-  fillAndEnter,
-  getTabText,
   parseCount,
-  closeAllOpenTabs,
   getTargetDateString,
 } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
@@ -42,14 +39,14 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
-    await fillAndEnter(page, sf.dateInput, scenario.date);
+    await sf.fillAndEnter(sf.dateInput, scenario.date);
     await sf.search();
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile, true);
+    const textDateOnly = await sf.getTabText(tabIndex++, logToFile, true);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
-    await fillAndEnter(page, sf.keywordsInput, scenario.keyword);
+    await sf.fillAndEnter(sf.keywordsInput, scenario.keyword);
 
-    let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
+    let textWithKeyword = await sf.getTabText(tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
     const textDateOnlyCount = parseCount(textDateOnly);
@@ -63,11 +60,10 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
       await sf.clearFilters();
       await exhibitsCheckbox.uncheck({ force: true });
       await ownershipFormsRadioButton.click();
-      await fillAndEnter(page, sf.dateInput, scenario.date);
-      await fillAndEnter(page, sf.keywordsInput, scenario.NotKeyword);
+      await sf.fillAndEnter(sf.dateInput, scenario.date);
+      await sf.fillAndEnter(sf.keywordsInput, scenario.NotKeyword);
 
-      const textWithNotKeyword = await getTabText(
-        page,
+      const textWithNotKeyword = await sf.getTabText(
         tabIndex++,
         logToFile,
         false,
@@ -110,5 +106,5 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
     logToFile(`\nFailed to dump to Google Sheets: ${err.message}`);
   }
   logToFile("\n--- End of Report ---");
-  await closeAllOpenTabs(page);
+  await sf.closeAllOpenTabs();
 };

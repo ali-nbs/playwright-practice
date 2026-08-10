@@ -3,8 +3,6 @@ import {
   getTabText,
   getRandomIndices,
   parseCount,
-  closeAllOpenTabs,
-  configureDisplayColumns,
 } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
@@ -254,11 +252,7 @@ const validateRandomDocuments = async (
     logToFile(`Jumping back to Results Grid (Tab Index: ${gridTabIndex})...`);
 
     // Locate the exact tab that holds the grid using the index we stored
-    const resultsTab = page
-      .locator(
-        '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-      )
-      .nth(gridTabIndex - 1);
+    const resultsTab = sf.statusTabLabels.nth(gridTabIndex - 1);
 
     // Click it to switch the view back to the grid
     await resultsTab.click();
@@ -452,7 +446,7 @@ export const runBooleanKeywordsTest = async (
         await search.keywordInput.fill(tc.query);
         await search.booleanTabBtn.click();
         await search.searchBtn.click();
-        const tabText = await getTabText(page, index++, logToFile, false);
+        const tabText = await sf.getTabText(index++, logToFile, false);
         console.log(`Tab Text for ${tc.id}:`, tabText);
         if (
           tabText.includes("No Results Found") ||
@@ -470,7 +464,7 @@ export const runBooleanKeywordsTest = async (
           highlights: string;
         }[] = [];
         if (!isDisplayColumnConfigured) {
-          await configureDisplayColumns(page, {
+          await sf.configureDisplayColumns({
             "Filing Info": ["Accession #"],
             "Company Info": [],
           });
@@ -519,7 +513,7 @@ export const runBooleanKeywordsTest = async (
         //  await page.pause();
       });
     }
-    await closeAllOpenTabs(page);
+    await sf.closeAllOpenTabs();
   });
 
   // --- PHASE 3: DOCUMENT HIGHLIGHTING ---

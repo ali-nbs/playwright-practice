@@ -1,11 +1,7 @@
 import { Page, expect } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import {
-  fillAndEnter,
-  getTabText,
   parseCount,
-  configureDisplayColumns,
-  closeAllOpenTabs,
 } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
@@ -107,7 +103,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
         .first()
         .click();
 
-      const statusText = await getTabText(page, index++, logToFile, false);
+      const statusText = await sf.getTabText(index++, logToFile, false);
       if (statusText.toLowerCase().includes("no results found")) {
         console.log(`\n╔${"═".repeat(BOX_WIDTH)}╗`);
         console.log(
@@ -119,7 +115,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
       }
 
       if (isFirstSearch) {
-        await configureDisplayColumns(page, {
+        await sf.configureDisplayColumns({
           "Filing Info": ["Accession #"],
           "Company Info": [],
         });
@@ -244,7 +240,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
   }
 
   logToFile("\n--- End of Report ---");
-  await closeAllOpenTabs(page);
+  await sf.closeAllOpenTabs();
 };
 
 async function selectSectionFilters(page: Page, combo: any) {
@@ -261,9 +257,7 @@ async function selectSectionFilters(page: Page, combo: any) {
   for (const formEntry of combo.forms) {
     console.log(`Selecting Form: ${formEntry.type}`);
     const formTypeItem = sf.sectionItems.filter({
-      has: page.locator("span", {
-        hasText: new RegExp(`^${formEntry.type}$`, "i"),
-      }),
+      has: sf.spanWithText(new RegExp(`^${formEntry.type}$`, "i")),
     });
     await formTypeItem.click();
     await page.waitForTimeout(800);
@@ -277,19 +271,12 @@ async function selectSectionFilters(page: Page, combo: any) {
     }
   }
 
-  await page
-    .locator("label")
-    .filter({ hasText: /^Only$/ })
-    .last()
-    .click();
+  await sf.labelWithText(/^Only$/).last().click();
   const popupBody = sf.tabbedPopupBody;
   const nonMaterialRow = popupBody.locator("div").filter({
-    has: page.locator("span", { hasText: /^Non-Material Sections$/ }),
+    has: sf.spanWithText(/^Non-Material Sections$/),
   });
-  await nonMaterialRow
-    .locator("span._icon_1jkal_249.Add")
-    .first()
-    .click({ force: true });
+  await sf.addIconIn(nonMaterialRow).click({ force: true });
 
   for (const excludeName of combo.exclude) {
     const row = sf.checkListItem(new RegExp(excludeName));

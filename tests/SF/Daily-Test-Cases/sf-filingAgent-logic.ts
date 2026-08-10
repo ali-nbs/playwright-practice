@@ -1,10 +1,6 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import {
-  closeAllOpenTabs,
-  configureDisplayColumns,
-  fillAndEnter,
-  getTabText,
   getTargetDateString,
   parseCount,
 } from "../../utils/helpers";
@@ -59,22 +55,22 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
     await sf.ownershipFormsIncludeRadio.click();
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
-    await fillAndEnter(page, sf.dateInput, scenario.date, 50);
+    await sf.fillAndEnter(sf.dateInput, scenario.date, 50);
 
     let filingAgentInput = sf.filingAgentInput;
-    await fillAndEnter(page, filingAgentInput, scenario.agent, 50);
+    await sf.fillAndEnter(filingAgentInput, scenario.agent, 50);
 
     let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsCheckbox.click({ force: true });
     await page.waitForTimeout(300);
     await sf.search();
 
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile);
+    const textDateOnly = await sf.getTabText(tabIndex++, logToFile);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
     if (textDateOnly.includes("Docs")) {
       if (selectCheckboxes) {
-        await configureDisplayColumns(page, {
+        await sf.configureDisplayColumns({
           "Filing Info": ["Accession #", "Filing Agent"],
           "Company Info": [],
         });
@@ -116,7 +112,7 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
   }
   logToFile("\n--- End of Report ---");
 
-  await closeAllOpenTabs(page);
+  await sf.closeAllOpenTabs();
 };
 
 async function scrapeFilingAgentResults(

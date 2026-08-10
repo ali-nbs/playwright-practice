@@ -1,6 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
-import { closeAllOpenTabs, configureDisplayColumns } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
 const TARGET_ROW_COUNT = 1;
@@ -52,9 +51,7 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
     // 1. Handle the Modal Filter for Company Type
     const companyTypeFilterBlock = sf.filterBlock(/^Company Type\/Status$/);
 
-    const sectionPlusBtn = companyTypeFilterBlock
-      .locator("span._icon_1jkal_249.Add")
-      .first();
+    const sectionPlusBtn = sf.addIconIn(companyTypeFilterBlock);
     const modal = sf.popupBody;
 
     // Click plus until modal is visible
@@ -97,16 +94,16 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
       ].join("\n");
 
       await updateGoogleSheet(finalReport, category.identifier, []);
-      await closeAllOpenTabs(page);
+      await sf.closeAllOpenTabs();
       continue;
     }
-    await configureDisplayColumns(page, {
+    await sf.configureDisplayColumns({
       "Filing Info": ["Accession #"],
       "Company Info": ["Company Type/Status"],
     });
 
     await validateRows(page, category, logToFile);
-    await closeAllOpenTabs(page);
+    await sf.closeAllOpenTabs();
   }
 };
 

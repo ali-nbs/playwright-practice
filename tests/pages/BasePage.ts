@@ -111,6 +111,36 @@ export class BasePage {
     );
   }
 
+  /** The "Docs:"-only tab label. */
+  get docsTabLabels(): Locator {
+    return this.page.locator('//span[contains(text(), "Docs:")]');
+  }
+
+  /**
+   * Clicks the results tab if it is visible, to switch back to the grid.
+   * Several flows do exactly this after opening a document.
+   */
+  async clickResultsTabIfVisible(tab: Locator) {
+    if (await tab.isVisible()) {
+      await tab.click();
+    }
+  }
+
+  /** The "+" icon inside an already-located filter block. */
+  addIconIn(block: Locator): Locator {
+    return block.locator("span._icon_1jkal_249.Add").first();
+  }
+
+  /** A <span> matching an exact label, for use in `filter({ has: ... })`. */
+  spanWithText(text: RegExp): Locator {
+    return this.page.locator("span", { hasText: text });
+  }
+
+  /** A <label> matching text, e.g. the "Only" toggle. */
+  labelWithText(text: RegExp): Locator {
+    return this.page.locator("label").filter({ hasText: text });
+  }
+
   /** The app's React crash boundary ("Oops! Something went wrong"). */
   get crashScreen(): Locator {
     return this.page.getByText("Oops!", { exact: false }).first();

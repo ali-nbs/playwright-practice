@@ -1,11 +1,5 @@
 import { Page, expect } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
-import {
-  closeAllOpenTabs,
-  configureDisplayColumns,
-  fillAndEnter,
-  getTabText,
-} from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_xbrl_parsing";
@@ -16,13 +10,13 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
   const sf = new SfPage(page);
 
   await sf.clearFiltersBtn.click({ force: true });
-  await fillAndEnter(page, sf.formsInput, "10-K", 20);
+  await sf.fillAndEnter(sf.formsInput, "10-K", 20);
 
   const exhibtsToFilingsCheckBox = await sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckBox.click({ force: true });
   await sf.searchBtn.click();
 
-  const searchResult = await getTabText(page, 0, logToFile, false);
+  const searchResult = await sf.getTabText(0, logToFile, false);
 
   const totalToProcess = 4;
   let processedCount = 0;
@@ -30,7 +24,7 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
   let isFailed = false;
 
   if (searchResult.includes("Docs")) {
-    await configureDisplayColumns(page, {
+    await sf.configureDisplayColumns({
       "Filing Info": ["Accession #"],
       "Company Info": [],
     });
@@ -97,12 +91,8 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
         );
       }
 
-      const resultsTab = page
-        .locator('//span[contains(text(), "Docs:")]')
-        .first();
-      if (await resultsTab.isVisible()) {
-        await resultsTab.click();
-      }
+      const resultsTab = sf.docsTabLabels.first();
+      await sf.clickResultsTabIfVisible(resultsTab);
       await page.waitForTimeout(500);
       processedCount++;
     }
@@ -121,5 +111,5 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
   await updateGoogleSheet(scenarioBlock, IDENTIFIER, failureLogs);
 
   logToFile("\n--- End of Report ---");
-  await closeAllOpenTabs(page);
+  await sf.closeAllOpenTabs();
 };

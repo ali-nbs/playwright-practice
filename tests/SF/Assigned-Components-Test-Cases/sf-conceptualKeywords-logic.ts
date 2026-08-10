@@ -3,8 +3,6 @@ import {
   getTabText,
   getRandomIndices,
   parseCount,
-  closeAllOpenTabs,
-  configureDisplayColumns,
 } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
@@ -238,11 +236,7 @@ const validateRandomConceptualDocs = async (
 
     // STEP C: JUMP BACK TO RESULTS GRID TAB
     logToFile(`Jumping back to Results Grid (Tab Index: ${gridTabIndex})...`);
-    const resultsTab = page
-      .locator(
-        '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-      )
-      .nth(gridTabIndex - 1);
+    const resultsTab = sf.statusTabLabels.nth(gridTabIndex - 1);
     await resultsTab.click();
 
     await gridContainer.waitFor({ state: "visible", timeout: 15000 });
@@ -312,7 +306,7 @@ export const runConceptualSearchTest = async (
     await conceptualUI.conceptualTabBtn.click();
     await search.searchBtn.click();
 
-    const tabText = await getTabText(page, index++, logToFile, false);
+    const tabText = await sf.getTabText(index++, logToFile, false);
     if (
       tabText.includes("No Results Found") ||
       tabText.includes("Invalid Query")
@@ -338,7 +332,7 @@ export const runConceptualSearchTest = async (
     );
 
     logToFile(`\nScraping results for highlight validation...`);
-    await configureDisplayColumns(page, {
+    await sf.configureDisplayColumns({
       "Filing Info": ["Accession #"],
       "Company Info": [],
     });
@@ -371,7 +365,7 @@ export const runConceptualSearchTest = async (
         )
         .toBeTruthy();
     }
-    await closeAllOpenTabs(page);
+    await sf.closeAllOpenTabs();
   });
 
   //   // --- PHASE 3: DOCUMENT HIGHLIGHTING ---

@@ -1,6 +1,5 @@
 import { Page, expect } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
-import { closeAllOpenTabs, configureDisplayColumns } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
 const TARGET_ROW_COUNT = 5;
@@ -57,9 +56,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
 
     const companyTypeFilterBlock = sf.filterBlock(/^Company Type\/Status$/);
 
-    const sectionPlusBtn = companyTypeFilterBlock
-      .locator("span._icon_1jkal_249.Add")
-      .first();
+    const sectionPlusBtn = sf.addIconIn(companyTypeFilterBlock);
     const modal = sf.popupBody;
 
     // Open Modal
@@ -101,11 +98,11 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
       } else {
         finalSummaryReport.push(reportBlock);
       }
-      await closeAllOpenTabs(page);
+      await sf.closeAllOpenTabs();
       continue;
     }
 
-    await configureDisplayColumns(page, {
+    await sf.configureDisplayColumns({
       "Filing Info": ["Accession #"],
       "Company Info": ["Company Type/Status", "SIC - Industry"],
     });
@@ -125,7 +122,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
     } else {
       finalSummaryReport.push(reportBlock);
     }
-    await closeAllOpenTabs(page);
+    await sf.closeAllOpenTabs();
   }
 
   // Final dump for REIT/BDC/FPI/INV

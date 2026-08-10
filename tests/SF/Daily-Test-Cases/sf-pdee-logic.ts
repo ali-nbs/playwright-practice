@@ -2,10 +2,7 @@ import { Page, expect } from "@playwright/test";
 import * as path from "path";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import {
-  closeAllOpenTabs,
-  fillAndEnter,
   getRandomIndices,
-  getTabText,
 } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
@@ -21,10 +18,10 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
   const exhibtsToFilingsCheckbox = sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckbox.click({ force: true });
 
-  await fillAndEnter(page, sf.dateInput, "Last 7 Days", 20);
+  await sf.fillAndEnter(sf.dateInput, "Last 7 Days", 20);
   await sf.searchBtn.click();
 
-  const statusText = await getTabText(page, 0, logToFile);
+  const statusText = await sf.getTabText(0, logToFile);
   logToFile(`Search Result: ${statusText}`);
 
   if (statusText.includes("No Results Found")) {
@@ -100,6 +97,6 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
   ].join("\n");
 
   await updateGoogleSheet(summary, IDENTIFIER);
-  await closeAllOpenTabs(page);
+  await sf.closeAllOpenTabs();
   logToFile("--- SF-PDEE Report Completed ---");
 };

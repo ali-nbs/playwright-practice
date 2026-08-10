@@ -1,11 +1,7 @@
 import { expect, Page } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import {
-  getTabText,
   parseCount,
-  closeAllOpenTabs,
-  configureDisplayColumns,
-  fillAndEnter,
   getTargetDateString,
 } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
@@ -33,15 +29,14 @@ export const runCrossReferenceLinksTest = async (
   await exhibitsCheckbox.click();
   await page.waitForTimeout(300);
   const dateInput = sf.dateInputByTestId;
-  await fillAndEnter(page, sf.dateInput, getTargetDateString());
+  await sf.fillAndEnter(sf.dateInput, getTargetDateString());
   await sf.search();
 
-  const searchResultTextOnly = await getTabText(page, tabIndex++, logToFile);
+  const searchResultTextOnly = await sf.getTabText(tabIndex++, logToFile);
   logToFile(`Baseline: ${searchResultTextOnly}`);
 
   if (searchResultTextOnly.includes("Docs")) {
-    await configureDisplayColumns(
-      page,
+    await sf.configureDisplayColumns(
       {
         "Filing Info": ["Intelligize ID"],
         "Company Info": [],
@@ -57,7 +52,7 @@ export const runCrossReferenceLinksTest = async (
     //  await page.pause();
     actualTarget = Math.min(docsCount, 25);
     findings = await scrapeResults(actualTarget, 4, page, logToFile);
-    await closeAllOpenTabs(page);
+    await sf.closeAllOpenTabs();
   }
   const scenarioBlock = [
     `Doc Count: ${actualTarget}`,
@@ -85,7 +80,7 @@ export const runCrossReferenceLinksTest = async (
     logToFile(`Sheet update failed: ${e.message}`);
   } finally {
     logToFile("\n--- End of AOE-Accountant Report ---");
-    await closeAllOpenTabs(page);
+    await sf.closeAllOpenTabs();
   }
 };
 
@@ -197,30 +192,16 @@ const scrapeResults = async (
                 //   `✅ Accession ${accessionNo} has ${crossReferenceLinksCount} cross-reference links.`,
                 // );
               }
-              const activeTab = page
-                .locator(
-                  '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-                )
-                .first();
-
-              if (await activeTab.isVisible()) {
-                await activeTab.click();
-              }
+              const activeTab = sf.statusTabLabels.first();
+              await sf.clickResultsTabIfVisible(activeTab);
             }
           }
         } catch (e: any) {
         } finally {
           processedIds.add(rowId);
           resultsFound++;
-          const activeTab = page
-            .locator(
-              '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-            )
-            .first();
-
-          if (await activeTab.isVisible()) {
-            await activeTab.click();
-          }
+          const activeTab = sf.statusTabLabels.first();
+          await sf.clickResultsTabIfVisible(activeTab);
           await page.waitForTimeout(700);
         }
       }

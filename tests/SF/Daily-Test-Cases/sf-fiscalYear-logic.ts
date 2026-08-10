@@ -1,9 +1,6 @@
 import { Page, expect, Locator } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import {
-  closeAllOpenTabs,
-  fillAndEnter,
-  getTabText,
   getTargetDateString,
   parseCount,
 } from "../../utils/helpers";
@@ -25,13 +22,13 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
   await sf.ownershipFormsIncludeRadio.click();
 
   logToFile(`Testing Scenario: Yesterday`);
-  await fillAndEnter(page, sf.dateInput, getTargetDateString());
+  await sf.fillAndEnter(sf.dateInput, getTargetDateString());
 
   const exhibtsToFilingsCheckbox = sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckbox.click({ force: true });
   await sf.search();
 
-  const textDateOnly = await getTabText(page, 0, logToFile);
+  const textDateOnly = await sf.getTabText(0, logToFile);
   logToFile(`Baseline (Yesterday): ${textDateOnly}`);
 
   if (!textDateOnly.includes("Docs")) {
@@ -43,7 +40,7 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
     ].join("\n");
     await updateGoogleSheet(scenarioBlock, IDENTIFIER, []);
     logToFile("Sheet updated successfully.");
-    await closeAllOpenTabs(page);
+    await sf.closeAllOpenTabs();
     return;
   }
 
@@ -62,7 +59,7 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
   try {
     await updateGoogleSheet(scenarioBlock, IDENTIFIER, findings.text);
     logToFile("Sheet updated successfully.");
-    await closeAllOpenTabs(page);
+    await sf.closeAllOpenTabs();
   } catch (e: any) {
     logToFile(`Sheet update failed: ${e.message}`);
   }

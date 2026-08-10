@@ -1,11 +1,7 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import {
-  fillAndEnter,
-  getTabText,
   parseCount,
-  closeAllOpenTabs,
-  configureDisplayColumns,
 } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
@@ -62,19 +58,19 @@ export const runAccountantTest = async (page: Page, logToFile: Function) => {
     await sf.okBtn.click();
 
     logToFile(`\nTesting Form Type: ${scenario.formType}`);
-    await fillAndEnter(page, sf.formsInput, scenario.formType, 200);
+    await sf.fillAndEnter(sf.formsInput, scenario.formType, 200);
     //await sf.formsInput.press('Enter');
     let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsCheckbox.click({ force: true });
     await page.waitForTimeout(1000);
     await sf.search();
 
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile);
+    const textDateOnly = await sf.getTabText(tabIndex++, logToFile);
     logToFile(`Baseline (${scenario.id}): ${textDateOnly}`);
 
     if (textDateOnly.includes("Docs")) {
       if (selectCheckboxes) {
-        await configureDisplayColumns(page, {
+        await sf.configureDisplayColumns({
           "Filing Info": ["Accession #", "Audited By"],
           "Company Info": ["Recent Auditor"],
         });
@@ -112,7 +108,7 @@ export const runAccountantTest = async (page: Page, logToFile: Function) => {
     logToFile(`Sheet update failed: ${e.message}`);
   } finally {
     logToFile("\n--- End of SF-Accountant Report ---");
-    await closeAllOpenTabs(page);
+    await sf.closeAllOpenTabs();
   }
 };
 const scrapeResults = async (

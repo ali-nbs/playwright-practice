@@ -1,11 +1,7 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import {
-  fillAndEnter,
-  getTabText,
   parseCount,
-  configureDisplayColumns,
-  closeAllOpenTabs,
   getTargetDateString,
 } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
@@ -37,21 +33,21 @@ export const runAuditorTest = async (page: Page, logToFile: Function) => {
     await ownershipFormsRadioButton.click();
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
-    await fillAndEnter(page, sf.dateInput, scenario.date, 50);
+    await sf.fillAndEnter(sf.dateInput, scenario.date, 50);
     logToFile(`\nTesting Form Type: ${scenario.formType}`);
-    await fillAndEnter(page, sf.formsInput, scenario.formType, 3000);
+    await sf.fillAndEnter(sf.formsInput, scenario.formType, 3000);
 
     let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
     await page.waitForTimeout(2000);
     await exhibitsCheckbox.click();
     await sf.search();
 
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile);
+    const textDateOnly = await sf.getTabText(tabIndex++, logToFile);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
     if (textDateOnly.includes("Docs")) {
       if (selectCheckboxes) {
-        await configureDisplayColumns(page, {
+        await sf.configureDisplayColumns({
           "Filing Info": ["Accession #", "Audited By"],
           "Company Info": ["Recent Auditor"],
         });
@@ -89,7 +85,7 @@ export const runAuditorTest = async (page: Page, logToFile: Function) => {
   }
   logToFile("\n--- End of Report ---");
 
-  await closeAllOpenTabs(page);
+  await sf.closeAllOpenTabs();
 };
 
 const scrapeAuditorResults = async (targetCount: number, page: Page) => {
