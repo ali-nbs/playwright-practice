@@ -1,9 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import {
-  fillAndEnter,
-  getTabText,
   parseCount,
-  closeAllOpenTabs,
   recoverFromAppCrash,
   getTargetDateString,
 } from "../utils/helpers";
@@ -51,12 +48,12 @@ export const runDBMAnalyticsTest = async (page: Page, logToFile: Function) => {
 
     if (!scenario.isBlankSearch) {
       if (scenario.date) {
-        await fillAndEnter(page, dbm.dateInput, scenario.date, 200);
+        await dbm.fillAndEnter(dbm.dateInput, scenario.date, 200);
       }
 
       if (scenario.sections) {
         for (const section of scenario.sections) {
-          await fillAndEnter(page, dbm.sectionTypeInput, section, 20);
+          await dbm.fillAndEnter(dbm.sectionTypeInput, section, 20);
           await page.locator("body").click();
         }
       }
@@ -64,7 +61,7 @@ export const runDBMAnalyticsTest = async (page: Page, logToFile: Function) => {
 
     await dbm.search();
 
-    const searchResultTextOnly = await getTabText(page, 0, logToFile);
+    const searchResultTextOnly = await dbm.getTabText(0, logToFile);
     logToFile(`${scenario.name} Result: ${searchResultTextOnly}`);
 
     let findings = { text: "No Results Found", isValid: true };
@@ -85,7 +82,7 @@ export const runDBMAnalyticsTest = async (page: Page, logToFile: Function) => {
 
       findings = await scrapeResults(page, scenario.isBlankSearch, logToFile);
     }
-    await closeAllOpenTabs(page);
+    await dbm.closeAllOpenTabs();
 
     const scenarioBlock = [
       `Scenario: ${scenario.name}`,
@@ -101,7 +98,7 @@ export const runDBMAnalyticsTest = async (page: Page, logToFile: Function) => {
   );
   console.log("Final Dump:\n", finalDump);
   await updateGoogleSheet(finalDump, IDENTIFIER, []);
-  await closeAllOpenTabs(page);
+  await dbm.closeAllOpenTabs();
   logToFile("Testing complete.");
 };
 
@@ -110,6 +107,7 @@ const scrapeResults = async (
   isBlankSearch: boolean,
   logToFile: Function,
 ) => {
+  const dbm = new DbmPage(page);
   let resultsFound = 0;
   const processedIds = new Set<string>();
   let rowsData: string[] = [];
@@ -156,7 +154,7 @@ const scrapeResults = async (
           const link = row.locator('span[id="link"]').first();
           await link.click();
 
-          const resultCount = await getTabText(page, 1, logToFile);
+          const resultCount = await dbm.getTabText(1, logToFile);
           rowsData.push(`Row ${rowId}: ${resultCount}`);
 
           await page

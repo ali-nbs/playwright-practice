@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
+import { BasePage } from "../../pages/BasePage";
 import { google } from "googleapis";
 import {
-  closeAllOpenTabs,
   ensureLoggedIn,
   navigateToSECFilings,
 } from "../../utils/helpers";
@@ -132,7 +132,7 @@ test("Cross-Reference Links Google Sheets Processor", async ({ page }) => {
     } catch (error: any) {
       console.error(`Error processing ${accNum}: ${error.message}`);
     } finally {
-      await closeAllOpenTabs(page);
+      await new BasePage(page).closeAllOpenTabs();
     }
   }
 });

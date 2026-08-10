@@ -209,27 +209,6 @@ export const ensureLoggedIn = async (
   }
 };
 
-// These now delegate to BasePage so there is ONE implementation. The
-// signatures are unchanged so existing (page, locator, value) call sites keep
-// working while flows are migrated to `app.fillAndEnter(locator, value)`.
-export const typeValue = async (
-  page: Page,
-  locator: Locator,
-  value: string,
-  delay: number = 0,
-) => {
-  await new BasePage(page).typeValue(locator, value, delay);
-};
-
-export const fillAndEnter = async (
-  page: Page,
-  locator: Locator,
-  value: string,
-  delay: number = 0,
-) => {
-  await new BasePage(page).fillAndEnter(locator, value, delay);
-};
-
 // getTabText throws a plain Error tagged with `.kind` when the result grid
 // shows an error state instead of a count, or when the app's crash screen
 // ("Oops! Something went wrong.") appears instead of the app entirely.
@@ -268,14 +247,6 @@ export const recoverFromAppCrash = async (
   logToFile("Recovery attempt complete.");
 };
 
-export const getTabText = async (
-  page: Page,
-  expectedIndex: number,
-  logToFile: Function,
-  isNeedLoadMoreResults: boolean = false,
-) =>
-  new BasePage(page).getTabText(expectedIndex, logToFile, isNeedLoadMoreResults);
-
 export const parseCount = (text: string): number => {
   const digits = text.replace(/[^0-9]/g, "");
   return digits ? parseInt(digits, 10) : 0;
@@ -292,100 +263,6 @@ export const parseCurrency = (value: string): number => {
   return num;
 };
 
-export const configureDisplayColumns = async (
-  page: Page,
-  selections: Record<string, string[]>,
-  options: ConfigureOptions = {},
-) => new BasePage(page).configureDisplayColumns(selections, options);
-
-// ---------------------------------------------------------------------
-// Doc View "document is loaded" wait.
-// ---------------------------------------------------------------------
-//
-// LIVE-CONFIRMED (2026-08-09, headed chromium run against Securities
-// Regulation & Compliance, "Laws & Regs: Select All", 9 docs, one probe
-// dumping every DocViewContainer's computed state after each View click):
-//
-//   after View on row 0: 1 container, tabindex="0",  textLen 344,766
-//   after View on row 1: 2 containers, tabindex="-1" + "0"
-//   after View on row 2: 3 containers, tabindex="-1","-1","0"
-//   after View on row 3: 3 containers, ALL tabindex="-1"
-//
-// Two facts fall out of that dump, and together they are the actual root
-// cause of "later docs are slow / time out after 30s even though the
-// document itself loads in a few seconds":
-//
-//  1. The app NEVER unmounts a previously opened document. Every "View"
-//     click mounts an ADDITIONAL `div#DocViewContainer` (duplicate id!)
-//     inside `DocumentViewer__Viewers___1usbl`, and every one of them
-//     stays `display:flex` / `visibility:visible` / non-zero box forever.
-//     So `page.locator('div[id="DocViewContainer"]')` matches a GROWING
-//     list, and old, stale documents are still "visible" to Playwright.
-//
-//  2. `tabindex` is a FOCUS marker, not a load marker. Exactly one
-//     container carries `tabindex="0"` (the focused one) and the rest are
-//     `tabindex="-1"` — and after focus moves elsewhere (clicking the
-//     "Docs: N" results tab, pressing a key, or the app restoring focus to
-//     the grid) EVERY container can sit at `tabindex="-1"`.
-//
-// The old assertion was `div[id="DocViewContainer"][tabindex="0"]`, i.e.
-// it waited for the document to be FOCUSED rather than for it to be
-// LOADED. For the first row focus happens to land on the viewer, so it
-// passed in ~6s. For later rows focus stays on the results grid, so the
-// selector matched nothing and the assertion burned its full 30s budget
-// and then reported "Doc View Content not Loaded" — even though the
-// document had rendered within a few seconds. That is why the failure
-// looked like "it got slower and slower for later docs" and why the 30s
-// timeout appeared to be exceeded by a document that clearly loaded.
-//
-// The `.or(...)` fallback branch could never rescue it either: the probe
-// shows `hasPdfPage:false` and 0 `div.pdfViewer > div[data-page-number]`
-// nodes for every document in this app, so that branch is dead code here.
-//
-// The fix waits for the real, focus-independent signal: a NEW container is
-// mounted (count grows past the pre-click baseline) and that newest
-// container is visible and has actually rendered text content.
-export const DOC_VIEW_CONTAINER_SELECTOR = 'div[id="DocViewContainer"]';
-
-export const countDocViewContainers = (page: Page) =>
-  page.locator(DOC_VIEW_CONTAINER_SELECTOR).count();
-
-// Minimum rendered characters before a viewer counts as "loaded". Real
-// documents in this app render hundreds of thousands of characters
-// (149,726 / 344,766 / 1,655,364 in the probe); an empty/skeleton viewer
-// renders almost nothing.
-const DOC_VIEW_MIN_TEXT_LENGTH = 200;
-
-export const waitForDocViewLoaded = async (
-  page: Page,
-  containersBeforeClick: number,
-  timeout: number = 30000,
-) => {
-  const containers = page.locator(DOC_VIEW_CONTAINER_SELECTOR);
-  const deadline = Date.now() + timeout;
-
-  // Phase 1: a new viewer must be mounted for the document just clicked.
-  // Falls through to phase 2 if the app reuses an existing viewer instead
-  // of mounting a new one (e.g. re-opening an already-open document).
-  while (Date.now() < deadline) {
-    if ((await containers.count()) > containersBeforeClick) break;
-    await page.waitForTimeout(200);
-  }
-
-  // Phase 2: the NEWEST viewer must be visible and have rendered content.
-  // `.last()` is the document just opened, since the app appends.
-  const newest = containers.last();
-  const remaining = Math.max(deadline - Date.now(), 1000);
-
-  await expect(newest).toBeVisible({ timeout: remaining });
-
-  await expect(async () => {
-    const textLength = await newest.evaluate(
-      (el) => (el.textContent || "").trim().length,
-    );
-    expect(textLength).toBeGreaterThan(DOC_VIEW_MIN_TEXT_LENGTH);
-  }).toPass({ timeout: Math.max(deadline - Date.now(), 1000) });
-};
 
 export const navigateToSECFilings = async (page: Page) => {
   await page.locator("text=/SEC Filings/i").first().click();
@@ -448,13 +325,7 @@ export const getRandomIndices = (maxRange: number, count: number): number[] => {
   return arr.sort(() => 0.5 - Math.random()).slice(0, count);
 };
 
-export const closeAllOpenTabs = async (page: Page) =>
-  new BasePage(page).closeAllOpenTabs();
 
-
-
-export const closeTabsToTheRight = async (page: Page) =>
-  new BasePage(page).closeTabsToTheRight();
 
 export function getTargetDateString(): string {
   const today = new Date();

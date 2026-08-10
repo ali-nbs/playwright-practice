@@ -1,10 +1,7 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import {
-  fillAndEnter,
-  getTabText,
   parseCount,
-  closeAllOpenTabs,
   getTargetDateString,
 } from "../utils/helpers";
 import { SePage } from "../pages/SePage";
@@ -43,14 +40,14 @@ export const runSEIndexingTest = async (page: Page, logToFile: Function) => {
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
-    await fillAndEnter(page, se.dateInput, scenario.date);
+    await se.fillAndEnter(se.dateInput, scenario.date);
     await se.search();
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile, false);
+    const textDateOnly = await se.getTabText(tabIndex++, logToFile, false);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
-    await fillAndEnter(page, se.keywordsInput, scenario.keyword);
+    await se.fillAndEnter(se.keywordsInput, scenario.keyword);
     // await se.search();
-    let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
+    let textWithKeyword = await se.getTabText(tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
     const textDateOnlyCount = parseCount(textDateOnly);
@@ -70,12 +67,11 @@ export const runSEIndexingTest = async (page: Page, logToFile: Function) => {
       await se.clearFilters();
       await page.waitForTimeout(1000);
 
-      await fillAndEnter(page, se.dateInput, scenario.date);
-      await fillAndEnter(page, se.keywordsInput, scenario.NotKeyword);
+      await se.fillAndEnter(se.dateInput, scenario.date);
+      await se.fillAndEnter(se.keywordsInput, scenario.NotKeyword);
       // await se.search();
 
-      const textWithNotKeyword = await getTabText(
-        page,
+      const textWithNotKeyword = await se.getTabText(
         tabIndex++,
         logToFile,
         false,
@@ -122,5 +118,5 @@ export const runSEIndexingTest = async (page: Page, logToFile: Function) => {
   }
 
   logToFile("\n--- End of Report ---");
-  await closeAllOpenTabs(page);
+  await se.closeAllOpenTabs();
 };

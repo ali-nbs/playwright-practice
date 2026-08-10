@@ -1,7 +1,6 @@
 // import { Page, expect } from "@playwright/test";
 // import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
-// import { closeAllOpenTabs, fillAndEnter, getTabText } from "../utils/helpers";
-
+// 
 // const IDENTIFIER = "bpc_compare";
 
 // export const runBpcCompareTest = async (page: Page, logToFile: Function) => {
@@ -239,7 +238,6 @@
 import { Page, expect } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { BpcPage } from "../pages/BpcPage";
-import { closeAllOpenTabs, fillAndEnter, getTabText } from "../utils/helpers";
 
 const IDENTIFIER = "bpc_compare";
 
@@ -353,12 +351,12 @@ export const runBpcCompareTest = async (page: Page, logToFile: Function) => {
   await page.locator("span").filter({ hasText: "Batch Add" }).click();
   const textArea = bpc.companyBatchAddTextarea;
   
-  await fillAndEnter(page, textArea, "AAPL", 20);
-  await fillAndEnter(page, textArea, "MSFT", 20);
-  await fillAndEnter(page, textArea, "TSLA", 20);
-  await fillAndEnter(page, textArea, "googl", 20);
-  await fillAndEnter(page, textArea, "AMZN", 20);
-  await fillAndEnter(page, textArea, "META", 20);
+  await bpc.fillAndEnter(textArea, "AAPL", 20);
+  await bpc.fillAndEnter(textArea, "MSFT", 20);
+  await bpc.fillAndEnter(textArea, "TSLA", 20);
+  await bpc.fillAndEnter(textArea, "googl", 20);
+  await bpc.fillAndEnter(textArea, "AMZN", 20);
+  await bpc.fillAndEnter(textArea, "META", 20);
   await page.locator(".PopupFooter__popup__footer___20Bi-").getByRole("button", { name: "OK" }).first().click({ force: true });
   await page.waitForTimeout(2000);
   await bpc.companyPopupOkBtn.click();
@@ -367,7 +365,7 @@ export const runBpcCompareTest = async (page: Page, logToFile: Function) => {
   //await page.waitForLoadState("networkidle");
   //logNetworkSummary("Initial Search Page Load");
 
-  await getTabText(page, 0, logToFile, false);
+  await bpc.getTabText(0, logToFile, false);
 
   async function executeProfileCompare(page: Page, logToFile: Function, tabName: string) {
     currentTabName = tabName;
@@ -549,7 +547,7 @@ export const runBpcCompareTest = async (page: Page, logToFile: Function) => {
   } catch (err: any) {
     logToFile(`\nFailed to dump to Google Sheets: ${err.message}`);
   }finally{
-    await closeAllOpenTabs(page);
+    await bpc.closeAllOpenTabs();
   }
 
   logToFile("\n--- End of Report ---");

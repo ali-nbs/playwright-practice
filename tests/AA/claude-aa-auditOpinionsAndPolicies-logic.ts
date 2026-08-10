@@ -2,11 +2,8 @@ import { expect, Page, Locator } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { AaPage } from "../pages/AaPage";
 import {
-  closeAllOpenTabs,
-  configureDisplayColumns,
   findResultRowByIndex,
   formatScenarioReport,
-  getTabText,
   parseCount,
   RowFinding,
 } from "../utils/helpers";
@@ -414,13 +411,13 @@ export const runAAAuditOpinionsAndPoliciesTest = async (
     await searchBtn.click();
 
     const currentTabIndex = tabIndex++;
-    const tabText = await getTabText(page, currentTabIndex, logToFile, false);
+    const tabText = await aa.getTabText(currentTabIndex, logToFile, false);
     const totalDocs = parseCount(tabText);
     logToFile(`Results for "${formValue}": ${tabText} (${totalDocs} docs)`);
 
     const docsToProcess = Math.min(DOCS_TO_PROCESS_PER_FORM, totalDocs);
     const findings: RowFinding[] = [];
-     await configureDisplayColumns(page, {
+     await aa.configureDisplayColumns({
             "Filing Info": ["Intelligize ID"],
             "Company Info": [],
           });
@@ -548,7 +545,7 @@ export const runAAAuditOpinionsAndPoliciesTest = async (
       }
     }
 
-    await closeAllOpenTabs(page);
+    await aa.closeAllOpenTabs();
 
     const { text, isValid: formValid } = formatScenarioReport(
       `Form: ${formValue}`,
@@ -582,5 +579,5 @@ export const runAAAuditOpinionsAndPoliciesTest = async (
   }
 
   logToFile("\n--- End of Report ---");
-  await closeAllOpenTabs(page);
+  await aa.closeAllOpenTabs();
 };

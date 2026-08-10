@@ -2,7 +2,10 @@ import { test, expect, Page } from "@playwright/test";
 import { google } from "googleapis";
 import path from "path";
 import fs from "fs";
-import { AUTH_PATH, closeAllOpenTabs } from "../..//utils/helpers";
+import {
+  AUTH_PATH,
+} from "../..//utils/helpers";
+import { BasePage } from "../../pages/BasePage";
 
 const SPREADSHEET_ID = "1ArHNlvrv-4vMedIlz5cohymFZtMhHhEK6FRAg7KqlIU";
 
@@ -242,7 +245,7 @@ test.describe("Batch Fiscal-Year Processor", () => {
             //     .click()
             //     .catch(() => {});
             // }
-            await closeAllOpenTabs(page);
+            await new BasePage(page).closeAllOpenTabs();
 
             continue;
           }
@@ -453,7 +456,7 @@ test.describe("Batch Fiscal-Year Processor", () => {
           //       await page.reload();
           //     }
           //   }
-          await closeAllOpenTabs(page);
+          await new BasePage(page).closeAllOpenTabs();
         }
       }
     }

@@ -12,8 +12,6 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-Indexing Report ---");
 
   const sf = new SfPage(page);
-
-
   logToFile("Exhibits to Filings: Checked");
 
   const testCases = [

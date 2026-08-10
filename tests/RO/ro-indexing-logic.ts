@@ -1,10 +1,7 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import {
-  fillAndEnter,
-  getTabText,
   parseCount,
-  closeAllOpenTabs,
   getTargetDateString,
 } from "../utils/helpers";
 import { RoPage } from "../pages/RoPage";
@@ -43,13 +40,13 @@ export const runRoIndexingTest = async (page: Page, logToFile: Function) => {
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
-    await fillAndEnter(page, ro.dateInput, scenario.date);
+    await ro.fillAndEnter(ro.dateInput, scenario.date);
     await ro.search();
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile, false);
+    const textDateOnly = await ro.getTabText(tabIndex++, logToFile, false);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
-    await fillAndEnter(page, ro.keywordsInput, scenario.keyword);
-    let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
+    await ro.fillAndEnter(ro.keywordsInput, scenario.keyword);
+    let textWithKeyword = await ro.getTabText(tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
     const textDateOnlyCount = parseCount(textDateOnly);
@@ -69,11 +66,10 @@ export const runRoIndexingTest = async (page: Page, logToFile: Function) => {
       await ro.clearFilters();
       await page.waitForTimeout(1000);
 
-      await fillAndEnter(page, ro.dateInput, scenario.date);
-      await fillAndEnter(page, ro.keywordsInput, scenario.NotKeyword);
+      await ro.fillAndEnter(ro.dateInput, scenario.date);
+      await ro.fillAndEnter(ro.keywordsInput, scenario.NotKeyword);
 
-      const textWithNotKeyword = await getTabText(
-        page,
+      const textWithNotKeyword = await ro.getTabText(
         tabIndex++,
         logToFile,
         false,
@@ -120,5 +116,5 @@ export const runRoIndexingTest = async (page: Page, logToFile: Function) => {
   }
 
   logToFile("\n--- End of Report ---");
-  await closeAllOpenTabs(page);
+  await ro.closeAllOpenTabs();
 };

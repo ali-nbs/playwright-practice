@@ -2,10 +2,8 @@ import { expect, Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { AaPage } from "../pages/AaPage";
 import {
-  closeAllOpenTabs,
   findResultRowByIndex,
   formatScenarioReport,
-  getTabText,
   parseCount,
   RowFinding,
 } from "../utils/helpers";
@@ -389,7 +387,7 @@ export const runAAAccountingDisclosuresAndPoliciesTest = async (
 
     const currentTabIndex = tabIndex++;
     lastResultsTabIndex = currentTabIndex;
-    const tabText = await getTabText(page, currentTabIndex, logToFile, false);
+    const tabText = await aa.getTabText(currentTabIndex, logToFile, false);
     const totalDocs = parseCount(tabText);
     logToFile(`Results for "${statusLabel}": ${tabText} (${totalDocs} docs)`);
 
@@ -468,5 +466,5 @@ export const runAAAccountingDisclosuresAndPoliciesTest = async (
   }
 
   logToFile("\n--- End of Report ---");
-  await closeAllOpenTabs(page);
+  await aa.closeAllOpenTabs();
 };

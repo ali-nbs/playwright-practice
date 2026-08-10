@@ -1,6 +1,8 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
-import { getTabText, closeAllOpenTabs, parseCount } from "../utils/helpers";
+import {
+  parseCount,
+} from "../utils/helpers";
 import { SrcPage } from "../pages/SrcPage";
 
 const IDENTIFIER = "src_docView";
@@ -14,7 +16,7 @@ export const runSRCDocViewTest = async (page: Page, logToFile: Function) => {
   await src.selectAllLawsAndRegs();
   await src.search();
 
-  const searchResult = await getTabText(page, tabIndex++, logToFile);
+  const searchResult = await src.getTabText(tabIndex++, logToFile);
   let findings = { text: "No Results Found", isValid: true };
   let docCount = 0;
 
@@ -42,7 +44,7 @@ export const runSRCDocViewTest = async (page: Page, logToFile: Function) => {
   }
   logToFile("\n--- End of Report ---");
 
-  await closeAllOpenTabs(page);
+  await src.closeAllOpenTabs();
 };
 
 /**

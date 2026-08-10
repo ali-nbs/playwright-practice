@@ -3,12 +3,7 @@ import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { AoePage } from "../pages/AoePage";
 import {
   ensureLoggedIn,
-  fillAndEnter,
-  getTabText,
   parseCount,
-  closeAllOpenTabs,
-  configureDisplayColumns,
-  closeTabsToTheRight,
   parseCurrency,
 } from "../utils/helpers";
 
@@ -66,8 +61,7 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
       searchInput += docType + "; ";
     }
 
-    await fillAndEnter(
-      page,
+    await aoe.fillAndEnter(
       aoe.docTypeInput,
       searchInput.slice(0, -2), // Remove the trailing "; "
       200,
@@ -107,8 +101,7 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
       .filter({ hasText: scenario.dealPoint })
       .locator("input")
       .first();
-    await fillAndEnter(
-      page,
+    await aoe.fillAndEnter(
       itemInputMinRange,
       scenario.minRange != null && scenario.minRange !== ""
         ? scenario.minRange
@@ -125,7 +118,7 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
         .filter({ hasText: scenario.dealPoint })
         .locator("input")
         .nth(1);
-      await fillAndEnter(page, itemInputMaxRange, scenario.maxRange, 100);
+      await aoe.fillAndEnter(itemInputMaxRange, scenario.maxRange, 100);
     }
 
     await page
@@ -137,11 +130,11 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
 
     await aoe.search();
 
-    const searchResultTextOnly = await getTabText(page, 0, logToFile);
+    const searchResultTextOnly = await aoe.getTabText(0, logToFile);
     logToFile(`Baseline (${scenario.id}): ${searchResultTextOnly}`);
 
     if (searchResultTextOnly.includes("Docs")) {
-      await configureDisplayColumns(page, {
+      await aoe.configureDisplayColumns({
         "Filing Info": ["Intelligize ID"],
         "Company Info": [],
         "Deal Points": scenario.configureDealPoints || [],
@@ -152,7 +145,7 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
       actualTarget = Math.min(scenario.resultGridVerificationCount, docsCount);
       console.log(`Actual target for scenario ${scenario.id}: ${actualTarget}`);
       findings = await scrapeResults(actualTarget, page, scenario, logToFile);
-      await closeAllOpenTabs(page);
+      await aoe.closeAllOpenTabs();
     }
     const scenarioBlock = [
       `Doc Count: ${actualTarget}`,
@@ -179,7 +172,7 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
     logToFile(`Sheet update failed: ${e.message}`);
   } finally {
     logToFile("\n--- End of AOE-Deal Points Report ---");
-    await closeAllOpenTabs(page);
+    await aoe.closeAllOpenTabs();
   }
 };
 

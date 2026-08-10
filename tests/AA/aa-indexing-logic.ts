@@ -401,9 +401,6 @@ import * as fs from "fs";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { AaPage } from "../pages/AaPage";
 import {
-  closeAllOpenTabs,
-  fillAndEnter,
-  getTabText,
   parseCount,
 } from "../utils/helpers";
 
@@ -688,14 +685,14 @@ export const runAAIndexingAndDocViewTest = async (
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
-    await fillAndEnter(page, dateInput, scenario.date);
+    await aa.fillAndEnter(dateInput, scenario.date);
     await searchBtn.click();
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile, false);
+    const textDateOnly = await aa.getTabText(tabIndex++, logToFile, false);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
-    await fillAndEnter(page, keywordsInput, scenario.keyword);
+    await aa.fillAndEnter(keywordsInput, scenario.keyword);
     const keywordTabIndex = tabIndex;
-    let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
+    let textWithKeyword = await aa.getTabText(tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
     const textDateOnlyCount = parseCount(textDateOnly);
@@ -715,12 +712,11 @@ export const runAAIndexingAndDocViewTest = async (
       await clearBtn.click();
       await page.waitForTimeout(1000);
 
-      await fillAndEnter(page, dateInput, scenario.date);
-      await fillAndEnter(page, keywordsInput, scenario.NotKeyword);
+      await aa.fillAndEnter(dateInput, scenario.date);
+      await aa.fillAndEnter(keywordsInput, scenario.NotKeyword);
       await searchBtn.click();
 
-      const textWithNotKeyword = await getTabText(
-        page,
+      const textWithNotKeyword = await aa.getTabText(
         tabIndex++,
         logToFile,
         false,
@@ -810,5 +806,5 @@ export const runAAIndexingAndDocViewTest = async (
   }
 
   logToFile("\n--- End of Report ---");
-  await closeAllOpenTabs(page);
+  await aa.closeAllOpenTabs();
 };

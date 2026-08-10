@@ -1,9 +1,6 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import {
-  closeAllOpenTabs,
-  fillAndEnter,
-  getTabText,
   parseCount,
 } from "../utils/helpers";
 import { NalPage } from "../pages/NalPage";
@@ -32,14 +29,14 @@ export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
-    await fillAndEnter(page, nal.dateInput, scenario.date);
+    await nal.fillAndEnter(nal.dateInput, scenario.date);
     await nal.search();
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile, false);
+    const textDateOnly = await nal.getTabText(tabIndex++, logToFile, false);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
-    await fillAndEnter(page, nal.keywordsInput, scenario.keyword);
+    await nal.fillAndEnter(nal.keywordsInput, scenario.keyword);
    // await nal.search();
-    let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
+    let textWithKeyword = await nal.getTabText(tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
     const textDateOnlyCount = parseCount(textDateOnly);
@@ -59,12 +56,11 @@ export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
       await nal.clearFilters();
       await page.waitForTimeout(1000);
 
-      await fillAndEnter(page, nal.dateInput, scenario.date);
-      await fillAndEnter(page, nal.keywordsInput, scenario.NotKeyword);
+      await nal.fillAndEnter(nal.dateInput, scenario.date);
+      await nal.fillAndEnter(nal.keywordsInput, scenario.NotKeyword);
       await nal.search();
 
-      const textWithNotKeyword = await getTabText(
-        page,
+      const textWithNotKeyword = await nal.getTabText(
         tabIndex++,
         logToFile,
         false,
@@ -111,5 +107,5 @@ export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
   }
 
   logToFile("\n--- End of Report ---");
-  await closeAllOpenTabs(page);
+  await nal.closeAllOpenTabs();
 };

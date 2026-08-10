@@ -1,7 +1,6 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { BpcPage } from "../pages/BpcPage";
-import { closeAllOpenTabs, getTabText } from "../utils/helpers";
 
 const IDENTIFIER = "bpc_displayBar";
 
@@ -121,7 +120,7 @@ export const runBpcDisplayBarTest = async (page: Page, logToFile: Function) => {
   await searchBtn.waitFor({ state: "visible" });
   await page.waitForTimeout(3000);
   await searchBtn.click();
-  await getTabText(page, 0, logToFile, false);
+  await bpc.getTabText(0, logToFile, false);
 
   // ── TAB 1: BOARD & COMPANY ───────────────────────────────────────────
   logToFile("\n📂 Processing Tab 1: Board & Company...");
@@ -133,7 +132,7 @@ export const runBpcDisplayBarTest = async (page: Page, logToFile: Function) => {
   await readyDirectorsTab.waitFor({ state: "visible", timeout: 30000 });
   await readyDirectorsTab.click({ force: true });
   
-  await getTabText(page, 0, logToFile, false);
+  await bpc.getTabText(0, logToFile, false);
   const directorNames = await fetchNames(page, logToFile, "Directors");
 
   // ── TAB 3: EXECUTIVES ─────────────────────────────────────────────────
@@ -142,7 +141,7 @@ export const runBpcDisplayBarTest = async (page: Page, logToFile: Function) => {
   await readyExecutiveTab.waitFor({ state: "visible", timeout: 30000 });
   await readyExecutiveTab.click({ force: true });
   
-  await getTabText(page, 0, logToFile, false);
+  await bpc.getTabText(0, logToFile, false);
   const executiveNames = await fetchNames(page, logToFile, "Executives");
 
   // ── COMPILE OVERALL SUMMARY payload ───────────────────────────────────
@@ -166,7 +165,7 @@ export const runBpcDisplayBarTest = async (page: Page, logToFile: Function) => {
   } catch (err: any) {
     logToFile(`\nFailed to dump to Google Sheets: ${err.message}`);
   }finally{
-    await closeAllOpenTabs(page);
+    await bpc.closeAllOpenTabs();
   }
 
   logToFile("\n--- End of Report ---");

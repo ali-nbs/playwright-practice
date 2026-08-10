@@ -3,12 +3,7 @@ import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { AoePage } from "../pages/AoePage";
 import {
   ensureLoggedIn,
-  fillAndEnter,
-  getTabText,
   parseCount,
-  closeAllOpenTabs,
-  configureDisplayColumns,
-  closeTabsToTheRight,
   getTargetDateString,
 } from "../utils/helpers";
 
@@ -86,7 +81,7 @@ export const runAccountantMappingTest = async (
         // await page.pause();
       }
 
-      await fillAndEnter(page, lawFirmSearchInput, scenario.lawFirm);
+      await aoe.fillAndEnter(lawFirmSearchInput, scenario.lawFirm);
       await page.waitForTimeout(1000);
 
       const targetRow = lawFirmModal
@@ -102,19 +97,19 @@ export const runAccountantMappingTest = async (
       await lawFirmModal.locator('button:has-text("OK")').click();
     } else {
       await page.waitForTimeout(500);
-      await fillAndEnter(page, aoe.lawFirmInput, scenario.lawFirm, 200);
+      await aoe.fillAndEnter(aoe.lawFirmInput, scenario.lawFirm, 200);
     }
 
     // continue;
 
     await aoe.search();
 
-    const searchResultTextOnly = await getTabText(page, 0, logToFile);
+    const searchResultTextOnly = await aoe.getTabText(0, logToFile);
     logToFile(`Baseline (${scenario.id}): ${searchResultTextOnly}`);
 
     if (searchResultTextOnly.includes("Docs")) {
       if (selectCheckboxes) {
-        await configureDisplayColumns(page, {
+        await aoe.configureDisplayColumns({
           "Filing Info": ["Intelligize ID"],
           "Company Info": [],
           "Deal Points": ["Law Firms"],
@@ -138,7 +133,7 @@ export const runAccountantMappingTest = async (
         logToFile,
       );
       //  await page.pause();
-      await closeAllOpenTabs(page);
+      await aoe.closeAllOpenTabs();
     }
     const scenarioBlock = [
       `Doc Count: ${actualTarget}`,
@@ -165,7 +160,7 @@ export const runAccountantMappingTest = async (
     logToFile(`Sheet update failed: ${e.message}`);
   } finally {
     logToFile("\n--- End of AOE-Accountant Report ---");
-    await closeAllOpenTabs(page);
+    await aoe.closeAllOpenTabs();
   }
 };
 const scrapeResults = async (
@@ -175,6 +170,7 @@ const scrapeResults = async (
   targetLawFirm: string,
   logToFile: Function,
 ) => {
+  const aoe = new AoePage(page);
   let resultsFound = 0;
   const processedIds = new Set<string>();
   let rowsData: string[] = [];
@@ -327,7 +323,7 @@ const scrapeResults = async (
             const searchInDoc = docViewWrapper
               .getByPlaceholder("Search")
               .first();
-            await fillAndEnter(page, searchInDoc, targetLawFirm, 200);
+            await aoe.fillAndEnter(searchInDoc, targetLawFirm, 200);
 
             const resultCount = page.locator(
               'span[class*="KeywordFinder__keyword-search__matches"]',

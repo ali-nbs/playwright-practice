@@ -1,10 +1,10 @@
 import { test, expect, Page } from "@playwright/test";
+import { BasePage } from "../../pages/BasePage";
 import { google } from "googleapis";
 import path from "path";
 import fs from "fs";
 import {
   AUTH_PATH,
-  closeAllOpenTabs,
   ensureLoggedIn,
   navigateToSECFilings,
 } from "../..//utils/helpers";
@@ -186,7 +186,7 @@ test.describe("Batch Fiscal-Year Processor", () => {
         } catch (error: any) {
           console.error(`Error processing ${accNum}: ${error.message}`);
         } finally {
-          await closeAllOpenTabs(page);
+          await new BasePage(page).closeAllOpenTabs();
         }
       }
     }

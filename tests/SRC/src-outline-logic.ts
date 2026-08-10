@@ -1,9 +1,6 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import {
-  fillAndEnter,
-  getTabText,
-  closeAllOpenTabs,
   parseCount,
 } from "../utils/helpers";
 import { SrcPage } from "../pages/SrcPage";
@@ -16,12 +13,12 @@ export const runSRCOutlineTest = async (page: Page, logToFile: Function) => {
   const src = new SrcPage(page);
   let tabIndex = 0;
 
-  await fillAndEnter(page, src.dateInput, "Last 60 Days");
-  await fillAndEnter(page, src.lawsAndRegsInput, "Securities Regs", 200);
+  await src.fillAndEnter(src.dateInput, "Last 60 Days");
+  await src.fillAndEnter(src.lawsAndRegsInput, "Securities Regs", 200);
 
   await src.search();
 
-  const searchResult = await getTabText(page, tabIndex++, logToFile);
+  const searchResult = await src.getTabText(tabIndex++, logToFile);
   let findings = { text: "No Results Found", isValid: true };
   let docCount = 0;
 
@@ -49,7 +46,7 @@ export const runSRCOutlineTest = async (page: Page, logToFile: Function) => {
   }
   logToFile("\n--- End of Report ---");
 
-  await closeAllOpenTabs(page);
+  await src.closeAllOpenTabs();
 };
 
 /**

@@ -1,9 +1,6 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import {
-  fillAndEnter,
-  getTabText,
-  closeAllOpenTabs,
   parseCount,
   getTargetDateString,
 } from "../utils/helpers";
@@ -21,10 +18,10 @@ export const runSRCCrawlingTest = async (page: Page, logToFile: Function) => {
   let tabIndex = 0;
 
   for (const scenario of testCases) {
-    await fillAndEnter(page, src.dateInput, scenario.date);
+    await src.fillAndEnter(src.dateInput, scenario.date);
     await src.search();
 
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile);
+    const textDateOnly = await src.getTabText(tabIndex++, logToFile);
     const resultCount = parseCount(textDateOnly);
     let findings = { text: "No Results Found", isValid: true };
 
@@ -49,7 +46,7 @@ export const runSRCCrawlingTest = async (page: Page, logToFile: Function) => {
     );
 
     await src.clearFilters();
-    await closeAllOpenTabs(page);
+    await src.closeAllOpenTabs();
   }
 
   const finalDump = allScenarioResults.join(

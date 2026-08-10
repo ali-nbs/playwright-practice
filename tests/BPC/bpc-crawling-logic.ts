@@ -2,8 +2,6 @@ import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { BpcPage } from "../pages/BpcPage";
 import {
-  closeAllOpenTabs,
-  getTabText,
   getTargetDateString,
   recoverFromAppCrash,
 } from "../utils/helpers";
@@ -11,6 +9,7 @@ import {
 const IDENTIFIER = "bpc_crawling";
 
 async function fetchSpansWithTitles(page: Page, logToFile: Function): Promise<string[]> {
+  const bpc = new BpcPage(page);
   const targetDate = getTargetDateString();
  // const targetDate = "06/18/2026";
   logToFile(`📅 Target date calculated: ${targetDate}`);
@@ -124,7 +123,7 @@ async function fetchSpansWithTitles(page: Page, logToFile: Function): Promise<st
         if (isNextBtnVisible) {
           await nextBtn.click();
           
-          await getTabText(page, 0, logToFile, false);
+          await bpc.getTabText(0, logToFile, false);
           
           pageNumber++;
           processedCount = 0;
@@ -177,7 +176,7 @@ let resultsSummary: string[] = [];
   await searchBtn.click();
 
   try {
-    await getTabText(page, 0, logToFile, false);
+    await bpc.getTabText(0, logToFile, false);
   } catch (e: any) {
     if (e?.kind === "crash") {
       logToFile(`💥 Initial search: app crashed — ${e.message}`);
@@ -198,7 +197,7 @@ let resultsSummary: string[] = [];
     await readyDirectorsTab.waitFor({ state: "visible", timeout: 30000 });
     await readyDirectorsTab.click({ force: true });
 
-    await getTabText(page, 0, logToFile, false);
+    await bpc.getTabText(0, logToFile, false);
     directorTitles = await fetchSpansWithTitles(page, logToFile);
   } catch (e: any) {
     if (e?.kind === "crash") {
@@ -217,7 +216,7 @@ let resultsSummary: string[] = [];
     await readyExecutiveTab.waitFor({ state: "visible", timeout: 30000 });
     await readyExecutiveTab.click({ force: true });
 
-    await getTabText(page, 0, logToFile, false);
+    await bpc.getTabText(0, logToFile, false);
     executiveTitles = await fetchSpansWithTitles(page, logToFile);
   } catch (e: any) {
     if (e?.kind === "crash") {
@@ -257,7 +256,7 @@ let resultsSummary: string[] = [];
   } catch (err: any) {
     logToFile(`\nFailed to dump to Google Sheets: ${err.message}`);
   }finally{
-    await closeAllOpenTabs(page);
+    await bpc.closeAllOpenTabs();
   }
 
   logToFile("\n--- End of Report ---");

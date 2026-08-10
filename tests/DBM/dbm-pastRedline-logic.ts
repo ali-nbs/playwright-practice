@@ -2,11 +2,7 @@ import { expect, Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { DbmPage } from "../pages/DbmPage";
 import {
-  fillAndEnter,
-  getTabText,
   parseCount,
-  closeAllOpenTabs,
-  configureDisplayColumns,
   parseCurrency,
 } from "../utils/helpers";
 
@@ -34,12 +30,11 @@ export const runPastRedlineVersionTest = async (
 
   await dbm.search();
 
-  const searchResultTextOnly = await getTabText(page, 0, logToFile);
+  const searchResultTextOnly = await dbm.getTabText(0, logToFile);
   logToFile(`Baseline ${searchDate}: ${searchResultTextOnly}`);
 
   if (searchResultTextOnly.includes("Results")) {
-    await configureDisplayColumns(
-      page,
+    await dbm.configureDisplayColumns(
       {
         "Filing Info": ["Accession #"],
         "Company Info": [],
@@ -55,7 +50,7 @@ export const runPastRedlineVersionTest = async (
     console.log(`Actual target for scenario ${actualTarget}`);
     findings = await scrapeResults(actualTarget, page, logToFile);
     //await page.pause();
-    await closeAllOpenTabs(page);
+    await dbm.closeAllOpenTabs();
 
     const scenarioBlock = [
       `Doc Count: ${actualTarget}`,
@@ -82,7 +77,7 @@ export const runPastRedlineVersionTest = async (
     logToFile(`Sheet update failed: ${e.message}`);
   } finally {
     logToFile("\n--- End of AOE-Deal Points Report ---");
-    await closeAllOpenTabs(page);
+    await dbm.closeAllOpenTabs();
   }
 };
 

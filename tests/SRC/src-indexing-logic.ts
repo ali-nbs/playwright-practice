@@ -1,10 +1,8 @@
 import { Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
+import { SrcPage } from "../pages/SrcPage";
 import {
-  fillAndEnter,
-  getTabText,
   parseCount,
-  closeAllOpenTabs,
   getTargetDateString,
 } from "../utils/helpers";
 
@@ -42,14 +40,14 @@ export const runSRCIndexingTest = async (page: Page, logToFile: Function) => {
 
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
-    await fillAndEnter(page, dateInput, scenario.date);
+    await new SrcPage(page).fillAndEnter(dateInput, scenario.date);
     await searchBtn.click();
-    const textDateOnly = await getTabText(page, tabIndex++, logToFile, true);
+    const textDateOnly = await new SrcPage(page).getTabText(tabIndex++, logToFile, true);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
-    await fillAndEnter(page, keywordsInput, scenario.keyword);
+    await new SrcPage(page).fillAndEnter(keywordsInput, scenario.keyword);
 
-    let textWithKeyword = await getTabText(page, tabIndex++, logToFile, false);
+    let textWithKeyword = await new SrcPage(page).getTabText(tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
     const textDateOnlyCount = parseCount(textDateOnly);
@@ -61,11 +59,10 @@ export const runSRCIndexingTest = async (page: Page, logToFile: Function) => {
 
     if (!isValid) {
       await clearBtn.click();
-      await fillAndEnter(page, dateInput, scenario.date);
-      await fillAndEnter(page, keywordsInput, scenario.NotKeyword);
+      await new SrcPage(page).fillAndEnter(dateInput, scenario.date);
+      await new SrcPage(page).fillAndEnter(keywordsInput, scenario.NotKeyword);
 
-      const textWithNotKeyword = await getTabText(
-        page,
+      const textWithNotKeyword = await new SrcPage(page).getTabText(
         tabIndex++,
         logToFile,
         false,
@@ -108,5 +105,5 @@ export const runSRCIndexingTest = async (page: Page, logToFile: Function) => {
     logToFile(`\nFailed to dump to Google Sheets: ${err.message}`);
   }
   logToFile("\n--- End of Report ---");
-  await closeAllOpenTabs(page);
+  await new SrcPage(page).closeAllOpenTabs();
 };

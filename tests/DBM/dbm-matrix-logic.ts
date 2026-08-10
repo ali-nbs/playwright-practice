@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
-import { closeAllOpenTabs } from "../utils/helpers";
+import { DbmPage } from "../pages/DbmPage";
 
 const IDENTIFIER = "dbm_matrix";
 
@@ -132,6 +132,6 @@ export const runMatrixTest = async (page: Page, logToFile: Function) => {
     logToFile(`❌ Sheet update failed: ${e.message}`);
   } finally {
     logToFile("\n--- End of DBM Report ---");
-    await closeAllOpenTabs(page);
+    await new DbmPage(page).closeAllOpenTabs();
   }
 };

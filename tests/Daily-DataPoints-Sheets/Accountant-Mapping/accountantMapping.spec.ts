@@ -1,11 +1,9 @@
 import { test, expect, Page } from "@playwright/test";
+import { BasePage } from "../../pages/BasePage";
 import { google } from "googleapis";
 import * as fs from "fs";
 import {
-  closeAllOpenTabs,
-  configureDisplayColumns,
   ensureLoggedIn,
-  getTabText,
   AUTH_PATH,
   navigateToAgreementsAndOtherExhibits,
 } from "../../utils/helpers";
@@ -80,7 +78,7 @@ test("Accountant Mapping Google Sheets Processor", async ({ page }) => {
 
       await page.getByRole("button", { name: /^Search$/i }).click();
 
-      const searchResult = await getTabText(page, 0, () => {}, false);
+      const searchResult = await new BasePage(page).getTabText(0, () => {}, false);
 
       if (searchResult.includes("No Results Found")) {
         console.log(`No results for ${intelligizeNo}, skipping...`);
@@ -92,11 +90,11 @@ test("Accountant Mapping Google Sheets Processor", async ({ page }) => {
             values: [["", "FALSE", "No Result Found", "Hafiz Ali"]],
           },
         });
-        await closeAllOpenTabs(page);
+        await new BasePage(page).closeAllOpenTabs();
         continue;
       }
       if (isFirstSearch) {
-        await configureDisplayColumns(page, {
+        await new BasePage(page).configureDisplayColumns({
           "Filing Info": [],
           "Company Info": [],
           "Deal Points": ["Financial Firms", "Law Firms"],
@@ -129,7 +127,7 @@ test("Accountant Mapping Google Sheets Processor", async ({ page }) => {
             ],
           },
         });
-        await closeAllOpenTabs(page);
+        await new BasePage(page).closeAllOpenTabs();
       } else {
         for (let i = 0; i < count; i++) {
           const firm = allFirms.nth(i);
@@ -236,7 +234,7 @@ test("Accountant Mapping Google Sheets Processor", async ({ page }) => {
       });
       firmFoundInPopUp = "";
 
-      await closeAllOpenTabs(page);
+      await new BasePage(page).closeAllOpenTabs();
     } catch (e) {
       console.log("error: ", e);
     }

@@ -1,6 +1,5 @@
 import { expect, Page, test } from "@playwright/test";
 import {
-  getTabText,
   getRandomIndices,
   parseCount,
 } from "../../utils/helpers";
