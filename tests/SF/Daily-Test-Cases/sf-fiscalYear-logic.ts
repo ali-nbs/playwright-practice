@@ -47,7 +47,7 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
   await configureFiscalYearColumns(page);
 
   const docsCount = parseCount(textDateOnly);
-  const actualTarget = Math.min(5, docsCount); 
+  const actualTarget = Math.min(5, docsCount);
   const findings = await scrapeFiscalYearResults(actualTarget, page);
 
   const scenarioBlock = [
@@ -96,7 +96,7 @@ const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
           if (!isValid.status) failureCompanies.push(anchorLinks[0]);
 
           processedIds.add(rowId);
-          await activeTab.nth(1).click(); 
+          await activeTab.nth(1).click();
           resultsFound++;
         } catch (e) {
           continue;
@@ -165,6 +165,24 @@ const validateFiscalYear = async (
   await link.click();
 
   try {
+    const docFrame = page
+      .locator('iframe[src*="/SECFilings/Documents/"]')
+      .first()
+      .contentFrame();
+    const currentFYELocator = docFrame
+      .locator('ix\\:nonnumeric[name="dei:CurrentFiscalYearEndDate"]')
+      .first();
+    const docPeriodLocator = docFrame
+      .locator('ix\\:nonnumeric[name="dei:DocumentPeriodEndDate"]')
+      .first();
+
+    let fiscalYearEndValue: string | null = null;
+
+
+    await currentFYELocator
+      .isVisible({ timeout: 10000 })
+      .catch(() => false)
+    await sf.ixbrlTabByText.waitFor({ state: "visible", timeout: 30000 });
     await sf.ixbrlTabByText.click();
     await sf.ex101Tab.click();
 
@@ -205,7 +223,7 @@ const validateFiscalYear = async (
         reason: "Fiscal Year End not found in XBRL.",
       };
     }
-    
+
     const normalize = (value: string) => value.replace(/^--/, "").trim();
 
     const isMatch =
@@ -243,7 +261,7 @@ const configureFiscalYearColumns = async (page: Page) => {
       .locator("._checkbox__icon_1xotg_257");
     await mainCheckbox.click();
     await page.waitForTimeout(500);
-    await mainCheckbox.click(); 
+    await mainCheckbox.click();
 
     if (section === "Filing Info") {
       await page

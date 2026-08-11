@@ -156,7 +156,7 @@ test.describe("Daily Test Cases - Master Suite", () => {
     await executeStep("SF CompanyType SRC Shell WKSI EGC",() => runCompanyType_SRC_Shell_WKSI_EGC_Test(page, logToFile),"SEC Filings");
     await executeStep("SF CompanyType SPAC REIT BDC FPI INV", () => runCompanyType_SPAC_REIT_BDC_FPI_INV_Test(page, logToFile), "SEC Filings");
     await executeStep("SF PDEE",                          () => runPDEETest(page, logToFile),                            "SEC Filings");
-    //await executeStep("SF Fiscal Year",                   () => runFiscalYearTest(page, logToFile),                      "SEC Filings");
+    await executeStep("SF Fiscal Year",                   () => runFiscalYearTest(page, logToFile),                      "SEC Filings");
 
     // ── SEC Enforcement Suite ──────────────────────────────────────────────
     await safeTransition("SEC Filings", "SEC Enforcement");

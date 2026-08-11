@@ -31,7 +31,7 @@ const SHEET_NAMES = [
   //   "4/22",
   //   "4/23",
 
- "8/7",
+ "8/10",
 ];
 const KEY_FILE = path.resolve(process.cwd(), "credentials.json");
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
