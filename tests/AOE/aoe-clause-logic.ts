@@ -92,6 +92,7 @@ export const runAoeClauseTest = async (page: Page, logToFile: Function) => {
       continue;
     }
 
+    await aoe.selectInfoOption("Filing Info", "Intelligize ID");
     const idsWithClause = await collectIds(countWithClause);
     await aoe.closeCurrentSearchTab();
 
