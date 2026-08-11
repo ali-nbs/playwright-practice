@@ -7,6 +7,15 @@ export type ConfigureOptions = {
 };
 
 /**
+ * The background colour the app paints on a keyword highlight.
+ *
+ * Every app renders the same yellow, so the flows that verify highlighting
+ * compare against this one constant instead of repeating the rgb() triple.
+ * If a rebuild ever changes the shade, it is edited here once.
+ */
+export const HIGHLIGHT_BG_COLOR = "rgb(252, 234, 151)";
+
+/**
  * getTabText throws a plain Error tagged with `.kind` when the result grid
  * shows an error state instead of a count, or when the app's crash screen
  * ("Oops! Something went wrong.") appears instead of the app entirely.
@@ -798,4 +807,416 @@ export class BasePage {
       expect(textLength).toBeGreaterThan(200);
     }).toPass({ timeout });
   }
+
+  // ---------------------------------------------------------------
+  // Search API response
+  // ---------------------------------------------------------------
+
+  /**
+   * Waits for the /api/search call a search triggers and returns its JSON.
+   *
+   * The count-driven flows use `TotalRecords` from this payload instead of
+   * reading the "Docs: N" tab, because they need the real total before the
+   * grid has finished rendering. Throws on a non-2xx so a server error fails
+   * the scenario immediately rather than after a 90s tab-text timeout.
+   */
+  async waitForSearchResponse(timeout = 90000) {
+    const response = await this.page.waitForResponse(
+      (r) => r.url().includes("/api/search"),
+      { timeout },
+    );
+
+    if (!response.ok()) {
+      throw new Error(`Search API failed with status: ${response.status()}`);
+    }
+
+    return response.json();
+  }
+
+  // ---------------------------------------------------------------
+  // Result grid - data-ref rows
+  // ---------------------------------------------------------------
+
+  /**
+   * Result rows addressed by their `data-ref` attribute.
+   *
+   * This is a DIFFERENT row locator from `rows` above and the two are not
+   * interchangeable. `rows` walks whatever the virtualized grid has drawn
+   * and de-dupes on the row's `id`, which the grid RE-USES as you scroll.
+   * `data-ref` ("search_...") is stable per document, so the flows that
+   * must visit every document exactly once key off this one instead.
+   */
+  get refRows(): Locator {
+    return this.page.locator('[data-test="resultRow"][data-ref^="search_"]');
+  }
+
+  /** Scrolls the result grid down by one step. */
+  async scrollResultGrid(step: number = 600, settleMs: number = 300) {
+    await this.scroller.evaluate((el, by) => el.scrollBy(0, by), step);
+    await this.page.waitForTimeout(settleMs);
+  }
+
+  /**
+   * Walks the grid by `data-ref` and runs `handleRow` once per document,
+   * scrolling until `targetCount` rows are seen or the grid stops growing.
+   *
+   * Kept separate from `forEachResultRow` on purpose: this one stops as soon
+   * as a scroll yields no new rows (so it finishes on a short result set
+   * instead of spinning), and it does not swallow row errors. Flows that
+   * need the id-based, skip-and-continue behaviour keep using
+   * `forEachResultRow`.
+   */
+  async forEachRefRow(
+    targetCount: number,
+    handleRow: (row: Locator, ref: string) => Promise<void>,
+  ) {
+    const rows = this.refRows;
+    const processed = new Set<string>();
+    let previousCount = 0;
+
+    while (processed.size < targetCount) {
+      const visibleRowCount = await rows.count();
+
+      for (let i = 0; i < visibleRowCount; i++) {
+        const row = rows.nth(i);
+        const ref = await row.getAttribute("data-ref");
+        if (!ref || processed.has(ref)) continue;
+
+        processed.add(ref);
+        await handleRow(row, ref);
+      }
+
+      if (processed.size === previousCount) break;
+
+      previousCount = processed.size;
+      await this.scrollResultGrid();
+    }
+  }
+
+  // ---------------------------------------------------------------
+  // Intelligize ID
+  // ---------------------------------------------------------------
+
+  /**
+   * Reads a row's Intelligize ID. Requires the "Intelligize ID" display
+   * column to have been switched on first (see selectInfoOption).
+   */
+  async rowIntelligizeId(row: Locator): Promise<string> {
+    const id = await row
+      .locator('span:has-text("Intelligize ID")')
+      .locator("xpath=following-sibling::span")
+      .first()
+      .innerText();
+
+    return id.trim();
+  }
+
+  /** Reads the Intelligize ID from the open document's Info panel. */
+  async openDocIntelligizeId(): Promise<string> {
+    const panel = this.page
+      .locator('div:has-text("Filed")')
+      .locator('xpath=ancestor::div[contains(@class,"info-panel")]');
+
+    const row = panel
+      .locator("div")
+      .filter({ has: this.page.getByText("Intelligize ID", { exact: true }) })
+      .first();
+
+    await row.scrollIntoViewIfNeeded();
+
+    const value = await row.locator("li span").first().innerText();
+
+    return value.trim();
+  }
+
+  // ---------------------------------------------------------------
+  // Display columns - Info popup
+  // ---------------------------------------------------------------
+
+  /**
+   * Ticks ONE option in a display-column section, e.g.
+   * selectInfoOption("Filing Info", "Intelligize ID").
+   *
+   * This is not the same control as `configureDisplayColumns`: that one
+   * clears a whole section and re-picks it, which would drop columns an
+   * earlier call had already switched on. This adds a single column and
+   * leaves everything else alone, which is what the flows that need both
+   * "Intelligize ID" and one data column require.
+   */
+  async selectInfoOption(section: string, option: string) {
+    await this.page.getByText(section, { exact: true }).first().click();
+
+    const container = this.page
+      .locator('[class*="checkbox-node__children"]')
+      .first();
+
+    const label = container
+      .locator("label")
+      .filter({ hasText: option })
+      .first();
+
+    await label.scrollIntoViewIfNeeded();
+    await label.waitFor({ state: "visible" });
+
+    // The label and its checkbox are linked by `for`/`id` rather than
+    // nesting, so the input has to be resolved through the attribute.
+    const forAttr = await label.getAttribute("for");
+    if (!forAttr) {
+      throw new Error(`No 'for' attribute for ${option}`);
+    }
+
+    const checkbox = this.page.locator(`input[id="${forAttr}"]`);
+
+    if (!(await checkbox.isChecked())) {
+      await label.click();
+    }
+
+    await this.applyBtn.click();
+  }
+
+  /**
+   * Checks or unchecks a filter-bar checkbox by its input id, e.g.
+   * setCheckboxState("-ExhibitsToFilings", false).
+   *
+   * Clicks only when the box is not already in the wanted state, because
+   * these checkboxes toggle and an unconditional click would undo it.
+   */
+  async setCheckboxState(inputId: string, shouldBeChecked: boolean) {
+    const checkbox = this.page.locator(`#${inputId}`);
+    const label = this.page.locator(`label[for="${inputId}"]`);
+
+    if ((await checkbox.isChecked()) !== shouldBeChecked) {
+      await label.click();
+    }
+
+    await expect(checkbox).toBeChecked({ checked: shouldBeChecked });
+  }
+
+  // ---------------------------------------------------------------
+  // Search type / filter panel
+  // ---------------------------------------------------------------
+
+  /** Switches the keyword box between "Boolean" and "Conceptual". */
+  async selectSearchType(value: string) {
+    await this.page.getByRole("button", { name: value }).click();
+  }
+
+  /** Collapses/expands the left filter panel to free up grid width. */
+  async toggleFiltersPanel() {
+    const filtersToggleBtn = this.page
+      .locator('[data-notice="toggle-panel-button"]')
+      .first();
+
+    await filtersToggleBtn.waitFor({ state: "visible" });
+    await filtersToggleBtn.click();
+  }
+
+  // ---------------------------------------------------------------
+  // Document viewer - stepping through documents
+  // ---------------------------------------------------------------
+
+  /**
+   * Opens a row's document by hovering it first.
+   *
+   * The View button only renders on hover, so scrollIntoViewIfNeeded +
+   * hover are both required before the click. This is the count-driven
+   * flows' way in; `openDocument` above is the one that also waits for the
+   * document body, and they are kept apart because these flows step through
+   * documents with Next instead of re-opening from the grid.
+   */
+  async clickViewForRow(row: Locator) {
+    await row.scrollIntoViewIfNeeded();
+    await row.hover();
+
+    await row.locator('button:has-text("View")').click();
+  }
+
+  /** Steps to the next document via the viewer's own Next control. */
+  async clickNextDocument() {
+    const nextButton = this.page.locator('button[title="Next"]').first();
+
+    await expect(nextButton).toBeVisible();
+    await expect(nextButton).toBeEnabled();
+
+    await nextButton.click();
+    await this.page
+      .locator('[data-notice="tab-icon-DOCUMENT"]')
+      .waitFor({ state: "visible", timeout: 10000 });
+  }
+
+  /** Opens the Info tab of the document currently in the viewer. */
+  async openInfoTab() {
+    await this.page.getByTitle("Info", { exact: true }).click();
+  }
+
+  /** Closes the open document tab and waits for the grid to come back. */
+  async closeCurrentDocumentTab() {
+    const selectedTab = this.page.locator('[class*="tab--selected"]');
+    const closeButton = selectedTab.locator('span[class*="Close"]');
+
+    await expect(closeButton).toBeVisible();
+    await closeButton.click();
+
+    await expect(this.refRows.first()).toBeVisible();
+  }
+
+  /**
+   * Closes the selected search tab.
+   *
+   * Same click as closeCurrentDocumentTab but deliberately does NOT wait for
+   * result rows afterwards - the flows that call this are about to run a
+   * fresh search, so there is no grid left to wait for.
+   */
+  async closeCurrentSearchTab() {
+    const selectedTab = this.page.locator('[class*="tab--selected"]');
+    const closeButton = selectedTab.locator('span[class*="Close"]');
+
+    await expect(closeButton).toBeVisible();
+    await closeButton.click();
+  }
+
+  // ---------------------------------------------------------------
+  // Keyword highlighting
+  // ---------------------------------------------------------------
+
+  /**
+   * True when the open document shows at least one keyword highlight.
+   *
+   * Scrolls to the bottom up to 10 times because the viewer renders the
+   * document lazily and the first highlight can be below the fold. Stops
+   * early once the page stops growing.
+   *
+   * `extraSelectors` exists because the apps do not all mark highlights up
+   * the same way - DBM and Insiders use a <customhighlight> tag the others
+   * never emit - so each app's page class passes its own additions rather
+   * than every app searching for every variant.
+   */
+  async hasDocumentHighlight(extraSelectors: string[] = []): Promise<boolean> {
+    const selector = [
+      "em.highlight", // main keyword highlight
+      ".Tablehighlight", // table highlight
+      ".highlight-terms", // clickable highlight terms
+      "em.ixbrl-highlight", // ixbrl highlights
+      ...extraSelectors,
+    ].join(",");
+
+    const locator = this.page.locator(selector);
+
+    let previousHeight = 0;
+
+    for (let i = 0; i < 10; i++) {
+      if ((await locator.count()) > 0) {
+        return true;
+      }
+
+      const currentHeight = await this.page.evaluate(
+        () => document.body.scrollHeight,
+      );
+
+      if (currentHeight === previousHeight) break;
+
+      previousHeight = currentHeight;
+
+      await this.page.evaluate(() =>
+        window.scrollTo(0, document.body.scrollHeight),
+      );
+      await this.page.waitForTimeout(300);
+    }
+
+    return (await locator.count()) > 0;
+  }
+
+  /**
+   * Clicks the first highlighted snippet in the outline panel so the viewer
+   * jumps to it. Returns false when the document has no snippet to click.
+   *
+   * The wait for the highlight inside the iframe is deliberately swallowed:
+   * a document that never renders one is exactly what the caller is trying
+   * to detect, so it must reach its own check instead of throwing here.
+   */
+  async clickFirstHighlightedSnippet(): Promise<boolean> {
+    const snippets = this.page.locator(
+      ".SectionTree-styles__section-tree___1Y7yk em.highlight",
+    );
+
+    if ((await snippets.count()) === 0) return false;
+
+    await snippets.first().click();
+
+    await this.page
+      .locator(".loading-spinner")
+      .waitFor({ state: "hidden", timeout: 5000 })
+      .catch(() => {});
+
+    const docFrame = this.page.frameLocator('iframe[id^="document_"]');
+
+    await docFrame
+      .locator("em.highlight")
+      .first()
+      .waitFor({ state: "visible", timeout: 10000 })
+      .catch(() =>
+        console.log(
+          "Highlight tag did not appear in the document within the timeout window.",
+        ),
+      );
+
+    return true;
+  }
+
+  /**
+   * Checks a row's highlights: whether there are any, and whether they all
+   * carry the expected highlight background.
+   *
+   * `highlightSelector` differs per app (<em class="highlight"> vs
+   * <customhighlight>), so each app's page class supplies its own.
+   */
+  async checkRowHighlights(
+    row: Locator,
+    highlightSelector: string,
+  ): Promise<{ found: boolean; invalidColor: boolean }> {
+    const highlights = row.locator(highlightSelector);
+    const count = await highlights.count();
+
+    if (count === 0) {
+      return { found: false, invalidColor: false };
+    }
+
+    let invalidColor = false;
+
+    for (let i = 0; i < count; i++) {
+      const color = await highlights
+        .nth(i)
+        .evaluate((el) => getComputedStyle(el).backgroundColor);
+
+      if (color !== HIGHLIGHT_BG_COLOR) {
+        invalidColor = true;
+        break;
+      }
+    }
+
+    return { found: true, invalidColor };
+  }
+
+  // ---------------------------------------------------------------
+  // Grid date column
+  // ---------------------------------------------------------------
+
+  /**
+   * Switches the grid's date column from `fromLabel` to `toLabel` (e.g.
+   * "Date Filed" -> "Date Released") when it is not already showing it.
+   *
+   * The dropdown is dismissed by clicking its own backdrop; Escape leaves
+   * the column unchanged, so it is not used here.
+   */
+  async switchDateColumn(fromLabel: string, toLabel: string) {
+    if ((await this.page.getByText(toLabel, { exact: true }).count()) > 0) {
+      return;
+    }
+
+    await this.page.getByText(fromLabel, { exact: true }).last().click();
+    await this.page.locator("li", { hasText: toLabel }).click();
+    await this.page.locator("div.styles__background___2AkxG").click();
+    await this.page.waitForLoadState();
+  }
+
 }

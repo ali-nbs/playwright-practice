@@ -287,4 +287,138 @@ export class SfPage extends BasePage {
   periodicFilingCells(row: Locator): Locator {
     return row.locator("td.text");
   }
+
+  // ---------------------------------------------------------------
+  // Filters used by the count-driven flows
+  // ---------------------------------------------------------------
+
+  /** Accounting Standard filter, e.g. "U.S. GAAP". */
+  get accountingStandardInput(): Locator {
+    return this.page.getByTestId("accountingStandard-input");
+  }
+
+  /** Accelerated Status filter, e.g. "Large Accelerated Filer". */
+  get acceleratedStatusInput(): Locator {
+    return this.page.getByTestId("acceleratedStatus-input");
+  }
+
+  /** Accountant Fees filter. Opens a picker rather than taking free text. */
+  get accountantFeesInput(): Locator {
+    return this.page.getByTestId("accountantFees-input");
+  }
+
+  /**
+   * Types a form list into the Forms filter and commits it.
+   *
+   * Uses pressSequentially rather than BasePage.fillAndEnter because the
+   * Forms box parses a ";"-separated list as it is typed and drops entries
+   * when the characters arrive faster than its own parsing.
+   */
+  async applyFormTypes(value: string, delay: number = 700) {
+    await this.formsInput.pressSequentially(value, { delay });
+    await this.page.keyboard.press("Enter");
+  }
+
+  /** Picks one Accountant Fees option, e.g. "Any Fees", and confirms. */
+  async applyAccountantFee(value: string) {
+    await this.accountantFeesInput.click();
+
+    await this.page
+      .locator("label")
+      .filter({ hasText: value })
+      .first()
+      .click();
+
+    await this.okBtn.click();
+  }
+
+  // ---------------------------------------------------------------
+  // Result-row values (need the matching display column switched on)
+  // ---------------------------------------------------------------
+
+  /** A row's "Accounting Std." value. */
+  async rowAccountingStandard(row: Locator): Promise<string> {
+    const value = await row
+      .locator('span:has-text("Accounting Std.")')
+      .locator("xpath=following-sibling::span/p")
+      .innerText();
+
+    return value.trim();
+  }
+
+  /** A row's "Accelerated Status" value. */
+  async rowAcceleratedStatus(row: Locator): Promise<string> {
+    const value = await row
+      .locator('span:has-text("Accelerated Status")')
+      .locator("xpath=following-sibling::span/p")
+      .innerText();
+
+    return value.trim();
+  }
+
+  /**
+   * True when a row shows any Accountant Fees value.
+   *
+   * Returns a boolean rather than the text because the fee cell holds
+   * several sub-values and the check is only ever "is anything there".
+   */
+  async rowHasAccountantFee(row: Locator): Promise<boolean> {
+    const value = await row
+      .locator('span:has-text("Accountant Fees")')
+      .locator("xpath=following-sibling::span")
+      .textContent()
+      .catch(() => null);
+
+    return !!value && value.trim() !== "";
+  }
+
+  /** A row's filing/release date cell. */
+  async rowDate(row: Locator): Promise<string> {
+    const date = await row
+      .locator(".styles__filing-date-value-column___2pu1v")
+      .textContent();
+
+    return date?.trim() ?? "";
+  }
+
+  // ---------------------------------------------------------------
+  // Document viewer - Outline tab
+  // ---------------------------------------------------------------
+
+  /**
+   * True when the open document's Outline tab rendered.
+   *
+   * Detected by its "Search Outline" box rather than the tab itself: the
+   * tab is present even for documents that have no outline, so only the
+   * search box distinguishes a real outline from an empty one.
+   */
+  async isOutlineTabActive(): Promise<boolean> {
+    const searchBox = this.page.getByRole("textbox", {
+      name: "Search Outline",
+    });
+
+    try {
+      await searchBox.first().waitFor({ timeout: 5000 });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // ---------------------------------------------------------------
+  // Snippets
+  // ---------------------------------------------------------------
+
+  /** The snippet block inside a result row. */
+  rowSnippets(row: Locator): Locator {
+    return row.locator(
+      ".Snippets-styles__result-row__snippet__content___2-_PD",
+    );
+  }
+
+  /** Keyword highlights inside a result row. */
+  rowKeywordHighlights(row: Locator): Locator {
+    return row.locator("em.highlight");
+  }
+
 }
