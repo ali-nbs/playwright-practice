@@ -29,4 +29,20 @@ export class SePage extends BasePage {
   get keywordsInput(): Locator {
     return this.page.locator('[data-testid="keywords-input"]');
   }
+
+  // ---------------------------------------------------------------
+  // Result table
+  // ---------------------------------------------------------------
+
+  /**
+   * Keyword highlights in the results table.
+   *
+   * SE renders results as a document table and marks highlights with a
+   * <customhighlight> tag that is not scoped to an individual row, so this
+   * matches across the whole table rather than per row.
+   */
+  get tableHighlights(): Locator {
+    return this.page.locator('[class*="DocumentTable"] customhighlight');
+  }
+
 }

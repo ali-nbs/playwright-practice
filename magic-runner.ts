@@ -39,6 +39,27 @@ import { runAAAccountingDisclosuresAndPoliciesTest } from "./tests/AA/claude-aa-
 import { runBpcProfileViewTest } from "./tests/BPC/bpc-profileView-logic";
 import { runAAAuditOpinionsAndPoliciesTest } from "./tests/AA/claude-aa-auditOpinionsAndPolicies-logic";
 
+// ---- Test cases ported from the peer repo ----
+import { runBooleanHighlightTest } from "./tests/SF/Daily-Test-Cases/sf-booleanHighlight-logic";
+import { runAccountingStandardTest } from "./tests/SF/Daily-Test-Cases/sf-accountingStandard-logic";
+import { runAcceleratedStatusTest } from "./tests/SF/Daily-Test-Cases/sf-acceleratedStatus-logic";
+import { runAccountantFeesTest } from "./tests/SF/Daily-Test-Cases/sf-accountantFees-logic";
+import { runSnippetsTest } from "./tests/SF/Daily-Test-Cases/sf-snippets-logic";
+import { runReleaseDateTest } from "./tests/SF/Daily-Test-Cases/sf-releaseDate-logic";
+import { runOutlineTest } from "./tests/SF/Daily-Test-Cases/sf-outline-logic";
+import {
+  runAoeBooleanHighlightTest,
+  runAoeConceptualHighlightTest,
+} from "./tests/AOE/aoe-keywordHighlight-logic";
+import { runAoeReleaseDateTest } from "./tests/AOE/aoe-releaseDate-logic";
+import { runAoeClauseTest } from "./tests/AOE/aoe-clause-logic";
+import {
+  runDbmBooleanHighlightTest,
+  runDbmConceptualHighlightTest,
+} from "./tests/DBM/dbm-keywordHighlight-logic";
+import { runSrcConceptualHighlightTest } from "./tests/SRC/src-conceptualHighlight-logic";
+import { runSeBooleanHighlightTest } from "./tests/SE/se-booleanHighlight-logic";
+
 
 async function devSandbox() {
   const CDP_URL = "http://localhost:9222";
@@ -83,6 +104,23 @@ async function devSandbox() {
   //  await runAAIndexingAndDocViewTest(page, liveLog);
    // await runAAAccountingDisclosuresAndPoliciesTest(page, liveLog);
     await runAAAuditOpinionsAndPoliciesTest(page, liveLog);
+
+    // ---- Ported from the peer repo. Uncomment one to drive it. ----
+    // await runBooleanHighlightTest(page, liveLog);
+    // await runAccountingStandardTest(page, liveLog);
+    // await runAcceleratedStatusTest(page, liveLog);
+    // await runAccountantFeesTest(page, liveLog);
+    // await runSnippetsTest(page, liveLog);
+    // await runReleaseDateTest(page, liveLog);
+    // await runOutlineTest(page, liveLog);
+    // await runAoeBooleanHighlightTest(page, liveLog);
+    // await runAoeConceptualHighlightTest(page, liveLog);
+    // await runAoeReleaseDateTest(page, liveLog);
+    // await runAoeClauseTest(page, liveLog);
+    // await runDbmBooleanHighlightTest(page, liveLog);
+    // await runDbmConceptualHighlightTest(page, liveLog);
+    // await runSrcConceptualHighlightTest(page, liveLog);
+    // await runSeBooleanHighlightTest(page, liveLog);
    
    
     console.log("---------------------------------------------------");
