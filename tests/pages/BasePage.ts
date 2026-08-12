@@ -83,28 +83,37 @@ export class BasePage {
   // ---------------------------------------------------------------
 
   /**
-   * Types into a filter and presses Enter.
+   * Types into a filter. Presses Enter unless `pressEnter: false`. Clears
+   * the field first (click, fill(""), pressSequentially) when `clearFirst`
+   * is set - this used to be a second method, `clearAndType`, existing only
+   * because the 6-K date picker needs its field emptied before typing and
+   * must NOT get an Enter (that closes the picker before it commits). One
+   * method, one flag, instead of two near-identical typing methods.
    *
    * `typeValue` used to be a separate method; it had no callers of its own
    * outside this one, so its body is inlined here instead of kept as a
    * second public step.
    */
-  async fillAndEnter(locator: Locator, value: string, delay: number = 0) {
-    await locator.focus();
-    await this.page.keyboard.type(value, { delay });
-    await this.page.keyboard.press("Enter");
-  }
+  async fillAndEnter(
+    locator: Locator,
+    value: string,
+    delay: number = 0,
+    options: { pressEnter?: boolean; clearFirst?: boolean } = {},
+  ) {
+    const { pressEnter = true, clearFirst = false } = options;
 
-  /**
-   * Clears a filter by clicking it, emptying it, then typing character by
-   * character. This is NOT the same as fillAndEnter: it uses fill("") plus
-   * pressSequentially and does not press Enter, which is what the 6-K flow
-   * needs to make the date picker commit.
-   */
-  async clearAndType(locator: Locator, value: string, delay: number = 100) {
-    await locator.click({ force: true });
-    await locator.fill("");
-    await locator.pressSequentially(value, { delay });
+    if (clearFirst) {
+      await locator.click({ force: true });
+      await locator.fill("");
+      await locator.pressSequentially(value, { delay });
+    } else {
+      await locator.focus();
+      await this.page.keyboard.type(value, { delay });
+    }
+
+    if (pressEnter) {
+      await this.page.keyboard.press("Enter");
+    }
   }
 
   // ---------------------------------------------------------------
@@ -149,12 +158,21 @@ export class BasePage {
    * Builds a results-tab label locator matching any of the given text
    * fragments (e.g. "Docs:", "No Results Found"). The three tab-label
    * getters below used to be three separately hand-written XPaths sharing
-   * the same `contains(text(), ...)` shape; now there is one template and
-   * they only supply which fragments they care about.
+   * the same `contains(text(), ...)` shape; now there is exactly one XPath
+   * template and they only supply which fragments they care about. Pass
+   * `caseInsensitive: true` for the one getter (tabLabels) that also has to
+   * match "error" in any casing.
    */
-  resultTabsMatching(fragments: string[]): Locator {
-    const clauses = fragments
-      .map((f) => `contains(text(), "${f}")`)
+  resultTabsMatching(
+    fragments: string[],
+    options: { caseInsensitiveFragments?: string[] } = {},
+  ): Locator {
+    const exact = fragments.map((f) => `contains(text(), "${f}")`);
+    const insensitive = (options.caseInsensitiveFragments ?? []).map(
+      (f) =>
+        `contains(translate(text(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "${f.toLowerCase()}")`,
+    );
+    const clauses = [...exact, ...insensitive]
       .join(" or ");
     return this.page.locator(`//span[${clauses}]`);
   }
@@ -164,8 +182,9 @@ export class BasePage {
    * "Offerings: N", "No Results Found", or an error state in any casing.
    */
   get tabLabels(): Locator {
-    return this.page.locator(
-      '//span[contains(text(), "Docs:") or contains(text(), "Results:") or contains(text(), "Offerings:") or contains(text(), "No Results Found") or contains(translate(text(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "error")]',
+    return this.resultTabsMatching(
+      ["Docs:", "Results:", "Offerings:", "No Results Found"],
+      { caseInsensitiveFragments: ["error"] },
     );
   }
 
@@ -201,14 +220,14 @@ export class BasePage {
     return block.locator("span._icon_1jkal_249.Add").first();
   }
 
-  /** A <span> matching an exact label, for use in `filter({ has: ... })`. */
-  spanWithText(text: RegExp): Locator {
-    return this.page.locator("span", { hasText: text });
-  }
-
-  /** A <label> matching text, e.g. the "Only" toggle. */
-  labelWithText(text: RegExp): Locator {
-    return this.page.locator("label").filter({ hasText: text });
+  /**
+   * An element matching text, by tag, e.g. elementWithText("span", /^10-K$/)
+   * or elementWithText("label", /^Only$/). Replaces what used to be two
+   * separate methods (spanWithText, labelWithText) differing only in which
+   * tag they searched.
+   */
+  elementWithText(tag: string, text: RegExp): Locator {
+    return this.page.locator(tag, { hasText: text });
   }
 
   /** The app's React crash boundary ("Oops! Something went wrong"). */
@@ -1204,30 +1223,27 @@ export class BasePage {
     await this.page.getByTitle("Info", { exact: true }).click();
   }
 
-  /** Closes the open document tab and waits for the grid to come back. */
-  async closeCurrentDocumentTab() {
-    const selectedTab = this.page.locator('[class*="tab--selected"]');
-    const closeButton = selectedTab.locator('span[class*="Close"]');
-
-    await expect(closeButton).toBeVisible();
-    await closeButton.click();
-
-    await expect(this.refRows.first()).toBeVisible();
-  }
-
   /**
-   * Closes the selected search tab.
+   * Closes the currently selected tab.
    *
-   * Same click as closeCurrentDocumentTab but deliberately does NOT wait for
-   * result rows afterwards - the flows that call this are about to run a
-   * fresh search, so there is no grid left to wait for.
+   * `waitForGrid: true` (the old `closeCurrentDocumentTab`) waits for result
+   * rows to reappear after the close - use this when the tab underneath is
+   * the results grid. `waitForGrid: false` (the old `closeCurrentSearchTab`)
+   * skips that wait - use it when a fresh search is about to run and there
+   * is no grid left underneath to wait for.
    */
-  async closeCurrentSearchTab() {
+  async closeCurrentTab(options: { waitForGrid?: boolean } = {}) {
+    const { waitForGrid = true } = options;
+
     const selectedTab = this.page.locator('[class*="tab--selected"]');
     const closeButton = selectedTab.locator('span[class*="Close"]');
 
     await expect(closeButton).toBeVisible();
     await closeButton.click();
+
+    if (waitForGrid) {
+      await expect(this.refRows.first()).toBeVisible();
+    }
   }
 
   // ---------------------------------------------------------------

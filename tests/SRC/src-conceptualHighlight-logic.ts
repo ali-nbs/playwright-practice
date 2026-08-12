@@ -82,7 +82,7 @@ export const runSrcConceptualHighlightTest = async (
       console.log(`Document ${i + 1} processed | highlighted: ${highlighted}`);
     }
 
-    await src.closeCurrentDocumentTab();
+    await src.closeCurrentTab();
 
     // ---- Result grid ----
     await src.forEachRefRow(target, async (row) => {

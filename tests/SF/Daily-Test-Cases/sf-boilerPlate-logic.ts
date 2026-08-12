@@ -250,7 +250,7 @@ async function selectSectionFilters(page: Page, combo: any) {
   for (const formEntry of combo.forms) {
     console.log(`Selecting Form: ${formEntry.type}`);
     const formTypeItem = sf.sectionItems.filter({
-      has: sf.spanWithText(new RegExp(`^${formEntry.type}$`, "i")),
+      has: sf.elementWithText("span", new RegExp(`^${formEntry.type}$`, "i")),
     });
     await formTypeItem.click();
     await page.waitForTimeout(800);
@@ -264,10 +264,10 @@ async function selectSectionFilters(page: Page, combo: any) {
     }
   }
 
-  await sf.labelWithText(/^Only$/).last().click();
+  await sf.elementWithText("label", /^Only$/).last().click();
   const popupBody = sf.tabbedPopupBody;
   const nonMaterialRow = popupBody.locator("div").filter({
-    has: sf.spanWithText(/^Non-Material Sections$/),
+    has: sf.elementWithText("span", /^Non-Material Sections$/),
   });
   await sf.addIconIn(nonMaterialRow).click({ force: true });
 

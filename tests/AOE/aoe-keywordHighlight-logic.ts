@@ -104,7 +104,7 @@ const runScenario = async (
       console.log(`Document ${i + 1} processed | highlighted: ${highlighted}`);
     }
 
-    await aoe.closeCurrentDocumentTab();
+    await aoe.closeCurrentTab();
 
     // ---- Result grid ----
     await aoe.forEachRefRow(target, async (row) => {

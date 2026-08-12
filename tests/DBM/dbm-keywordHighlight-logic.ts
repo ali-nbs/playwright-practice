@@ -92,7 +92,7 @@ const runScenario = async (
       console.log(`Document ${i + 1} processed | highlighted: ${highlighted}`);
     }
 
-    await dbm.closeCurrentDocumentTab();
+    await dbm.closeCurrentTab();
 
     // ---- Result grid ----
     await dbm.forEachRefRow(target, async (row) => {

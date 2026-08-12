@@ -83,7 +83,7 @@ export const runAoeClauseTest = async (page: Page, logToFile: Function) => {
     const idsWithoutClause = await collectIds(countWithoutClause);
 
     // ---- Search 2: date + document type + clause ----
-    await aoe.closeCurrentSearchTab();
+    await aoe.closeCurrentTab({ waitForGrid: false });
     await aoe.clearFilters();
     await aoe.fillAndEnter(aoe.dateInput, date, 700);
     await aoe.fillAndEnter(aoe.docTypeInput, docType, 700);
@@ -113,7 +113,7 @@ export const runAoeClauseTest = async (page: Page, logToFile: Function) => {
 
     await aoe.configureDisplayColumns({ "Filing Info": ["Intelligize ID"] });
     const idsWithClause = await collectIds(countWithClause);
-    await aoe.closeCurrentSearchTab();
+    await aoe.closeCurrentTab({ waitForGrid: false });
 
     // ---- Compare ----
     const missing = [...idsWithoutClause].filter(

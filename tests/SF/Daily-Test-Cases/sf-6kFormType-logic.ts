@@ -52,7 +52,10 @@ async function selectFormTypeAndSearch(
   await sf.okBtn.click();
 
   // Execute search
-  await sf.clearAndType(sf.dateInput, dateValue, 100);
+  await sf.fillAndEnter(sf.dateInput, dateValue, 100, {
+    pressEnter: false,
+    clearFirst: true,
+  });
 
   await sf.searchBtn.click();
   await sf.waitForResults(60000);
