@@ -26,24 +26,19 @@ export class SfPage extends BasePage {
     return this.page.locator("#Forms").getByRole("textbox");
   }
 
-  /**
-   * Date filter, located via its label. Used by 7 flows.
-   *
-   * NOTE: sf-crossReferenceLinks uses `getByTestId("date-input")` instead.
-   * Both are kept (see dateInputByTestId) rather than picking one, because
-   * they are not verified to be interchangeable.
-   */
-  get dateInput(): Locator {
-    return this.page.locator('//label[text()="Date"]/ancestor::div[5]//input');
-  }
+  // dateInput and keywordsInput both come from BasePage now - SF's copies
+  // were identical to the shared ones.
 
-  /** The testid-based Date input, as used by sf-crossReferenceLinks. */
+  /**
+   * The testid-based Date input, as used by sf-crossReferenceLinks.
+   *
+   * Kept as its own getter rather than merged into `dateInput`: it is not
+   * verified to be interchangeable with the label-anchored one every other
+   * SF flow uses, so this stays an explicit opt-in for the one flow that
+   * needs it.
+   */
   get dateInputByTestId(): Locator {
     return this.page.getByTestId("date-input");
-  }
-
-  get keywordsInput(): Locator {
-    return this.page.getByTestId("keywords-input");
   }
 
   /**
@@ -335,24 +330,21 @@ export class SfPage extends BasePage {
   // Result-row values (need the matching display column switched on)
   // ---------------------------------------------------------------
 
+  // These were four separate methods, each hand-writing the same
+  // "label span -> following sibling" lookup. They now name their column and
+  // hand off to BasePage.rowValueByLabel. `rowDate` is gone entirely: it was
+  // identical to the BasePage version.
+
   /** A row's "Accounting Std." value. */
   async rowAccountingStandard(row: Locator): Promise<string> {
-    const value = await row
-      .locator('span:has-text("Accounting Std.")')
-      .locator("xpath=following-sibling::span/p")
-      .innerText();
-
-    return value.trim();
+    return this.rowValueByLabel(row, "Accounting Std.", { inParagraph: true });
   }
 
   /** A row's "Accelerated Status" value. */
   async rowAcceleratedStatus(row: Locator): Promise<string> {
-    const value = await row
-      .locator('span:has-text("Accelerated Status")')
-      .locator("xpath=following-sibling::span/p")
-      .innerText();
-
-    return value.trim();
+    return this.rowValueByLabel(row, "Accelerated Status", {
+      inParagraph: true,
+    });
   }
 
   /**
@@ -362,22 +354,7 @@ export class SfPage extends BasePage {
    * several sub-values and the check is only ever "is anything there".
    */
   async rowHasAccountantFee(row: Locator): Promise<boolean> {
-    const value = await row
-      .locator('span:has-text("Accountant Fees")')
-      .locator("xpath=following-sibling::span")
-      .textContent()
-      .catch(() => null);
-
-    return !!value && value.trim() !== "";
-  }
-
-  /** A row's filing/release date cell. */
-  async rowDate(row: Locator): Promise<string> {
-    const date = await row
-      .locator(".styles__filing-date-value-column___2pu1v")
-      .textContent();
-
-    return date?.trim() ?? "";
+    return (await this.rowValueByLabel(row, "Accountant Fees")) !== "";
   }
 
   // ---------------------------------------------------------------
@@ -415,9 +392,8 @@ export class SfPage extends BasePage {
     );
   }
 
-  /** Keyword highlights inside a result row. */
-  rowKeywordHighlights(row: Locator): Locator {
-    return row.locator("em.highlight");
-  }
+  // NOTE: `rowKeywordHighlights` used to live here with zero callers -
+  // every flow already used the more general BasePage.checkRowHighlights
+  // with "em.highlight" passed in.
 
 }

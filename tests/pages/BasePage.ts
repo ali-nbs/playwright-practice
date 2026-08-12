@@ -113,6 +113,40 @@ export class BasePage {
   }
 
   // ---------------------------------------------------------------
+  // Filters shared by most apps
+  // ---------------------------------------------------------------
+
+  /**
+   * A filter input found by its label text.
+   *
+   * NAL, RO, SE and SF all declared this exact XPath separately. It is one
+   * getter now, and an app only writes its own when its filter bar really is
+   * built differently (SRC's Date, for instance).
+   */
+  filterInputByLabel(label: string): Locator {
+    return this.page.locator(
+      `//label[text()="${label}"]/ancestor::div[5]//input`,
+    );
+  }
+
+  /** The Date filter. Apps whose Date box differs override this. */
+  get dateInput(): Locator {
+    return this.filterInputByLabel("Date");
+  }
+
+  /**
+   * The Keywords filter.
+   *
+   * SF, SE and AOE each declared this separately - SE as a raw
+   * `[data-testid="keywords-input"]` string and the others via getByTestId,
+   * which are the same query written two ways. NAL, RO and SRC use a
+   * genuinely different control and override it.
+   */
+  get keywordsInput(): Locator {
+    return this.page.getByTestId("keywords-input");
+  }
+
+  // ---------------------------------------------------------------
   // Result tabs / counts
   // ---------------------------------------------------------------
 
@@ -1025,17 +1059,56 @@ export class BasePage {
   }
 
   /**
+   * Reads the value sitting next to a label inside a result row, e.g.
+   * rowValueByLabel(row, "Accelerated Status").
+   *
+   * The display column for that label has to be switched on first (see
+   * selectInfoOption). SF used to carry four near-identical copies of this
+   * lookup - one per label - differing only in the label text and whether
+   * the value was wrapped in a <p>.
+   *
+   * Returns "" when the label is not in the row. The per-label copies threw
+   * instead, which meant a missing column surfaced as an unrelated locator
+   * timeout rather than as an empty value the flow could report on.
+   */
+  async rowValueByLabel(
+    row: Locator,
+    label: string,
+    options: { inParagraph?: boolean } = {},
+  ): Promise<string> {
+    const valuePath = options.inParagraph
+      ? "xpath=following-sibling::span/p"
+      : "xpath=following-sibling::span";
+
+    const value = row
+      .locator(`span:has-text("${label}")`)
+      .locator(valuePath)
+      .first();
+
+    const text = await value.textContent().catch(() => null);
+
+    return (text ?? "").trim();
+  }
+
+  /**
    * Reads a row's Intelligize ID. Requires the "Intelligize ID" display
    * column to have been switched on first (see selectInfoOption).
    */
   async rowIntelligizeId(row: Locator): Promise<string> {
-    const id = await row
-      .locator('span:has-text("Intelligize ID")')
-      .locator("xpath=following-sibling::span")
-      .first()
-      .innerText();
+    return this.rowValueByLabel(row, "Intelligize ID");
+  }
 
-    return id.trim();
+  /**
+   * A row's filing/release date cell.
+   *
+   * AOE and SF each had their own copy of this with the identical selector.
+   */
+  async rowDate(row: Locator): Promise<string> {
+    const date = await row
+      .locator(".styles__filing-date-value-column___2pu1v")
+      .textContent();
+
+    return date?.trim() ?? "";
   }
 
   /** Reads the Intelligize ID from the open document's Info panel. */

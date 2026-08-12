@@ -25,6 +25,10 @@ export class DbmPage extends BasePage {
   // Filters
   // ---------------------------------------------------------------
 
+  /**
+   * DBM's Date box is a testid input rather than the label-anchored one
+   * BasePage uses.
+   */
   get dateInput(): Locator {
     return this.page.getByTestId("date-input");
   }

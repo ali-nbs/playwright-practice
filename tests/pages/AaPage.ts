@@ -23,9 +23,9 @@ export class AaPage extends BasePage {
     return this.page.locator(".ReactVirtualized__Grid:visible").last();
   }
 
-  get visibleRows(): Locator {
-    return this.visibleScroller.locator('div[data-test="resultRow"]');
-  }
+  // NOTE: `visibleRows` used to live here with zero callers - only
+  // `visibleScroller` and `findResultRowByIndex` (which queries the scroller
+  // directly) are actually used.
 
   // ---------------------------------------------------------------------
   // Result-grid row lookup that is safe when "Exhibits to Filings" is ON.

@@ -21,16 +21,12 @@ export class AoePage extends BasePage {
     return this.page.getByTestId("documentType-input");
   }
 
-  // ---------------------------------------------------------------
-  // Filters
-  // ---------------------------------------------------------------
-
+  /**
+   * AOE's Date box is a testid input rather than the label-anchored one
+   * BasePage uses.
+   */
   get dateInput(): Locator {
     return this.page.getByTestId("date-input");
-  }
-
-  get keywordsInput(): Locator {
-    return this.page.getByTestId("keywords-input");
   }
 
   /** Section Type filter, e.g. "Preamble". Referred to as the clause. */
@@ -53,15 +49,6 @@ export class AoePage extends BasePage {
     return row.locator(
       'xpath=following-sibling::div[contains(@class,"snippets-container")]',
     );
-  }
-
-  /** A row's date cell. */
-  async rowDate(row: Locator): Promise<string> {
-    const date = await row
-      .locator(".styles__filing-date-value-column___2pu1v")
-      .textContent();
-
-    return date?.trim() ?? "";
   }
 
   // ---------------------------------------------------------------
