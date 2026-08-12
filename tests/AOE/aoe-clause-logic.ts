@@ -57,7 +57,7 @@ export const runAoeClauseTest = async (page: Page, logToFile: Function) => {
     await aoe.clearFilters();
     await aoe.fillAndEnter(aoe.dateInput, date, 700);
     await aoe.fillAndEnter(aoe.docTypeInput, docType, 700);
-    await aoe.search();
+    await aoe.searchBtn.click();
 
     const withoutClause = await aoe.trySearchResponse();
 
@@ -79,7 +79,7 @@ export const runAoeClauseTest = async (page: Page, logToFile: Function) => {
       continue;
     }
 
-    await aoe.selectInfoOption("Filing Info", "Intelligize ID");
+    await aoe.configureDisplayColumns({ "Filing Info": ["Intelligize ID"] });
     const idsWithoutClause = await collectIds(countWithoutClause);
 
     // ---- Search 2: date + document type + clause ----
@@ -88,7 +88,7 @@ export const runAoeClauseTest = async (page: Page, logToFile: Function) => {
     await aoe.fillAndEnter(aoe.dateInput, date, 700);
     await aoe.fillAndEnter(aoe.docTypeInput, docType, 700);
     await aoe.fillAndEnter(aoe.sectionTypeInput, CLAUSE, 700);
-    await aoe.search();
+    await aoe.searchBtn.click();
 
     const withClause = await aoe.trySearchResponse();
     await page.waitForTimeout(1000);
@@ -111,7 +111,7 @@ export const runAoeClauseTest = async (page: Page, logToFile: Function) => {
       continue;
     }
 
-    await aoe.selectInfoOption("Filing Info", "Intelligize ID");
+    await aoe.configureDisplayColumns({ "Filing Info": ["Intelligize ID"] });
     const idsWithClause = await collectIds(countWithClause);
     await aoe.closeCurrentSearchTab();
 

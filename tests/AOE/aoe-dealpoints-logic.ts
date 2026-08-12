@@ -128,7 +128,7 @@ export const runDealPointsTest = async (page: Page, logToFile: Function) => {
 
     await page.getByRole("button", { name: /^OK$/i }).click();
 
-    await aoe.search();
+    await aoe.searchBtn.click();
 
     const searchResultTextOnly = await aoe.getTabText(0, logToFile);
     logToFile(`Baseline (${scenario.id}): ${searchResultTextOnly}`);

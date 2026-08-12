@@ -33,7 +33,7 @@ export const runAcceleratedStatusTest = async (
   await sf.typeFormTypeList(FORM_TYPES);
   logToFile(`Forms applied: ${FORM_TYPES}`);
   await sf.fillAndEnter(sf.acceleratedStatusInput, ACCELERATED_STATUS, 1000);
-  await sf.search();
+  await sf.searchBtn.click();
 
   const { body, error: searchError } = await sf.trySearchResponse();
   logToFile(`Total Records: ${body.TotalRecords}`);
@@ -50,8 +50,10 @@ export const runAcceleratedStatusTest = async (
   let verified = 0;
 
   if (body.TotalRecords > 0) {
-    await sf.selectInfoOption("Filing Info", "Intelligize ID");
-    await sf.selectInfoOption("Company Info", "Accelerated Status");
+    await sf.configureDisplayColumns({
+      "Filing Info": ["Intelligize ID"],
+      "Company Info": ["Accelerated Status"],
+    });
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 

@@ -343,10 +343,9 @@ export const runAAAccountingDisclosuresAndPoliciesTest = async (
   logToFile("--- Starting AA-AccountingDisclosuresAndPolicies Report ---");
 
   const aa = new AaPage(page);
-  const clearBtn = aa.clearFiltersBtn;
   const searchBtn = aa.searchBtn;
 
-  await clearBtn.click();
+  await aa.clearFilters();
   await page.waitForTimeout(500);
 
   await selectTypeaheadChip(page, "Forms", "10-K", logToFile);

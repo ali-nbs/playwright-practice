@@ -28,7 +28,7 @@ export const runPastRedlineVersionTest = async (
 
   // await fillAndEnter(page, dbm.dateInput, searchDate, 200);
 
-  await dbm.search();
+  await dbm.searchBtn.click();
 
   const searchResultTextOnly = await dbm.getTabText(0, logToFile);
   logToFile(`Baseline ${searchDate}: ${searchResultTextOnly}`);

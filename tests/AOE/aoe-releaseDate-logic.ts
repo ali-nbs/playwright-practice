@@ -29,7 +29,7 @@ export const runAoeReleaseDateTest = async (
   await page.waitForTimeout(1000);
 
   await aoe.fillAndEnter(aoe.dateInput, expectedDate, 700);
-  await aoe.search();
+  await aoe.searchBtn.click();
 
   const { body, error: searchError } = await aoe.trySearchResponse();
   logToFile(`Total Records: ${body.TotalRecords}`);
@@ -47,7 +47,7 @@ export const runAoeReleaseDateTest = async (
 
   if (body.TotalRecords > 0) {
     await aoe.switchDateColumn("Filed", "Released");
-    await aoe.selectInfoOption("Filing Info", "Intelligize ID");
+    await aoe.configureDisplayColumns({ "Filing Info": ["Intelligize ID"] });
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 

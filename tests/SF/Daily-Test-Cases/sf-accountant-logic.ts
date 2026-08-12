@@ -63,7 +63,7 @@ export const runAccountantTest = async (page: Page, logToFile: Function) => {
     let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsCheckbox.click({ force: true });
     await page.waitForTimeout(1000);
-    await sf.search();
+    await sf.searchBtn.click();
 
     const textDateOnly = await sf.getTabText(tabIndex++, logToFile);
     logToFile(`Baseline (${scenario.id}): ${textDateOnly}`);
@@ -138,7 +138,7 @@ const scrapeResults = async (
 
       if (rowId && !processedIds.has(rowId)) {
         try {
-          const cleanContent = await sf.rowSpanTextsClean(row);
+          const { spans: cleanContent } = await sf.rowData(row);
           console.log("```````````````````````````````````````");
           // for (const [index, text] of cleanContent.entries()) {
           //   console.log(index, text);

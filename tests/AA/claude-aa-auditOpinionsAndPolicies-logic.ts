@@ -392,7 +392,6 @@ export const runAAAuditOpinionsAndPoliciesTest = async (
   logToFile("--- Starting AA-AuditOpinionsAndPolicies Report ---");
 
   const aa = new AaPage(page);
-  const clearBtn = aa.clearFiltersBtn;
   const searchBtn = aa.searchBtn;
 
   
@@ -401,7 +400,7 @@ export const runAAAuditOpinionsAndPoliciesTest = async (
   for (const formValue of FORMS_TO_TEST) {
     logToFile(`\nTesting Form: ${formValue}`);
     let tabIndex = 0;
-    await clearBtn.click();
+    await aa.clearFilters();
     await page.waitForTimeout(500);
     await selectFormsFilter(page, formValue, logToFile);
     let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');

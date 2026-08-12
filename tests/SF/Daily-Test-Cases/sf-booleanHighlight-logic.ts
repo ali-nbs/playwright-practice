@@ -49,7 +49,7 @@ export const runBooleanHighlightTest = async (
   let verified = 0;
 
   if (body.TotalRecords > 0) {
-    await sf.selectInfoOption("Filing Info", "Intelligize ID");
+    await sf.configureDisplayColumns({ "Filing Info": ["Intelligize ID"] });
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 

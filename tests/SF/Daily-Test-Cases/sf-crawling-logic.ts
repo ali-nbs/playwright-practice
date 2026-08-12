@@ -24,7 +24,7 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
     await sf.ownershipFormsIncludeRadio.click();
 
     await sf.fillAndEnter(sf.dateInput, scenario.date);
-    await sf.search();
+    await sf.searchBtn.click();
 
     const textDateOnly = await sf.getTabText(tabIndex++, logToFile);
     let findings = { text: "No Results Found", isValid: true };
@@ -78,7 +78,7 @@ const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
   let isScenarioValid = true;
 
   await sf.forEachResultRow(targetCount, async (row, rowId) => {
-    const cleanContent = await sf.rowSpanTextsClean(row);
+    const { spans: cleanContent } = await sf.rowData(row);
 
     const companyName = cleanContent[4] || "";
     const pages = cleanContent[5] || "";

@@ -38,7 +38,7 @@ export const runIndexingTest = async (page: Page, logToFile: Function) => {
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
     await sf.fillAndEnter(sf.dateInput, scenario.date);
-    await sf.search();
+    await sf.searchBtn.click();
     const textDateOnly = await sf.getTabText(tabIndex++, logToFile, true);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 

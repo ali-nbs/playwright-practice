@@ -102,7 +102,7 @@ export const runAccountantMappingTest = async (
 
     // continue;
 
-    await aoe.search();
+    await aoe.searchBtn.click();
 
     const searchResultTextOnly = await aoe.getTabText(0, logToFile);
     logToFile(`Baseline (${scenario.id}): ${searchResultTextOnly}`);

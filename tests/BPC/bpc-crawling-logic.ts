@@ -162,7 +162,6 @@ export const runBpcCrawlingTest = async (page: Page, logToFile: Function) => {
 
   const bpc = new BpcPage(page);
   const searchBtn = bpc.searchBtn;
-  const clearBtn = bpc.clearFiltersBtn;
 
 let resultsSummary: string[] = [];
   const targetDate = getTargetDateString();

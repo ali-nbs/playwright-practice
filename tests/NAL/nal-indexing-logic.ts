@@ -30,12 +30,12 @@ export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
     await nal.fillAndEnter(nal.dateInput, scenario.date);
-    await nal.search();
+    await nal.searchBtn.click();
     const textDateOnly = await nal.getTabText(tabIndex++, logToFile, false);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
     await nal.fillAndEnter(nal.keywordsInput, scenario.keyword);
-   // await nal.search();
+   // await nal.searchBtn.click();
     let textWithKeyword = await nal.getTabText(tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
@@ -58,7 +58,7 @@ export const runNalIndexingTest = async (page: Page, logToFile: Function) => {
 
       await nal.fillAndEnter(nal.dateInput, scenario.date);
       await nal.fillAndEnter(nal.keywordsInput, scenario.NotKeyword);
-      await nal.search();
+      await nal.searchBtn.click();
 
       const textWithNotKeyword = await nal.getTabText(
         tabIndex++,

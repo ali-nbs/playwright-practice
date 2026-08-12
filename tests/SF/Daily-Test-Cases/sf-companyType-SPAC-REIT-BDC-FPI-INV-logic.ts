@@ -51,8 +51,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
   for (const category of Categories) {
     logToFile(`\n--- Starting Category: ${category.name} ---`);
 
-    const clearBtn = sf.clearFiltersBtn;
-    await clearBtn.click({ force: true });
+    await sf.clearFilters();
 
     const companyTypeFilterBlock = sf.filterBlock(/^Company Type\/Status$/);
 
@@ -72,7 +71,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
 
     const exhibitsTofilingsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsTofilingsCheckbox.uncheck({ force: true });
-    await sf.search();
+    await sf.searchBtn.click();
 
     // 2. Verify Results Exist
     const statusLocator = sf.statusTabLabels;

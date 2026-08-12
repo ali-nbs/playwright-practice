@@ -23,7 +23,7 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
 
   const sf = new SfPage(page);
 
-  await sf.clearFiltersBtn.click({ force: true });
+  await sf.clearFilters();
   const exhibtsToFilingsCheckbox = sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckbox.click({ force: true });
 
@@ -122,7 +122,7 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
 
       const [download] = await Promise.all([
         page.waitForEvent("download", { timeout: DOWNLOAD_TIMEOUT }),
-        sf.okBtnAnyCase.click(),
+        sf.okBtn.click(),
       ]);
 
       await saveAndVerify(download, formats[i]);
@@ -140,7 +140,7 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
 
     const [excelDownload] = await Promise.all([
       page.waitForEvent("download", { timeout: DOWNLOAD_TIMEOUT }),
-      sf.okBtnAnyCase.click(),
+      sf.okBtn.click(),
     ]);
 
     await saveAndVerify(excelDownload, "Excel");
@@ -154,7 +154,7 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
     await sf.emailBtn.click();
     // This click used to be un-awaited, so the flow raced on to writing the
     // report while the dialog was still being dismissed.
-    await sf.okBtnAnyCase.click();
+    await sf.okBtn.click();
   } catch (e) {
     failures.push(`Email dialog failed: ${cleanErrorMessage(e)}`);
     logToFile(`Email dialog failed: ${cleanErrorMessage(e)}`);

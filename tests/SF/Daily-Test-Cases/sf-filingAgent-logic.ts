@@ -63,7 +63,7 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
     let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsCheckbox.click({ force: true });
     await page.waitForTimeout(300);
-    await sf.search();
+    await sf.searchBtn.click();
 
     const textDateOnly = await sf.getTabText(tabIndex++, logToFile);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
@@ -142,7 +142,7 @@ async function scrapeFilingAgentResults(
 
       if (rowId && !processedIds.has(rowId)) {
         try {
-          const cleanContent = await sf.rowSpanTextsClean(row);
+          const { spans: cleanContent } = await sf.rowData(row);
 
           const accessionNo =
             cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||

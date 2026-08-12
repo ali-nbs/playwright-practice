@@ -67,7 +67,7 @@ const runScenario = async (
   let rowsVerified = 0;
 
   if (body.TotalRecords > 0) {
-    await aoe.selectInfoOption("Filing Info", "Intelligize ID");
+    await aoe.configureDisplayColumns({ "Filing Info": ["Intelligize ID"] });
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 

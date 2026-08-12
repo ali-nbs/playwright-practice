@@ -15,7 +15,7 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
   const sf = new SfPage(page);
 
 
-  await sf.clearFiltersBtn.click({ force: true });
+  await sf.clearFilters();
   await page.waitForTimeout(2000);
 
   await sf.amendmentFilingsExcludeRadio.click();
@@ -26,7 +26,7 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
 
   const exhibtsToFilingsCheckbox = sf.exhibitsToFilingsLabel;
   await exhibtsToFilingsCheckbox.click({ force: true });
-  await sf.search();
+  await sf.searchBtn.click();
 
   const textDateOnly = await sf.getTabText(0, logToFile);
   logToFile(`Baseline (Yesterday): ${textDateOnly}`);
@@ -88,7 +88,7 @@ const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
 
       if (rowId && !processedIds.has(rowId)) {
         try {
-          const anchorLinks = await sf.rowLinkTexts(row);
+          const { links: anchorLinks } = await sf.rowData(row);
           await sf.rowFirstLink(row).click();
           await page.waitForTimeout(500);
 

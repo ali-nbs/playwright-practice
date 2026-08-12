@@ -22,7 +22,6 @@ const getSearchElements = (page: Page) => {
   return {
     keywordInput: sf.keywordsInput,
     searchBtn: sf.searchBtn,
-    clearBtn: sf.clearFiltersBtn,
     gridContainer: sf.scroller,
   };
 };
@@ -86,21 +85,15 @@ const scrapeVirtualizedGrid = async (
       await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
       await page.waitForTimeout(200);
 
-      const pTexts = await sf.rowParagraphTexts(currentRow);
-      const fullText = pTexts.join(" ").replace(/\n/g, " ").trim();
-
-      const emTextsArray = await sf.rowHighlightTexts(currentRow);
-      const highlights = emTextsArray.join(" ").replace(/\n/g, " ").trim();
+      const data = await sf.rowData(currentRow);
+      const fullText = data.paragraphs.join(" ").replace(/\n/g, " ").trim();
+      const highlights = data.highlights.join(" ").replace(/\n/g, " ").trim();
 
       const hasViewAllHits =
         (await sf.rowViewAllHits(currentRow).count()) > 0;
 
-      const texts = await sf.rowSpanTextsRaw(currentRow);
-      const cleanContent = texts
-        .map((t) => t.trim())
-        .filter((t) => t.length > 0);
       const accessionNo =
-        cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
+        data.spans.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
         "N/A";
       console.log(
         `Extracted Row ${processedCount + 1}: Acc.No: ${accessionNo} | Highlights: ${highlights} | Has View All Hits: ${hasViewAllHits}`,
@@ -261,7 +254,7 @@ export const runConceptualSearchTest = async (
   await test.step("PHASE 1: Validate Conceptual UI Modes and Warnings", async () => {
     logToFile("\n--- PHASE 1: UI Validation ---");
 
-    await search.clearBtn.click();
+    await sf.clearFilters();
     getUIElements(page).exhibitsToFilingsLabel.click();
     await page.waitForTimeout(1000);
 
@@ -297,7 +290,7 @@ export const runConceptualSearchTest = async (
 
     const conceptualQuery = "geopolitical instability";
 
-    await search.clearBtn.click();
+    await sf.clearFilters();
     getUIElements(page).exhibitsToFilingsLabel.click();
     await page.waitForTimeout(1000);
 
@@ -373,7 +366,7 @@ export const runConceptualSearchTest = async (
 
   //     const conceptualQuery = "risk factor";
 
-  //     await search.clearBtn.click();
+  //     await sf.clearFilters();
   //     getUIElements(page).exhibitsToFilingsLabel.click();
   //     await page.waitForTimeout(1000);
   //     await search.keywordInput.fill(conceptualQuery);

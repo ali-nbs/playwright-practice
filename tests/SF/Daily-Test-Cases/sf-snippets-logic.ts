@@ -26,7 +26,7 @@ export const runSnippetsTest = async (page: Page, logToFile: Function) => {
   await page.waitForTimeout(1000);
 
   await sf.fillAndEnter(sf.dateInput, date);
-  await sf.search();
+  await sf.searchBtn.click();
 
   let { body, error: searchError } = await sf.trySearchResponse();
   logToFile(`Initial grid loaded. Total Records: ${body.TotalRecords}`);
@@ -54,7 +54,7 @@ export const runSnippetsTest = async (page: Page, logToFile: Function) => {
       logToFile(`Snippets re-run search failed: ${rerun.error}`);
     }
 
-    await sf.selectInfoOption("Filing Info", "Intelligize ID");
+    await sf.configureDisplayColumns({ "Filing Info": ["Intelligize ID"] });
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 

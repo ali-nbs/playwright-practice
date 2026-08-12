@@ -73,7 +73,7 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
     const exhibitsTofilingsCheckbox = sf.exhibitsToFilingsLabel;
     //await exhibitsTofilingsCheckbox.click({ force: true });
     await exhibitsTofilingsCheckbox.uncheck({ force: true });
-    await sf.search();
+    await sf.searchBtn.click();
 
     // 3. Verify Results
     const statusLocator = sf.statusTabLabels;

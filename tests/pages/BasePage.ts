@@ -52,16 +52,8 @@ export class BasePage {
     return this.page.getByRole("button", { name: /^Search$/i }).first();
   }
 
-  get clearFiltersBtn(): Locator {
-    return this.page.getByRole("button", { name: /^Clear Filters$/i });
-  }
-
-  async search() {
-    await this.searchBtn.click();
-  }
-
   /**
-   * Clears the filter bar.
+   * Clears the filter bar, if a Clear Filters button is present.
    *
    * Uses force:true for the same reason sf-fiscalYear, sf-ixbrl, sf-pdee
    * and sf-xbrlParsing already call `clearFiltersBtn.click({ force: true })`
@@ -72,9 +64,18 @@ export class BasePage {
    * stable. LIVE-CONFIRMED (2026-08-12, headed run over CDP against SRC):
    * without force this retries for the full 30s and then fails with
    * "<span ...>Share Link</span> ... intercepts pointer events".
+   *
+   * The one public entry point for this control - no separate locator
+   * getter, so there is exactly one way to clear filters. Skips cleanly
+   * (rather than throwing) when the button never renders, which is what
+   * sf-boilerPlate's old `if (await sf.clearFiltersBtn.isVisible())` guard
+   * was for.
    */
   async clearFilters() {
-    await this.clearFiltersBtn.click({ force: true });
+    const btn = this.page.getByRole("button", { name: /^Clear Filters$/i });
+    if (await btn.isVisible().catch(() => false)) {
+      await btn.click({ force: true });
+    }
   }
 
   // ---------------------------------------------------------------
@@ -82,21 +83,15 @@ export class BasePage {
   // ---------------------------------------------------------------
 
   /**
-   * Focuses a filter and types into it via the keyboard.
+   * Types into a filter and presses Enter.
    *
-   * Moved verbatim from helpers.typeValue, including the commented-out
-   * fill("")/pressSequentially lines that were tried and rejected.
+   * `typeValue` used to be a separate method; it had no callers of its own
+   * outside this one, so its body is inlined here instead of kept as a
+   * second public step.
    */
-  async typeValue(locator: Locator, value: string, delay: number = 0) {
-    await locator.focus();
-    // await locator.fill("");
-    //await locator.pressSequentially(value, { delay });
-    await this.page.keyboard.type(value, { delay });
-  }
-
-  /** Types into a filter and presses Enter. Moved from helpers.fillAndEnter. */
   async fillAndEnter(locator: Locator, value: string, delay: number = 0) {
-    await this.typeValue(locator, value, delay);
+    await locator.focus();
+    await this.page.keyboard.type(value, { delay });
     await this.page.keyboard.press("Enter");
   }
 
@@ -151,6 +146,20 @@ export class BasePage {
   // ---------------------------------------------------------------
 
   /**
+   * Builds a results-tab label locator matching any of the given text
+   * fragments (e.g. "Docs:", "No Results Found"). The three tab-label
+   * getters below used to be three separately hand-written XPaths sharing
+   * the same `contains(text(), ...)` shape; now there is one template and
+   * they only supply which fragments they care about.
+   */
+  resultTabsMatching(fragments: string[]): Locator {
+    const clauses = fragments
+      .map((f) => `contains(text(), "${f}")`)
+      .join(" or ");
+    return this.page.locator(`//span[${clauses}]`);
+  }
+
+  /**
    * The results-tab label locator. Matches "Docs: N", "Results: N",
    * "Offerings: N", "No Results Found", or an error state in any casing.
    */
@@ -162,14 +171,12 @@ export class BasePage {
 
   /** The narrower "Docs:" / "No Results Found" status tab. */
   get statusTabLabels(): Locator {
-    return this.page.locator(
-      '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-    );
+    return this.resultTabsMatching(["Docs:", "No Results Found"]);
   }
 
   /** The "Docs:"-only tab label. */
   get docsTabLabels(): Locator {
-    return this.page.locator('//span[contains(text(), "Docs:")]');
+    return this.resultTabsMatching(["Docs:"]);
   }
 
   /**
@@ -306,33 +313,6 @@ export class BasePage {
     }
   }
 
-  /**
-   * Closes result tabs to the right of the first one.
-   * Moved verbatim from helpers.closeTabsToTheRight. NOTE: this uses a
-   * NARROWER tab locator than closeAllOpenTabs (no "Results:"), and a 5s
-   * right-click timeout rather than 10s. Both differences are preserved.
-   */
-  async closeTabsToTheRight() {
-    const activeTab = this.page.locator(
-      '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-    );
-    if ((await activeTab.count()) > 0) {
-      try {
-        await activeTab.first().click({ button: "right", timeout: 5000 });
-        const closeTabsToTheRightBtn = this.page
-          .locator(".react-contextmenu--visible")
-          .getByRole("menuitem", { name: /Close tabs to the right/i });
-        await this.page.waitForTimeout(1000);
-        await closeTabsToTheRightBtn.click();
-        await this.page.waitForTimeout(1000);
-        await expect(activeTab).toHaveCount(1, { timeout: 15000 });
-      } catch (cleanupError) {
-        console.error("Error during cleanup (closing tabs):", cleanupError);
-        await this.page.reload();
-      }
-    }
-  }
-
   // ---------------------------------------------------------------
   // Display columns
   // ---------------------------------------------------------------
@@ -449,9 +429,14 @@ export class BasePage {
     return this.page.locator("div.PopupContainer__container___1-tgp").first();
   }
 
-  /** Popup confirm button. */
+  /**
+   * The confirm button, matched case-insensitively ("OK", "Ok", "ok").
+   * One locator for this job - it used to also exist as `okBtnAnyCase`
+   * with a stricter, exact-case sibling `okBtn`, but nothing needed the
+   * stricter match, so the case-insensitive version is now the only one.
+   */
   get okBtn(): Locator {
-    return this.page.getByRole("button", { name: /^OK$/ });
+    return this.page.getByRole("button", { name: /ok/i });
   }
 
   /** Display-columns popup apply button. */
@@ -569,16 +554,6 @@ export class BasePage {
     );
   }
 
-  /**
-   * The confirm button matched case-insensitively, for dialogs that render
-   * it as "Ok"/"ok" rather than "OK". Distinct from `okBtn` above, which is
-   * an exact "OK" match. Renamed from `okBtnLoose`, where "Loose" did not
-   * say what was loose about it.
-   */
-  get okBtnAnyCase(): Locator {
-    return this.page.getByRole("button", { name: /ok/i });
-  }
-
   /** A checkbox label in an export dialog, e.g. "coverPage". */
   dialogCheckboxLabel(forAttr: string): Locator {
     return this.page.locator(`label[for="${forAttr}"]`);
@@ -650,64 +625,86 @@ export class BasePage {
     return row.getByRole("button", { name: /View/i });
   }
 
-  // Both of the next two read a row's <span> texts. The only difference is
-  // trimming and dropping empties, which the old `rowTexts` / `rowSpanTexts`
-  // names gave no hint of, so they are now named for that difference.
+  /**
+   * All the text a result row carries, read in one pass.
+   *
+   * This replaces what used to be six separate methods
+   * (rowSpanTextsClean/Raw, rowParagraphTexts, rowHighlightTexts,
+   * rowLinkTexts, plus callers hand-rolling the same trim/filter every flow
+   * that needed span text already did on its own). One row, one read, every
+   * text a flow has ever needed out of it:
+   *   spans      - every <span>, trimmed, empties dropped (title, source,
+   *                category, accession #, ...)
+   *   paragraphs - every <p> (snippet/body text)
+   *   highlights - <em> inside a <p> (keyword-highlight matches)
+   *   links      - every <a> (anchor text, e.g. boilerplate section links)
+   *
+   * Locators you need to click/check/count instead of read stay as their
+   * own getters below (rowFirstLink, rowCheckboxLabel, rowLabelledSpan,
+   * rowViewAllHits) - those are actions, not text, so a batched text read
+   * cannot replace them.
+   */
+  async rowData(row: Locator): Promise<{
+    spans: string[];
+    paragraphs: string[];
+    highlights: string[];
+    links: string[];
+  }> {
+    const [spansRaw, paragraphs, highlights, links] = await Promise.all([
+      row.locator("span").allInnerTexts(),
+      row.locator("p").allInnerTexts(),
+      row.locator("p em").allInnerTexts(),
+      row.locator("a").allInnerTexts(),
+    ]);
 
-  /** A row's trimmed, non-empty span texts (title, source, category, ...). */
-  async rowSpanTextsClean(row: Locator): Promise<string[]> {
-    const texts = await row.locator("span").allInnerTexts();
-    return texts.map((t) => t.trim()).filter((t) => t.length > 0);
+    return {
+      spans: spansRaw.map((t) => t.trim()).filter((t) => t.length > 0),
+      paragraphs,
+      highlights,
+      links,
+    };
   }
 
-  /** Raw (untrimmed, empties kept) span texts of a row. */
-  async rowSpanTextsRaw(row: Locator): Promise<string[]> {
-    return row.locator("span").allInnerTexts();
-  }
-
-  /** A row's <p> texts. */
-  async rowParagraphTexts(row: Locator): Promise<string[]> {
-    return row.locator("p").allInnerTexts();
-  }
-
-  /** A row's keyword-highlight texts (<em> inside <p>). */
-  async rowHighlightTexts(row: Locator): Promise<string[]> {
-    return row.locator("p em").allInnerTexts();
-  }
-
-  /** A row's link texts. */
-  async rowLinkTexts(row: Locator): Promise<string[]> {
-    return row.locator("a").allInnerTexts();
-  }
-
-  /** A row's first link. */
+  /** A row's first link. Click target, not text - kept as a locator. */
   rowFirstLink(row: Locator): Locator {
     return row.locator("a").first();
   }
 
-  /** A row's anchors and paragraphs, in document order. */
-  rowLinksAndParagraphs(row: Locator): Locator {
-    return row.locator("a, p");
-  }
-
-  /** A row's paragraphs as a locator (not their text). */
+  /**
+   * A row's paragraphs as a Locator (not their text - see rowData for
+   * that). Kept because sf-crossReferenceLinks chains `.locator(...)` off
+   * it to find a link inside a specific paragraph, which a text array
+   * cannot express.
+   */
   rowParagraphs(row: Locator): Locator {
     return row.locator("p");
   }
 
-  /** A row's select checkbox label. */
+  /**
+   * A row's anchors and paragraphs, in DOCUMENT ORDER. Kept as a Locator:
+   * sf-boilerPlate iterates this element-by-element and checks each one's
+   * tag name at runtime, which rowData's separate `links`/`paragraphs`
+   * arrays cannot express (they lose the original interleaving).
+   */
+  rowLinksAndParagraphs(row: Locator): Locator {
+    return row.locator("a, p");
+  }
+
+  /** A row's select checkbox label. Click target - kept as a locator. */
   rowCheckboxLabel(row: Locator): Locator {
     return row.locator("label").first();
   }
 
-  /** The "View All Hits" / "View More" affordance inside a row. */
+  /** The "View All Hits" / "View More" affordance inside a row. Its .count() is checked, not its text. */
   rowViewAllHits(row: Locator): Locator {
     return row.getByText(/View All Hits|View More/i);
   }
 
   /**
    * A labelled cell inside a row, e.g. rowLabelledSpan(row, "Accession #").
-   * Returns the <span> carrying the label itself.
+   * Returns the <span> carrying the label itself - callers walk from it
+   * (following-sibling, nested spans) to reach the value, which is why this
+   * stays a locator rather than folding into rowData or rowValueByLabel.
    */
   rowLabelledSpan(row: Locator, label: string): Locator {
     return row.locator("span", { hasText: label });
@@ -715,7 +712,10 @@ export class BasePage {
 
   /**
    * Reads a labelled value out of a row, e.g. labelledValue(row, "File #").
-   * Returns null when the row doesn't have that label.
+   * Returns null when the row doesn't have that label. Scoped through a
+   * `div` wrapper rather than `span` (see rowValueByLabel) - SRC's File #/
+   * Release # cells are not built the same way SF's labelled spans are, so
+   * this is a genuinely different DOM shape, not a duplicate.
    */
   async labelledValue(row: Locator, label: string): Promise<string | null> {
     const value = row
@@ -1127,51 +1127,6 @@ export class BasePage {
     const value = await row.locator("li span").first().innerText();
 
     return value.trim();
-  }
-
-  // ---------------------------------------------------------------
-  // Display columns - Info popup
-  // ---------------------------------------------------------------
-
-  /**
-   * Ticks ONE option in a display-column section, e.g.
-   * selectInfoOption("Filing Info", "Intelligize ID").
-   *
-   * This is not the same control as `configureDisplayColumns`: that one
-   * clears a whole section and re-picks it, which would drop columns an
-   * earlier call had already switched on. This adds a single column and
-   * leaves everything else alone, which is what the flows that need both
-   * "Intelligize ID" and one data column require.
-   */
-  async selectInfoOption(section: string, option: string) {
-    await this.page.getByText(section, { exact: true }).first().click();
-
-    const container = this.page
-      .locator('[class*="checkbox-node__children"]')
-      .first();
-
-    const label = container
-      .locator("label")
-      .filter({ hasText: option })
-      .first();
-
-    await label.scrollIntoViewIfNeeded();
-    await label.waitFor({ state: "visible" });
-
-    // The label and its checkbox are linked by `for`/`id` rather than
-    // nesting, so the input has to be resolved through the attribute.
-    const forAttr = await label.getAttribute("for");
-    if (!forAttr) {
-      throw new Error(`No 'for' attribute for ${option}`);
-    }
-
-    const checkbox = this.page.locator(`input[id="${forAttr}"]`);
-
-    if (!(await checkbox.isChecked())) {
-      await label.click();
-    }
-
-    await this.applyBtn.click();
   }
 
   /**

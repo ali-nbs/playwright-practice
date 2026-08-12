@@ -41,7 +41,7 @@ export const runRoIndexingTest = async (page: Page, logToFile: Function) => {
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
     await ro.fillAndEnter(ro.dateInput, scenario.date);
-    await ro.search();
+    await ro.searchBtn.click();
     const textDateOnly = await ro.getTabText(tabIndex++, logToFile, false);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 

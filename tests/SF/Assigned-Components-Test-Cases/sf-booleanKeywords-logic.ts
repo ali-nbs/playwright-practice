@@ -27,7 +27,6 @@ const getSearchElements = (page: Page) => {
     keywordInput: sf.keywordsInput,
     booleanTabBtn: sf.booleanTabBtn,
     searchBtn: sf.searchBtn,
-    clearBtn: sf.clearFiltersBtn,
     filterBar: sf.filterBar.locator("span"),
     gridContainer: sf.scroller,
   };
@@ -84,25 +83,21 @@ const scrapeVirtualizedGrid = async (
       await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
       await page.waitForTimeout(400);
 
+      // One batched read of the row's text instead of four separate calls.
+      const data = await sf.rowData(currentRow);
+
       // Extract full text (for proximity & NOT rules)
-      const pTexts = await sf.rowParagraphTexts(currentRow);
-      const fullText = pTexts.join(" ").replace(/\n/g, " ").trim();
+      const fullText = data.paragraphs.join(" ").replace(/\n/g, " ").trim();
 
       // Extract ONLY highlighted words (for AND/OR rules)
-      const emTextsArray = await sf.rowHighlightTexts(currentRow);
-      const highlights = emTextsArray.join(" ").replace(/\n/g, " ").trim();
+      const highlights = data.highlights.join(" ").replace(/\n/g, " ").trim();
 
       // Check if this row hides some snippets behind a button
       const hasViewAllHits =
         (await sf.rowViewAllHits(currentRow).count()) > 0;
 
-      const texts = await sf.rowSpanTextsRaw(currentRow);
-      const cleanContent = texts
-        .map((t) => t.trim())
-        .filter((t) => t.length > 0);
-
       const accessionNo =
-        cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
+        data.spans.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
         "N/A";
       console.log(`Accessible Name for Row ${processedCount}:`, accessionNo);
 
@@ -168,10 +163,7 @@ const validateRandomDocuments = async (
         );
         await page.waitForTimeout(500);
 
-        const texts = await sf.rowSpanTextsRaw(currentRow);
-        const cleanContent = texts
-          .map((t) => t.trim())
-          .filter((t) => t.length > 0);
+        const { spans: cleanContent } = await sf.rowData(currentRow);
 
         const accessionNo =
           cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
@@ -439,7 +431,7 @@ export const runBooleanKeywordsTest = async (
       await test.step(`Executing ${tc.id}`, async () => {
         logToFile(`\nExecuting ${tc.id}: ${tc.query}`);
 
-        await search.clearBtn.click();
+        await sf.clearFilters();
         getUIElements(page).exhibitsToFilingsLabel.click();
         await page.waitForTimeout(1000);
         await search.keywordInput.fill(tc.query);
@@ -521,7 +513,7 @@ export const runBooleanKeywordsTest = async (
   //   const search = getSearchElements(page);
   //   const sampleQuery = "cybersecurity AND breach";
 
-  //   await search.clearBtn.click();
+  //   await sf.clearFilters();
   //   getUIElements(page).exhibitsToFilingsLabel.click();
   //   await page.waitForTimeout(1000);
   //   await search.keywordInput.fill(sampleQuery);

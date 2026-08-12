@@ -9,7 +9,7 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
 
   const sf = new SfPage(page);
 
-  await sf.clearFiltersBtn.click({ force: true });
+  await sf.clearFilters();
   await sf.fillAndEnter(sf.formsInput, "10-K", 20);
 
   const exhibtsToFilingsCheckBox = await sf.exhibitsToFilingsLabel;
@@ -48,7 +48,7 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
       }
 
       console.log(`Processing Row: ${1 + processedCount}`);
-      const cleanContent = await sf.rowSpanTextsClean(currentRow);
+      const { spans: cleanContent } = await sf.rowData(currentRow);
       const accessionNo =
         cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
         "N/A";

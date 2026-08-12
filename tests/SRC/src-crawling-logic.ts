@@ -19,7 +19,7 @@ export const runSRCCrawlingTest = async (page: Page, logToFile: Function) => {
 
   for (const scenario of testCases) {
     await src.fillAndEnter(src.dateInput, scenario.date);
-    await src.search();
+    await src.searchBtn.click();
 
     const textDateOnly = await src.getTabText(tabIndex++, logToFile);
     const resultCount = parseCount(textDateOnly);
@@ -78,7 +78,7 @@ const scrapeCrawlingResults = async (targetCount: number, src: SrcPage) => {
     console.log({ fileNo, releaseNo });
     if (fileNo || releaseNo) fileOrReleaseNoCount++;
 
-    const cleanContent = await src.rowSpanTextsClean(row);
+    const { spans: cleanContent } = await src.rowData(row);
 
     const title = cleanContent[2] || "";
     const sourceType = cleanContent[3] || "";

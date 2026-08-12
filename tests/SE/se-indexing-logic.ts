@@ -41,12 +41,12 @@ export const runSEIndexingTest = async (page: Page, logToFile: Function) => {
     logToFile(`\nTesting Scenario: ${scenario.date}`);
 
     await se.fillAndEnter(se.dateInput, scenario.date);
-    await se.search();
+    await se.searchBtn.click();
     const textDateOnly = await se.getTabText(tabIndex++, logToFile, false);
     logToFile(`Baseline (${scenario.date}): ${textDateOnly}`);
 
     await se.fillAndEnter(se.keywordsInput, scenario.keyword);
-    // await se.search();
+    // await se.searchBtn.click();
     let textWithKeyword = await se.getTabText(tabIndex++, logToFile, false);
     logToFile(`With Keyword: ${textWithKeyword}`);
 
@@ -69,7 +69,7 @@ export const runSEIndexingTest = async (page: Page, logToFile: Function) => {
 
       await se.fillAndEnter(se.dateInput, scenario.date);
       await se.fillAndEnter(se.keywordsInput, scenario.NotKeyword);
-      // await se.search();
+      // await se.searchBtn.click();
 
       const textWithNotKeyword = await se.getTabText(
         tabIndex++,

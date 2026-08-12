@@ -30,7 +30,7 @@ export const runCrossReferenceLinksTest = async (
   await page.waitForTimeout(300);
   const dateInput = sf.dateInputByTestId;
   await sf.fillAndEnter(sf.dateInput, getTargetDateString());
-  await sf.search();
+  await sf.searchBtn.click();
 
   const searchResultTextOnly = await sf.getTabText(tabIndex++, logToFile);
   logToFile(`Baseline: ${searchResultTextOnly}`);
@@ -113,11 +113,10 @@ const scrapeResults = async (
       if (rowId && !processedIds.has(rowId)) {
         let AccessionNumber = "N/A";
         try {
-          const allSpantexts = await sf.rowSpanTextsRaw(row);
+          // rowParagraphs stays a locator (targetedLink below chains
+          // .locator() off it); the span text is now read via rowData.
           const allpTags = sf.rowParagraphs(row);
-          const cleanContent = allSpantexts
-            .map((t) => t.trim())
-            .filter((t) => t.length > 0);
+          const { spans: cleanContent } = await sf.rowData(row);
 
           console.log("---------------------------------------------");
             // for (const [index, text] of cleanContent.entries()) {

@@ -44,7 +44,7 @@ export const runAccountantFeesTest = async (
   await page.locator("label").filter({ hasText: FEE_OPTION }).first().click();
   await sf.okBtn.click();
 
-  await sf.search();
+  await sf.searchBtn.click();
 
   const { body, error: searchError } = await sf.trySearchResponse();
   logToFile(`Total Records: ${body.TotalRecords}`);
@@ -61,8 +61,9 @@ export const runAccountantFeesTest = async (
   let verified = 0;
 
   if (body.TotalRecords > 0) {
-    await sf.selectInfoOption("Filing Info", "Intelligize ID");
-    await sf.selectInfoOption("Filing Info", "Accountant Fees");
+    await sf.configureDisplayColumns({
+      "Filing Info": ["Intelligize ID", "Accountant Fees"],
+    });
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 

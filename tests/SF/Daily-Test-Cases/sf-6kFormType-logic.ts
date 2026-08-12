@@ -82,7 +82,7 @@ async function scrapeResults(
       await formTypeCell.waitFor({ state: "attached", timeout: 3000 });
       const rowText = await formTypeCell.innerText();
 
-      const cleanContent = await sf.rowSpanTextsClean(currentRow);
+      const { spans: cleanContent } = await sf.rowData(currentRow);
 
       const accessionNo =
         cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||

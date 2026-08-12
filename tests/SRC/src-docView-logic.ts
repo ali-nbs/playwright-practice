@@ -14,7 +14,7 @@ export const runSRCDocViewTest = async (page: Page, logToFile: Function) => {
   let tabIndex = 0;
 
   await src.selectAllLawsAndRegs();
-  await src.search();
+  await src.searchBtn.click();
 
   const searchResult = await src.getTabText(tabIndex++, logToFile);
   let findings = { text: "No Results Found", isValid: true };
@@ -56,7 +56,7 @@ const verifyDocViews = async (targetCount: number, src: SrcPage) => {
   let isScenarioValid = true;
 
   await src.forEachResultRow(targetCount, async (row, rowId) => {
-    const cleanContent = await src.rowSpanTextsClean(row);
+    const { spans: cleanContent } = await src.rowData(row);
 
     const title = cleanContent[2] || "";
     const sourceType = cleanContent[3] || "";

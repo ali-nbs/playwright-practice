@@ -30,7 +30,7 @@ export const runOutlineTest = async (page: Page, logToFile: Function) => {
 
   await sf.fillAndEnter(sf.dateInput, date);
   await sf.typeFormTypeList(FORM_TYPES);
-  await sf.search();
+  await sf.searchBtn.click();
 
   const { body, error: searchError } = await sf.trySearchResponse();
   logToFile(`Total Records: ${body.TotalRecords}`);

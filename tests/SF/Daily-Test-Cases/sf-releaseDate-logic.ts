@@ -30,7 +30,7 @@ export const runReleaseDateTest = async (page: Page, logToFile: Function) => {
 
   await sf.setCheckboxState("-ExhibitsToFilings", false);
   await sf.fillAndEnter(sf.dateInput, expectedDate);
-  await sf.search();
+  await sf.searchBtn.click();
 
   const { body, error: searchError } = await sf.trySearchResponse();
   logToFile(`Total Records: ${body.TotalRecords}`);
@@ -48,7 +48,7 @@ export const runReleaseDateTest = async (page: Page, logToFile: Function) => {
 
   if (body.TotalRecords > 0) {
     await sf.switchDateColumn("Date Filed", "Date Released");
-    await sf.selectInfoOption("Filing Info", "Intelligize ID");
+    await sf.configureDisplayColumns({ "Filing Info": ["Intelligize ID"] });
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 

@@ -26,7 +26,7 @@ export const runAccountingStandardTest = async (
 
   await sf.fillAndEnter(sf.dateInput, date);
   await sf.fillAndEnter(sf.accountingStandardInput, ACCOUNTING_STANDARD, 700);
-  await sf.search();
+  await sf.searchBtn.click();
 
   const { body, error: searchError } = await sf.trySearchResponse();
   logToFile(`Total Records: ${body.TotalRecords}`);
@@ -43,8 +43,10 @@ export const runAccountingStandardTest = async (
   let verified = 0;
 
   if (body.TotalRecords > 0) {
-    await sf.selectInfoOption("Filing Info", "Intelligize ID");
-    await sf.selectInfoOption("Company Info", "Accounting Std.");
+    await sf.configureDisplayColumns({
+      "Filing Info": ["Intelligize ID"],
+      "Company Info": ["Accounting Std."],
+    });
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 

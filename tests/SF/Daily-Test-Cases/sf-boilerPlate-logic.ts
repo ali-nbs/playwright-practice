@@ -98,7 +98,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
 
       await selectSectionFilters(page, combo);
 
-      await sf.search();
+      await sf.searchBtn.click();
 
       const statusText = await sf.getTabText(index++, logToFile, false);
       if (statusText.toLowerCase().includes("no results found")) {
@@ -148,7 +148,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
           continue;
         }
 
-        const cleanContent = await sf.rowSpanTextsClean(currentRow);
+        const { spans: cleanContent } = await sf.rowData(currentRow);
         const fillingInforesultLabel = sf.rowLabelledSpan(currentRow, "Accession #");
         const accessionNo = await fillingInforesultLabel
           .locator("xpath=following-sibling::span")
@@ -218,11 +218,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
       ].join("\n");
       allScenarioResults.push(scenarioBlock);
 
-      if (
-        await sf.clearFiltersBtn.isVisible()
-      ) {
-        await sf.clearFiltersBtn.click();
-      }
+      await sf.clearFilters();
     } catch (error: any) {
       console.error(`Error processing ${combo}: ${error.message}`);
     }

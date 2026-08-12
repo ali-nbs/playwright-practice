@@ -103,9 +103,25 @@ async function devSandbox() {
    // await runBpcCompareTest(page, logToFile);
   //  await runAAIndexingAndDocViewTest(page, liveLog);
    // await runAAAccountingDisclosuresAndPoliciesTest(page, liveLog);
-    await runAAAuditOpinionsAndPoliciesTest(page, liveLog);
+    // await runAAAuditOpinionsAndPoliciesTest(page, liveLog);
 
     // ---- Ported from the peer repo. Uncomment one to drive it. ----
+    //
+    // IMPORTANT: these flows start from an app that is ALREADY open - they
+    // do not navigate themselves (the .spec.ts files call `goto()` for
+    // that). So whatever tab this connects to must be showing the right
+    // app first, otherwise the flow happily runs against the wrong one and
+    // reports meaningless passes.
+    //
+    // Uncomment the matching navigation line for the app you need, using
+    // whatever app is loaded in Chrome right now as the source:
+    //
+    // await new BasePage(page).navigateFromTo("SEC Filings", "Securities Regulation & Compliance");
+    // await new BasePage(page).navigateFromTo("SEC Filings", "Agreements & Other Exhibits");
+    // await new BasePage(page).navigateFromTo("SEC Filings", "Disclosure Benchmarking");
+    // await new BasePage(page).navigateFromTo("SEC Filings", "SEC Enforcement");
+
+    // SEC Filings
     // await runBooleanHighlightTest(page, liveLog);
     // await runAccountingStandardTest(page, liveLog);
     // await runAcceleratedStatusTest(page, liveLog);
@@ -113,20 +129,31 @@ async function devSandbox() {
     // await runSnippetsTest(page, liveLog);
     // await runReleaseDateTest(page, liveLog);
     // await runOutlineTest(page, liveLog);
+
+    // Agreements & Other Exhibits
     // await runAoeBooleanHighlightTest(page, liveLog);
     // await runAoeConceptualHighlightTest(page, liveLog);
     // await runAoeReleaseDateTest(page, liveLog);
     // await runAoeClauseTest(page, liveLog);
+
+    // Disclosure Benchmarking
     // await runDbmBooleanHighlightTest(page, liveLog);
     // await runDbmConceptualHighlightTest(page, liveLog);
-    // await runSrcConceptualHighlightTest(page, liveLog);
+
+    // Securities Regulation & Compliance
+    await runSrcConceptualHighlightTest(page, liveLog);
+
+    // SEC Enforcement
     // await runSeBooleanHighlightTest(page, liveLog);
    
    
     console.log("---------------------------------------------------");
     console.log("✅ Run Complete. Browser is still open for your next edit.");
 
-    await browser.close();
+    // Deliberately NOT closing the browser: this connects to YOUR already
+    // running Chrome over CDP, and closing here would throw away the loaded
+    // app that takes ~10 minutes to get back.
+    // await browser.close();
   } catch (error) {
     console.error("❌ Execution Error:");
     console.error(error.message);

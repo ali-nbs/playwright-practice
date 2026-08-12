@@ -270,7 +270,7 @@
 //   let resultsSummary: string[] = [];
 
 //   for (const scenario of testCases) {
-//     await clearBtn.click();
+//     await aa.clearFilters();
 //     await page.waitForTimeout(500);
 //     let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
 //     await exhibitsCheckbox.uncheck({ force: true });
@@ -302,7 +302,7 @@
 //         "⚠️ Mismatch detected. Firing AA NOT keyword fallback verification...",
 //       );
 
-//       await clearBtn.click();
+//       await aa.clearFilters();
 //       await page.waitForTimeout(1000);
 
 //       await fillAndEnter(page, dateInput, scenario.date);
@@ -663,7 +663,6 @@ export const runAAIndexingAndDocViewTest = async (
   );
   const aa = new AaPage(page);
   const searchBtn = aa.searchBtn;
-  const clearBtn = aa.clearFiltersBtn;
 
   const testCases = [
     {
@@ -677,7 +676,7 @@ export const runAAIndexingAndDocViewTest = async (
   let resultsSummary: string[] = [];
 
   for (const scenario of testCases) {
-    await clearBtn.click();
+    await aa.clearFilters();
     await page.waitForTimeout(500);
     let exhibitsCheckbox = page.locator('label[for="-ExhibitsToFilings"]');
     await exhibitsCheckbox.uncheck({ force: true });
@@ -709,7 +708,7 @@ export const runAAIndexingAndDocViewTest = async (
         "⚠️ Mismatch detected. Firing AA NOT keyword fallback verification...",
       );
 
-      await clearBtn.click();
+      await aa.clearFilters();
       await page.waitForTimeout(1000);
 
       await aa.fillAndEnter(dateInput, scenario.date);

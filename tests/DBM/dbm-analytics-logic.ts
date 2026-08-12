@@ -59,7 +59,7 @@ export const runDBMAnalyticsTest = async (page: Page, logToFile: Function) => {
       }
     }
 
-    await dbm.search();
+    await dbm.searchBtn.click();
 
     const searchResultTextOnly = await dbm.getTabText(0, logToFile);
     logToFile(`${scenario.name} Result: ${searchResultTextOnly}`);

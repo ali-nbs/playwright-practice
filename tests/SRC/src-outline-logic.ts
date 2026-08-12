@@ -16,7 +16,7 @@ export const runSRCOutlineTest = async (page: Page, logToFile: Function) => {
   await src.fillAndEnter(src.dateInput, "Last 60 Days");
   await src.fillAndEnter(src.lawsAndRegsInput, "Securities Regs", 200);
 
-  await src.search();
+  await src.searchBtn.click();
 
   const searchResult = await src.getTabText(tabIndex++, logToFile);
   let findings = { text: "No Results Found", isValid: true };
@@ -58,7 +58,7 @@ const verifyOutlines = async (targetCount: number, src: SrcPage, page: Page) => 
   let isScenarioValid = true;
 
   await src.forEachResultRow(targetCount, async (row, rowId) => {
-    const cleanContent = await src.rowSpanTextsClean(row);
+    const { spans: cleanContent } = await src.rowData(row);
 
     const title = cleanContent[2] || "";
     const sourceType = cleanContent[3] || "";
