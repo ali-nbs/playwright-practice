@@ -72,10 +72,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
 
     const exhibitsTofilingsCheckbox = sf.exhibitsToFilingsLabel;
     await exhibitsTofilingsCheckbox.uncheck({ force: true });
-    await page
-      .getByRole("button", { name: /^Search$/i })
-      .first()
-      .click();
+    await sf.search();
 
     // 2. Verify Results Exist
     const statusLocator = sf.statusTabLabels;

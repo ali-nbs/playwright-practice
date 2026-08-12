@@ -67,69 +67,42 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
   await sf.closeAllOpenTabs();
 };
 
+/**
+ * Walks the grid via BasePage.forEachResultRow instead of hand-rolling the
+ * same id-tracked, skip-on-error scroll loop that lived here before -
+ * identical scroll style ("intoViewStart") and 500ms settle wait.
+ */
 const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
   const sf = new SfPage(page);
-  let resultsFound = 0;
-  const processedIds = new Set<string>();
-  let rowsData: string[] = [];
+  const rowsData: string[] = [];
   let isScenarioValid = true;
 
-  while (resultsFound < targetCount) {
-    const scroller = sf.scroller;
-    const rows = sf.rows;
-    const visibleRowCount = await rows.count();
+  await sf.forEachResultRow(targetCount, async (row, rowId) => {
+    const cleanContent = await sf.rowSpanTextsClean(row);
 
-    if (visibleRowCount === 0) {
-      await page.waitForTimeout(500);
-      continue;
+    const companyName = cleanContent[4] || "";
+    const pages = cleanContent[5] || "";
+    const docSize = cleanContent[6] || "";
+    const accessionNo = cleanContent[cleanContent.length - 1] || "";
+
+    const isLineMissingData =
+      !companyName || !pages || !docSize || !accessionNo;
+
+    const line = `Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`;
+
+    if (isLineMissingData) {
+      isScenarioValid = false;
+      rowsData.push(`❌ MISSING DATA >> ${line}`);
+    } else {
+      rowsData.push(line);
     }
 
-    for (let i = 0; i < visibleRowCount; i++) {
-      const row = rows.nth(i);
-      const rowId = await row.getAttribute("id");
+    console.log("```````````````````````````````````````");
+    console.log(`Row ${rowId}:`);
+    console.log(line);
+    console.log("```````````````````````````````````````");
+  });
 
-      if (rowId && !processedIds.has(rowId)) {
-        try {
-          const cleanContent = await sf.rowSpanTextsClean(row);
-
-          const companyName = cleanContent[4] || "";
-          const pages = cleanContent[5] || "";
-          const docSize = cleanContent[6] || "";
-          const accessionNo = cleanContent[cleanContent.length - 1] || "";
-
-          const isLineMissingData =
-            !companyName || !pages || !docSize || !accessionNo;
-
-          if (isLineMissingData) {
-            isScenarioValid = false;
-            rowsData.push(
-              `❌ MISSING DATA >> Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`,
-            );
-          } else {
-            rowsData.push(
-              `Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`,
-            );
-          }
-          console.log("```````````````````````````````````````");
-          console.log(`Row ${rowId}:`);
-          console.log(
-            `Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`,
-          );
-          console.log("```````````````````````````````````````");
-          processedIds.add(rowId);
-          await page.waitForTimeout(500);
-          resultsFound++;
-        } catch (e) {
-          continue;
-        }
-      }
-      if (resultsFound >= targetCount) break;
-    }
-    if (resultsFound < targetCount) {
-      await rows.last().evaluate((el) => el.scrollIntoView({ block: "start" }));
-      await page.waitForTimeout(500);
-    }
-  }
   return {
     text: rowsData.join("\n"),
     isValid: isScenarioValid,

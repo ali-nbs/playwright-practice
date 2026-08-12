@@ -98,10 +98,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
 
       await selectSectionFilters(page, combo);
 
-      await page
-        .getByRole("button", { name: /^Search$/i })
-        .first()
-        .click();
+      await sf.search();
 
       const statusText = await sf.getTabText(index++, logToFile, false);
       if (statusText.toLowerCase().includes("no results found")) {
