@@ -34,10 +34,18 @@ export const runBooleanHighlightTest = async (
   await sf.selectSearchType("Boolean");
   await sf.fillAndEnter(sf.keywordsInput, KEYWORD);
 
-  const body = await sf.waitForSearchResponse();
+  const { body, error: searchError } = await sf.trySearchResponse();
   logToFile(`Total Records: ${body.TotalRecords}`);
 
   let failures: string[] = [];
+
+  // A search that errored or never fired used to throw straight out of
+  // the flow, so nothing was ever written to the sheet. Record it as a
+  // failure instead and let the report still be produced.
+  if (searchError) {
+    failures.push(`Search failed: ${searchError}`);
+    logToFile(`Search failed: ${searchError}`);
+  }
   let verified = 0;
 
   if (body.TotalRecords > 0) {

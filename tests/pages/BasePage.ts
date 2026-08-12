@@ -60,8 +60,21 @@ export class BasePage {
     await this.searchBtn.click();
   }
 
+  /**
+   * Clears the filter bar.
+   *
+   * Uses force:true for the same reason sf-fiscalYear, sf-ixbrl, sf-pdee
+   * and sf-xbrlParsing already call `clearFiltersBtn.click({ force: true })`
+   * directly: the app leaves a hidden options strip
+   * (`styles__tabsContainer--hidden___18VdZ`, holding "Share Link") laid
+   * over the filter bar, and Playwright's actionability check refuses to
+   * click "through" it even though the button is visible, enabled and
+   * stable. LIVE-CONFIRMED (2026-08-12, headed run over CDP against SRC):
+   * without force this retries for the full 30s and then fails with
+   * "<span ...>Share Link</span> ... intercepts pointer events".
+   */
   async clearFilters() {
-    await this.clearFiltersBtn.click();
+    await this.clearFiltersBtn.click({ force: true });
   }
 
   // ---------------------------------------------------------------
@@ -656,6 +669,13 @@ export class BasePage {
    * They are NOT interchangeable, so each caller keeps the one it used:
    *   "intoViewStart"    -> rows.last().evaluate(el => el.scrollIntoView(...))
    *   "intoViewIfNeeded" -> rows.last().scrollIntoViewIfNeeded()
+   *
+   * `maxStagnantScrolls` stops the loop when scrolling stops producing new
+   * rows. Without it this loop never exits if the grid holds fewer rows than
+   * `targetCount` (e.g. the tab said "Docs: 20" but only 9 rows can ever
+   * render), which hangs the whole run rather than reporting what it found.
+   * The same guard already exists in forEachRefRow and in
+   * AaPage.findResultRowByIndex; this brings the third loop in line.
    */
   async forEachResultRow(
     targetCount: number,
@@ -663,11 +683,17 @@ export class BasePage {
     options: {
       scrollStyle?: "intoViewStart" | "intoViewIfNeeded";
       logRowId?: boolean;
+      maxStagnantScrolls?: number;
     } = {},
   ) {
-    const { scrollStyle = "intoViewStart", logRowId = true } = options;
+    const {
+      scrollStyle = "intoViewStart",
+      logRowId = true,
+      maxStagnantScrolls = 12,
+    } = options;
 
     let resultsFound = 0;
+    let stagnantScrolls = 0;
     const processedIds = new Set<string>();
 
     while (resultsFound < targetCount) {
@@ -675,9 +701,18 @@ export class BasePage {
       const visibleRowCount = await rows.count();
 
       if (visibleRowCount === 0) {
+        stagnantScrolls++;
+        if (stagnantScrolls > maxStagnantScrolls) {
+          console.log(
+            `forEachResultRow: giving up with ${resultsFound}/${targetCount} rows - the grid rendered no rows for ${maxStagnantScrolls} attempts.`,
+          );
+          return;
+        }
         await this.page.waitForTimeout(500);
         continue;
       }
+
+      const processedBeforeThisPass = processedIds.size;
 
       for (let i = 0; i < visibleRowCount; i++) {
         const row = rows.nth(i);
@@ -699,6 +734,18 @@ export class BasePage {
       }
 
       if (resultsFound < targetCount) {
+        // A pass that added no new row ids means scrolling is no longer
+        // revealing anything, so count it towards giving up.
+        stagnantScrolls =
+          processedIds.size === processedBeforeThisPass ? stagnantScrolls + 1 : 0;
+
+        if (stagnantScrolls > maxStagnantScrolls) {
+          console.log(
+            `forEachResultRow: stopping with ${resultsFound}/${targetCount} rows - ${maxStagnantScrolls} scrolls revealed no new rows.`,
+          );
+          return;
+        }
+
         if (scrollStyle === "intoViewIfNeeded") {
           await rows.last().scrollIntoViewIfNeeded();
         } else {
@@ -831,6 +878,36 @@ export class BasePage {
     }
 
     return response.json();
+  }
+
+  /**
+   * waitForSearchResponse, but a failed search is returned instead of thrown.
+   *
+   * Every count-driven flow used to call waitForSearchResponse bare. When the
+   * search API errored or never fired (a swallowed Enter, a server hiccup),
+   * the throw escaped the flow, so updateGoogleSheet never ran and the sheet
+   * got NO row at all - indistinguishable from "this test never ran". With
+   * this, the flow carries on with TotalRecords: 0, records the reason as a
+   * failure, and still writes an INVALID row.
+   *
+   * The ANSI strip is inlined rather than importing helpers.cleanErrorMessage
+   * because helpers.ts already imports BasePage, and importing it back would
+   * make the two modules circular.
+   */
+  async trySearchResponse(
+    timeout = 90000,
+  ): Promise<{ body: any; error?: string }> {
+    try {
+      return { body: await this.waitForSearchResponse(timeout) };
+    } catch (e) {
+      const raw = e instanceof Error ? e.message : String(e);
+      const message =
+        // eslint-disable-next-line no-control-regex
+        raw.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, "").split("\n")[0].trim() ||
+        "Unknown error (no message)";
+
+      return { body: { TotalRecords: 0 }, error: message };
+    }
   }
 
   // ---------------------------------------------------------------

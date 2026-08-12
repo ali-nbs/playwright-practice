@@ -28,17 +28,31 @@ export const runSnippetsTest = async (page: Page, logToFile: Function) => {
   await sf.fillAndEnter(sf.dateInput, date);
   await sf.search();
 
-  let body = await sf.waitForSearchResponse();
+  let { body, error: searchError } = await sf.trySearchResponse();
   logToFile(`Initial grid loaded. Total Records: ${body.TotalRecords}`);
 
   let failures: string[] = [];
   let verified = 0;
 
+  // A search that errored or never fired used to throw straight out of the
+  // flow, so nothing was ever written to the sheet. Record it as a failure
+  // instead and let the report still be produced.
+  if (searchError) {
+    failures.push(`Search failed: ${searchError}`);
+    logToFile(`Search failed: ${searchError}`);
+  }
+
   if (body.TotalRecords > 0) {
     await sf.setCheckboxState("Snippets", true);
 
-    body = await sf.waitForSearchResponse();
+    const rerun = await sf.trySearchResponse();
+    body = rerun.body;
     logToFile(`Search re-ran with Snippets. Total Records: ${body.TotalRecords}`);
+
+    if (rerun.error) {
+      failures.push(`Snippets re-run search failed: ${rerun.error}`);
+      logToFile(`Snippets re-run search failed: ${rerun.error}`);
+    }
 
     await sf.selectInfoOption("Filing Info", "Intelligize ID");
 

@@ -59,8 +59,19 @@ export const runAoeClauseTest = async (page: Page, logToFile: Function) => {
     await aoe.fillAndEnter(aoe.docTypeInput, docType, 700);
     await aoe.search();
 
-    const withoutClauseBody = await aoe.waitForSearchResponse();
-    const countWithoutClause = withoutClauseBody.TotalRecords;
+    const withoutClause = await aoe.trySearchResponse();
+
+    // A failed search used to throw out of the whole flow, losing every
+    // document type that had already passed. Record it and move on.
+    if (withoutClause.error) {
+      failures.push(
+        `Document Type: ${docType}\nSearch (without clause) failed: ${withoutClause.error}`,
+      );
+      logToFile(`${docType} search (without clause) failed: ${withoutClause.error}`);
+      continue;
+    }
+
+    const countWithoutClause = withoutClause.body.TotalRecords;
     logToFile(`${docType} WITHOUT clause: ${countWithoutClause}`);
 
     if (countWithoutClause === 0) {
@@ -79,10 +90,18 @@ export const runAoeClauseTest = async (page: Page, logToFile: Function) => {
     await aoe.fillAndEnter(aoe.sectionTypeInput, CLAUSE, 700);
     await aoe.search();
 
-    const withClauseBody = await aoe.waitForSearchResponse();
+    const withClause = await aoe.trySearchResponse();
     await page.waitForTimeout(1000);
 
-    const countWithClause = withClauseBody.TotalRecords;
+    if (withClause.error) {
+      failures.push(
+        `Document Type: ${docType}\nSearch (with clause) failed: ${withClause.error}`,
+      );
+      logToFile(`${docType} search (with clause) failed: ${withClause.error}`);
+      continue;
+    }
+
+    const countWithClause = withClause.body.TotalRecords;
     logToFile(`${docType} WITH clause: ${countWithClause}`);
 
     if (countWithClause === 0) {

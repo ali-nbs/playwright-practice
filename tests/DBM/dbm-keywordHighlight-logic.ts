@@ -47,10 +47,18 @@ const runScenario = async (
   await dbm.selectSearchType(scenario.searchType);
   await dbm.fillAndEnter(dbm.bodyKeywordsInput, scenario.keyword, 700);
 
-  const body = await dbm.waitForSearchResponse();
+  const { body, error: searchError } = await dbm.trySearchResponse();
   logToFile(`Total Records: ${body.TotalRecords}`);
 
   let docFailures: string[] = [];
+
+  // A search that errored or never fired used to throw straight out of
+  // the flow, so nothing was ever written to the sheet. Record it as a
+  // failure instead and let the report still be produced.
+  if (searchError) {
+    docFailures.push(`Search failed: ${searchError}`);
+    logToFile(`Search failed: ${searchError}`);
+  }
   let gridFailures: string[] = [];
   let docsVerified = 0;
   let rowsVerified = 0;

@@ -36,10 +36,18 @@ export const runSrcConceptualHighlightTest = async (
   await src.selectSearchType("Conceptual");
   await src.fillAndEnter(src.keywordsInput, CONCEPTUAL_KEYWORD, 700);
 
-  const body = await src.waitForSearchResponse();
+  const { body, error: searchError } = await src.trySearchResponse();
   logToFile(`Total Records: ${body.TotalRecords}`);
 
   let docFailures: string[] = [];
+
+  // A search that errored or never fired used to throw straight out of
+  // the flow, so nothing was ever written to the sheet. Record it as a
+  // failure instead and let the report still be produced.
+  if (searchError) {
+    docFailures.push(`Search failed: ${searchError}`);
+    logToFile(`Search failed: ${searchError}`);
+  }
   let gridFailures: string[] = [];
   let docsVerified = 0;
   let rowsVerified = 0;
@@ -81,9 +89,13 @@ export const runSrcConceptualHighlightTest = async (
       const details = await src.rowDetails(row);
       const label = `${details.title} - ${details.category} - ${details.dateFiled}`;
 
+      // LIVE-CONFIRMED (2026-08-12, headed run over CDP): SRC marks row
+      // highlights with <em class="highlight">, NOT the <customhighlight>
+      // tag DBM uses - a real row had 15 em.highlight and 0
+      // customhighlight, so the DBM selector would have failed every row.
       const { found, invalidColor } = await src.checkRowHighlights(
         row,
-        "customhighlight",
+        "em.highlight",
       );
 
       rowsVerified++;

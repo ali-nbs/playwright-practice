@@ -10,7 +10,7 @@ import {
 import path from "path";
 
 const SPREADSHEET_ID = "1DOnzSxSjCQYeQKewr0JDQiMzq_w4LM1dWHvMSW-9QUg";
-const SHEET_NAME = "8/10";
+const SHEET_NAME = "8/11";
 const KEY_FILE = path.resolve(process.cwd(), "credentials.json");
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
