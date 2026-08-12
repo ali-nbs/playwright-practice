@@ -148,7 +148,14 @@ export class BasePage {
     }
   }
 
-  /** The "+" icon inside an already-located filter block. */
+  /**
+   * The "+" icon inside an already-located filter block.
+   *
+   * Use this when you already hold the block's Locator; use `filterAddIcon`
+   * when you only know the block's label. They were separate copies of the
+   * same selector until the consolidation - now `filterAddIcon` calls this,
+   * so the selector exists once.
+   */
   addIconIn(block: Locator): Locator {
     return block.locator("span._icon_1jkal_249.Add").first();
   }
@@ -429,9 +436,34 @@ export class BasePage {
       .filter({ has: this.page.locator("label", { hasText: labelText }) });
   }
 
-  /** The "+" icon that opens a filter block's picker. */
+  /**
+   * The "+" icon that opens a filter block's picker, found by the block's
+   * label. The label-free counterpart is `addIconIn`.
+   */
   filterAddIcon(labelText: RegExp): Locator {
-    return this.filterBlock(labelText).locator("span._icon_1jkal_249.Add").first();
+    return this.addIconIn(this.filterBlock(labelText));
+  }
+
+  /**
+   * A row in a picker popup's check-list, e.g. the Section picker.
+   *
+   * Lives here rather than on SfPage: nothing about it is SF-specific, and
+   * the popup chrome it targets is the same one every app's filter pickers
+   * use. Moved from SfPage.checkListItem.
+   */
+  pickerListItem(text: RegExp): Locator {
+    return this.page
+      .locator("li.styles__check-list-item__container___233d9")
+      .filter({ hasText: text });
+  }
+
+  /**
+   * The checkbox icon inside a picker row. Moved from
+   * SfPage.pickerRowCheckboxIcon - `_checkbox__icon_1xotg_257` is the same
+   * shared class configureDisplayColumns above already uses.
+   */
+  pickerCheckboxIcon(row: Locator): Locator {
+    return row.locator("label._checkbox__icon_1xotg_257");
   }
 
   // ---------------------------------------------------------------
@@ -503,8 +535,13 @@ export class BasePage {
     );
   }
 
-  /** The lowercase "ok" confirm button used by the export dialogs. */
-  get okBtnLoose(): Locator {
+  /**
+   * The confirm button matched case-insensitively, for dialogs that render
+   * it as "Ok"/"ok" rather than "OK". Distinct from `okBtn` above, which is
+   * an exact "OK" match. Renamed from `okBtnLoose`, where "Loose" did not
+   * say what was loose about it.
+   */
+  get okBtnAnyCase(): Locator {
     return this.page.getByRole("button", { name: /ok/i });
   }
 
@@ -579,14 +616,18 @@ export class BasePage {
     return row.getByRole("button", { name: /View/i });
   }
 
+  // Both of the next two read a row's <span> texts. The only difference is
+  // trimming and dropping empties, which the old `rowTexts` / `rowSpanTexts`
+  // names gave no hint of, so they are now named for that difference.
+
   /** A row's trimmed, non-empty span texts (title, source, category, ...). */
-  async rowTexts(row: Locator): Promise<string[]> {
+  async rowSpanTextsClean(row: Locator): Promise<string[]> {
     const texts = await row.locator("span").allInnerTexts();
     return texts.map((t) => t.trim()).filter((t) => t.length > 0);
   }
 
-  /** Raw (untrimmed) span texts of a row. */
-  async rowSpanTexts(row: Locator): Promise<string[]> {
+  /** Raw (untrimmed, empties kept) span texts of a row. */
+  async rowSpanTextsRaw(row: Locator): Promise<string[]> {
     return row.locator("span").allInnerTexts();
   }
 
@@ -975,6 +1016,15 @@ export class BasePage {
   // ---------------------------------------------------------------
 
   /**
+   * The text the document's Info panel is anchored on when looking up the
+   * Intelligize ID. AOE labels this block "Filing Info" instead, so it
+   * overrides just this string rather than the whole lookup below.
+   */
+  protected get infoPanelAnchorText(): string {
+    return "Filed";
+  }
+
+  /**
    * Reads a row's Intelligize ID. Requires the "Intelligize ID" display
    * column to have been switched on first (see selectInfoOption).
    */
@@ -991,7 +1041,7 @@ export class BasePage {
   /** Reads the Intelligize ID from the open document's Info panel. */
   async openDocIntelligizeId(): Promise<string> {
     const panel = this.page
-      .locator('div:has-text("Filed")')
+      .locator(`div:has-text("${this.infoPanelAnchorText}")`)
       .locator('xpath=ancestor::div[contains(@class,"info-panel")]');
 
     const row = panel

@@ -209,23 +209,16 @@ export const ensureLoggedIn = async (
   }
 };
 
-// getTabText throws a plain Error tagged with `.kind` when the result grid
-// shows an error state instead of a count, or when the app's crash screen
-// ("Oops! Something went wrong.") appears instead of the app entirely.
-// Callers check `error.kind` ("error" | "crash") to decide whether to skip
-// to the next scenario or recover + abort.
-const throwGridStateError = (kind: "error" | "crash", message: string) => {
-  const err: any = new Error(message);
-  err.kind = kind;
-  throw err;
-};
-
-// The app's generic React crash boundary: a centered "Oops! / Something
-// went wrong. / Go Back" block replacing the entire UI. Confirmed live via
-// screenshot (apps.intelligize.com/BoardProfilesAndCompensation).
-export const getCrashScreenLocator = (page: Page) =>
-  page.getByText("Oops!", { exact: false }).first();
-
+// NOTE: `throwGridStateError` and `getCrashScreenLocator` used to live here
+// too. Both moved to BasePage during the POM consolidation (as the private
+// helper above `getTabText`, and as the `crashScreen` getter) and the copies
+// left behind had no callers - the throwGridStateError copy was not even
+// exported. They were deleted rather than re-exported, since nothing
+// imported them.
+//
+// `recoverFromAppCrash` deliberately stays in utils: it takes a `page` but is
+// not part of any app's screen, so per POM-ARCHITECTURE section 4 it belongs
+// with session-level helpers rather than on a page class.
 export const recoverFromAppCrash = async (
   page: Page,
   logToFile: Function = () => {},

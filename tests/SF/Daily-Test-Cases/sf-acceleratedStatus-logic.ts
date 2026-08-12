@@ -30,7 +30,7 @@ export const runAcceleratedStatusTest = async (
   await page.waitForTimeout(1000);
 
   await sf.fillAndEnter(sf.dateInput, date);
-  await sf.applyFormTypes(FORM_TYPES);
+  await sf.typeFormTypeList(FORM_TYPES);
   logToFile(`Forms applied: ${FORM_TYPES}`);
   await sf.fillAndEnter(sf.acceleratedStatusInput, ACCELERATED_STATUS, 1000);
   await sf.search();

@@ -142,7 +142,7 @@ async function scrapeFilingAgentResults(
 
       if (rowId && !processedIds.has(rowId)) {
         try {
-          const cleanContent = await sf.rowTexts(row);
+          const cleanContent = await sf.rowSpanTextsClean(row);
 
           const accessionNo =
             cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||

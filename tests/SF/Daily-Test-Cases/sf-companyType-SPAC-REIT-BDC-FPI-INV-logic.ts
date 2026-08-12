@@ -78,7 +78,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
       .click();
 
     // 2. Verify Results Exist
-    const statusLocator = sf.statusTab;
+    const statusLocator = sf.statusTabLabels;
     await expect(statusLocator.first()).toBeVisible({ timeout: 60000 });
 
     if (

@@ -72,7 +72,7 @@ const runScenario = async (
     for (let i = 0; i < target; i++) {
       await page.waitForTimeout(100);
 
-      const highlighted = await dbm.hasDbmDocumentHighlight();
+      const highlighted = await dbm.hasDocumentHighlight();
       docsVerified++;
 
       if (!highlighted) {

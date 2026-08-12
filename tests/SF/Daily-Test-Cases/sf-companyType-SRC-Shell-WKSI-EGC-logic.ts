@@ -79,7 +79,7 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
       .click();
 
     // 3. Verify Results
-    const statusLocator = sf.statusTab;
+    const statusLocator = sf.statusTabLabels;
     await expect(statusLocator.first()).toBeVisible({ timeout: 60000 });
 
     if (

@@ -138,7 +138,7 @@ const scrapeResults = async (
 
       if (rowId && !processedIds.has(rowId)) {
         try {
-          const cleanContent = await sf.rowTexts(row);
+          const cleanContent = await sf.rowSpanTextsClean(row);
           console.log("```````````````````````````````````````");
           // for (const [index, text] of cleanContent.entries()) {
           //   console.log(index, text);

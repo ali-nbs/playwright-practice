@@ -122,7 +122,7 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
 
       const [download] = await Promise.all([
         page.waitForEvent("download", { timeout: DOWNLOAD_TIMEOUT }),
-        sf.okBtnLoose.click(),
+        sf.okBtnAnyCase.click(),
       ]);
 
       await saveAndVerify(download, formats[i]);
@@ -140,7 +140,7 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
 
     const [excelDownload] = await Promise.all([
       page.waitForEvent("download", { timeout: DOWNLOAD_TIMEOUT }),
-      sf.okBtnLoose.click(),
+      sf.okBtnAnyCase.click(),
     ]);
 
     await saveAndVerify(excelDownload, "Excel");
@@ -154,7 +154,7 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
     await sf.emailBtn.click();
     // This click used to be un-awaited, so the flow raced on to writing the
     // report while the dialog was still being dismissed.
-    await sf.okBtnLoose.click();
+    await sf.okBtnAnyCase.click();
   } catch (e) {
     failures.push(`Email dialog failed: ${cleanErrorMessage(e)}`);
     logToFile(`Email dialog failed: ${cleanErrorMessage(e)}`);

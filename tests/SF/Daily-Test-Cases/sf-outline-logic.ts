@@ -29,7 +29,7 @@ export const runOutlineTest = async (page: Page, logToFile: Function) => {
   await page.waitForTimeout(1000);
 
   await sf.fillAndEnter(sf.dateInput, date);
-  await sf.applyFormTypes(FORM_TYPES);
+  await sf.typeFormTypeList(FORM_TYPES);
   await sf.search();
 
   const { body, error: searchError } = await sf.trySearchResponse();

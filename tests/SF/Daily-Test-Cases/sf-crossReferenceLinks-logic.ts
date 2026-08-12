@@ -113,7 +113,7 @@ const scrapeResults = async (
       if (rowId && !processedIds.has(rowId)) {
         let AccessionNumber = "N/A";
         try {
-          const allSpantexts = await sf.rowSpanTexts(row);
+          const allSpantexts = await sf.rowSpanTextsRaw(row);
           const allpTags = sf.rowParagraphs(row);
           const cleanContent = allSpantexts
             .map((t) => t.trim())

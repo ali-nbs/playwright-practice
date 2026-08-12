@@ -5,6 +5,13 @@ import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_accountantFees";
 
+/**
+ * Which Accountant Fees option to filter by.
+ *
+ * The three lines that apply it live in this file rather than on SfPage:
+ * picking "Any Fees" is a decision this test makes, and the click sequence
+ * itself is a generic popup interaction with nothing SF-specific about it.
+ */
 const FEE_OPTION = "Any Fees";
 const FORM_TYPES = "10-K;10-Q;S-4;DEF 14A;40-F;20-F";
 const MAX_DOCS = 25;
@@ -30,9 +37,13 @@ export const runAccountantFeesTest = async (
   await page.waitForTimeout(1000);
 
   await sf.fillAndEnter(sf.dateInput, date);
-  await sf.applyFormTypes(FORM_TYPES);
+  await sf.typeFormTypeList(FORM_TYPES);
   logToFile(`Forms applied: ${FORM_TYPES}`);
-  await sf.applyAccountantFee(FEE_OPTION);
+
+  await sf.accountantFeesInput.click();
+  await page.locator("label").filter({ hasText: FEE_OPTION }).first().click();
+  await sf.okBtn.click();
+
   await sf.search();
 
   const { body, error: searchError } = await sf.trySearchResponse();

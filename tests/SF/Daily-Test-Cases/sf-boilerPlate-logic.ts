@@ -151,7 +151,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
           continue;
         }
 
-        const cleanContent = await sf.rowTexts(currentRow);
+        const cleanContent = await sf.rowSpanTextsClean(currentRow);
         const fillingInforesultLabel = sf.rowLabelledSpan(currentRow, "Accession #");
         const accessionNo = await fillingInforesultLabel
           .locator("xpath=following-sibling::span")
@@ -279,8 +279,8 @@ async function selectSectionFilters(page: Page, combo: any) {
   await sf.addIconIn(nonMaterialRow).click({ force: true });
 
   for (const excludeName of combo.exclude) {
-    const row = sf.checkListItem(new RegExp(excludeName));
-    await sf.pickerRowCheckboxIcon(row).click({ force: true });
+    const row = sf.pickerListItem(new RegExp(excludeName));
+    await sf.pickerCheckboxIcon(row).click({ force: true });
   }
 
   await popupBody.getByRole("button", { name: /^OK$/ }).click();

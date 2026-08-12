@@ -58,7 +58,7 @@ const verifyOutlines = async (targetCount: number, src: SrcPage, page: Page) => 
   let isScenarioValid = true;
 
   await src.forEachResultRow(targetCount, async (row, rowId) => {
-    const cleanContent = await src.rowTexts(row);
+    const cleanContent = await src.rowSpanTextsClean(row);
 
     const title = cleanContent[2] || "";
     const sourceType = cleanContent[3] || "";

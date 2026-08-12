@@ -78,7 +78,7 @@ const scrapeCrawlingResults = async (targetCount: number, src: SrcPage) => {
     console.log({ fileNo, releaseNo });
     if (fileNo || releaseNo) fileOrReleaseNoCount++;
 
-    const cleanContent = await src.rowTexts(row);
+    const cleanContent = await src.rowSpanTextsClean(row);
 
     const title = cleanContent[2] || "";
     const sourceType = cleanContent[3] || "";

@@ -90,7 +90,7 @@ const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
 
       if (rowId && !processedIds.has(rowId)) {
         try {
-          const cleanContent = await sf.rowTexts(row);
+          const cleanContent = await sf.rowSpanTextsClean(row);
 
           const companyName = cleanContent[4] || "";
           const pages = cleanContent[5] || "";

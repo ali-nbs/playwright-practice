@@ -69,7 +69,7 @@ async function scrapeResults(
   let failurelogs: string[] = [];
 
   while (resultsFound < targetCount) {
-    const currentRow = sf.rowByIdFlat(resultsFound);
+    const currentRow = sf.rowByIdUnscoped(resultsFound);
 
     if ((await currentRow.count()) === 0) {
       await currentRow.last().scrollIntoViewIfNeeded();
@@ -82,7 +82,7 @@ async function scrapeResults(
       await formTypeCell.waitFor({ state: "attached", timeout: 3000 });
       const rowText = await formTypeCell.innerText();
 
-      const cleanContent = await sf.rowTexts(currentRow);
+      const cleanContent = await sf.rowSpanTextsClean(currentRow);
 
       const accessionNo =
         cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||

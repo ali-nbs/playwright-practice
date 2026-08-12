@@ -95,7 +95,7 @@ const scrapeVirtualizedGrid = async (
       const hasViewAllHits =
         (await sf.rowViewAllHits(currentRow).count()) > 0;
 
-      const texts = await sf.rowSpanTexts(currentRow);
+      const texts = await sf.rowSpanTextsRaw(currentRow);
       const cleanContent = texts
         .map((t) => t.trim())
         .filter((t) => t.length > 0);

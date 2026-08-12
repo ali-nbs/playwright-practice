@@ -223,10 +223,8 @@ export class SfPage extends BasePage {
     return this.page.locator(`input[name="${sectionName}"]`);
   }
 
-  /** The checkbox icon inside a picker row. */
-  pickerRowCheckboxIcon(row: Locator): Locator {
-    return row.locator("label._checkbox__icon_1xotg_257");
-  }
+  // NOTE: `pickerRowCheckboxIcon` moved to BasePage as `pickerCheckboxIcon`.
+  // Nothing about it was SF-specific.
 
   // ---------------------------------------------------------------
   // Fiscal year (company summary popup)
@@ -237,15 +235,21 @@ export class SfPage extends BasePage {
     return this.page.locator("tr.periodicFilingsContent__tableRow___trkDv");
   }
 
-  /** The results-status tab used by the company-type flows. */
-  get statusTab(): Locator {
-    return this.page.locator(
-      '//span[contains(text(), "Docs:") or contains(text(), "No Results Found")]',
-    );
-  }
+  // NOTE: `statusTab` used to be declared here with the exact same XPath as
+  // BasePage.statusTabLabels, character for character. It was a merge
+  // duplicate, so it is gone and its two callers now use statusTabLabels.
 
-  /** A result row looked up directly by id (no rowgroup scoping). */
-  rowByIdFlat(id: number | string): Locator {
+  /**
+   * A result row looked up directly by id, WITHOUT scoping through the
+   * rowgroup the way BasePage.rowById does.
+   *
+   * The two are not interchangeable: the unscoped query also matches rows in
+   * a stale, offscreen grid the app has left mounted. Only sf-6kFormType uses
+   * this, and whether it actually needs the unscoped behaviour is unverified
+   * - see the review's open questions. Renamed from `rowByIdFlat`, where
+   * "Flat" was never defined anywhere.
+   */
+  rowByIdUnscoped(id: number | string): Locator {
     return this.page.locator(`div[data-test="resultRow"][id="${id}"]`);
   }
 
@@ -256,12 +260,8 @@ export class SfPage extends BasePage {
     );
   }
 
-  /** A row inside the Section picker's check-list. */
-  checkListItem(text: RegExp): Locator {
-    return this.page
-      .locator("li.styles__check-list-item__container___233d9")
-      .filter({ hasText: text });
-  }
+  // NOTE: `checkListItem` moved to BasePage as `pickerListItem`. It targets
+  // generic picker-popup chrome, not anything SF owns.
 
   /** The XBRL viewer iframe (a different iframe from documentFrame). */
   get xbrlFrame() {
@@ -308,29 +308,28 @@ export class SfPage extends BasePage {
   }
 
   /**
-   * Types a form list into the Forms filter and commits it.
+   * Types a ";"-separated list of form types into the Forms filter and
+   * commits it.
    *
    * Uses pressSequentially rather than BasePage.fillAndEnter because the
-   * Forms box parses a ";"-separated list as it is typed and drops entries
-   * when the characters arrive faster than its own parsing.
+   * Forms box parses the list as it is typed and drops entries when the
+   * characters arrive faster than its own parsing. A SINGLE form type does
+   * not hit that problem, which is why sf-accountant happily uses
+   * fillAndEnter for one value. Renamed from `applyFormTypes` so the "list"
+   * part - the entire reason this exists - is in the name.
    */
-  async applyFormTypes(value: string, delay: number = 700) {
+  async typeFormTypeList(value: string, delay: number = 700) {
     await this.formsInput.pressSequentially(value, { delay });
     await this.page.keyboard.press("Enter");
   }
 
-  /** Picks one Accountant Fees option, e.g. "Any Fees", and confirms. */
-  async applyAccountantFee(value: string) {
-    await this.accountantFeesInput.click();
-
-    await this.page
-      .locator("label")
-      .filter({ hasText: value })
-      .first()
-      .click();
-
-    await this.okBtn.click();
-  }
+  // NOTE: `applyAccountantFee` used to live here. It had one caller, and its
+  // body was a generic "open this filter, tick the option with this label,
+  // press OK" sequence with nothing SF-specific in it except which input.
+  // Which fee option to pick is a decision belonging to the test, so those
+  // three lines now live in sf-accountantFees-logic.ts next to FEE_OPTION.
+  // The `accountantFeesInput` locator above stays here, because a locator IS
+  // a thing on SF's screen.
 
   // ---------------------------------------------------------------
   // Result-row values (need the matching display column switched on)

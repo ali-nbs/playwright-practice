@@ -102,10 +102,16 @@ export class DbmPage extends BasePage {
    * True when the open document shows a keyword highlight.
    *
    * Adds <customhighlight> to the shared selector list: DBM marks snippet
-   * highlights with that tag, which the other apps never emit.
+   * highlights with that tag, which the other apps never emit. Any extra
+   * selectors a caller passes are still honoured.
+   *
+   * This is a plain override rather than the old separately-named
+   * `hasDbmDocumentHighlight`, which stuttered at the call site
+   * (`dbm.hasDbmDocumentHighlight()`) and meant a caller holding a BasePage
+   * reference silently got the version without the DBM tag.
    */
-  async hasDbmDocumentHighlight(): Promise<boolean> {
-    return this.hasDocumentHighlight(["customhighlight"]);
+  async hasDocumentHighlight(extraSelectors: string[] = []): Promise<boolean> {
+    return super.hasDocumentHighlight(["customhighlight", ...extraSelectors]);
   }
 
 }

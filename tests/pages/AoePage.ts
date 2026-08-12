@@ -69,26 +69,14 @@ export class AoePage extends BasePage {
   // ---------------------------------------------------------------
 
   /**
-   * Reads the Intelligize ID from the open document's Info panel.
+   * AOE's Info panel is anchored on "Filing Info" rather than the "Filed"
+   * label the other apps use.
    *
-   * Overridden because AOE's panel is anchored on "Filing Info" rather than
-   * the "Filed" label BasePage keys off.
+   * This used to be a full override of openDocIntelligizeId that duplicated
+   * all 13 lines of the base version just to change this one string.
    */
-  async openDocIntelligizeId(): Promise<string> {
-    const panel = this.page
-      .locator('div:has-text("Filing Info")')
-      .locator('xpath=ancestor::div[contains(@class,"info-panel")]');
-
-    const row = panel
-      .locator("div")
-      .filter({ has: this.page.getByText("Intelligize ID", { exact: true }) })
-      .first();
-
-    await row.scrollIntoViewIfNeeded();
-
-    const value = await row.locator("li span").first().innerText();
-
-    return value.trim();
+  protected get infoPanelAnchorText(): string {
+    return "Filing Info";
   }
 
 }
