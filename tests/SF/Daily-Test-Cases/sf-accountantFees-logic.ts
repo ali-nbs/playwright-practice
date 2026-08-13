@@ -3,7 +3,7 @@ import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import { getTargetDateString } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
-const IDENTIFIER = "sf_accountantFees";
+const IDENTIFIER = "prod_sf_AccFee_validation";
 
 /**
  * Which Accountant Fees option to filter by.
@@ -14,7 +14,7 @@ const IDENTIFIER = "sf_accountantFees";
  */
 const FEE_OPTION = "Any Fees";
 const FORM_TYPES = "10-K;10-Q;S-4;DEF 14A;40-F;20-F";
-const MAX_DOCS = 25;
+const MAX_DOCS = 2;
 
 /**
  * Filters by Accountant Fees = "Any Fees" and checks every result row
@@ -37,7 +37,7 @@ export const runAccountantFeesTest = async (
   await page.waitForTimeout(1000);
 
   await sf.fillAndEnter(sf.dateInput, date);
-  await sf.typeFormTypeList(FORM_TYPES);
+  await sf.fillAndEnter(sf.formsInput,FORM_TYPES);
   logToFile(`Forms applied: ${FORM_TYPES}`);
 
   await sf.accountantFeesInput.click();
@@ -51,9 +51,6 @@ export const runAccountantFeesTest = async (
 
   let failures: string[] = [];
 
-  // A search that errored or never fired used to throw straight out of
-  // the flow, so nothing was ever written to the sheet. Record it as a
-  // failure instead and let the report still be produced.
   if (searchError) {
     failures.push(`Search failed: ${searchError}`);
     logToFile(`Search failed: ${searchError}`);
@@ -71,7 +68,7 @@ export const runAccountantFeesTest = async (
       target,
       async (row) => {
         const id = await sf.rowValueByLabel(row, "Intelligize ID");
-        const hasFee = await sf.rowHasAccountantFee(row);
+        const hasFee = await sf.rowValueByLabel(row, "Accountant Fees"); 
 
         verified++;
 

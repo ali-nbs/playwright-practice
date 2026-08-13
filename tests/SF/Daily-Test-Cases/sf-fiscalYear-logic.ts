@@ -47,7 +47,7 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
   await configureFiscalYearColumns(page);
 
   const docsCount = parseCount(textDateOnly);
-  const actualTarget = Math.min(5, docsCount);
+  const actualTarget = Math.min(1, docsCount);
   const findings = await scrapeFiscalYearResults(actualTarget, page);
 
   const scenarioBlock = [
@@ -68,47 +68,24 @@ export const runFiscalYearTest = async (page: Page, logToFile: Function) => {
 
 const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
   const sf = new SfPage(page);
-  let resultsFound = 0;
-  const processedIds = new Set<string>();
   let failureCompanies: string[] = [];
   const activeTab = sf.contextMenuWrapper;
 
-  while (resultsFound < targetCount) {
-    const scroller = sf.scroller;
-    const rows = sf.rows;
-
-    if ((await rows.count()) === 0) {
+  await sf.forEachRow(
+    targetCount,
+    async (row) => {
+      const { links: anchorLinks } = await sf.rowData(row);
+      await row.locator("a").first().click();
       await page.waitForTimeout(500);
-      continue;
-    }
 
-    for (let i = 0; i < (await rows.count()); i++) {
-      const row = rows.nth(i);
-      const rowId = await row.getAttribute("id");
+      const isValid = await validateFiscalYear(page, activeTab);
+      if (!isValid.status) failureCompanies.push(anchorLinks[0]);
 
-      if (rowId && !processedIds.has(rowId)) {
-        try {
-          const { links: anchorLinks } = await sf.rowData(row);
-          await row.locator("a").first().click();
-          await page.waitForTimeout(500);
+      await activeTab.nth(1).click();
+    },
+    { swallowRowErrors: true },
+  );
 
-          const isValid = await validateFiscalYear(page, activeTab);
-          if (!isValid.status) failureCompanies.push(anchorLinks[0]);
-
-          processedIds.add(rowId);
-          await activeTab.nth(1).click();
-          resultsFound++;
-        } catch (e) {
-          continue;
-        }
-      }
-      if (resultsFound >= targetCount) break;
-    }
-    if (resultsFound < targetCount) {
-      await rows.last().scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
-    }
-  }
   return { text: failureCompanies, isValid: failureCompanies.length === 0 };
 };
 

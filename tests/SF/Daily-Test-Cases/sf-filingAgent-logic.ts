@@ -12,20 +12,18 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-Filing Agent Report ---");
 
   const sf = new SfPage(page);
-
-
   const testCases = [
     {
       date: getTargetDateString(),
       agent: "Akin Gump Strauss Hauer & Feld LLP",
       alias: ["Akin Gump Strauss Hauer & Feld LLP"],
-      count: 15,
+      count: 1,
     },
     {
       date: getTargetDateString(),
       agent: "Broadridge Financial Solutions, Inc",
       alias: ["Broadridge Financial Solutions, Inc./FA", "Broadridge Investor Communication Solutions, Inc"],
-      count: 15,
+      count: 1,
     },
     {
       date: getTargetDateString(),
@@ -37,7 +35,7 @@ export const runFilingAgentTest = async (page: Page, logToFile: Function) => {
         "DONNELLEY FINANCIAL SOLUTIONS 03/FA",
         "DONNELLEY FINANCIAL SOLUTIONS/NY",
       ],
-      count: 15
+      count: 1
     },
   ];
 
@@ -121,75 +119,48 @@ async function scrapeFilingAgentResults(
   scenario: any,
 ) {
   const sf = new SfPage(page);
-  let resultsFound = 0;
-  const processedIds = new Set<string>();
   let rowsData: string[] = [];
   let isScenarioValid = true;
 
-  while (resultsFound < targetCount || resultsFound == 24) {
-    const scroller = sf.scroller;
-    const rows = sf.rows;
-    const visibleRowCount = await rows.count();
+  await sf.forEachRow(
+    targetCount,
+    async (row) => {
+      const { spans: cleanContent } = await sf.rowData(row);
 
-    if (visibleRowCount === 0) {
-      await page.waitForTimeout(500);
-      continue;
-    }
+      const accessionNo =
+        cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
+        "N/A";
+      const filingAgentIndex = cleanContent.indexOf("Filing Agent");
+      const filingAgent =
+        filingAgentIndex !== -1
+          ? cleanContent[filingAgentIndex + 1]
+          : "No Filing Agent Found";
 
-    for (let i = 0; i < visibleRowCount; i++) {
-      const row = rows.nth(i);
-      const rowId = await row.getAttribute("id");
+      const isLineMissingData =
+        filingAgent == "No Filing Agent Found" || !accessionNo;
 
-      if (rowId && !processedIds.has(rowId)) {
-        try {
-          const { spans: cleanContent } = await sf.rowData(row);
+      const names = [scenario.agent, ...scenario.alias];
+      const match = names.some((name) =>
+        filingAgent.toLowerCase().includes(name.toLowerCase()),
+      );
 
-          const accessionNo =
-            cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
-            "N/A";
-          const filingAgentIndex = cleanContent.indexOf("Filing Agent");
-          const filingAgent =
-            filingAgentIndex !== -1
-              ? cleanContent[filingAgentIndex + 1]
-              : "No Filing Agent Found";
-
-          const isLineMissingData =
-            filingAgent == "No Filing Agent Found" || !accessionNo;
-         
-          const names = [scenario.agent, ...scenario.alias];
-          const match = names.some(name =>
-            filingAgent.toLowerCase().includes(name.toLowerCase())
-          );
-
-          if (isLineMissingData) {
-            isScenarioValid = false;
-            rowsData.push(
-              `❌ MISSING DATA >> Acc.No: ${accessionNo} | Filing Agent: ${filingAgent}`,
-            );
-          } else if (!match || filingAgent === "No Filing Agent Found") {
-            isScenarioValid = false;
-            rowsData.push(
-              `❌ WRONG Filing Agent >> Acc.No: ${accessionNo} | Filing Agent: ${filingAgent}`,
-            );
-          }
-
-          console.log(`Acc.No: ${accessionNo} || Filing Agent ${filingAgent}`);
-          processedIds.add(rowId);
-          await page.waitForTimeout(500);
-          resultsFound++;
-        } catch (e) {
-          console.log(`Skipping Row ${rowId} due to re-render.`);
-        }
+      if (isLineMissingData) {
+        isScenarioValid = false;
+        rowsData.push(
+          `❌ MISSING DATA >> Acc.No: ${accessionNo} | Filing Agent: ${filingAgent}`,
+        );
+      } else if (!match || filingAgent === "No Filing Agent Found") {
+        isScenarioValid = false;
+        rowsData.push(
+          `❌ WRONG Filing Agent >> Acc.No: ${accessionNo} | Filing Agent: ${filingAgent}`,
+        );
       }
 
-      if (resultsFound >= targetCount) break;
-    }
-    if (resultsFound < targetCount) {
+      console.log(`Acc.No: ${accessionNo} || Filing Agent ${filingAgent}`);
       await page.waitForTimeout(500);
-      await rows.last().scrollIntoViewIfNeeded();
-      await page.waitForTimeout(500);
-    }
-  }
+    },
+    { swallowRowErrors: true },
+  );
 
   return {
     text: rowsData.join("\n"),

@@ -21,7 +21,6 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
 
   const searchResult = await sf.getTabText(0, logToFile, false);
   const totalToProcess = 4;
-  let processedCount = 0;
   let failureLogs: string[] = [];
   let isFailed = false;
   if (searchResult.includes("Docs")) {
@@ -29,22 +28,8 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
       "Filing Info": ["Accession #"],
       "Company Info": [],
     });
-    while (processedCount < totalToProcess) {
-      const scroller = sf.scroller;
-      let currentRow = await sf.scrollToRow(processedCount);
-
-      const rowExists = (await currentRow.count()) > 0;
-      if (rowExists) {
-        await currentRow.evaluate((el) =>
-          el.scrollIntoView({ block: "start" }),
-        );
-      } else {
-        await scroller.evaluate((el) => (el.scrollTop += el.clientHeight));
-        await page.waitForTimeout(1000);
-        continue;
-      }
-
-      console.log(`Processing Row: ${1 + processedCount}`);
+    await sf.forEachRow(totalToProcess, async (currentRow, rowId) => {
+      console.log(`Processing Row: ${rowId}`);
       const { spans: cleanContent } = await sf.rowData(currentRow);
       const accessionNo =
         cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
@@ -159,8 +144,7 @@ export const runIxbrlTest = async (page: Page, logToFile: Function) => {
         await resultsTab.click();
       }
       await page.waitForTimeout(500);
-      processedCount++;
-    }
+    });
   }
 
   const scenarioBlock = [

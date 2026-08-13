@@ -3,7 +3,7 @@ import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { getTargetDateString } from "../utils/helpers";
 import { AoePage } from "../pages/AoePage";
 
-const IDENTIFIER = "aoe_releaseDate";
+const IDENTIFIER = "prod_aoe_releaseDate_validation";
 
 const MAX_DOCS = 25;
 

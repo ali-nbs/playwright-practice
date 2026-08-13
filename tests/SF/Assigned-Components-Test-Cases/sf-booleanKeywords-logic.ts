@@ -25,7 +25,6 @@ const getSearchElements = (page: Page) => {
   const sf = new SfPage(page);
   return {
     keywordInput: sf.keywordsInput,
-    booleanTabBtn: sf.booleanTabBtn,
     searchBtn: sf.searchBtn,
     filterBar: sf.filterBar.locator("span"),
     gridContainer: sf.scroller,
@@ -67,57 +66,30 @@ const scrapeVirtualizedGrid = async (
 ): Promise<RowData[]> => {
   const sf = new SfPage(page);
   const extractedRows: RowData[] = [];
-  let processedCount = 0;
-  let emptyAttempts = 0;
 
   const { gridContainer } = getSearchElements(page);
   await gridContainer.waitFor({ state: "visible", timeout: 15000 });
-  const resultsContainer = gridContainer.locator('> div[role="rowgroup"]');
 
-  while (processedCount < targetCount) {
-    const currentRow = resultsContainer
-      .locator(`> div > div[data-test="resultRow"][id="${processedCount}"]`)
-      .first();
+  await sf.forEachRow(targetCount, async (row) => {
+    // One batched read of the row's text instead of four separate calls.
+    const data = await sf.rowData(row);
 
-    if ((await currentRow.count()) > 0) {
-      await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
-      await page.waitForTimeout(400);
+    // Extract full text (for proximity & NOT rules)
+    const fullText = data.paragraphs.join(" ").replace(/\n/g, " ").trim();
 
-      // One batched read of the row's text instead of four separate calls.
-      const data = await sf.rowData(currentRow);
+    // Extract ONLY highlighted words (for AND/OR rules)
+    const highlights = data.highlights.join(" ").replace(/\n/g, " ").trim();
 
-      // Extract full text (for proximity & NOT rules)
-      const fullText = data.paragraphs.join(" ").replace(/\n/g, " ").trim();
+    // Check if this row hides some snippets behind a button
+    const hasViewAllHits =
+      (await row.getByText(/View All Hits|View More/i).count()) > 0;
 
-      // Extract ONLY highlighted words (for AND/OR rules)
-      const highlights = data.highlights.join(" ").replace(/\n/g, " ").trim();
+    const accessionNo =
+      data.spans.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) || "N/A";
+    console.log(`Accessible Name for Row:`, accessionNo);
 
-      // Check if this row hides some snippets behind a button
-      const hasViewAllHits =
-        (await currentRow.getByText(/View All Hits|View More/i).count()) > 0;
-
-      const accessionNo =
-        data.spans.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
-        "N/A";
-      console.log(`Accessible Name for Row ${processedCount}:`, accessionNo);
-
-      extractedRows.push({ accessionNo, fullText, highlights, hasViewAllHits });
-
-      processedCount++;
-      emptyAttempts = 0; // Reset failsafe
-    } else {
-      emptyAttempts++;
-      if (emptyAttempts > 10) {
-        console.log(`⚠️ Reached end of grid. Stopped at ${processedCount}`);
-        break;
-      }
-      // Nudge the scroller
-      await gridContainer.evaluate((el) => {
-        el.scrollBy({ top: 150, behavior: "instant" });
-      });
-      await page.waitForTimeout(500);
-    }
-  }
+    extractedRows.push({ accessionNo, fullText, highlights, hasViewAllHits });
+  });
 
   return extractedRows;
 };
@@ -218,7 +190,7 @@ const validateRandomDocuments = async (
         .click();
     }
 
-    const highlights = sf.documentHighlights;
+    const highlights = sf.documentFrame.locator("em");
 
     const isHighlightVisible = await highlights
       .first()
@@ -435,7 +407,7 @@ export const runBooleanKeywordsTest = async (
         getUIElements(page).exhibitsToFilingsLabel.click();
         await page.waitForTimeout(1000);
         await search.keywordInput.fill(tc.query);
-        await search.booleanTabBtn.click();
+        await sf.booleanTabBtn.click();
         await search.searchBtn.click();
         const tabText = await sf.getTabText(index++, logToFile, false);
         console.log(`Tab Text for ${tc.id}:`, tabText);

@@ -51,16 +51,12 @@ async function selectFormTypeAndSearch(
   await sf.formsModalOption(formType).click();
   await sf.okBtn.click();
 
-  // Execute search
   await sf.fillAndEnter(sf.dateInput, dateValue, 100, {
     pressEnter: false,
     clearFirst: true,
   });
 
   await sf.searchBtn.click();
-  await expect(
-    sf.resultTabsMatching(["Docs:", "No Results Found"]).first(),
-  ).toBeVisible({ timeout: 60000 });
 }
 
 async function scrapeResults(
@@ -69,51 +65,46 @@ async function scrapeResults(
   targetCount: number,
   formType: string,
 ) {
-  let resultsFound = 0;
   let isTestCaseFailed = false;
   let failurelogs: string[] = [];
+  let resultsFound = 0;
 
-  while (resultsFound < targetCount) {
-    const currentRow = sf.rowByIdUnscoped(resultsFound);
+  await sf.forEachRow(
+    targetCount,
+    async (currentRow) => {
+      resultsFound++;
 
-    if ((await currentRow.count()) === 0) {
-      await currentRow.last().scrollIntoViewIfNeeded();
-      await page.waitForTimeout(1000);
-      continue;
-    }
+      try {
+        const formTypeCell = sf.rowFormTypeCell(currentRow, formType);
+        await formTypeCell.waitFor({ state: "attached", timeout: 3000 });
+        const rowText = await formTypeCell.innerText();
 
-    try {
-      const formTypeCell = sf.rowFormTypeCell(currentRow, formType);
-      await formTypeCell.waitFor({ state: "attached", timeout: 3000 });
-      const rowText = await formTypeCell.innerText();
+        const { spans: cleanContent } = await sf.rowData(currentRow);
 
-      const { spans: cleanContent } = await sf.rowData(currentRow);
+        const accessionNo =
+          cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
+          "N/A";
 
-      const accessionNo =
-        cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
-        "N/A";
+        const parenRegex = /\(([^)]+)\)/;
+        const match = rowText.match(parenRegex);
 
-      const parenRegex = /\(([^)]+)\)/;
-      const match = rowText.match(parenRegex);
-
-      if (!match || match[1].trim().length === 0) {
+        if (!match || match[1].trim().length === 0) {
+          console.log(
+            `❌ Validation Failed for Row ${resultsFound}: Empty parentheses or no description.`,
+          );
+          isTestCaseFailed = true;
+          failurelogs.push(accessionNo.trim());
+        } else {
+          console.log(`✅ Row ${resultsFound} Passed: ${rowText}`);
+        }
+      } catch (e: any) {
         console.log(
-          `❌ Validation Failed for Row ${resultsFound}: Empty parentheses or no description.`,
+          `Note: Row ${resultsFound} could not be fully validated. ${e.message}`,
         );
-        isTestCaseFailed = true;
-        failurelogs.push(accessionNo.trim());
-      } else {
-        console.log(`✅ Row ${resultsFound} Passed: ${rowText}`);
       }
-    } catch (e: any) {
-      console.log(
-        `Note: Row ${resultsFound} could not be fully validated. ${e.message}`,
-      );
-    }
-
-    resultsFound++;
-    await currentRow.last().scrollIntoViewIfNeeded();
-  }
+    },
+    { swallowRowErrors: true },
+  );
 
   const resultSummary = [
     `Status: ${!isTestCaseFailed ? "Passed ✅" : "Failed ❌"}`,

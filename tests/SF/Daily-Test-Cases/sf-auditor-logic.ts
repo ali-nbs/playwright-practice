@@ -14,7 +14,7 @@ export const runAuditorTest = async (page: Page, logToFile: Function) => {
   const sf = new SfPage(page);
 
 
-  const testCases = [{ date: getTargetDateString(), formType: "10-k", count: 15 }];
+  const testCases = [{ date: getTargetDateString(), formType: "10-k", count: 1 }];
 
   let tabIndex = 0;
   let selectCheckboxes = true;
@@ -27,7 +27,7 @@ export const runAuditorTest = async (page: Page, logToFile: Function) => {
     let findings = { text: "No Results Found", isValid: true };
 
     let amendmentFillingsRadioButton = sf.amendmentFilingsExcludeRadio;
-    // await amendmentFillingsRadioButton.click();
+    await amendmentFillingsRadioButton.click();
 
     let ownershipFormsRadioButton = sf.ownershipFormsIncludeRadio;
     await ownershipFormsRadioButton.click();
@@ -90,84 +90,54 @@ export const runAuditorTest = async (page: Page, logToFile: Function) => {
 
 const scrapeAuditorResults = async (targetCount: number, page: Page) => {
   const sf = new SfPage(page);
-  let resultsFound = 0;
-  const processedIds = new Set<string>();
   let rowsData: string[] = [];
   let isScenarioValid = true;
 
-  while (resultsFound < targetCount || resultsFound == 24) {
-    const scroller = sf.scroller;
-    const rows = sf.rows;
-    const visibleRowCount = await rows.count();
+  await sf.forEachRow(
+    targetCount,
+    async (row) => {
+      const { spans: cleanContent } = await sf.rowData(row);
 
-    if (visibleRowCount === 0) {
-      await page.waitForTimeout(500);
-      continue;
-    }
+      const accessionNo =
+        cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
+        "N/A";
 
-    for (let i = 0; i < visibleRowCount; i++) {
-      const row = rows.nth(i);
-      const rowId = await row.getAttribute("id");
+      const auditorIndex = cleanContent.indexOf("Audited By");
+      const recentAuditorIndex = cleanContent.indexOf("Recent Auditor");
 
-      if (rowId && !processedIds.has(rowId)) {
-        try {
-          const { spans: cleanContent } = await sf.rowData(row);
+      const recentAuditorName =
+        recentAuditorIndex !== -1
+          ? cleanContent[recentAuditorIndex + 1]
+          : "No Recent Auditor Found";
 
-          const accessionNo =
-            cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
-            "N/A";
+      const auditorName =
+        auditorIndex !== -1
+          ? cleanContent[auditorIndex + 1]
+          : "No Auditor Found";
 
-          const auditorIndex = cleanContent.indexOf("Audited By");
-          const recentAuditorIndex = cleanContent.indexOf("Recent Auditor");
+      const isLineMissingData =
+        (auditorName == "No Auditor Found" &&
+          recentAuditorName == "No Recent Auditor Found") ||
+        !accessionNo;
 
-          console.log("auditorIndex", auditorIndex);
-          console.log("recentAuditorIndex", recentAuditorIndex);
-
-          const recentAuditorName =
-            recentAuditorIndex !== -1
-              ? cleanContent[recentAuditorIndex + 1]
-              : "No Recent Auditor Found";
-
-          const auditorName =
-            auditorIndex !== -1
-              ? cleanContent[auditorIndex + 1]
-              : "No Auditor Found";
-
-          const isLineMissingData =
-            (auditorName == "No Auditor Found" &&
-              recentAuditorName == "No Recent Auditor Found") ||
-            !accessionNo;
-
-          if (isLineMissingData) {
-            isScenarioValid = false;
-            rowsData.push(
-              `❌ MISSING DATA >> Acc.No: ${accessionNo} | auditorName: ${auditorName}`,
-            );
-          } else {
-            rowsData.push(
-              `Acc.No: ${accessionNo} | auditorName: ${auditorName != "No Auditor Found" ? auditorName : recentAuditorName}`,
-            );
-          }
-
-          console.log(
-            `Acc.No: ${accessionNo} || Auditor ${auditorName != "No Auditor Found" ? auditorName : recentAuditorName}`,
-          );
-          processedIds.add(rowId);
-          await page.waitForTimeout(500);
-          resultsFound++;
-        } catch (e) {
-          console.log(`Skipping Row ${rowId} due to re-render.`);
-        }
+      if (isLineMissingData) {
+        isScenarioValid = false;
+        rowsData.push(
+          `❌ MISSING DATA >> Acc.No: ${accessionNo} | auditorName: ${auditorName}`,
+        );
+      } else {
+        rowsData.push(
+          `Acc.No: ${accessionNo} | auditorName: ${auditorName != "No Auditor Found" ? auditorName : recentAuditorName}`,
+        );
       }
 
-      if (resultsFound >= targetCount) break;
-    }
-    if (resultsFound < targetCount) {
+      console.log(
+        `Acc.No: ${accessionNo} || Auditor ${auditorName != "No Auditor Found" ? auditorName : recentAuditorName}`,
+      );
       await page.waitForTimeout(500);
-      await rows.last().evaluate((el) => el.scrollIntoView({ block: "start" }));
-      await page.waitForTimeout(500);
-    }
-  }
+    },
+    { swallowRowErrors: true },
+  );
 
   return {
     text: rowsData.join("\n"),

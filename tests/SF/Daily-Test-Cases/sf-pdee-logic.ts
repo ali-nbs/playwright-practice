@@ -7,15 +7,6 @@ import { SfPage } from "../../pages/SfPage";
 
 const IDENTIFIER = "sf_pdee";
 
-/**
- * How long to wait for a download to start before calling it a failure.
- *
- * Previously the `page.waitForEvent("download")` calls below had NO timeout.
- * When an export failed, the flow hung until the global test timeout, and
- * under magic-runner (which has no test timeout) it hung forever. A failed
- * export is now recorded as a failure and the flow carries on to the next
- * format.
- */
 const DOWNLOAD_TIMEOUT = 60000;
 
 export const runPDEETest = async (page: Page, logToFile: Function) => {
@@ -42,9 +33,6 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
     return;
   }
 
-  // NOTE: getRandomIndices(maxRange, count) - this asks for 25 indices out of
-  // a range of 5, so it can only ever return 5. Left as-is because changing it
-  // changes how many rows get downloaded; see the review's open questions.
   let targetIndices = getRandomIndices(5, 25).sort((a, b) => a - b);
   logToFile(
     `Action: Targeting random row indices: ${targetIndices.join(", ")}`,
@@ -54,7 +42,7 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
   let selectedRows = 0;
 
   for (const index of targetIndices) {
-    const currentRow = await sf.scrollToRow(index);
+    const currentRow =  sf.rowById(index);
 
     if ((await currentRow.count()) > 0) {
       await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
@@ -67,14 +55,6 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
     }
   }
 
-  /**
-   * Saves a started download and checks the file actually landed on disk with
-   * content in it.
-   *
-   * The old code assumed success: it saved the file and then reported a
-   * hardcoded "Downloads: ... (Success)", so a 0-byte or missing export was
-   * still reported as VALID.
-   */
   const saveAndVerify = async (
     download: import("@playwright/test").Download,
     label: string,
@@ -148,8 +128,6 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
 
   try {
     await sf.emailBtn.click();
-    // This click used to be un-awaited, so the flow raced on to writing the
-    // report while the dialog was still being dismissed.
     await sf.okBtn.click();
   } catch (e) {
     failures.push(`Email dialog failed: ${cleanErrorMessage(e)}`);

@@ -2,7 +2,7 @@ import { Page, expect } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import { SfPage } from "../../pages/SfPage";
 
-const TARGET_ROW_COUNT = 5;
+const TARGET_ROW_COUNT = 1;
 const Categories = [
   {
     id: "IsSPAC",
@@ -61,7 +61,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
     // Open Modal
     let attempts = 0;
     while (!(await modal.isVisible()) && attempts < 5) {
-      await sectionPlusBtn.click({ force: true }).catch(() => {});
+      await sectionPlusBtn.click({ force: true }).catch(() => { });
       await page.waitForTimeout(1000);
       attempts++;
     }
@@ -102,6 +102,7 @@ export const runCompanyType_SPAC_REIT_BDC_FPI_INV_Test = async (
       "Filing Info": ["Accession #"],
       "Company Info": ["Company Type/Status", "SIC - Industry"],
     });
+
     const failureLogs = await validateExtendedRows(page, category, logToFile);
 
     // 5. Prepare Report Block
@@ -137,23 +138,9 @@ async function validateExtendedRows(
   logToFile: Function,
 ) {
   const sf = new SfPage(page);
-  let resultsFound = 0;
   let failureLogs: string[] = [];
 
-  while (resultsFound < TARGET_ROW_COUNT) {
-    const scroller = sf.scroller;
-    const currentRow = scroller
-      .locator(`div[data-test="resultRow"][id="${resultsFound}"]`)
-      .first();
-
-    if (!(await currentRow.count())) {
-      await scroller.evaluate((el) => (el.scrollTop += 500));
-      await page.waitForTimeout(1000);
-      continue;
-    }
-
-    await currentRow.scrollIntoViewIfNeeded();
-
+  await sf.forEachRow(TARGET_ROW_COUNT, async (currentRow) => {
     const uiText = await currentRow
       .locator('span:has-text("Company Type/Status")')
       .locator("p")
@@ -163,13 +150,6 @@ async function validateExtendedRows(
     );
 
     let sicMatch = true;
-    // if (category.SIC_Code !== "") {
-    //   const sicText = await currentRow
-    //     .locator('span:has-text("SIC - Industry")')
-    //     .locator("p")
-    //     .allInnerTexts();
-    //   sicMatch = sicText.some((t) => t.includes(category.SIC_Code));
-    // }
     if (category.SIC_Code !== "") {
       const sicLocator = currentRow
         .locator('span:has-text("SIC - Industry")')
@@ -193,8 +173,6 @@ async function validateExtendedRows(
         `❌ Failure on Acc# ${accNo}: TypeMatch=${typeMatch}, SICMatch=${sicMatch}`,
       );
     }
-
-    resultsFound++;
-  }
+  });
   return failureLogs;
 }

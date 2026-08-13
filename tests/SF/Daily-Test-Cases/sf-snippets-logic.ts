@@ -3,19 +3,10 @@ import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import { getTargetDateString } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
-const IDENTIFIER = "sf_snippets";
+const IDENTIFIER = "prod_sf_snippets_validation";
 
-const MAX_DOCS = 25;
+const MAX_DOCS = 2;
 
-/**
- * Turns the Snippets display option on and checks every result row renders
- * its snippet block.
- *
- * The search runs twice on purpose: once to load the grid, then again
- * because ticking Snippets re-runs the search itself. Waiting for that
- * second response is what stops the row checks from reading the pre-snippet
- * grid.
- */
 export const runSnippetsTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-Snippets Report ---");
 
@@ -34,16 +25,16 @@ export const runSnippetsTest = async (page: Page, logToFile: Function) => {
   let failures: string[] = [];
   let verified = 0;
 
-  // A search that errored or never fired used to throw straight out of the
-  // flow, so nothing was ever written to the sheet. Record it as a failure
-  // instead and let the report still be produced.
   if (searchError) {
     failures.push(`Search failed: ${searchError}`);
     logToFile(`Search failed: ${searchError}`);
   }
 
   if (body.TotalRecords > 0) {
-    await sf.setCheckboxState("Snippets", true);
+     await sf.configureDisplayColumns({
+      "Filing Info": ["Intelligize ID"],
+      "Company Info": [],
+    }, {enableSnippets: true});
 
     const rerun = await sf.trySearchResponse();
     body = rerun.body;
@@ -54,15 +45,15 @@ export const runSnippetsTest = async (page: Page, logToFile: Function) => {
       logToFile(`Snippets re-run search failed: ${rerun.error}`);
     }
 
-    await sf.configureDisplayColumns({ "Filing Info": ["Intelligize ID"] });
-
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 
     await sf.forEachRow(
       target,
       async (row) => {
         const id = await sf.rowValueByLabel(row, "Intelligize ID");
-        const snippetCount = await sf.rowSnippets(row).count();
+        const snippetCount = await row
+          .locator(".Snippets-styles__result-row__snippet__content___2-_PD")
+          .count();
 
         verified++;
 

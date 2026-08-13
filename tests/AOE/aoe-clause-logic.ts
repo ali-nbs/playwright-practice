@@ -3,7 +3,7 @@ import { updateGoogleSheet } from "../utils/dumpDataOnGoogleSheet";
 import { getTargetDateString } from "../utils/helpers";
 import { AoePage } from "../pages/AoePage";
 
-const IDENTIFIER = "aoe_clause";
+const IDENTIFIER = "prod_aoe_clause_validation";
 
 const CLAUSE = "Preamble";
 

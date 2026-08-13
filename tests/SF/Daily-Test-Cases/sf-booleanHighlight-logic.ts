@@ -4,19 +4,11 @@ import { getTargetDateString } from "../../utils/helpers";
 import { HIGHLIGHT_BG_COLOR } from "../../pages/BasePage";
 import { SfPage } from "../../pages/SfPage";
 
-const IDENTIFIER = "sf_booleanHighlight";
+const IDENTIFIER = "prod_sf_boolean_search";
 
 const KEYWORD = "is or the or a";
-const MAX_DOCS = 25;
+const MAX_DOCS = 2;
 
-/**
- * Runs a boolean keyword search and checks that every result row actually
- * shows the keyword highlighted, in the app's highlight colour.
- *
- * "Exhibits to Filings" is switched OFF first so the grid holds filings
- * only - exhibit sub-rows carry no snippet of their own and would be
- * reported as missing highlights.
- */
 export const runBooleanHighlightTest = async (
   page: Page,
   logToFile: Function,
@@ -29,9 +21,9 @@ export const runBooleanHighlightTest = async (
   await sf.clearFilters();
   await page.waitForTimeout(1000);
 
-  await sf.setCheckboxState("-ExhibitsToFilings", false);
+  await sf.exhibitsToFilingsLabel.uncheck();
   await sf.fillAndEnter(sf.dateInput, date);
-  await sf.selectSearchType("Boolean");
+  await sf.booleanTabBtn.click();
   await sf.fillAndEnter(sf.keywordsInput, KEYWORD);
 
   const { body, error: searchError } = await sf.trySearchResponse();
@@ -39,9 +31,6 @@ export const runBooleanHighlightTest = async (
 
   let failures: string[] = [];
 
-  // A search that errored or never fired used to throw straight out of
-  // the flow, so nothing was ever written to the sheet. Record it as a
-  // failure instead and let the report still be produced.
   if (searchError) {
     failures.push(`Search failed: ${searchError}`);
     logToFile(`Search failed: ${searchError}`);

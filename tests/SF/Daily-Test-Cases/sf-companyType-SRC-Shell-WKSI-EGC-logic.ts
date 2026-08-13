@@ -106,24 +106,9 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
 
 async function validateRows(page: Page, category: any, logToFile: Function) {
   const sf = new SfPage(page);
-  let resultsFound = 0;
   let failureLogs: string[] = [];
 
-  while (resultsFound < TARGET_ROW_COUNT) {
-    const scroller = sf.scroller;
-    const resultsContainer = sf.resultsContainer;
-
-    const currentRow = resultsContainer
-      .locator(`> div > div[data-test="resultRow"][id="${resultsFound}"]`)
-      .first();
-    if (!(await currentRow.count())) {
-      await scroller.evaluate((el) => (el.scrollTop += 500));
-      await page.waitForTimeout(1000);
-      continue;
-    }
-
-    await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
-
+  await sf.forEachRow(TARGET_ROW_COUNT, async (currentRow) => {
     // Get Accession #
     const accLabel = sf.elementWithText("span", "Accession #", currentRow);
     const accValues = await accLabel.locator("span").allInnerTexts();
@@ -213,16 +198,15 @@ async function validateRows(page: Page, category: any, logToFile: Function) {
           );
         }
       } catch (e) {
-        logToFile(`⚠️ XBRL content not found for row ${resultsFound}`);
+        logToFile(`⚠️ XBRL content not found for row Acc# ${accessionNo}`);
       } finally {
-        const backToDocs = sf.backToDocsTab;
+        const backToDocs = sf.resultTabsMatching(["Docs:"]);
         if (await backToDocs.first().isVisible())
           await backToDocs.first().click();
         await page.waitForTimeout(1000);
       }
     }
-    resultsFound++;
-  }
+  });
 
   const isSuccess = failureLogs.length === 0;
   const finalReport = [

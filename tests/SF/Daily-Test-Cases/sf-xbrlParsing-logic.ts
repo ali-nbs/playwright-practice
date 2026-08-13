@@ -18,8 +18,7 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
 
   const searchResult = await sf.getTabText(0, logToFile, false);
 
-  const totalToProcess = 4;
-  let processedCount = 0;
+  const totalToProcess = 2;
   let failureLogs: string[] = [];
   let isFailed = false;
 
@@ -28,22 +27,8 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
       "Filing Info": ["Accession #"],
       "Company Info": [],
     });
-    while (processedCount < totalToProcess) {
-      const scroller = sf.scroller;
-      let currentRow = await sf.scrollToRow(processedCount);
-
-      const rowExists = (await currentRow.count()) > 0;
-      if (rowExists) {
-        await currentRow.evaluate((el) =>
-          el.scrollIntoView({ block: "start" }),
-        );
-      } else {
-        await scroller.evaluate((el) => (el.scrollTop += el.clientHeight));
-        await page.waitForTimeout(1000);
-        continue;
-      }
-
-      console.log(`Processing Row: ${1 + processedCount}`);
+    await sf.forEachRow(totalToProcess, async (currentRow, rowId) => {
+      console.log(`Processing Row: ${rowId}`);
       const { spans: cleanContent } = await sf.rowData(currentRow);
       const accessionNo =
         cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
@@ -57,8 +42,7 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
 
       if (!(await isixbrlBtn.isVisible({ timeout: 5000 }).catch(() => false))) {
         console.log(`iXBRL doc not found for ${accessionNo}, skipping...`);
-        processedCount++;
-        continue;
+        return;
       }
 
       try {
@@ -74,16 +58,14 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
             } else {
               isFailed = true;
             }
-            console.log(
-              `Successfully accessed EX-101 for Item ${processedCount + 1}`,
-            );
+            console.log(`Successfully accessed EX-101 for Item ${rowId}`);
           } else {
             isFailed = true;
           }
         }
       } catch (e: any) {
         console.log(
-          `Extraction failed for item at index ${processedCount}: ${e.message}`,
+          `Extraction failed for item at index ${rowId}: ${e.message}`,
         );
       }
 
@@ -92,8 +74,7 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
         await resultsTab.click();
       }
       await page.waitForTimeout(500);
-      processedCount++;
-    }
+    });
   }
 
   const scenarioBlock = [

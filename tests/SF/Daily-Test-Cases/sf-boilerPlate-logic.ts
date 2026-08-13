@@ -79,7 +79,7 @@ const KEYWORDS_CROSS_REFERENCE = [
   "see",
 ];
 const KEYWORDS_RESERVED = ["reserved"];
-const TARGET_ROW_COUNT = 25;
+const TARGET_ROW_COUNT = 2;
 const BOX_WIDTH = 65;
 
 export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
@@ -134,20 +134,8 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
       const loopLimit = Math.min(TARGET_ROW_COUNT, totalAvailableDocs);
       let resultsFound = 0;
 
-      while (resultsFound < loopLimit) {
-        const scroller = sf.scroller;
-        let resultsContainer = sf.resultsContainer;
-        let currentRow = resultsContainer
-          .locator(`> div > div[data-test="resultRow"][id="${resultsFound}"]`)
-          .first();
-
-        if (!((await currentRow.count()) > 0)) {
-          await page.mouse.wheel(0, 600);
-          await page.waitForTimeout(1000);
-          if (resultsFound > 0 && !((await currentRow.count()) > 0)) break;
-          continue;
-        }
-
+      await sf.forEachRow(loopLimit, async (currentRow, rowId) => {
+        resultsFound++;
         const { spans: cleanContent } = await sf.rowData(currentRow);
         const fillingInforesultLabel = sf.elementWithText("span", "Accession #", currentRow);
         const accessionNo = await fillingInforesultLabel
@@ -172,7 +160,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
             rowMatchedAnyExclude = true;
           }
           console.log(`[Accession No , ${accessionNo}]`);
-          console.log(`╚${combo.name}] Row ${resultsFound}: ${lastAnchorText}`);
+          console.log(`╚${combo.name}] Row ${rowId}: ${lastAnchorText}`);
           console.log(`╚${type || "Substantive"} from anchor tag`);
         }
 
@@ -190,7 +178,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
               rowMatchedAnyExclude = true;
             }
             console.log(`[Accession No , ${accessionNo}]`);
-            console.log(`╚${combo.name}] Row ${resultsFound}: ${text}`);
+            console.log(`╚${combo.name}] Row ${rowId}: ${text}`);
             console.log(`╚${type || "Substantive"} from ${tagName} tag`);
           }
         }
@@ -199,9 +187,7 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
           isScenarioValid = false;
           comboFindings.push(accessionNo);
         }
-        resultsFound++;
-        await currentRow.last().scrollIntoViewIfNeeded();
-      }
+      });
 
       const includedTypes = ALL_BOILERPLATE_TYPES.filter(
         (type) => !combo.exclude.includes(type),

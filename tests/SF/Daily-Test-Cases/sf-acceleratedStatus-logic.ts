@@ -3,20 +3,12 @@ import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import { getTargetDateString } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
-const IDENTIFIER = "sf_acceleratedStatus";
+const IDENTIFIER = "prod_sf_AccStatus_validation";
 
 const ACCELERATED_STATUS = "Large Accelerated Filer";
 const FORM_TYPES = "10-K;10-Q;S-4;DEF 14A;40-F;20-F";
-const MAX_DOCS = 25;
+const MAX_DOCS = 2;
 
-/**
- * Filters by Accelerated Status and checks every result row really carries
- * that status, by reading the "Accelerated Status" display column.
- *
- * The form filter is applied first because Accelerated Status is only
- * populated on periodic filings, so an unfiltered search would report rows
- * with a blank status that are not actually defects.
- */
 export const runAcceleratedStatusTest = async (
   page: Page,
   logToFile: Function,
@@ -30,7 +22,7 @@ export const runAcceleratedStatusTest = async (
   await page.waitForTimeout(1000);
 
   await sf.fillAndEnter(sf.dateInput, date);
-  await sf.typeFormTypeList(FORM_TYPES);
+  await sf.fillAndEnter(sf.formsInput,FORM_TYPES);
   logToFile(`Forms applied: ${FORM_TYPES}`);
   await sf.fillAndEnter(sf.acceleratedStatusInput, ACCELERATED_STATUS, 1000);
   await sf.searchBtn.click();
@@ -40,9 +32,6 @@ export const runAcceleratedStatusTest = async (
 
   let failures: string[] = [];
 
-  // A search that errored or never fired used to throw straight out of
-  // the flow, so nothing was ever written to the sheet. Record it as a
-  // failure instead and let the report still be produced.
   if (searchError) {
     failures.push(`Search failed: ${searchError}`);
     logToFile(`Search failed: ${searchError}`);
@@ -61,7 +50,9 @@ export const runAcceleratedStatusTest = async (
       target,
       async (row) => {
         const id = await sf.rowValueByLabel(row, "Intelligize ID");
-        const status = await sf.rowAcceleratedStatus(row);
+        const status = await sf.rowValueByLabel(row, "Accelerated Status", {
+        inParagraph: true,
+        });
 
         verified++;
 

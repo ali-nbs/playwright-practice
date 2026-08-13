@@ -47,7 +47,7 @@ const runScenario = async (
   await page.waitForTimeout(1000);
 
   await aoe.fillAndEnter(aoe.dateInput, date, 700);
-  await aoe.selectSearchType(scenario.searchType);
+  scenario.searchType ==  "Boolean" ? await aoe.booleanTabBtn.click() :await aoe.conceptualTabBtn.click() ;
   await aoe.fillAndEnter(aoe.keywordsInput, scenario.keyword, 700);
 
   const { body, error: searchError } = await aoe.trySearchResponse();
@@ -173,7 +173,7 @@ export const runAoeBooleanHighlightTest = async (
   logToFile: Function,
 ) =>
   runScenario(page, logToFile, {
-    identifier: "aoe_booleanHighlight",
+    identifier: "prod_aoe_boolean_validation",
     label: "Boolean",
     searchType: "Boolean",
     keyword: BOOLEAN_KEYWORD,
@@ -185,7 +185,7 @@ export const runAoeConceptualHighlightTest = async (
   logToFile: Function,
 ) =>
   runScenario(page, logToFile, {
-    identifier: "aoe_conceptualHighlight",
+    identifier: "prod_aoe_conceptual_validation",
     label: "Conceptual",
     searchType: "Conceptual",
     keyword: CONCEPTUAL_KEYWORD,

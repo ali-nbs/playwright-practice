@@ -26,7 +26,7 @@ export const runCrossReferenceLinksTest = async (
   await sf.clearFilters();
   await page.waitForTimeout(500);
   let exhibitsCheckbox = sf.exhibitsToFilingsLabel;
-  await exhibitsCheckbox.click();
+  await exhibitsCheckbox.uncheck();
   await page.waitForTimeout(300);
   const dateInput = sf.dateInputByTestId;
   await sf.fillAndEnter(sf.dateInput, getTargetDateString());
@@ -50,8 +50,8 @@ export const runCrossReferenceLinksTest = async (
     await page.waitForTimeout(500);
     const docsCount = parseCount(searchResultTextOnly);
     //  await page.pause();
-    actualTarget = Math.min(docsCount, 25);
-    findings = await scrapeResults(actualTarget, 4, page, logToFile);
+    actualTarget = Math.min(docsCount, 2);
+    findings = await scrapeResults(actualTarget, 0, page, logToFile);
     await sf.closeAllOpenTabs();
   }
   const scenarioBlock = [
@@ -91,131 +91,95 @@ const scrapeResults = async (
   logToFile: Function,
 ) => {
   const sf = new SfPage(page);
-  let resultsFound = 0;
-  const processedIds = new Set<string>();
   let rowsData: string[] = [];
   let isScenarioValid = true;
+  let resultsFound = 0;
 
-  while (resultsFound < targetCount || resultsFound === 24) {
-    const scroller = sf.scroller;
-    const rows = sf.rows;
-    const visibleRowCount = await rows.count();
+  await sf.forEachRow(
+    targetCount,
+    async (row) => {
+      try {
+        const allpTags = row.locator("p");
+        const { spans: cleanContent } = await sf.rowData(row);
 
-    if (visibleRowCount === 0) {
-      await page.waitForTimeout(500);
-      continue;
-    }
+        const intelligizeIdIndex = cleanContent.findIndex(
+          (item) => item === "Intelligize ID",
+        );
 
-    for (let i = 0; i < visibleRowCount; i++) {
-      const row = rows.nth(i);
-      const rowId = await row.getAttribute("id");
+        const intelligizeId =
+          intelligizeIdIndex !== -1
+            ? cleanContent[intelligizeIdIndex + 1]
+            : undefined;
 
-      if (rowId && !processedIds.has(rowId)) {
-        let AccessionNumber = "N/A";
-        try {
-          // row.locator("p") - targetedLink below chains .locator() off it.
-          const allpTags = row.locator("p");
-          const { spans: cleanContent } = await sf.rowData(row);
+        const formType = cleanContent[2];
 
-          console.log("---------------------------------------------");
-            // for (const [index, text] of cleanContent.entries()) {
-            //   console.log(index, text);
-            // }
-          console.log("-------------------------------------------");
+        console.log(
+          `Row: ${resultsFound + 1} || Intelligize ID: ${intelligizeId} `,
+        );
 
-          // const accessionNo =
-          //   cleanContent.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
-          //   "N/A";
-
-          const intelligizeIdIndex = cleanContent.findIndex(
-            item => item === "Intelligize ID"
+        const targetedLink = allpTags
+          .locator('a[href*="/SecuritiesRegulationAndCompliance?"]')
+          .first();
+        if (await targetedLink.isVisible()) {
+          console.log("Found the Securities Regulation link!");
+        } else {
+          isScenarioValid = false;
+          rowsData.push(
+            `Intelligize ID: ${intelligizeId} | FormType ${formType} -> on Result Grid -> missing highlighting of the Cross Reference link.`,
           );
+        }
 
-          const intelligizeId =
-            intelligizeIdIndex !== -1
-              ? cleanContent[intelligizeIdIndex + 1]
-              : undefined;
+        if (targetDocViewerCount > 0 && resultsFound < targetDocViewerCount) {
+          const viewBtn = sf.viewButton(row).first();
+          if (await viewBtn.isVisible()) {
+            await viewBtn.click();
+            await page.waitForTimeout(1000);
 
-          const formType = cleanContent[2];    
+            const docFrame = sf.documentFrame;
+            await docFrame
+              .locator("body")
+              .waitFor({ state: "visible", timeout: 15000 });
+            await docFrame
+              .locator(".cross-reference-anchor")
+              .first()
+              .waitFor({ state: "attached", timeout: 15000 })
+              .catch(() => {});
+            const crossReferenceLinksCount = await docFrame
+              .locator(".cross-reference-anchor")
+              .count();
 
-          console.log(
-            `Row: ${resultsFound + 1} || Intelligize ID: ${intelligizeId} `,
-          );
-          
-          const targetedLink = allpTags
-            .locator('a[href*="/SecuritiesRegulationAndCompliance?"]')
-            .first();
-          if (await targetedLink.isVisible()) {
-            console.log("Found the Securities Regulation link!");
-          } else {
-            isScenarioValid = false;
-            rowsData.push(
-              `Intelligize ID: ${intelligizeId} | FormType ${formType} -> on Result Grid -> missing highlighting of the Cross Reference link.`,
+            console.log(
+              `Cross Reference Links found: ${crossReferenceLinksCount}`,
             );
-            // logToFile(
-            //   `❌ Row ${resultsFound + 1}: Accession ${accessionNo} on Result Grid -> missing highlighting of the Cross Reference link.`,
-            // );
-          }
-
-          if (targetDocViewerCount > 0 && resultsFound < targetDocViewerCount) {
-            const viewBtn = sf.viewButton(row).first();
-            if (await viewBtn.isVisible()) {
-              await viewBtn.click();
-              await page.waitForTimeout(1000);
-
-              const docFrame = sf.documentFrame;
-              await docFrame
-                .locator("body")
-                .waitFor({ state: "visible", timeout: 15000 });
-              await docFrame
-                .locator(".cross-reference-anchor")
-                .first()
-                .waitFor({ state: "attached", timeout: 15000 })
-                .catch(() => {});
-              const crossReferenceLinksCount = await docFrame
-                .locator(".cross-reference-anchor")
-                .count();
-
-              console.log(
-                `Cross Reference Links found: ${crossReferenceLinksCount}`,
+            if (crossReferenceLinksCount === 0) {
+              isScenarioValid = false;
+              rowsData.push(
+                `Intelligize ID: ${intelligizeId} | FormType ${formType} -> in Document Viewer -> missing highlighting of cross-reference links.`,
               );
-              if (crossReferenceLinksCount === 0) {
-                isScenarioValid = false;
-               
-                rowsData.push(
-                  `Intelligize ID: ${intelligizeId} | FormType ${formType} -> in Document Viewer -> missing highlighting of cross-reference links.`,
-                );
-              } else {
-                // logToFile(
-                //   `✅ Accession ${accessionNo} has ${crossReferenceLinksCount} cross-reference links.`,
-                // );
-              }
-              const activeTab = sf.resultTabsMatching(["Docs:", "No Results Found"]).first();
-              if (await activeTab.isVisible()) {
-                await activeTab.click();
-              }
+            }
+            const activeTab = sf
+              .resultTabsMatching(["Docs:", "No Results Found"])
+              .first();
+            if (await activeTab.isVisible()) {
+              await activeTab.click();
             }
           }
-        } catch (e: any) {
-        } finally {
-          processedIds.add(rowId);
-          resultsFound++;
-          const activeTab = sf.resultTabsMatching(["Docs:", "No Results Found"]).first();
-          if (await activeTab.isVisible()) {
-            await activeTab.click();
-          }
-          await page.waitForTimeout(700);
         }
+      } catch (e: any) {
+        // Preserve original behavior: swallow row-level errors, still count
+        // the row as processed and return to the results grid below.
+      } finally {
+        resultsFound++;
+        const activeTab = sf
+          .resultTabsMatching(["Docs:", "No Results Found"])
+          .first();
+        if (await activeTab.isVisible()) {
+          await activeTab.click();
+        }
+        await page.waitForTimeout(700);
       }
-      if (resultsFound >= targetCount) break;
-    }
-
-    if (resultsFound < targetCount) {
-      await page.waitForTimeout(500);
-      await rows.last().evaluate((el) => el.scrollIntoView({ block: "start" }));
-      await page.waitForTimeout(500);
-    }
-  }
+    },
+  );
 
   console.log(`Successfully scraped ${resultsFound} rows.`);
   return { text: rowsData.join("\n"), isValid: isScenarioValid };

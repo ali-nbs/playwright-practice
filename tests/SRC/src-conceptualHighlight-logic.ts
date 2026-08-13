@@ -4,22 +4,11 @@ import { getTargetDateString } from "../utils/helpers";
 import { HIGHLIGHT_BG_COLOR } from "../pages/BasePage";
 import { SrcPage } from "../pages/SrcPage";
 
-const IDENTIFIER = "src_conceptualHighlight";
+const IDENTIFIER = "prod_src_conceptual_validation";
 
 const CONCEPTUAL_KEYWORD = "Exchange";
 const MAX_DOCS = 25;
 
-/**
- * Runs a conceptual keyword search and checks the keyword is highlighted in
- * both the opened document and every result row's snippet.
- *
- * The filter panel is collapsed before opening the first document: SRC's
- * panel overlaps the viewer at this viewport, and the Next control ends up
- * underneath it.
- *
- * Rows are named by title/category/date because SRC results are regulatory
- * documents and carry no Intelligize ID.
- */
 export const runSrcConceptualHighlightTest = async (
   page: Page,
   logToFile: Function,
@@ -33,7 +22,7 @@ export const runSrcConceptualHighlightTest = async (
   await page.waitForTimeout(1000);
 
   await src.fillAndEnter(src.dateInput, date, 700);
-  await src.selectSearchType("Conceptual");
+  await src.conceptualTabBtn.click();
   await src.fillAndEnter(src.keywordsInput, CONCEPTUAL_KEYWORD, 700);
 
   const { body, error: searchError } = await src.trySearchResponse();

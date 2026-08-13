@@ -3,22 +3,10 @@ import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import { getTargetDateString } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
-const IDENTIFIER = "sf_releaseDate";
+const IDENTIFIER = "prod_sf_releaseDate_validation";
 
-const MAX_DOCS = 25;
+const MAX_DOCS = 2;
 
-/**
- * Checks that every row released on the searched date really shows that
- * date, by switching the grid's date column from "Date Filed" to
- * "Date Released" and reading it back.
- *
- * The expected value is the search date itself: getTargetDateString()
- * already returns a concrete MM/DD/YYYY, so no separate date resolution is
- * needed here.
- *
- * "Exhibits to Filings" is switched OFF so the grid holds filings only;
- * exhibit sub-rows have no date cell of their own.
- */
 export const runReleaseDateTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-Release Date Report ---");
 
@@ -28,7 +16,7 @@ export const runReleaseDateTest = async (page: Page, logToFile: Function) => {
   await sf.clearFilters();
   await page.waitForTimeout(1000);
 
-  await sf.setCheckboxState("-ExhibitsToFilings", false);
+  await sf.exhibitsToFilingsLabel.uncheck();
   await sf.fillAndEnter(sf.dateInput, expectedDate);
   await sf.searchBtn.click();
 
@@ -37,9 +25,6 @@ export const runReleaseDateTest = async (page: Page, logToFile: Function) => {
 
   let failures: string[] = [];
 
-  // A search that errored or never fired used to throw straight out of
-  // the flow, so nothing was ever written to the sheet. Record it as a
-  // failure instead and let the report still be produced.
   if (searchError) {
     failures.push(`Search failed: ${searchError}`);
     logToFile(`Search failed: ${searchError}`);

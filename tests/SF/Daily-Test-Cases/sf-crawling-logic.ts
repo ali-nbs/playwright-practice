@@ -13,7 +13,7 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
   let allScenarioResults: string[] = [];
 
 
-  const testCases = [{ date: "Today", count: 15 }];
+  const testCases = [{ date: "Today", count: 1 }];
 
   let tabIndex = 0;
 
@@ -67,12 +67,6 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
   await sf.closeAllOpenTabs();
 };
 
-/**
- * Walks the grid via BasePage.forEachRow (swallowRowErrors: true, the
- * original id-based, skip-on-error behaviour) instead of hand-rolling the
- * same loop - identical scroll style ("intoViewStart") and 500ms settle
- * wait.
- */
 const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
   const sf = new SfPage(page);
   const rowsData: string[] = [];

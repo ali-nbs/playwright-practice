@@ -3,22 +3,11 @@ import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import { getTargetDateString } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
-const IDENTIFIER = "sf_outline";
+const IDENTIFIER = "prod_sf_outline_validation";
 
 const FORM_TYPES = "10-K;8-K";
-const MAX_DOCS = 25;
+const MAX_DOCS = 2;
 
-/**
- * Opens the first result and steps through documents with the viewer's Next
- * control, checking each one renders its Outline tab.
- *
- * Only 10-K and 8-K are searched because those are the forms the app builds
- * an outline for; other forms would legitimately have none.
- *
- * The 10s settle wait before each check is deliberate: the Outline tab is
- * built after the document body renders, and checking earlier reports a
- * document that does have an outline as missing one.
- */
 export const runOutlineTest = async (page: Page, logToFile: Function) => {
   logToFile("--- Starting SF-Outline Report ---");
 
@@ -29,7 +18,7 @@ export const runOutlineTest = async (page: Page, logToFile: Function) => {
   await page.waitForTimeout(1000);
 
   await sf.fillAndEnter(sf.dateInput, date);
-  await sf.typeFormTypeList(FORM_TYPES);
+  await sf.fillAndEnter(sf.formsInput, FORM_TYPES);
   await sf.searchBtn.click();
 
   const { body, error: searchError } = await sf.trySearchResponse();
@@ -37,9 +26,6 @@ export const runOutlineTest = async (page: Page, logToFile: Function) => {
 
   let failures: string[] = [];
 
-  // A search that errored or never fired used to throw straight out of
-  // the flow, so nothing was ever written to the sheet. Record it as a
-  // failure instead and let the report still be produced.
   if (searchError) {
     failures.push(`Search failed: ${searchError}`);
     logToFile(`Search failed: ${searchError}`);

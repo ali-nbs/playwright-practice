@@ -44,7 +44,7 @@ const runScenario = async (
   await page.waitForTimeout(1000);
 
   await dbm.fillAndEnter(dbm.dateInput, date, 700);
-  await dbm.selectSearchType(scenario.searchType);
+  scenario.searchType ==  "Boolean" ? await dbm.booleanTabBtn.click() :await dbm.conceptualTabBtn.click() ;
   await dbm.fillAndEnter(dbm.bodyKeywordsInput, scenario.keyword, 700);
 
   const { body, error: searchError } = await dbm.trySearchResponse();
@@ -163,7 +163,7 @@ export const runDbmBooleanHighlightTest = async (
   logToFile: Function,
 ) =>
   runScenario(page, logToFile, {
-    identifier: "dbm_booleanHighlight",
+    identifier: "prod_dbm_boolean_validation",
     label: "Boolean",
     searchType: "Boolean",
     keyword: BOOLEAN_KEYWORD,
@@ -174,7 +174,7 @@ export const runDbmConceptualHighlightTest = async (
   logToFile: Function,
 ) =>
   runScenario(page, logToFile, {
-    identifier: "dbm_conceptualHighlight",
+    identifier: "prod_dbm_conceptual_validation",
     label: "Conceptual",
     searchType: "Conceptual",
     keyword: CONCEPTUAL_KEYWORD,

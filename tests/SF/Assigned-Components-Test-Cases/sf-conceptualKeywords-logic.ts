@@ -29,8 +29,6 @@ const getSearchElements = (page: Page) => {
 const getConceptualElements = (page: Page) => {
   const sf = new SfPage(page);
   return {
-    booleanTabBtn: sf.booleanTabBtn,
-    conceptualTabBtn: sf.conceptualTabBtn,
     expandKeywordsBtn: sf.expandKeywordsBtn,
     booleanWarning: sf.booleanWarning,
     relevanceColumnHeader: sf.relevanceColumnHeader,
@@ -69,51 +67,28 @@ const scrapeVirtualizedGrid = async (
 ): Promise<RowData[]> => {
   const sf = new SfPage(page);
   const extractedRows: RowData[] = [];
-  let processedCount = 0;
-  let emptyAttempts = 0;
 
   const { gridContainer } = getSearchElements(page);
   await gridContainer.waitFor({ state: "visible", timeout: 15000 });
-  const resultsContainer = gridContainer.locator('> div[role="rowgroup"]');
 
-  while (processedCount < targetCount) {
-    const currentRow = resultsContainer
-      .locator(`> div > div[data-test="resultRow"][id="${processedCount}"]`)
-      .first();
+  let count = 0;
+  await sf.forEachRow(targetCount, async (row) => {
+    const data = await sf.rowData(row);
+    const fullText = data.paragraphs.join(" ").replace(/\n/g, " ").trim();
+    const highlights = data.highlights.join(" ").replace(/\n/g, " ").trim();
 
-    if ((await currentRow.count()) > 0) {
-      await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
-      await page.waitForTimeout(200);
+    const hasViewAllHits =
+      (await row.getByText(/View All Hits|View More/i).count()) > 0;
 
-      const data = await sf.rowData(currentRow);
-      const fullText = data.paragraphs.join(" ").replace(/\n/g, " ").trim();
-      const highlights = data.highlights.join(" ").replace(/\n/g, " ").trim();
+    const accessionNo =
+      data.spans.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) || "N/A";
+    count++;
+    console.log(
+      `Extracted Row ${count}: Acc.No: ${accessionNo} | Highlights: ${highlights} | Has View All Hits: ${hasViewAllHits}`,
+    );
 
-      const hasViewAllHits =
-        (await currentRow.getByText(/View All Hits|View More/i).count()) > 0;
-
-      const accessionNo =
-        data.spans.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
-        "N/A";
-      console.log(
-        `Extracted Row ${processedCount + 1}: Acc.No: ${accessionNo} | Highlights: ${highlights} | Has View All Hits: ${hasViewAllHits}`,
-      );
-
-      extractedRows.push({ accessionNo, fullText, highlights, hasViewAllHits });
-
-      processedCount++;
-      emptyAttempts = 0;
-    } else {
-      emptyAttempts++;
-      if (emptyAttempts > 10) {
-        break;
-      }
-      await gridContainer.evaluate((el) => {
-        el.scrollBy({ top: 150, behavior: "instant" });
-      });
-      await page.waitForTimeout(500);
-    }
-  }
+    extractedRows.push({ accessionNo, fullText, highlights, hasViewAllHits });
+  });
 
   return extractedRows;
 };
@@ -206,7 +181,7 @@ const validateRandomConceptualDocs = async (
     }
 
     // IN CONCEPTUAL MODE: We just verify that semantic highlights rendered (em tags exist), we don't regex match specific terms.
-    const highlights = sf.documentHighlights;
+    const highlights = sf.documentFrame.locator("em");
 
     const isHighlightVisible = await highlights
       .first()
@@ -261,7 +236,7 @@ export const runConceptualSearchTest = async (
     await search.keywordInput.fill("cybersecurity AND breach");
     logToFile(`Typed Boolean query: "cybersecurity AND breach"`);
 
-    await conceptualUI.conceptualTabBtn.click();
+    await sf.conceptualTabBtn.click();
 
     await expect(conceptualUI.booleanWarning).toBeVisible({ timeout: 15000 });
     logToFile(
@@ -273,7 +248,7 @@ export const runConceptualSearchTest = async (
       "✅ 'Expand Keywords' button is correctly DISABLED in Conceptual mode.",
     );
 
-    await conceptualUI.booleanTabBtn.click();
+    await sf.booleanTabBtn.click();
 
     await expect(conceptualUI.booleanWarning).toBeHidden();
     logToFile("✅ Warning message correctly disappeared in Boolean mode.");
@@ -295,7 +270,7 @@ export const runConceptualSearchTest = async (
     await page.waitForTimeout(1000);
 
     await search.keywordInput.fill(conceptualQuery);
-    await conceptualUI.conceptualTabBtn.click();
+    await sf.conceptualTabBtn.click();
     await search.searchBtn.click();
 
     const tabText = await sf.getTabText(index++, logToFile, false);
@@ -370,7 +345,7 @@ export const runConceptualSearchTest = async (
   //     getUIElements(page).exhibitsToFilingsLabel.click();
   //     await page.waitForTimeout(1000);
   //     await search.keywordInput.fill(conceptualQuery);
-  //     await conceptualUI.conceptualTabBtn.click();
+  //     await sf.conceptualTabBtn.click();
   //     await search.searchBtn.click();
 
   //     const tabText = await getTabText(page, 0, logToFile, false);

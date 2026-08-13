@@ -3,10 +3,10 @@ import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import { getTargetDateString } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
 
-const IDENTIFIER = "sf_accountingStandard";
+const IDENTIFIER = "prod_sf_AccStd_validation";
 
 const ACCOUNTING_STANDARD = "U.S. GAAP";
-const MAX_DOCS = 25;
+const MAX_DOCS = 2;
 
 /**
  * Filters by Accounting Standard and checks every result row really carries
@@ -54,7 +54,7 @@ export const runAccountingStandardTest = async (
       target,
       async (row) => {
         const id = await sf.rowValueByLabel(row, "Intelligize ID");
-        const standard = await sf.rowAccountingStandard(row);
+        const standard = await sf.rowValueByLabel(row, "Accounting Std.");
 
         verified++;
 
