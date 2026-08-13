@@ -674,26 +674,6 @@ export class BasePage {
   // rename a one-line query.
 
   /**
-   * Reads a labelled value out of a row, e.g. labelledValue(row, "File #").
-   * Returns null when the row doesn't have that label. Scoped through a
-   * `div` wrapper rather than `span` (see rowValueByLabel) - SRC's File #/
-   * Release # cells are not built the same way SF's labelled spans are, so
-   * this is a genuinely different DOM shape, not a duplicate.
-   */
-  async labelledValue(row: Locator, label: string): Promise<string | null> {
-    const value = row
-      .locator("div")
-      .filter({ hasText: label })
-      .locator("span")
-      .last();
-
-    if (await value.count()) {
-      return value.innerText();
-    }
-    return null;
-  }
-
-  /**
    * Walks the result grid and runs `handleRow` for each row, scrolling to
    * load more rows until `targetCount` rows have been processed.
    *
@@ -835,19 +815,26 @@ export class BasePage {
   // Result tabs
   // ---------------------------------------------------------------
 
-  /** The "Docs: N" tab. */
-  get docsTab(): Locator {
-    return this.page.locator('span[title^="Docs:"]').first();
-  }
-
   /**
    * Go back to the results grid after opening a document.
    *
    * Uses a raw DOM click on purpose - Playwright's .click() was tried and
    * did not work reliably here. Please don't "simplify" this.
+   *
+   * NOTE: this used to build its own separate `docsTab` locator
+   * (`span[title^="Docs:"]`) instead of `resultTabsMatching`. Both match
+   * "Docs:" tabs, but `docsTab` was matched on the element's `title`
+   * attribute while `resultTabsMatching` matches on its text content -
+   * genuinely different selectors on genuinely different attributes, not
+   * a duplicate to blindly swap. Switched to `resultTabsMatching(["Docs:"])`
+   * here since the text-content match is the one already proven correct in
+   * `getTabText` and `docsTabLabels`'s former callers; if this ever needs
+   * the title-attribute match back, that is a real behavior decision, not
+   * a rename.
    */
   async backToResults() {
-    await this.docsTab.evaluate((el) => (el as HTMLElement).click());
+    const docsTab = this.resultTabsMatching(["Docs:"]).first();
+    await docsTab.evaluate((el) => (el as HTMLElement).click());
   }
 
   // ---------------------------------------------------------------
@@ -987,20 +974,12 @@ export class BasePage {
   // Result grid - data-ref rows
   // ---------------------------------------------------------------
 
-  /**
-   * Result rows addressed by their `data-ref` attribute.
-   *
-   * This is a DIFFERENT row locator from `rows` above and the two are not
-   * interchangeable. `rows` walks whatever the virtualized grid has drawn
-   * and de-dupes on the row's `id`, which the grid RE-USES as you scroll.
-   * `data-ref` ("search_...") is stable per document, so the flows that
-   * must visit every document exactly once key off this one instead.
-   */
-  get refRows(): Locator {
-    return this.page.locator('[data-test="resultRow"][data-ref^="search_"]');
-  }
-
-  // NOTE: `forEachRefRow` and `scrollResultGrid` used to live here.
+  // NOTE: `refRows` used to be a public getter here, wrapping the single
+  // selector `[data-test="resultRow"][data-ref^="search_"]`. It is now
+  // inlined at its 5 call sites (4 external, plus closeCurrentTab below) -
+  // one selector string, not a getter that only saved re-typing it.
+  //
+  // `forEachRefRow` and `scrollResultGrid` used to live here too.
   // forEachRefRow is superseded by forEachRow(targetCount, handleRow,
   // { keyAttr: "data-ref" }) above - every call site now uses that instead.
   // scrollResultGrid had no other caller once forEachRefRow's internal use
@@ -1031,13 +1010,36 @@ export class BasePage {
    * Returns "" when the label is not in the row. The per-label copies threw
    * instead, which meant a missing column surfaced as an unrelated locator
    * timeout rather than as an empty value the flow could report on.
+   *
+   * `containerTag` covers the two DOM shapes flows have needed:
+   *   "span" (default) - SF's shape: a `<span>` carrying the label, whose
+   *   VALUE is the following sibling span (or that span's own `<p>`, with
+   *   `inParagraph`).
+   *   "div" - SRC's shape (used to be a separate method, `labelledValue`):
+   *   a `<div>` that CONTAINS both the label text and a value `<span>`
+   *   inside it, not a sibling. SRC's File #/Release # cells are not built
+   *   the same way SF's labelled spans are, so this is one function with a
+   *   real branch, not two functions duplicating each other.
    */
   async rowValueByLabel(
     row: Locator,
     label: string,
-    options: { inParagraph?: boolean } = {},
+    options: { inParagraph?: boolean; containerTag?: "span" | "div" } = {},
   ): Promise<string> {
-    const valuePath = options.inParagraph
+    const { inParagraph = false, containerTag = "span" } = options;
+
+    if (containerTag === "div") {
+      const value = row
+        .locator("div")
+        .filter({ hasText: label })
+        .locator("span")
+        .last();
+
+      if (!(await value.count())) return "";
+      return (await value.innerText()).trim();
+    }
+
+    const valuePath = inParagraph
       ? "xpath=following-sibling::span/p"
       : "xpath=following-sibling::span";
 
@@ -1119,21 +1121,12 @@ export class BasePage {
   // Document viewer - stepping through documents
   // ---------------------------------------------------------------
 
-  /**
-   * Opens a row's document by hovering it first.
-   *
-   * The View button only renders on hover, so scrollIntoViewIfNeeded +
-   * hover are both required before the click. This is the count-driven
-   * flows' way in; `openDocument` above is the one that also waits for the
-   * document body, and they are kept apart because these flows step through
-   * documents with Next instead of re-opening from the grid.
-   */
-  async clickViewForRow(row: Locator) {
-    await row.scrollIntoViewIfNeeded();
-    await row.hover();
-
-    await row.locator('button:has-text("View")').click();
-  }
+  // NOTE: `clickViewForRow` used to live here (scrollIntoViewIfNeeded +
+  // hover + click the row's View button - hover is required because the
+  // button only renders on hover). Its 4 callers now inline that sequence
+  // directly on the row Locator `rowData` already hands them, rather than
+  // going through a page-class method for a 3-line click sequence. SRC's
+  // override (no hover needed there) is gone from SrcPage the same way.
 
   /** Steps to the next document via the viewer's own Next control. */
   async clickNextDocument() {
@@ -1172,7 +1165,11 @@ export class BasePage {
     await closeButton.click();
 
     if (waitForGrid) {
-      await expect(this.refRows.first()).toBeVisible();
+      await expect(
+        this.page
+          .locator('[data-test="resultRow"][data-ref^="search_"]')
+          .first(),
+      ).toBeVisible();
     }
   }
 

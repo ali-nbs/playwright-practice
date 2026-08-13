@@ -74,8 +74,8 @@ const scrapeCrawlingResults = async (targetCount: number, src: SrcPage) => {
   await src.forEachRow(
     targetCount,
     async (row, rowId) => {
-      const fileNo = await src.labelledValue(row, "File #");
-      const releaseNo = await src.labelledValue(row, "Release #");
+      const fileNo = await src.rowValueByLabel(row, "File #", { containerTag: "div" });
+      const releaseNo = await src.rowValueByLabel(row, "Release #", { containerTag: "div" });
 
       console.log({ fileNo, releaseNo });
       if (fileNo || releaseNo) fileOrReleaseNoCount++;

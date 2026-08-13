@@ -67,7 +67,12 @@ const runScenario = async (
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 
     // ---- Document viewer ----
-    await dbm.clickViewForRow(dbm.refRows.first());
+    const firstRow = page
+      .locator('[data-test="resultRow"][data-ref^="search_"]')
+      .first();
+    await firstRow.scrollIntoViewIfNeeded();
+    await firstRow.hover();
+    await firstRow.locator('button:has-text("View")').click();
 
     for (let i = 0; i < target; i++) {
       await page.waitForTimeout(100);

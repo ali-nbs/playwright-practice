@@ -57,7 +57,12 @@ export const runSrcConceptualHighlightTest = async (
 
     // ---- Document viewer ----
     await src.toggleFiltersPanel();
-    await src.clickViewForRow(src.refRows.first());
+    const firstRow = page
+      .locator('[data-test="resultRow"][data-ref^="search_"]')
+      .first();
+    // SRC's View button renders without a hover, unlike the other apps -
+    // hovering here made the click land on the row instead of the button.
+    await firstRow.getByRole("button", { name: "View" }).click();
 
     for (let i = 0; i < target; i++) {
       await page.waitForTimeout(100);

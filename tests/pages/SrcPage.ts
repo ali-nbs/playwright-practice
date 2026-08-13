@@ -170,21 +170,10 @@ export class SrcPage extends BasePage {
   // Document viewer
   // ---------------------------------------------------------------
 
-  /**
-   * Opens a row's document.
-   *
-   * Overrides the hover-then-click BasePage version: SRC renders the View
-   * button without needing a hover, and the hover step made the click land
-   * on the row instead of the button.
-   */
-  async clickViewForRow(row: Locator) {
-    await expect(row).toBeVisible();
-
-    const button = row.getByRole("button", { name: "View" });
-
-    await expect(button).toBeVisible();
-    await button.click();
-  }
+  // NOTE: `clickViewForRow` used to be overridden here (no hover needed -
+  // SRC's View button renders without it, and hovering made the click land
+  // on the row instead). Its one caller now clicks the button directly,
+  // same as BasePage's version being gone too.
 
   /**
    * Steps to the next document.
