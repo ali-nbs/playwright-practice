@@ -68,40 +68,45 @@ export const runCrawlingTest = async (page: Page, logToFile: Function) => {
 };
 
 /**
- * Walks the grid via BasePage.forEachResultRow instead of hand-rolling the
- * same id-tracked, skip-on-error scroll loop that lived here before -
- * identical scroll style ("intoViewStart") and 500ms settle wait.
+ * Walks the grid via BasePage.forEachRow (swallowRowErrors: true, the
+ * original id-based, skip-on-error behaviour) instead of hand-rolling the
+ * same loop - identical scroll style ("intoViewStart") and 500ms settle
+ * wait.
  */
 const scrapeCrawlingResults = async (targetCount: number, page: Page) => {
   const sf = new SfPage(page);
   const rowsData: string[] = [];
   let isScenarioValid = true;
 
-  await sf.forEachResultRow(targetCount, async (row, rowId) => {
-    const { spans: cleanContent } = await sf.rowData(row);
+  await sf.forEachRow(
+    targetCount,
+    async (row, rowId) => {
+      const { spans: cleanContent } = await sf.rowData(row);
 
-    const companyName = cleanContent[4] || "";
-    const pages = cleanContent[5] || "";
-    const docSize = cleanContent[6] || "";
-    const accessionNo = cleanContent[cleanContent.length - 1] || "";
+      const companyName = cleanContent[4] || "";
+      const pages = cleanContent[5] || "";
+      const docSize = cleanContent[6] || "";
+      const accessionNo = cleanContent[cleanContent.length - 1] || "";
 
-    const isLineMissingData =
-      !companyName || !pages || !docSize || !accessionNo;
+      const isLineMissingData =
+        !companyName || !pages || !docSize || !accessionNo;
 
-    const line = `Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`;
+      const line = `Acc.No: ${accessionNo} | Co: ${companyName} | Pg: ${pages} | Sz: ${docSize}`;
 
-    if (isLineMissingData) {
-      isScenarioValid = false;
-      rowsData.push(`❌ MISSING DATA >> ${line}`);
-    } else {
-      rowsData.push(line);
-    }
+      if (isLineMissingData) {
+        isScenarioValid = false;
+        rowsData.push(`❌ MISSING DATA >> ${line}`);
+      } else {
+        rowsData.push(line);
+      }
 
-    console.log("```````````````````````````````````````");
-    console.log(`Row ${rowId}:`);
-    console.log(line);
-    console.log("```````````````````````````````````````");
-  });
+      console.log("```````````````````````````````````````");
+      console.log(`Row ${rowId}:`);
+      console.log(line);
+      console.log("```````````````````````````````````````");
+    },
+    { swallowRowErrors: true },
+  );
 
   return {
     text: rowsData.join("\n"),

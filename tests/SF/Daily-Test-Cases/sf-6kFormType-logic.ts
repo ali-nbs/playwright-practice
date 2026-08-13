@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { Page, expect } from "@playwright/test";
 import { updateGoogleSheet } from "../../utils/dumpDataOnGoogleSheet";
 import { getTargetDateString, parseCount } from "../../utils/helpers";
 import { SfPage } from "../../pages/SfPage";
@@ -58,7 +58,9 @@ async function selectFormTypeAndSearch(
   });
 
   await sf.searchBtn.click();
-  await sf.waitForResults(60000);
+  await expect(
+    sf.resultTabsMatching(["Docs:", "No Results Found"]).first(),
+  ).toBeVisible({ timeout: 60000 });
 }
 
 async function scrapeResults(

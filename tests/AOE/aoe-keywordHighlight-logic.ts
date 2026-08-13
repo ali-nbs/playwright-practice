@@ -107,27 +107,31 @@ const runScenario = async (
     await aoe.closeCurrentTab();
 
     // ---- Result grid ----
-    await aoe.forEachRefRow(target, async (row) => {
-      const id = await aoe.rowIntelligizeId(row);
-      const { found, invalidColor } = await aoe.checkRowHighlights(
-        aoe.rowSnippetContainer(row),
-        "em.highlight",
-      );
-
-      rowsVerified++;
-
-      if (!found) {
-        gridFailures.push(
-          `Intelligize ID: ${id} -> no highlight in result-grid snippet.`,
+    await aoe.forEachRow(
+      target,
+      async (row) => {
+        const id = await aoe.rowValueByLabel(row, "Intelligize ID");
+        const { found, invalidColor } = await aoe.checkRowHighlights(
+          aoe.rowSnippetContainer(row),
+          "em.highlight",
         );
-      } else if (invalidColor) {
-        gridFailures.push(
-          `Intelligize ID: ${id} -> snippet highlight colour is not ${HIGHLIGHT_BG_COLOR}.`,
-        );
-      }
 
-      console.log(`Row ${rowsVerified} -> ${id} | highlighted: ${found}`);
-    });
+        rowsVerified++;
+
+        if (!found) {
+          gridFailures.push(
+            `Intelligize ID: ${id} -> no highlight in result-grid snippet.`,
+          );
+        } else if (invalidColor) {
+          gridFailures.push(
+            `Intelligize ID: ${id} -> snippet highlight colour is not ${HIGHLIGHT_BG_COLOR}.`,
+          );
+        }
+
+        console.log(`Row ${rowsVerified} -> ${id} | highlighted: ${found}`);
+      },
+      { keyAttr: "data-ref" },
+    );
   }
 
   const allFailures = [...docFailures, ...gridFailures];

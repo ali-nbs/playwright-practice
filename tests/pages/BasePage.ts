@@ -178,37 +178,6 @@ export class BasePage {
   }
 
   /**
-   * The results-tab label locator. Matches "Docs: N", "Results: N",
-   * "Offerings: N", "No Results Found", or an error state in any casing.
-   */
-  get tabLabels(): Locator {
-    return this.resultTabsMatching(
-      ["Docs:", "Results:", "Offerings:", "No Results Found"],
-      { caseInsensitiveFragments: ["error"] },
-    );
-  }
-
-  /** The narrower "Docs:" / "No Results Found" status tab. */
-  get statusTabLabels(): Locator {
-    return this.resultTabsMatching(["Docs:", "No Results Found"]);
-  }
-
-  /** The "Docs:"-only tab label. */
-  get docsTabLabels(): Locator {
-    return this.resultTabsMatching(["Docs:"]);
-  }
-
-  /**
-   * Clicks the results tab if it is visible, to switch back to the grid.
-   * Several flows do exactly this after opening a document.
-   */
-  async clickResultsTabIfVisible(tab: Locator) {
-    if (await tab.isVisible()) {
-      await tab.click();
-    }
-  }
-
-  /**
    * The "+" icon inside an already-located filter block.
    *
    * Use this when you already hold the block's Locator; use `filterAddIcon`
@@ -222,12 +191,19 @@ export class BasePage {
 
   /**
    * An element matching text, by tag, e.g. elementWithText("span", /^10-K$/)
-   * or elementWithText("label", /^Only$/). Replaces what used to be two
-   * separate methods (spanWithText, labelWithText) differing only in which
-   * tag they searched.
+   * or elementWithText("label", /^Only$/). Replaces what used to be three
+   * separate methods (spanWithText, labelWithText, rowLabelledSpan)
+   * differing only in which tag they searched and whether the search was
+   * page-scoped or row-scoped - `root` covers that: pass a row Locator to
+   * search inside it (e.g. elementWithText("span", "Accession #", row)),
+   * or leave it default to search the whole page.
    */
-  elementWithText(tag: string, text: RegExp): Locator {
-    return this.page.locator(tag, { hasText: text });
+  elementWithText(
+    tag: string,
+    text: string | RegExp,
+    root: Locator | Page = this.page,
+  ): Locator {
+    return root.locator(tag, { hasText: text });
   }
 
   /** The app's React crash boundary ("Oops! Something went wrong"). */
@@ -252,7 +228,11 @@ export class BasePage {
     isNeedLoadMoreResults: boolean = false,
   ) {
     console.log("expected index ", expectedIndex);
-    const target = this.tabLabels.nth(expectedIndex);
+    const tabLabels = this.resultTabsMatching(
+      ["Docs:", "Results:", "Offerings:", "No Results Found"],
+      { caseInsensitiveFragments: ["error"] },
+    );
+    const target = tabLabels.nth(expectedIndex);
     const crashLocator = this.crashScreen;
 
     // Race the normal tab text against the crash screen so a crash is caught
@@ -287,15 +267,10 @@ export class BasePage {
 
     if (text.includes("Docs: 2,000+") && isNeedLoadMoreResults) {
       await this.loadMoreResultsLink.last().click({ force: true });
-      text = await this.tabLabels.nth(expectedIndex).innerText();
+      text = await tabLabels.nth(expectedIndex).innerText();
     }
 
     return text;
-  }
-
-  /** Waits for the results status tab to appear after a search. */
-  async waitForResults(timeout = 60000) {
-    await expect(this.statusTabLabels.first()).toBeVisible({ timeout });
   }
 
   // ---------------------------------------------------------------
@@ -619,24 +594,29 @@ export class BasePage {
   }
 
   /**
-   * Measures a rendered row's height, falling back to 115 when the grid has
-   * not drawn a row yet. Used by flows that scroll by `index * rowHeight`.
+   * Scrolls the grid so row `index` is at the top, and returns its Locator.
+   *
+   * Replaces what used to be three separate calls every positional-access
+   * flow (sf-ixbrl, sf-xbrlParsing, sf-pdee) made in the same order every
+   * time: measure a rendered row's height (falling back to 115 before the
+   * grid has drawn one), scroll `index * height` down, then look the row up
+   * by id. Those three steps are never used apart from one another, so they
+   * are now one call.
    */
-  async rowHeight(): Promise<number> {
-    return this.scroller.evaluate((el) => {
+  async scrollToRow(index: number): Promise<Locator> {
+    const height = await this.scroller.evaluate((el) => {
       const sampleRow = el.querySelector('[data-test="resultRow"]');
       return sampleRow ? sampleRow.getBoundingClientRect().height : 115;
     });
-  }
 
-  /** Scrolls the grid so that row `index` is at the top. */
-  async scrollToRowIndex(index: number, height: number) {
     await this.scroller.evaluate(
       (el, { i, h }) => {
         el.scrollTop = i * h;
       },
       { i: index, h: height },
     );
+
+    return this.rowById(index);
   }
 
   /** The "View" button inside a result row. */
@@ -684,50 +664,14 @@ export class BasePage {
     };
   }
 
-  /** A row's first link. Click target, not text - kept as a locator. */
-  rowFirstLink(row: Locator): Locator {
-    return row.locator("a").first();
-  }
-
-  /**
-   * A row's paragraphs as a Locator (not their text - see rowData for
-   * that). Kept because sf-crossReferenceLinks chains `.locator(...)` off
-   * it to find a link inside a specific paragraph, which a text array
-   * cannot express.
-   */
-  rowParagraphs(row: Locator): Locator {
-    return row.locator("p");
-  }
-
-  /**
-   * A row's anchors and paragraphs, in DOCUMENT ORDER. Kept as a Locator:
-   * sf-boilerPlate iterates this element-by-element and checks each one's
-   * tag name at runtime, which rowData's separate `links`/`paragraphs`
-   * arrays cannot express (they lose the original interleaving).
-   */
-  rowLinksAndParagraphs(row: Locator): Locator {
-    return row.locator("a, p");
-  }
-
-  /** A row's select checkbox label. Click target - kept as a locator. */
-  rowCheckboxLabel(row: Locator): Locator {
-    return row.locator("label").first();
-  }
-
-  /** The "View All Hits" / "View More" affordance inside a row. Its .count() is checked, not its text. */
-  rowViewAllHits(row: Locator): Locator {
-    return row.getByText(/View All Hits|View More/i);
-  }
-
-  /**
-   * A labelled cell inside a row, e.g. rowLabelledSpan(row, "Accession #").
-   * Returns the <span> carrying the label itself - callers walk from it
-   * (following-sibling, nested spans) to reach the value, which is why this
-   * stays a locator rather than folding into rowData or rowValueByLabel.
-   */
-  rowLabelledSpan(row: Locator, label: string): Locator {
-    return row.locator("span", { hasText: label });
-  }
+  // NOTE: rowFirstLink, rowParagraphs, rowLinksAndParagraphs,
+  // rowCheckboxLabel, rowViewAllHits and rowLabelledSpan used to live here,
+  // each a one-line wrapper around `row.locator(...)`. `row` is already a
+  // Playwright Locator - callers now call `.locator()` on it directly
+  // (e.g. `row.locator("a").first()`, `row.locator("span", { hasText: label
+  // })`) or use `elementWithText(tag, text, row)` for the row-scoped
+  // text-match case, instead of a page-class method existing solely to
+  // rename a one-line query.
 
   /**
    * Reads a labelled value out of a row, e.g. labelledValue(row, "File #").
@@ -753,52 +697,80 @@ export class BasePage {
    * Walks the result grid and runs `handleRow` for each row, scrolling to
    * load more rows until `targetCount` rows have been processed.
    *
-   * This loop (virtualized grid + processedIds + scroll to load more) was
-   * copy-pasted in every scraping test. Now it lives here once and each test
-   * only writes the part that is actually different: what to do with a row.
+   * This is the ONE grid-walking loop. It replaces what used to be two
+   * separate methods (forEachResultRow / forEachRefRow) that differed only
+   * in three things, which are now options instead of two copies of the
+   * same ~40-line loop:
    *
-   * Rows that throw are logged and skipped, exactly as before.
+   *   `keyAttr` - which attribute identifies a row so it isn't processed
+   *   twice. `"id"` (the default) is what the virtualized grid re-uses as
+   *   you scroll; `"data-ref"` is stable per document and is what the
+   *   flows that must visit every document exactly once key off instead.
    *
-   * `scrollStyle` covers the two ways the existing flows advance the grid.
-   * They are NOT interchangeable, so each caller keeps the one it used:
-   *   "intoViewStart"    -> rows.last().evaluate(el => el.scrollIntoView(...))
-   *   "intoViewIfNeeded" -> rows.last().scrollIntoViewIfNeeded()
+   *   `swallowRowErrors` - when true (the old forEachResultRow behaviour),
+   *   a row that throws is logged and skipped rather than aborting the
+   *   whole scenario. Defaults to false (the old forEachRefRow behaviour):
+   *   let it throw, because the highlight/value-check flows that use this
+   *   need a bad row to actually fail the scenario, not be silently
+   *   dropped from the count.
    *
-   * `maxStagnantScrolls` stops the loop when scrolling stops producing new
-   * rows. Without it this loop never exits if the grid holds fewer rows than
-   * `targetCount` (e.g. the tab said "Docs: 20" but only 9 rows can ever
-   * render), which hangs the whole run rather than reporting what it found.
-   * The same guard already exists in forEachRefRow and in
-   * AaPage.findResultRowByIndex; this brings the third loop in line.
+   *   `scrollStyle` - the three ways the existing flows advance the grid.
+   *   They are NOT interchangeable, so each caller keeps the one it used:
+   *     "intoViewStart"    -> rows.last().evaluate(el => el.scrollIntoView(...))
+   *     "intoViewIfNeeded" -> rows.last().scrollIntoViewIfNeeded()
+   *     "scrollBy"         -> scroller.scrollBy(0, 600), the old forEachRefRow
+   *                           default - kept as the default for `data-ref`
+   *                           mode so merging the two loops does not
+   *                           silently change how data-ref flows scroll.
+   *
+   * `maxStagnantScrolls` stops the loop once scrolling stops revealing new
+   * rows, so it reports what it found instead of hanging forever when the
+   * grid holds fewer rows than `targetCount`.
+   *
+   * NOTE ON BEHAVIOR: the old forEachRefRow gave up on the very FIRST
+   * scroll that revealed nothing new. This unified loop retries up to
+   * `maxStagnantScrolls` (12) for every mode, matching the guard already
+   * added to the old forEachResultRow. That is a deliberate strictness
+   * relaxation, not an accident: a single stagnant scroll can be a
+   * transient render delay, and giving up instantly was the more fragile
+   * behavior.
    */
-  async forEachResultRow(
+  async forEachRow(
     targetCount: number,
-    handleRow: (row: Locator, rowId: string) => Promise<void>,
+    handleRow: (row: Locator, key: string) => Promise<void>,
     options: {
-      scrollStyle?: "intoViewStart" | "intoViewIfNeeded";
+      keyAttr?: "id" | "data-ref";
+      swallowRowErrors?: boolean;
+      scrollStyle?: "intoViewStart" | "intoViewIfNeeded" | "scrollBy";
       logRowId?: boolean;
       maxStagnantScrolls?: number;
     } = {},
   ) {
     const {
-      scrollStyle = "intoViewStart",
+      keyAttr = "id",
+      swallowRowErrors = false,
+      scrollStyle = keyAttr === "data-ref" ? "scrollBy" : "intoViewStart",
       logRowId = true,
       maxStagnantScrolls = 12,
     } = options;
 
+    const rowsLocator =
+      keyAttr === "data-ref"
+        ? this.page.locator('[data-test="resultRow"][data-ref^="search_"]')
+        : this.rows;
+
     let resultsFound = 0;
     let stagnantScrolls = 0;
-    const processedIds = new Set<string>();
+    const processed = new Set<string>();
 
     while (resultsFound < targetCount) {
-      const rows = this.rows;
-      const visibleRowCount = await rows.count();
+      const visibleRowCount = await rowsLocator.count();
 
       if (visibleRowCount === 0) {
         stagnantScrolls++;
         if (stagnantScrolls > maxStagnantScrolls) {
           console.log(
-            `forEachResultRow: giving up with ${resultsFound}/${targetCount} rows - the grid rendered no rows for ${maxStagnantScrolls} attempts.`,
+            `forEachRow: giving up with ${resultsFound}/${targetCount} rows - the grid rendered no rows for ${maxStagnantScrolls} attempts.`,
           );
           return;
         }
@@ -806,44 +778,51 @@ export class BasePage {
         continue;
       }
 
-      const processedBeforeThisPass = processedIds.size;
+      const processedBeforeThisPass = processed.size;
 
       for (let i = 0; i < visibleRowCount; i++) {
-        const row = rows.nth(i);
-        const rowId = await row.getAttribute("id");
-        if (logRowId) console.log("row id ", rowId);
+        const row = rowsLocator.nth(i);
+        const key = await row.getAttribute(keyAttr);
+        if (logRowId) console.log(`row ${keyAttr}`, key);
 
-        if (rowId && !processedIds.has(rowId)) {
+        if (!key || processed.has(key)) continue;
+
+        if (swallowRowErrors) {
           try {
-            await handleRow(row, rowId);
-            processedIds.add(rowId);
+            await handleRow(row, key);
+            processed.add(key);
             await this.page.waitForTimeout(500);
             resultsFound++;
           } catch (e) {
             console.log("err :", e);
             continue;
           }
+        } else {
+          await handleRow(row, key);
+          processed.add(key);
+          resultsFound++;
         }
+
         if (resultsFound >= targetCount) break;
       }
 
       if (resultsFound < targetCount) {
-        // A pass that added no new row ids means scrolling is no longer
-        // revealing anything, so count it towards giving up.
         stagnantScrolls =
-          processedIds.size === processedBeforeThisPass ? stagnantScrolls + 1 : 0;
+          processed.size === processedBeforeThisPass ? stagnantScrolls + 1 : 0;
 
         if (stagnantScrolls > maxStagnantScrolls) {
           console.log(
-            `forEachResultRow: stopping with ${resultsFound}/${targetCount} rows - ${maxStagnantScrolls} scrolls revealed no new rows.`,
+            `forEachRow: stopping with ${resultsFound}/${targetCount} rows - ${maxStagnantScrolls} scrolls revealed no new rows.`,
           );
           return;
         }
 
         if (scrollStyle === "intoViewIfNeeded") {
-          await rows.last().scrollIntoViewIfNeeded();
+          await rowsLocator.last().scrollIntoViewIfNeeded();
+        } else if (scrollStyle === "scrollBy") {
+          await this.scroller.evaluate((el, by) => el.scrollBy(0, by), 600);
         } else {
-          await rows
+          await rowsLocator
             .last()
             .evaluate((el) => el.scrollIntoView({ block: "start" }));
         }
@@ -1021,48 +1000,11 @@ export class BasePage {
     return this.page.locator('[data-test="resultRow"][data-ref^="search_"]');
   }
 
-  /** Scrolls the result grid down by one step. */
-  async scrollResultGrid(step: number = 600, settleMs: number = 300) {
-    await this.scroller.evaluate((el, by) => el.scrollBy(0, by), step);
-    await this.page.waitForTimeout(settleMs);
-  }
-
-  /**
-   * Walks the grid by `data-ref` and runs `handleRow` once per document,
-   * scrolling until `targetCount` rows are seen or the grid stops growing.
-   *
-   * Kept separate from `forEachResultRow` on purpose: this one stops as soon
-   * as a scroll yields no new rows (so it finishes on a short result set
-   * instead of spinning), and it does not swallow row errors. Flows that
-   * need the id-based, skip-and-continue behaviour keep using
-   * `forEachResultRow`.
-   */
-  async forEachRefRow(
-    targetCount: number,
-    handleRow: (row: Locator, ref: string) => Promise<void>,
-  ) {
-    const rows = this.refRows;
-    const processed = new Set<string>();
-    let previousCount = 0;
-
-    while (processed.size < targetCount) {
-      const visibleRowCount = await rows.count();
-
-      for (let i = 0; i < visibleRowCount; i++) {
-        const row = rows.nth(i);
-        const ref = await row.getAttribute("data-ref");
-        if (!ref || processed.has(ref)) continue;
-
-        processed.add(ref);
-        await handleRow(row, ref);
-      }
-
-      if (processed.size === previousCount) break;
-
-      previousCount = processed.size;
-      await this.scrollResultGrid();
-    }
-  }
+  // NOTE: `forEachRefRow` and `scrollResultGrid` used to live here.
+  // forEachRefRow is superseded by forEachRow(targetCount, handleRow,
+  // { keyAttr: "data-ref" }) above - every call site now uses that instead.
+  // scrollResultGrid had no other caller once forEachRefRow's internal use
+  // was inlined into forEachRow's "scrollBy" branch.
 
   // ---------------------------------------------------------------
   // Intelligize ID
@@ -1109,26 +1051,14 @@ export class BasePage {
     return (text ?? "").trim();
   }
 
-  /**
-   * Reads a row's Intelligize ID. Requires the "Intelligize ID" display
-   * column to have been switched on first (see selectInfoOption).
-   */
-  async rowIntelligizeId(row: Locator): Promise<string> {
-    return this.rowValueByLabel(row, "Intelligize ID");
-  }
-
-  /**
-   * A row's filing/release date cell.
-   *
-   * AOE and SF each had their own copy of this with the identical selector.
-   */
-  async rowDate(row: Locator): Promise<string> {
-    const date = await row
-      .locator(".styles__filing-date-value-column___2pu1v")
-      .textContent();
-
-    return date?.trim() ?? "";
-  }
+  // NOTE: rowIntelligizeId used to live here as a one-line wrapper around
+  // rowValueByLabel(row, "Intelligize ID") - callers now call
+  // rowValueByLabel directly, since that IS the one generalized helper.
+  //
+  // rowDate used to be a second, unrelated method (a different selector,
+  // .styles__filing-date-value-column___2pu1v, not a label lookup) that
+  // AOE and SF each declared separately before being merged here. Its two
+  // callers now inline the one-line selector directly.
 
   /** Reads the Intelligize ID from the open document's Info panel. */
   async openDocIntelligizeId(): Promise<string> {

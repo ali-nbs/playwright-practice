@@ -76,7 +76,7 @@ export const runCompanyType_SRC_Shell_WKSI_EGC_Test = async (
     await sf.searchBtn.click();
 
     // 3. Verify Results
-    const statusLocator = sf.statusTabLabels;
+    const statusLocator = sf.resultTabsMatching(["Docs:", "No Results Found"]);
     await expect(statusLocator.first()).toBeVisible({ timeout: 60000 });
 
     if (
@@ -125,12 +125,12 @@ async function validateRows(page: Page, category: any, logToFile: Function) {
     await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
 
     // Get Accession #
-    const accLabel = sf.rowLabelledSpan(currentRow, "Accession #");
+    const accLabel = sf.elementWithText("span", "Accession #", currentRow);
     const accValues = await accLabel.locator("span").allInnerTexts();
     const accessionNo = accValues.find((t) => t.includes("-"))?.trim() || "N/A";
 
     // Check UI Status
-    const uiLabel = sf.rowLabelledSpan(currentRow, "Company Type/Status");
+    const uiLabel = sf.elementWithText("span", "Company Type/Status", currentRow);
     const uiValues = await uiLabel.locator("p").allInnerTexts();
     const uiMatchFound = uiValues.some(
       (val) =>

@@ -53,25 +53,29 @@ export const runBooleanHighlightTest = async (
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 
-    await sf.forEachRefRow(target, async (row) => {
-      const id = await sf.rowIntelligizeId(row);
-      const { found, invalidColor } = await sf.checkRowHighlights(
-        row,
-        "em.highlight",
-      );
-
-      verified++;
-
-      if (!found) {
-        failures.push(`Intelligize ID: ${id} -> no keyword highlight in row.`);
-      } else if (invalidColor) {
-        failures.push(
-          `Intelligize ID: ${id} -> highlight colour is not ${HIGHLIGHT_BG_COLOR}.`,
+    await sf.forEachRow(
+      target,
+      async (row) => {
+        const id = await sf.rowValueByLabel(row, "Intelligize ID");
+        const { found, invalidColor } = await sf.checkRowHighlights(
+          row,
+          "em.highlight",
         );
-      }
 
-      console.log(`Row ${verified} -> ${id} | highlighted: ${found}`);
-    });
+        verified++;
+
+        if (!found) {
+          failures.push(`Intelligize ID: ${id} -> no keyword highlight in row.`);
+        } else if (invalidColor) {
+          failures.push(
+            `Intelligize ID: ${id} -> highlight colour is not ${HIGHLIGHT_BG_COLOR}.`,
+          );
+        }
+
+        console.log(`Row ${verified} -> ${id} | highlighted: ${found}`);
+      },
+      { keyAttr: "data-ref" },
+    );
   }
 
   const scenarioBlock = [

@@ -113,9 +113,8 @@ const scrapeResults = async (
       if (rowId && !processedIds.has(rowId)) {
         let AccessionNumber = "N/A";
         try {
-          // rowParagraphs stays a locator (targetedLink below chains
-          // .locator() off it); the span text is now read via rowData.
-          const allpTags = sf.rowParagraphs(row);
+          // row.locator("p") - targetedLink below chains .locator() off it.
+          const allpTags = row.locator("p");
           const { spans: cleanContent } = await sf.rowData(row);
 
           console.log("---------------------------------------------");
@@ -191,16 +190,20 @@ const scrapeResults = async (
                 //   `✅ Accession ${accessionNo} has ${crossReferenceLinksCount} cross-reference links.`,
                 // );
               }
-              const activeTab = sf.statusTabLabels.first();
-              await sf.clickResultsTabIfVisible(activeTab);
+              const activeTab = sf.resultTabsMatching(["Docs:", "No Results Found"]).first();
+              if (await activeTab.isVisible()) {
+                await activeTab.click();
+              }
             }
           }
         } catch (e: any) {
         } finally {
           processedIds.add(rowId);
           resultsFound++;
-          const activeTab = sf.statusTabLabels.first();
-          await sf.clickResultsTabIfVisible(activeTab);
+          const activeTab = sf.resultTabsMatching(["Docs:", "No Results Found"]).first();
+          if (await activeTab.isVisible()) {
+            await activeTab.click();
+          }
           await page.waitForTimeout(700);
         }
       }

@@ -30,11 +30,7 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
     });
     while (processedCount < totalToProcess) {
       const scroller = sf.scroller;
-      const rowHeight = await sf.rowHeight();
-
-      await sf.scrollToRowIndex(processedCount, rowHeight);
-
-      let currentRow = sf.rowById(processedCount);
+      let currentRow = await sf.scrollToRow(processedCount);
 
       const rowExists = (await currentRow.count()) > 0;
       if (rowExists) {
@@ -91,8 +87,10 @@ export const runXbrlParsingTest = async (page: Page, logToFile: Function) => {
         );
       }
 
-      const resultsTab = sf.docsTabLabels.first();
-      await sf.clickResultsTabIfVisible(resultsTab);
+      const resultsTab = sf.resultTabsMatching(["Docs:"]).first();
+      if (await resultsTab.isVisible()) {
+        await resultsTab.click();
+      }
       await page.waitForTimeout(500);
       processedCount++;
     }

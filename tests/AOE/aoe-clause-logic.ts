@@ -42,10 +42,14 @@ export const runAoeClauseTest = async (page: Page, logToFile: Function) => {
     });
     await page.waitForTimeout(1000);
 
-    await aoe.forEachRefRow(total, async (row) => {
-      const id = await aoe.rowIntelligizeId(row);
-      if (id) ids.add(id.trim());
-    });
+    await aoe.forEachRow(
+      total,
+      async (row) => {
+        const id = await aoe.rowValueByLabel(row, "Intelligize ID");
+        if (id) ids.add(id.trim());
+      },
+      { keyAttr: "data-ref" },
+    );
 
     return ids;
   };

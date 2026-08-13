@@ -85,31 +85,35 @@ export const runSrcConceptualHighlightTest = async (
     await src.closeCurrentTab();
 
     // ---- Result grid ----
-    await src.forEachRefRow(target, async (row) => {
-      const details = await src.rowDetails(row);
-      const label = `${details.title} - ${details.category} - ${details.dateFiled}`;
+    await src.forEachRow(
+      target,
+      async (row) => {
+        const details = await src.rowDetails(row);
+        const label = `${details.title} - ${details.category} - ${details.dateFiled}`;
 
-      // LIVE-CONFIRMED (2026-08-12, headed run over CDP): SRC marks row
-      // highlights with <em class="highlight">, NOT the <customhighlight>
-      // tag DBM uses - a real row had 15 em.highlight and 0
-      // customhighlight, so the DBM selector would have failed every row.
-      const { found, invalidColor } = await src.checkRowHighlights(
-        row,
-        "em.highlight",
-      );
-
-      rowsVerified++;
-
-      if (!found) {
-        gridFailures.push(`${label} -> no highlighted keyword in row.`);
-      } else if (invalidColor) {
-        gridFailures.push(
-          `${label} -> highlight colour is not ${HIGHLIGHT_BG_COLOR}.`,
+        // LIVE-CONFIRMED (2026-08-12, headed run over CDP): SRC marks row
+        // highlights with <em class="highlight">, NOT the <customhighlight>
+        // tag DBM uses - a real row had 15 em.highlight and 0
+        // customhighlight, so the DBM selector would have failed every row.
+        const { found, invalidColor } = await src.checkRowHighlights(
+          row,
+          "em.highlight",
         );
-      }
 
-      console.log(`Row ${rowsVerified} -> ${label} | highlighted: ${found}`);
-    });
+        rowsVerified++;
+
+        if (!found) {
+          gridFailures.push(`${label} -> no highlighted keyword in row.`);
+        } else if (invalidColor) {
+          gridFailures.push(
+            `${label} -> highlight colour is not ${HIGHLIGHT_BG_COLOR}.`,
+          );
+        }
+
+        console.log(`Row ${rowsVerified} -> ${label} | highlighted: ${found}`);
+      },
+      { keyAttr: "data-ref" },
+    );
   }
 
   const allFailures = [...docFailures, ...gridFailures];

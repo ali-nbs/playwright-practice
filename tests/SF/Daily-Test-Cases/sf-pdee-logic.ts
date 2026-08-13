@@ -54,16 +54,12 @@ export const runPDEETest = async (page: Page, logToFile: Function) => {
   let selectedRows = 0;
 
   for (const index of targetIndices) {
-    const rowHeight = await sf.rowHeight();
-
-    await sf.scrollToRowIndex(index, rowHeight);
-
-    const currentRow = sf.rowById(index);
+    const currentRow = await sf.scrollToRow(index);
 
     if ((await currentRow.count()) > 0) {
       await currentRow.evaluate((el) => el.scrollIntoView({ block: "start" }));
       await page.waitForTimeout(500);
-      await sf.rowCheckboxLabel(currentRow).check({ force: true });
+      await currentRow.locator("label").first().check({ force: true });
       selectedRows++;
       logToFile(`Selected Row Index: ${index}`);
     } else {

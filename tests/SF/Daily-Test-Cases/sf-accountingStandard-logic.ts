@@ -50,20 +50,24 @@ export const runAccountingStandardTest = async (
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 
-    await sf.forEachRefRow(target, async (row) => {
-      const id = await sf.rowIntelligizeId(row);
-      const standard = await sf.rowAccountingStandard(row);
+    await sf.forEachRow(
+      target,
+      async (row) => {
+        const id = await sf.rowValueByLabel(row, "Intelligize ID");
+        const standard = await sf.rowAccountingStandard(row);
 
-      verified++;
+        verified++;
 
-      if (standard !== ACCOUNTING_STANDARD) {
-        failures.push(
-          `Intelligize ID: ${id} -> Accounting Std. is "${standard}", expected "${ACCOUNTING_STANDARD}".`,
-        );
-      }
+        if (standard !== ACCOUNTING_STANDARD) {
+          failures.push(
+            `Intelligize ID: ${id} -> Accounting Std. is "${standard}", expected "${ACCOUNTING_STANDARD}".`,
+          );
+        }
 
-      console.log(`Row ${verified} -> ${id} | ${standard}`);
-    });
+        console.log(`Row ${verified} -> ${id} | ${standard}`);
+      },
+      { keyAttr: "data-ref" },
+    );
   }
 
   const scenarioBlock = [

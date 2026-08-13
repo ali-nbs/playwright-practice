@@ -94,7 +94,7 @@ const scrapeVirtualizedGrid = async (
 
       // Check if this row hides some snippets behind a button
       const hasViewAllHits =
-        (await sf.rowViewAllHits(currentRow).count()) > 0;
+        (await currentRow.getByText(/View All Hits|View More/i).count()) > 0;
 
       const accessionNo =
         data.spans.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
@@ -243,7 +243,7 @@ const validateRandomDocuments = async (
     logToFile(`Jumping back to Results Grid (Tab Index: ${gridTabIndex})...`);
 
     // Locate the exact tab that holds the grid using the index we stored
-    const resultsTab = sf.statusTabLabels.nth(gridTabIndex - 1);
+    const resultsTab = sf.resultTabsMatching(["Docs:", "No Results Found"]).nth(gridTabIndex - 1);
 
     // Click it to switch the view back to the grid
     await resultsTab.click();

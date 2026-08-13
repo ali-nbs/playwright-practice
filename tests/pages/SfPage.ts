@@ -230,9 +230,10 @@ export class SfPage extends BasePage {
     return this.page.locator("tr.periodicFilingsContent__tableRow___trkDv");
   }
 
-  // NOTE: `statusTab` used to be declared here with the exact same XPath as
-  // BasePage.statusTabLabels, character for character. It was a merge
-  // duplicate, so it is gone and its two callers now use statusTabLabels.
+  // NOTE: `statusTab` used to be declared here with the exact same XPath
+  // BasePage later generalized into `resultTabsMatching`. It was a merge
+  // duplicate, so it is gone; its callers now call
+  // resultTabsMatching(["Docs:", "No Results Found"]) directly.
 
   /**
    * A result row looked up directly by id, WITHOUT scoping through the

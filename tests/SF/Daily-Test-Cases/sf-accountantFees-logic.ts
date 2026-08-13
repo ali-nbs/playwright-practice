@@ -67,18 +67,22 @@ export const runAccountantFeesTest = async (
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 
-    await sf.forEachRefRow(target, async (row) => {
-      const id = await sf.rowIntelligizeId(row);
-      const hasFee = await sf.rowHasAccountantFee(row);
+    await sf.forEachRow(
+      target,
+      async (row) => {
+        const id = await sf.rowValueByLabel(row, "Intelligize ID");
+        const hasFee = await sf.rowHasAccountantFee(row);
 
-      verified++;
+        verified++;
 
-      if (!hasFee) {
-        failures.push(`Intelligize ID: ${id} -> no Accountant Fee shown.`);
-      }
+        if (!hasFee) {
+          failures.push(`Intelligize ID: ${id} -> no Accountant Fee shown.`);
+        }
 
-      console.log(`Row ${verified} -> ${id} | has fee: ${hasFee}`);
-    });
+        console.log(`Row ${verified} -> ${id} | has fee: ${hasFee}`);
+      },
+      { keyAttr: "data-ref" },
+    );
   }
 
   const scenarioBlock = [

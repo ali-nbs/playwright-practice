@@ -89,7 +89,7 @@ const scrapeFiscalYearResults = async (targetCount: number, page: Page) => {
       if (rowId && !processedIds.has(rowId)) {
         try {
           const { links: anchorLinks } = await sf.rowData(row);
-          await sf.rowFirstLink(row).click();
+          await row.locator("a").first().click();
           await page.waitForTimeout(500);
 
           const isValid = await validateFiscalYear(page, activeTab);

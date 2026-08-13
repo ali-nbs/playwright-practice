@@ -95,29 +95,33 @@ const runScenario = async (
     await dbm.closeCurrentTab();
 
     // ---- Result grid ----
-    await dbm.forEachRefRow(target, async (row) => {
-      const details = await dbm.rowDetails(row);
-      const { found, invalidColor } = await dbm.checkRowHighlights(
-        row,
-        "customhighlight",
-      );
-
-      rowsVerified++;
-
-      if (!found) {
-        gridFailures.push(
-          `${describeRow(details)} -> no highlighted keyword in row.`,
+    await dbm.forEachRow(
+      target,
+      async (row) => {
+        const details = await dbm.rowDetails(row);
+        const { found, invalidColor } = await dbm.checkRowHighlights(
+          row,
+          "customhighlight",
         );
-      } else if (invalidColor) {
-        gridFailures.push(
-          `${describeRow(details)} -> highlight colour is not ${HIGHLIGHT_BG_COLOR}.`,
-        );
-      }
 
-      console.log(
-        `Row ${rowsVerified} -> ${describeRow(details)} | highlighted: ${found}`,
-      );
-    });
+        rowsVerified++;
+
+        if (!found) {
+          gridFailures.push(
+            `${describeRow(details)} -> no highlighted keyword in row.`,
+          );
+        } else if (invalidColor) {
+          gridFailures.push(
+            `${describeRow(details)} -> highlight colour is not ${HIGHLIGHT_BG_COLOR}.`,
+          );
+        }
+
+        console.log(
+          `Row ${rowsVerified} -> ${describeRow(details)} | highlighted: ${found}`,
+        );
+      },
+      { keyAttr: "data-ref" },
+    );
   }
 
   const allFailures = [...docFailures, ...gridFailures];

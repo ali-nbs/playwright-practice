@@ -51,20 +51,27 @@ export const runAoeReleaseDateTest = async (
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 
-    await aoe.forEachRefRow(target, async (row) => {
-      const id = await aoe.rowIntelligizeId(row);
-      const releaseDate = await aoe.rowDate(row);
+    await aoe.forEachRow(
+      target,
+      async (row) => {
+        const id = await aoe.rowValueByLabel(row, "Intelligize ID");
+        const releaseDate =
+          (await row
+            .locator(".styles__filing-date-value-column___2pu1v")
+            .textContent())?.trim() ?? "";
 
-      verified++;
+        verified++;
 
-      if (releaseDate !== expectedDate) {
-        failures.push(
-          `Intelligize ID: ${id} -> Released date is "${releaseDate}", expected "${expectedDate}".`,
-        );
-      }
+        if (releaseDate !== expectedDate) {
+          failures.push(
+            `Intelligize ID: ${id} -> Released date is "${releaseDate}", expected "${expectedDate}".`,
+          );
+        }
 
-      console.log(`Row ${verified} -> ${id} | ${releaseDate}`);
-    });
+        console.log(`Row ${verified} -> ${id} | ${releaseDate}`);
+      },
+      { keyAttr: "data-ref" },
+    );
   }
 
   const scenarioBlock = [

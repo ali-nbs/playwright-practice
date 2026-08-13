@@ -58,18 +58,22 @@ export const runSnippetsTest = async (page: Page, logToFile: Function) => {
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 
-    await sf.forEachRefRow(target, async (row) => {
-      const id = await sf.rowIntelligizeId(row);
-      const snippetCount = await sf.rowSnippets(row).count();
+    await sf.forEachRow(
+      target,
+      async (row) => {
+        const id = await sf.rowValueByLabel(row, "Intelligize ID");
+        const snippetCount = await sf.rowSnippets(row).count();
 
-      verified++;
+        verified++;
 
-      if (snippetCount === 0) {
-        failures.push(`Intelligize ID: ${id} -> row displays no snippets.`);
-      }
+        if (snippetCount === 0) {
+          failures.push(`Intelligize ID: ${id} -> row displays no snippets.`);
+        }
 
-      console.log(`Row ${verified} -> ${id} | snippets: ${snippetCount}`);
-    });
+        console.log(`Row ${verified} -> ${id} | snippets: ${snippetCount}`);
+      },
+      { keyAttr: "data-ref" },
+    );
   }
 
   const scenarioBlock = [

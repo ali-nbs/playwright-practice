@@ -90,7 +90,7 @@ const scrapeVirtualizedGrid = async (
       const highlights = data.highlights.join(" ").replace(/\n/g, " ").trim();
 
       const hasViewAllHits =
-        (await sf.rowViewAllHits(currentRow).count()) > 0;
+        (await currentRow.getByText(/View All Hits|View More/i).count()) > 0;
 
       const accessionNo =
         data.spans.find((text) => /^\d{10}-?\d{2}-?\d{6}$/.test(text)) ||
@@ -228,7 +228,7 @@ const validateRandomConceptualDocs = async (
 
     // STEP C: JUMP BACK TO RESULTS GRID TAB
     logToFile(`Jumping back to Results Grid (Tab Index: ${gridTabIndex})...`);
-    const resultsTab = sf.statusTabLabels.nth(gridTabIndex - 1);
+    const resultsTab = sf.resultTabsMatching(["Docs:", "No Results Found"]).nth(gridTabIndex - 1);
     await resultsTab.click();
 
     await gridContainer.waitFor({ state: "visible", timeout: 15000 });

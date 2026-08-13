@@ -149,12 +149,12 @@ export const runBoilerPlateTest = async (page: Page, logToFile: Function) => {
         }
 
         const { spans: cleanContent } = await sf.rowData(currentRow);
-        const fillingInforesultLabel = sf.rowLabelledSpan(currentRow, "Accession #");
+        const fillingInforesultLabel = sf.elementWithText("span", "Accession #", currentRow);
         const accessionNo = await fillingInforesultLabel
           .locator("xpath=following-sibling::span")
           .innerText();
 
-        const allContent = sf.rowLinksAndParagraphs(currentRow);
+        const allContent = currentRow.locator("a, p");
         const totalItems = await allContent.count();
         let rowMatchedAnyExclude = false;
         const lastAnchorText = (

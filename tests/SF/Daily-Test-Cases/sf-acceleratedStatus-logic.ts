@@ -57,20 +57,24 @@ export const runAcceleratedStatusTest = async (
 
     const target = Math.min(body.TotalRecords, MAX_DOCS);
 
-    await sf.forEachRefRow(target, async (row) => {
-      const id = await sf.rowIntelligizeId(row);
-      const status = await sf.rowAcceleratedStatus(row);
+    await sf.forEachRow(
+      target,
+      async (row) => {
+        const id = await sf.rowValueByLabel(row, "Intelligize ID");
+        const status = await sf.rowAcceleratedStatus(row);
 
-      verified++;
+        verified++;
 
-      if (status !== ACCELERATED_STATUS) {
-        failures.push(
-          `Intelligize ID: ${id} -> Accelerated Status is "${status}", expected "${ACCELERATED_STATUS}".`,
-        );
-      }
+        if (status !== ACCELERATED_STATUS) {
+          failures.push(
+            `Intelligize ID: ${id} -> Accelerated Status is "${status}", expected "${ACCELERATED_STATUS}".`,
+          );
+        }
 
-      console.log(`Row ${verified} -> ${id} | ${status}`);
-    });
+        console.log(`Row ${verified} -> ${id} | ${status}`);
+      },
+      { keyAttr: "data-ref" },
+    );
   }
 
   const scenarioBlock = [

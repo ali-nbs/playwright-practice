@@ -57,42 +57,46 @@ const verifyOutlines = async (targetCount: number, src: SrcPage, page: Page) => 
   const rowsData: string[] = [];
   let isScenarioValid = true;
 
-  await src.forEachResultRow(targetCount, async (row, rowId) => {
-    const { spans: cleanContent } = await src.rowData(row);
+  await src.forEachRow(
+    targetCount,
+    async (row, rowId) => {
+      const { spans: cleanContent } = await src.rowData(row);
 
-    const title = cleanContent[2] || "";
-    const sourceType = cleanContent[3] || "";
-    const materialCategory = cleanContent[4] || "";
-    const materialType = cleanContent[5] || "";
-    const date = cleanContent[6] || "";
+      const title = cleanContent[2] || "";
+      const sourceType = cleanContent[3] || "";
+      const materialCategory = cleanContent[4] || "";
+      const materialType = cleanContent[5] || "";
+      const date = cleanContent[6] || "";
 
-    const rowSummary = `Title: ${title} | Source: ${sourceType} | Category: ${materialCategory} | Type: ${materialType} | Date: ${date}`;
-    console.log(`Row ${rowId}: ${rowSummary}`);
+      const rowSummary = `Title: ${title} | Source: ${sourceType} | Category: ${materialCategory} | Type: ${materialType} | Date: ${date}`;
+      console.log(`Row ${rowId}: ${rowSummary}`);
 
-    if (!title || !sourceType || !materialCategory || !materialType) {
-      isScenarioValid = false;
-      rowsData.push(`❌ MISSING DATA >> ${rowSummary}`);
-    }
+      if (!title || !sourceType || !materialCategory || !materialType) {
+        isScenarioValid = false;
+        rowsData.push(`❌ MISSING DATA >> ${rowSummary}`);
+      }
 
-    try {
-      await src.openDocument(row);
-    } catch (error) {
-      console.log("error :", error);
-      rowsData.push(`Doc View Content not Loaded >> ${rowSummary}\n`);
-    }
+      try {
+        await src.openDocument(row);
+      } catch (error) {
+        console.log("error :", error);
+        rowsData.push(`Doc View Content not Loaded >> ${rowSummary}\n`);
+      }
 
-    // The outline tab is disabled for documents that have no outline.
-    if (await src.isOutlineDisabled()) {
-      rowsData.push(`Outline section Disabled >> ${rowSummary}\n`);
-      isScenarioValid = false;
-    } else {
-      await src.outlineTab.click({ force: true });
-      await src.clickLastOutlineItem();
-      await page.waitForTimeout(1000);
-    }
+      // The outline tab is disabled for documents that have no outline.
+      if (await src.isOutlineDisabled()) {
+        rowsData.push(`Outline section Disabled >> ${rowSummary}\n`);
+        isScenarioValid = false;
+      } else {
+        await src.outlineTab.click({ force: true });
+        await src.clickLastOutlineItem();
+        await page.waitForTimeout(1000);
+      }
 
-    await src.backToResults();
-  });
+      await src.backToResults();
+    },
+    { swallowRowErrors: true },
+  );
 
   return {
     text: rowsData.join("\n"),
