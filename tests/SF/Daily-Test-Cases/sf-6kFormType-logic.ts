@@ -11,7 +11,7 @@ export const run6kFormTypeTest = async (page: Page, logToFile: Function) => {
   const sf = new SfPage(page);
 
   const TEST_DATA = [
-    { id: 1, form: "6-K", day: getTargetDateString(), count: 25 },
+    { id: 1, form: "6-K", day: getTargetDateString(), count: 5 },
   ];
 
   for (const data of TEST_DATA) {

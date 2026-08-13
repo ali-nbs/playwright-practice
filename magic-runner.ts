@@ -141,21 +141,22 @@ async function devSandbox() {
     // await runDbmConceptualHighlightTest(page, liveLog);
 
     // Securities Regulation & Compliance
-    await runAccountantTest(page, liveLog);
-    await runAccountantFeesTest(page, liveLog);
-    await runAccountingStandardTest(page, liveLog);
-    await runAuditorTest(page, liveLog);
-    await runBoilerPlateTest(page, liveLog);
-    await runBooleanHighlightTest(page, liveLog);
-    await runCompanyType_SPAC_REIT_BDC_FPI_INV_Test(page, liveLog);
-    await runCompanyType_SRC_Shell_WKSI_EGC_Test(page, liveLog);
-    await runCrawlingTest(page, liveLog);
-    await runCrossReferenceLinksTest(page, liveLog);
-    await runFilingAgentTest(page, liveLog);
-    await runIxbrlTest(page, liveLog);
-    await runOutlineTest(page, liveLog);
-    await runReleaseDateTest(page, liveLog);
-    await runSnippetsTest(page, liveLog);
+    await run6kFormTypeTest(page, liveLog);
+    // await runAccountantTest(page, liveLog);
+    // await runAccountantFeesTest(page, liveLog);
+    // await runAccountingStandardTest(page, liveLog);
+    // await runAuditorTest(page, liveLog);
+    // await runBoilerPlateTest(page, liveLog);
+    // await runBooleanHighlightTest(page, liveLog);
+    // await runCompanyType_SPAC_REIT_BDC_FPI_INV_Test(page, liveLog);
+    // await runCompanyType_SRC_Shell_WKSI_EGC_Test(page, liveLog);
+    // await runCrawlingTest(page, liveLog);
+    // await runCrossReferenceLinksTest(page, liveLog);
+    // await runFilingAgentTest(page, liveLog);
+    // await runIxbrlTest(page, liveLog);
+    // await runOutlineTest(page, liveLog);
+    // await runReleaseDateTest(page, liveLog);
+    // await runSnippetsTest(page, liveLog);
 
     // SEC Enforcement
     // await runSeBooleanHighlightTest(page, liveLog);
